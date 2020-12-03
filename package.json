@@ -1,13 +1,9 @@
 {
-  "name": "hyrama-blog-server",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.ts",
-  "dependencies": {
-    "typescript": "4.0.3"
-  },
+  "name": "elaina-blog",
   "scripts": {
-    "test": "echo \"server\""
+    "client-dev": "cd client && npm run test",
+    "server-dev": "cd server && npm run test",
+    "dev": "concurrently \"npm run client-dev\" \"npm run server-dev\""
   },
   "author": {
     "name": "elaina-blog",

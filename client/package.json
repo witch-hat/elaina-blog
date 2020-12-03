@@ -1,7 +1,6 @@
 {
   "name": "elaina-blog-client",
   "version": "0.1.0",
-  "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
@@ -24,7 +23,8 @@
     "dev": "next",
     "start": "next start",
     "build": "next build",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "test": "echo \"client\""
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -42,5 +42,13 @@
     ]
   },
   "homepage": "/",
+  "author": {
+    "name": "elaina-blog",
+    "url": "https://github.com/lumyjuwon/elaina-blog"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lumyjuwon/elaina-blog.git"
+  },
   "license": "MIT"
 }
