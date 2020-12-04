@@ -1,10 +1,7 @@
+import Layout from 'components/Layout';
 import React from 'react';
-import Post from './post/Post';
+import Main from './main/Main';
 
-const Index = () => (
-  <div>
-    <Post></Post>
-  </div>
-);
+const Index = () => <Main></Main>;
 
 export default Index;
