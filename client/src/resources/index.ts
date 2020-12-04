@@ -1,1 +1,1 @@
-import React from "react";
+export { color } from './colors';
