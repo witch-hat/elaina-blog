@@ -3,7 +3,9 @@ import styled from 'styled-components';
 import { Header } from './header/Header';
 
 const Container = styled.div({
-  marginTop: '10vh'
+  width: '1300px',
+  margin: '10vh auto 0',
+  minHeight: '90vh'
 });
 
 interface Props {

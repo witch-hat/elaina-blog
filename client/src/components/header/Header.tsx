@@ -6,7 +6,7 @@ import { color } from 'resources';
 
 const StyledHeader = styled.header({
   width: '100vw',
-  minHeight: '10vh',
+  height: '10vh',
   display: 'flex',
   alignItems: 'center',
   borderBottom: '1px solid #ccc',
