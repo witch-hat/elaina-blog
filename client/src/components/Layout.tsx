@@ -5,6 +5,7 @@ import { Header } from './header/Header';
 const Container = styled.div({
   width: '1300px',
   margin: '10vh auto 0',
+  padding: '20px 0',
   minHeight: '90vh'
 });
 
