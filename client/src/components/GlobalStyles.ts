@@ -1,25 +1,19 @@
 import { createGlobalStyle } from 'styled-components';
+import reset from 'styled-reset';
 
 export const GlobalStyles = createGlobalStyle`
-html,
-body {
-  padding: 0;
-  margin: 0;
-  font-family: 'Nanum Gothic', sans-serif;
-  line-height: 1.6;
-  font-size: 18px;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-a {
-  text-decoration: none;
-}
-
-img {
-  max-width: 100%;
-  display: block;
-}
+	${reset};
+	a {
+		text-decoration: none;
+		color: inherit;
+	}
+	* {
+		box-sizing: border-box;
+	}
+	body {
+    background-color: #fff;
+    color: #121314;
+		line-height: 1.4;
+		font-family: 'Nanum Gothic', sans-serif
+	}
 `;
