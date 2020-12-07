@@ -72,7 +72,7 @@ export function Header(props: Props) {
           <BlogName>{props.name}</BlogName>
           <FlexWrapper>
             <SearchForm method='GET' action='/search'>
-              <InputBox placeholder='Search' id='search' minLength={2} maxLength={15} styles={{ width: '150px' }} />
+              <InputBox placeholder='Search' id='search' minLength={2} maxLength={10} styles={{ width: '180px' }} />
               <SearchButton type='submit'>
                 <i className='fas fa-search'></i>
               </SearchButton>
