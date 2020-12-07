@@ -10,6 +10,7 @@ export { InputBox } from './common/box/InputBox';
 export { FlexWrapper } from './common/wrapper/FlexWrapper';
 
 // Images
+export { RoundImage } from './common/image/RoundImage';
 
 // Main
 export { Container } from './pages/main/Container';
