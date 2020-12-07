@@ -31,6 +31,16 @@ const BlogName = styled.div({
   color: color.blogName
 });
 
+const SearchIcon = styled.div({
+  fontSize: '25px',
+  padding: '4px 10px',
+  borderRadius: '50%',
+  cursor: 'pointer',
+  '&:hover': {
+    backgroundColor: '#ccc'
+  }
+});
+
 interface Props {
   name: string;
 }
@@ -41,6 +51,9 @@ export function Header(props: Props) {
       <Link href='/' passHref>
         <Container>
           <BlogName>{props.name}</BlogName>
+          <SearchIcon>
+            <i className='fas fa-search'></i>
+          </SearchIcon>
         </Container>
       </Link>
     </StyledHeader>
