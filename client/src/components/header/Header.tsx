@@ -3,6 +3,7 @@ import Link from 'next/link';
 import styled from 'styled-components';
 
 import { color } from 'resources';
+import { InputBox, FlexWrapper } from 'components';
 
 const StyledHeader = styled.header({
   width: '100vw',
@@ -18,6 +19,7 @@ const StyledHeader = styled.header({
 const Container = styled.div({
   display: 'flex',
   width: '1300px',
+  height: '100%',
   margin: '0 auto',
   alignItems: 'center',
   justifyContent: 'space-between'
@@ -31,19 +33,31 @@ const BlogName = styled.div({
   color: color.blogName
 });
 
-const SearchIcon = styled.div({
+const SearchButton = styled.button({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
-  width: '50px',
-  height: '50px',
-  marginRight: '10px',
-  fontSize: '25px',
+  width: '45px',
+  height: '45px',
+  margin: '0 10px',
+  fontSize: '20px',
   borderRadius: '50%',
+  border: 'none',
+  backgroundColor: '#fff',
   cursor: 'pointer',
+  '&:focus': {
+    outline: 'none'
+  },
   '&:hover': {
-    backgroundColor: '#ccc'
+    backgroundColor: '#eee'
   }
+});
+
+const SearchForm = styled.form({
+  width: '100%',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center'
 });
 
 interface Props {
@@ -56,9 +70,14 @@ export function Header(props: Props) {
       <Link href='/' passHref>
         <Container>
           <BlogName>{props.name}</BlogName>
-          <SearchIcon>
-            <i className='fas fa-search'></i>
-          </SearchIcon>
+          <FlexWrapper>
+            <SearchForm method='GET' action='/search'>
+              <InputBox placeholder='Search' id='search' minLength={2} maxLength={15} styles={{ width: '150px' }} />
+              <SearchButton type='submit'>
+                <i className='fas fa-search'></i>
+              </SearchButton>
+            </SearchForm>
+          </FlexWrapper>
         </Container>
       </Link>
     </StyledHeader>
