@@ -1,5 +1,13 @@
-import React from 'react';
+import styled from 'styled-components';
+
+import { Container } from 'components';
+
+interface Props {}
 
 export function ContentCategory() {
-  return null;
+  return (
+    <Container styles={{ width: '1000px', padding: '10px' }}>
+      <>This is Content Categories</>
+    </Container>
+  );
 }
