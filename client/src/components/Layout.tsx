@@ -3,10 +3,12 @@ import styled from 'styled-components';
 import { Header } from './header/Header';
 
 const Container = styled.div({
+  display: 'flex',
   width: '1300px',
   margin: '10vh auto 0',
   padding: '20px 0',
-  minHeight: '90vh'
+  minHeight: '90vh',
+  position: 'relative'
 });
 
 interface Props {
