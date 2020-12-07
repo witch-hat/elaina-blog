@@ -32,8 +32,13 @@ const BlogName = styled.div({
 });
 
 const SearchIcon = styled.div({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  width: '50px',
+  height: '50px',
+  marginRight: '10px',
   fontSize: '25px',
-  padding: '4px 10px',
   borderRadius: '50%',
   cursor: 'pointer',
   '&:hover': {
