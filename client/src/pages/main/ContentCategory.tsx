@@ -1,15 +1,13 @@
 import styled from 'styled-components';
 
-const ContentCategoryContainer = styled.div({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: '1000px',
-  height: '100%'
-});
+import { Container } from 'components';
 
 interface Props {}
 
 export function ContentCategory() {
-  return <ContentCategoryContainer>Content Categories</ContentCategoryContainer>;
+  return (
+    <Container styles={{ width: '1000px', padding: '10px' }}>
+      <>Content Categories</>
+    </Container>
+  );
 }
