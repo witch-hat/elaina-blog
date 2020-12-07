@@ -7,18 +7,25 @@ import { color } from 'resources';
 const StyledHeader = styled.header({
   width: '100vw',
   height: '10vh',
-  display: 'flex',
   alignItems: 'center',
   borderBottom: '1px solid #ccc',
-  padding: '5px 10vw',
+  padding: '5px 0',
   fontWeight: 'bold',
   position: 'fixed',
   top: '0'
 });
 
+const Container = styled.div({
+  display: 'flex',
+  width: '1300px',
+  margin: '0 auto',
+  alignItems: 'center',
+  justifyContent: 'space-between'
+});
+
 const BlogName = styled.div({
   fontSize: '25px',
-  padding: '15px 10px',
+  padding: '10px',
   cursor: 'pointer',
   userSelect: 'none',
   color: color.blogName
@@ -32,7 +39,9 @@ export function Header(props: Props) {
   return (
     <StyledHeader>
       <Link href='/' passHref>
-        <BlogName>{props.name}</BlogName>
+        <Container>
+          <BlogName>{props.name}</BlogName>
+        </Container>
       </Link>
     </StyledHeader>
   );
