@@ -1,5 +1,14 @@
-import React from 'react';
+import styled from 'styled-components';
+
+const Container = styled.div({
+  width: '100%',
+  height: '150px',
+  padding: '10px',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center'
+});
 
 export function Category() {
-  return null;
+  return <Container>This is Category</Container>;
 }

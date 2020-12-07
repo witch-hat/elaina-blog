@@ -13,8 +13,8 @@ export { FlexWrapper } from './common/wrapper/FlexWrapper';
 export { RoundImage } from './common/image/RoundImage';
 
 // Main
-export { Container } from './pages/main/Container';
 export { Profile } from './pages/main/Profile';
 export { ContentCategory } from './pages/main/ContentCategory';
+export { Category } from './pages/main/Category';
 
 // Post

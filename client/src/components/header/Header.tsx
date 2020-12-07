@@ -13,7 +13,9 @@ const StyledHeader = styled.header({
   padding: '5px 0',
   fontWeight: 'bold',
   position: 'fixed',
-  top: '0'
+  top: '0',
+  backgroundColor: '#fff',
+  zIndex: 9999
 });
 
 const Container = styled.div({
