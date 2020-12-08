@@ -2,6 +2,13 @@ import styled from 'styled-components';
 
 import { color } from 'resources/colors';
 
+const Title = styled.div({
+  width: '100%',
+  fontSize: '22px',
+  fontWeight: 'bold',
+  margin: '25px 0 0'
+});
+
 const Container = styled.div({
   display: 'flex',
   width: '100%',
@@ -14,7 +21,7 @@ const Container = styled.div({
 
 const Content = styled.div({
   display: 'flex',
-  border: '1px solid #ddd',
+  border: `1px solid ${color.borderColor}`,
   width: '100%',
   padding: '1rem',
   height: '8rem',
@@ -32,12 +39,15 @@ interface Props {}
 
 export function ContentCategory() {
   return (
-    <Container>
-      <Content>Content1(미리보기: 사진, 제목, 내용)</Content>
-      <Content>Content2(미리보기: 사진, 제목, 내용)</Content>
-      <Content>Content3(미리보기: 사진, 제목, 내용)</Content>
-      <Content>Content4(미리보기: 사진, 제목, 내용)</Content>
-      <Content>Content5(미리보기: 사진, 제목, 내용)</Content>
-    </Container>
+    <>
+      <Title>Content Category</Title>
+      <Container>
+        <Content>Content1(미리보기: 사진, 제목, 내용)</Content>
+        <Content>Content2(미리보기: 사진, 제목, 내용)</Content>
+        <Content>Content3(미리보기: 사진, 제목, 내용)</Content>
+        <Content>Content4(미리보기: 사진, 제목, 내용)</Content>
+        <Content>Content5(미리보기: 사진, 제목, 내용)</Content>
+      </Container>
+    </>
   );
 }
