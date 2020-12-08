@@ -6,12 +6,13 @@ import { color } from 'resources';
 const Container = styled.div({
   display: 'flex',
   flexDirection: 'column',
-  justifyContent: 'center',
+  justifyContent: 'flex-start',
   alignItmes: 'center',
   padding: '10px',
-  justifySelf: 'stretch',
+  // justifySelf: 'stretch',
   minHeight: 'calc(90vh - 40px)',
-  flex: 1
+  // flex: 1
+  alignSelf: 'stretch'
 });
 
 const Name = styled.div({

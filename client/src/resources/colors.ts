@@ -1,3 +1,4 @@
 export const color = {
-  blogName: '#ff00f8'
+  blogName: '#ff00f8',
+  contentBackgroundColor: '#ededed'
 };

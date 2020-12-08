@@ -5,13 +5,13 @@ import { Profile, ContentCategory, FlexWrapper, Category } from 'components';
 const Container = styled.div({
   display: 'flex',
   justifyContent: 'center',
-  alignItems: 'stretch',
+  alignItems: 'flex-start',
   width: '100%'
 });
 
 const Wrapper = styled.div({
   width: '1000px',
-  padding: '0 0 0 50px',
+  padding: '0 0 0 30px',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
