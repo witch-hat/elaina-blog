@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { BorderBox } from 'components';
+import { BorderBox, HorizontalScrollWrapper } from 'components';
 
 const Title = styled.div({
   width: '100%',
@@ -43,38 +43,40 @@ export function Category() {
   return (
     <div style={{ width: '100%' }}>
       <Title>Category</Title>
-      <Container>
-        <BorderBox styles={{ margin: '0 10px' }}>
-          <Content>Category</Content>
-        </BorderBox>
-        <BorderBox styles={{ margin: '0 10px' }}>
-          <Content>Category</Content>
-        </BorderBox>
-        <BorderBox styles={{ margin: '0 10px' }}>
-          <Content>Category</Content>
-        </BorderBox>
-        <BorderBox styles={{ margin: '0 10px' }}>
-          <Content>Category</Content>
-        </BorderBox>
-        <BorderBox styles={{ margin: '0 10px' }}>
-          <Content>Category</Content>
-        </BorderBox>
-        <BorderBox styles={{ margin: '0 10px' }}>
-          <Content>Category</Content>
-        </BorderBox>
-        <BorderBox styles={{ margin: '0 10px' }}>
-          <Content>Category</Content>
-        </BorderBox>
-        <BorderBox styles={{ margin: '0 10px' }}>
-          <Content>Category</Content>
-        </BorderBox>
-        <BorderBox styles={{ margin: '0 10px' }}>
-          <Content>Category</Content>
-        </BorderBox>
-        <BorderBox styles={{ margin: '0 10px' }}>
-          <Content>Category</Content>
-        </BorderBox>
-      </Container>
+      <HorizontalScrollWrapper>
+        <Container>
+          <BorderBox styles={{ margin: '0 10px' }}>
+            <Content>Category</Content>
+          </BorderBox>
+          <BorderBox styles={{ margin: '0 10px' }}>
+            <Content>Category</Content>
+          </BorderBox>
+          <BorderBox styles={{ margin: '0 10px' }}>
+            <Content>Category</Content>
+          </BorderBox>
+          <BorderBox styles={{ margin: '0 10px' }}>
+            <Content>Category</Content>
+          </BorderBox>
+          <BorderBox styles={{ margin: '0 10px' }}>
+            <Content>Category</Content>
+          </BorderBox>
+          <BorderBox styles={{ margin: '0 10px' }}>
+            <Content>Category</Content>
+          </BorderBox>
+          <BorderBox styles={{ margin: '0 10px' }}>
+            <Content>Category</Content>
+          </BorderBox>
+          <BorderBox styles={{ margin: '0 10px' }}>
+            <Content>Category</Content>
+          </BorderBox>
+          <BorderBox styles={{ margin: '0 10px' }}>
+            <Content>Category</Content>
+          </BorderBox>
+          <BorderBox styles={{ margin: '0 10px' }}>
+            <Content>Category</Content>
+          </BorderBox>
+        </Container>
+      </HorizontalScrollWrapper>
     </div>
   );
 }
