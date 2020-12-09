@@ -23,7 +23,14 @@ const Name = styled.div({
   wordBreak: 'keep-all'
 });
 
-const Description = styled.div({
+const ListWrapper = styled.ul({
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'flex-start'
+});
+
+const Description = styled.li({
   width: '100%',
   fontSize: '18px',
   wordBreak: 'keep-all',
@@ -40,19 +47,21 @@ export function Profile(props: Props) {
         styles={{ borderRadius: '50%', border: `4px solid ${color.blogName}`, width: '280px', height: '280px' }}
       />
       <Name>Elaina</Name>
-      <Description>Hello My name is Elaina~~~~~~~</Description>
-      <Description>
-        <i className='fas fa-link'></i>&nbsp;Link
-      </Description>
-      <Description>
-        <i className='far fa-building'></i>&nbsp;Company
-      </Description>
-      <Description>
-        <i className='fas fa-map-marker-alt'></i>&nbsp;Location
-      </Description>
-      <Description>
-        <i className='far fa-envelope'></i>&nbsp;Email
-      </Description>
+      <ListWrapper>
+        <Description>Hello My name is Elaina~~~~~~~</Description>
+        <Description>
+          <i className='fas fa-link'></i>&nbsp;Link
+        </Description>
+        <Description>
+          <i className='far fa-building'></i>&nbsp;Company
+        </Description>
+        <Description>
+          <i className='fas fa-map-marker-alt'></i>&nbsp;Location
+        </Description>
+        <Description>
+          <i className='far fa-envelope'></i>&nbsp;Email
+        </Description>
+      </ListWrapper>
     </Container>
   );
 }
