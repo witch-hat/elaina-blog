@@ -1,6 +1,8 @@
 import { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
 
+import { theme } from 'resources/theme';
+
 export const GlobalStyles = createGlobalStyle`
 	${reset};
 	a {
@@ -11,8 +13,8 @@ export const GlobalStyles = createGlobalStyle`
 		box-sizing: border-box;
 	}
 	body {
-    background-color: #fff;
-    color: #121314;
+    background-color: ${theme.light.backgroundColor};
+    color: ${theme.light.textColor};
 		line-height: 1.4;
 		font-family: 'Nanum Gothic', sans-serif
 	}

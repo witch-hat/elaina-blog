@@ -2,8 +2,8 @@ import React from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
 
-import { color } from 'resources';
-import { InputBox, FlexWrapper } from 'components';
+import { theme } from 'resources';
+import { InputBox } from 'components';
 
 const StyledHeader = styled.header({
   width: '100vw',
@@ -32,7 +32,7 @@ const BlogName = styled.div({
   padding: '10px',
   cursor: 'pointer',
   userSelect: 'none',
-  color: color.blogName
+  color: theme.light.blogName
 });
 
 const SearchButton = styled.button({
@@ -62,6 +62,12 @@ const SearchForm = styled.form({
   alignItems: 'center'
 });
 
+const Flex = styled.div({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center'
+});
+
 interface Props {
   name: string;
 }
@@ -72,14 +78,14 @@ export function Header(props: Props) {
       <Link href='/' passHref>
         <Container>
           <BlogName>{props.name}</BlogName>
-          <FlexWrapper>
+          <Flex>
             <SearchForm method='GET' action='/search'>
               <InputBox placeholder='Search' id='search' minLength={2} maxLength={10} styles={{ width: '180px' }} />
               <SearchButton type='submit'>
                 <i className='fas fa-search'></i>
               </SearchButton>
             </SearchForm>
-          </FlexWrapper>
+          </Flex>
         </Container>
       </Link>
     </StyledHeader>

@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 
 import { BorderBox } from 'components';
-import { color } from 'resources/colors';
-import { RoundImage } from 'components/common/image/RoundImage';
 
 const Title = styled.div({
   width: '100%',

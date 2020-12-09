@@ -15,6 +15,7 @@ const Container = styled.div({
   display: 'flex',
   justifyContent: 'flex-start',
   alignItems: 'center',
+  overflowY: 'hidden',
   overflowX: 'auto',
   '&::-webkit-scrollbar': {
     width: '5px',

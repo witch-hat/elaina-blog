@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
-import { FlexWrapper, RoundImage } from 'components';
-import { color } from 'resources';
+import { RoundImage } from 'components';
+import { theme } from 'resources';
 
 const Container = styled.div({
   display: 'flex',
@@ -44,7 +44,7 @@ export function Profile(props: Props) {
     <Container>
       <RoundImage
         src={'/images/FakeProfile.png'}
-        styles={{ borderRadius: '50%', border: `4px solid ${color.blogName}`, width: '280px', height: '280px' }}
+        styles={{ borderRadius: '50%', border: `4px solid ${theme.light.blogName}`, width: '280px', height: '280px' }}
       />
       <Name>Elaina</Name>
       <ListWrapper>
