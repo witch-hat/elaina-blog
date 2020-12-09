@@ -28,7 +28,7 @@ const Container = styled.div({
 });
 
 const BlogName = styled.div({
-  fontSize: '25px',
+  fontSize: '1.8rem',
   padding: '10px',
   cursor: 'pointer',
   userSelect: 'none',

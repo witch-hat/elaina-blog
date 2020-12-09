@@ -16,7 +16,7 @@ const Container = styled.div({
 });
 
 const Name = styled.div({
-  fontSize: '22px',
+  fontSize: '1.4rem',
   fontWeight: 'bold',
   width: '100%',
   margin: '15px 0',
@@ -32,7 +32,7 @@ const ListWrapper = styled.ul({
 
 const Description = styled.li({
   width: '100%',
-  fontSize: '18px',
+  fontSize: '1.1rem',
   wordBreak: 'keep-all',
   margin: '10px 0'
 });

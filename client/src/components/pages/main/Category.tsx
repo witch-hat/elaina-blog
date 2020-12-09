@@ -4,7 +4,7 @@ import { BorderBox, HorizontalScrollWrapper } from 'components';
 
 const Title = styled.div({
   width: '100%',
-  fontSize: '22px',
+  fontSize: '1.4rem',
   fontWeight: 'bold'
 });
 
