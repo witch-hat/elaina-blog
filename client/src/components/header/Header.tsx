@@ -4,13 +4,13 @@ import styled from 'styled-components';
 
 import { theme } from 'resources';
 import { InputBox } from 'components';
+import { ModeSwitch } from './ModeSwitch';
 
 const StyledHeader = styled.header({
   width: '100vw',
-  height: '10vh',
   alignItems: 'center',
   borderBottom: '1px solid #ccc',
-  padding: '5px 0',
+  padding: '.5rem 0',
   fontWeight: 'bold',
   position: 'fixed',
   top: '0',
@@ -63,6 +63,7 @@ const SearchForm = styled.form({
 });
 
 const Flex = styled.div({
+  width: 'max-content',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center'
@@ -79,6 +80,7 @@ export function Header(props: Props) {
         <Container>
           <BlogName>{props.name}</BlogName>
           <Flex>
+            <ModeSwitch />
             <SearchForm method='GET' action='/search'>
               <InputBox placeholder='Search' id='search' minLength={2} maxLength={10} styles={{ width: '180px' }} />
               <SearchButton type='submit'>
