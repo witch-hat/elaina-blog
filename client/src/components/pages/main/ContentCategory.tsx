@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 
+import { BorderBox } from 'components';
 import { color } from 'resources/colors';
 
 const Title = styled.div({
@@ -11,43 +12,46 @@ const Title = styled.div({
 
 const Container = styled.div({
   display: 'flex',
+  flexDirection: 'column',
   width: '100%',
   height: '100%',
   padding: '.9rem',
-  justifyContent: 'flex-start',
-  alignItems: 'center',
-  flexWrap: 'wrap'
+  justifyContent: 'center',
+  alignItems: 'center'
 });
 
 const Content = styled.div({
   display: 'flex',
-  border: `1px solid ${color.borderColor}`,
-  width: '100%',
+  justifyContent: 'center',
+  alignItems: 'center',
+  width: 'calc(950px - 1.8rem)',
   padding: '1rem',
-  height: '8rem',
-  margin: '.8rem',
-  borderRadius: '12px',
-  cursor: 'pointer',
-  transition: '.2s all',
-  '&:hover': {
-    transform: 'translateY(-10px)',
-    boxShadow: '0 10px 4px -2px rgba(38, 38, 38, .2)'
-  }
+  height: '10rem'
 });
 
 interface Props {}
 
 export function ContentCategory() {
   return (
-    <>
+    <div style={{ width: '100%' }}>
       <Title>Content Category</Title>
       <Container>
-        <Content>Content1(미리보기: 사진, 제목, 내용)</Content>
-        <Content>Content2(미리보기: 사진, 제목, 내용)</Content>
-        <Content>Content3(미리보기: 사진, 제목, 내용)</Content>
-        <Content>Content4(미리보기: 사진, 제목, 내용)</Content>
-        <Content>Content5(미리보기: 사진, 제목, 내용)</Content>
+        <BorderBox styles={{ margin: '.8rem 0' }}>
+          <Content>Content1(미리보기: 사진, 제목, 내용)</Content>
+        </BorderBox>
+        <BorderBox styles={{ margin: '.8rem 0' }}>
+          <Content>Content2(미리보기: 사진, 제목, 내용)</Content>
+        </BorderBox>
+        <BorderBox styles={{ margin: '.8rem 0' }}>
+          <Content>Content3(미리보기: 사진, 제목, 내용)</Content>
+        </BorderBox>
+        <BorderBox styles={{ margin: '.8rem 0' }}>
+          <Content>Content4(미리보기: 사진, 제목, 내용)</Content>
+        </BorderBox>
+        <BorderBox styles={{ margin: '.8rem 0' }}>
+          <Content>Content5(미리보기: 사진, 제목, 내용)</Content>
+        </BorderBox>
       </Container>
-    </>
+    </div>
   );
 }

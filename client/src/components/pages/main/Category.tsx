@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { color } from 'resources/colors';
+import { BorderBox } from 'components';
 
 const Title = styled.div({
   width: '100%',
@@ -11,9 +11,9 @@ const Title = styled.div({
 const Container = styled.div({
   width: '100%',
   height: '150px',
-  padding: '.9rem',
+  padding: '1rem',
   display: 'flex',
-  justifyContent: 'center',
+  justifyContent: 'flex-start',
   alignItems: 'center',
   overflowX: 'auto',
   '&::-webkit-scrollbar': {
@@ -23,43 +23,58 @@ const Container = styled.div({
   '&::-webkit-scrollbar-thumb': {
     borderRadius: '8px',
     backgroundColor: '#c1c2c3'
+  },
+  '& > div:nth-child(1)': {
+    margin: '0 10px 0 0 !important'
   }
 });
 
-const CategoryBox = styled.div({
+const Content = styled.div({
   display: 'flex',
   flexDirection: 'column',
-  border: `1px solid ${color.borderColor}`,
-  borderRadius: '12px',
+  alignItems: 'center',
+  justifyContent: 'center',
   padding: '.5rem',
-  width: '8rem',
-  height: '100%',
-  margin: '0 15px',
-  flexShrink: 0,
-  cursor: 'pointer',
-  transition: '.2s all',
-  '&:hover': {
-    transform: 'translateY(-10px)',
-    boxShadow: '0 10px 4px -2px rgba(38, 38, 38, .2)'
-  }
+  width: '7rem',
+  height: '7rem'
 });
 
 export function Category() {
   return (
-    <>
+    <div style={{ width: '100%' }}>
       <Title>Category</Title>
       <Container>
-        <CategoryBox>Category</CategoryBox>
-        <CategoryBox>Category</CategoryBox>
-        <CategoryBox>Category</CategoryBox>
-        <CategoryBox>Category</CategoryBox>
-        <CategoryBox>Category</CategoryBox>
-        <CategoryBox>Category</CategoryBox>
-        <CategoryBox>Category</CategoryBox>
-        <CategoryBox>Category</CategoryBox>
-        <CategoryBox>Category</CategoryBox>
-        <CategoryBox>Category</CategoryBox>
+        <BorderBox styles={{ margin: '0 10px' }}>
+          <Content>Category</Content>
+        </BorderBox>
+        <BorderBox styles={{ margin: '0 10px' }}>
+          <Content>Category</Content>
+        </BorderBox>
+        <BorderBox styles={{ margin: '0 10px' }}>
+          <Content>Category</Content>
+        </BorderBox>
+        <BorderBox styles={{ margin: '0 10px' }}>
+          <Content>Category</Content>
+        </BorderBox>
+        <BorderBox styles={{ margin: '0 10px' }}>
+          <Content>Category</Content>
+        </BorderBox>
+        <BorderBox styles={{ margin: '0 10px' }}>
+          <Content>Category</Content>
+        </BorderBox>
+        <BorderBox styles={{ margin: '0 10px' }}>
+          <Content>Category</Content>
+        </BorderBox>
+        <BorderBox styles={{ margin: '0 10px' }}>
+          <Content>Category</Content>
+        </BorderBox>
+        <BorderBox styles={{ margin: '0 10px' }}>
+          <Content>Category</Content>
+        </BorderBox>
+        <BorderBox styles={{ margin: '0 10px' }}>
+          <Content>Category</Content>
+        </BorderBox>
       </Container>
-    </>
+    </div>
   );
 }
