@@ -9,6 +9,7 @@ export { BorderBox } from './common/box/BorderBox';
 
 // Wrapper
 export { FlexWrapper } from './common/wrapper/FlexWrapper';
+export { HorizontalScrollWrapper } from './common/wrapper/HorizontalScrollWrapper';
 
 // Images
 export { RoundImage } from './common/image/RoundImage';
