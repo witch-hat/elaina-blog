@@ -5,6 +5,7 @@ export { GlobalStyles } from './GlobalStyles';
 
 // Box
 export { InputBox } from './common/box/InputBox';
+export { BorderBox } from './common/box/BorderBox';
 
 // Wrapper
 export { FlexWrapper } from './common/wrapper/FlexWrapper';
