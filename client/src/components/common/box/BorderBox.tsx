@@ -1,9 +1,8 @@
 import styled from 'styled-components';
 
-import { color } from 'resources/colors';
+import { theme } from 'resources/theme';
 
 interface Styles {
-  borderColor?: string;
   margin?: string;
 }
 
@@ -14,7 +13,7 @@ const Box = styled.div<Styles>((props) => {
     alignItems: 'center',
     width: 'max-content',
     margin: props.margin || '10px',
-    border: `1px solid ${props.borderColor || color.borderColor}`,
+    border: `1px solid ${theme.light.borderColor}`,
     borderRadius: '12px',
     transition: '.2s all',
     cursor: 'pointer',
