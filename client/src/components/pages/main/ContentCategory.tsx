@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Link from 'next/link';
 
 import { BorderBox } from 'components';
 
@@ -80,15 +81,17 @@ export function ContentCategory() {
     <div style={{ width: '100%' }}>
       <Title>Content Category</Title>
       <Container>
-        <BorderBox styles={{ margin: '.8rem 0' }}>
-          <Content>
-            <PreviewImage src='/images/FakeProfile.png' alt='preview image' />
-            <PreviewTextWrapper>
-              <PreviewTitle>Hello!</PreviewTitle>
-              <PreviewContent>PreviewContent</PreviewContent>
-            </PreviewTextWrapper>
-          </Content>
-        </BorderBox>
+        <Link href='/post'>
+          <BorderBox styles={{ margin: '.8rem 0' }}>
+            <Content>
+              <PreviewImage src='/images/FakeProfile.png' alt='preview image' />
+              <PreviewTextWrapper>
+                <PreviewTitle>Hello!</PreviewTitle>
+                <PreviewContent>PreviewContent</PreviewContent>
+              </PreviewTextWrapper>
+            </Content>
+          </BorderBox>
+        </Link>
         <BorderBox styles={{ margin: '.8rem 0' }}>
           <Content>
             <PreviewImage src='/images/FakeProfile.png' alt='preview image' />
