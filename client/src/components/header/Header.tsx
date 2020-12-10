@@ -2,8 +2,8 @@ import React from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
 
-import { theme } from 'resources';
-import { InputBox } from 'components';
+import { theme } from 'src/resources';
+import { InputBox } from 'src/components';
 import { ModeSwitch } from './ModeSwitch';
 
 const StyledHeader = styled.header({

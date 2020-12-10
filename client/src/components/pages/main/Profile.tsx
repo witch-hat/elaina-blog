@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
-import { RoundImage } from 'components';
-import { theme } from 'resources';
+import { RoundImage } from 'src/components';
+import { theme } from 'src/resources';
 
 const Container = styled.div({
   display: 'flex',

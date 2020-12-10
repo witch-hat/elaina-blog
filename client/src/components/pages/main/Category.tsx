@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { BorderBox, HorizontalScrollWrapper } from 'components';
+import { BorderBox, HorizontalScrollWrapper } from 'src/components';
 
 const Title = styled.div({
   width: '100%',

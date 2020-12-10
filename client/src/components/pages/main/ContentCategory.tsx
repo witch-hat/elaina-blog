@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import Link from 'next/link';
 
-import { BorderBox } from 'components';
+import { BorderBox } from 'src/components';
 
 const Title = styled.div({
   width: '100%',

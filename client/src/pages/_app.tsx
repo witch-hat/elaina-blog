@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 
-import { Header, GlobalStyles } from 'components';
-import Layout from 'components/Layout';
+import { Header, GlobalStyles } from 'src/components';
+import Layout from 'src/components/Layout';
 
 export default function ElainaBlog({ Component, pageProps }: AppProps) {
   return (

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { theme } from 'resources/theme';
+import { theme } from 'src/resources/theme';
 
 interface Styles {
   margin?: string;
