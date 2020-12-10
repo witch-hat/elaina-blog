@@ -1,6 +1,5 @@
-import Layout from 'components/Layout';
 import React from 'react';
-import Main from './main/Main';
+import Main from './main';
 
 const Index = () => <Main></Main>;
 
