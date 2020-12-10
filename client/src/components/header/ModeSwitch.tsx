@@ -36,7 +36,7 @@ const Switch = styled.div<{ isChecked: boolean }>`
     background-color: #fff;
     transition: 0.4s;
     border-radius: 50%;
-    transform: ${(props) => (props.isChecked ? 'translateX(26px)' : 'translateX(0)')};
+    transform: ${(props) => (props.isChecked ? 'translateX(26px)' : 'none')};
   }
 `;
 
