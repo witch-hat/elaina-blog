@@ -5,7 +5,7 @@ interface Color {
   blogName: string;
 }
 
-interface Theme {
+export interface Theme {
   light: Color;
   dark: Color;
 }

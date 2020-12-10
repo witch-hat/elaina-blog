@@ -6,15 +6,19 @@ import Head from 'next/head';
 import { GlobalStyles } from 'src/components';
 import Layout from 'src/components/Layout';
 
-import { Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
 import { store, persistor } from 'src/redux';
 import { PersistGate } from 'redux-persist/integration/react';
+import { RootState } from 'src/redux/rootReducer';
+import { ThemeMode } from 'src/redux/common/type';
 
 export default function ElainaBlog({ Component, pageProps }: AppProps) {
+  const theme: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <GlobalStyles />
+        <GlobalStyles theme={theme} />
         <Head>
           <meta charSet='utf-8' />
           {/* <link rel='icon' href='%PUBLIC_URL%/favicon.ico' /> */}

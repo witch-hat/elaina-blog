@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
+import { ThemeMode } from 'src/redux/common/type';
+import { commonDispatch } from 'src/redux/common/dispatch';
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/redux/rootReducer';
+
 const Switch = styled.label({
   flexShrink: 0,
   marginRight: '10px',
@@ -48,13 +53,25 @@ const Input = styled.input`
 `;
 
 export function ModeSwitch() {
-  const [isChecked, setIsChecked] = useState(false);
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  const [isChecked, setIsChecked] = useState(themeMode === ThemeMode.light ? false : true);
 
-  console.log(isChecked);
+  function handleModeSwitch() {
+    () => {
+      setIsChecked(!isChecked);
+    };
+    if (isChecked) {
+      commonDispatch.SetThemeMode(ThemeMode.light);
+    } else {
+      commonDispatch.SetThemeMode(ThemeMode.dark);
+    }
+  }
+
+  console.log(themeMode, isChecked);
 
   return (
     <Switch>
-      <Input type='checkbox' checked={isChecked} onChange={() => setIsChecked(!isChecked)} />
+      <Input type='checkbox' checked={isChecked} onChange={() => handleModeSwitch()} />
       <Slider></Slider>
     </Switch>
   );
