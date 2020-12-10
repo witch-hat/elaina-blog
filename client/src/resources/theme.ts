@@ -19,7 +19,7 @@ export const theme: Theme = {
     blogName: '#ff00f8'
   },
   dark: {
-    backgroundColor: '#222324',
+    backgroundColor: '#262728',
     borderColor: '#ddd',
     textColor: '#f1f2f3',
     blogName: '#ff00f8'
