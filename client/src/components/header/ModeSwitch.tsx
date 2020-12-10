@@ -6,13 +6,24 @@ import { commonDispatch } from 'src/redux/common/dispatch';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';
 
+const Container = styled.div({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  marginRight: '20px'
+});
+
+const Icon = styled.div({
+  fontSize: '1.5rem',
+  marginRight: '5px'
+});
+
 const Switch = styled.label({
   flexShrink: 0,
-  marginRight: '10px',
   position: 'relative',
   display: 'inline-block',
-  width: '60px',
-  height: '34px'
+  width: '50px',
+  height: '20px'
 });
 
 const Slider = styled.span`
@@ -28,8 +39,8 @@ const Slider = styled.span`
   &:before {
     position: absolute;
     content: '';
-    height: 26px;
-    width: 26px;
+    height: 12px;
+    width: 12px;
     left: 4px;
     bottom: 4px;
     background-color: #fff;
@@ -43,7 +54,7 @@ const Input = styled.input`
   width: 0;
   height: 0;
   &:checked + ${Slider} {
-    background-color: #2196f3;
+    background-color: #414243;
   }
   &:checked + ${Slider}:before {
     -webkit-transform: translateX(26px);
@@ -70,9 +81,12 @@ export function ModeSwitch() {
   console.log(themeMode, isChecked);
 
   return (
-    <Switch>
-      <Input type='checkbox' checked={isChecked} onChange={() => handleModeSwitch()} />
-      <Slider></Slider>
-    </Switch>
+    <Container>
+      <Icon>{isChecked ? <i className='fas fa-moon'></i> : <i className='fas fa-sun'></i>}</Icon>
+      <Switch>
+        <Input type='checkbox' checked={isChecked} onChange={() => handleModeSwitch()} />
+        <Slider></Slider>
+      </Switch>
+    </Container>
   );
 }
