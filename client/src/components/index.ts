@@ -12,10 +12,3 @@ export { HorizontalScrollWrapper } from './common/wrapper/HorizontalScrollWrappe
 
 // Images
 export { RoundImage } from './common/image/RoundImage';
-
-// Main
-export { Profile } from './pages/main/Profile';
-export { ContentCategory } from './pages/main/ContentCategory';
-export { Category } from './pages/main/Category';
-
-// Post

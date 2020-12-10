@@ -3,6 +3,6 @@ import styled from 'styled-components';
 
 const Container = styled.div({});
 
-export function ContentNavigation() {
+export default function PostCategory() {
   return <Container></Container>;
 }

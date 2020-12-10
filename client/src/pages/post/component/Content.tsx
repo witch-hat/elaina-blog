@@ -1,5 +1,5 @@
 import React from 'react';
 
-export function Content() {
+export default function Content() {
   return null;
 }
