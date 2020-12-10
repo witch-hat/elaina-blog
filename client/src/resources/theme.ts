@@ -1,3 +1,5 @@
+import { ThemeMode } from 'src/redux/common/type';
+
 interface Color {
   backgroundColor: string;
   borderColor: string;
@@ -5,10 +7,9 @@ interface Color {
   blogName: string;
 }
 
-export interface Theme {
-  light: Color;
-  dark: Color;
-}
+export type Theme = {
+  [key in ThemeMode]: Color;
+};
 
 export const theme: Theme = {
   light: {

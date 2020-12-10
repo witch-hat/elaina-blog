@@ -26,7 +26,7 @@ export default function Layout(props: Props) {
 
   return (
     <div>
-      <GlobalStyles theme={theme} />
+      <GlobalStyles themeMode={theme} />
       <Header name={props.name} />
       <Container>{props.children}</Container>
     </div>
