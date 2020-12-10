@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { Profile, ContentCategory, Category } from 'src/components';
+import { Category, ContentCategory, Profile } from 'src/pages/main/component';
 
 const Container = styled.div({
   display: 'flex',
