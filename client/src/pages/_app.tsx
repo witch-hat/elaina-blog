@@ -13,12 +13,9 @@ import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 
 export default function ElainaBlog({ Component, pageProps }: AppProps) {
-  const theme: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
-
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <GlobalStyles theme={theme} />
         <Head>
           <meta charSet='utf-8' />
           {/* <link rel='icon' href='%PUBLIC_URL%/favicon.ico' /> */}

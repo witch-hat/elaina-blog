@@ -1,6 +1,11 @@
 import styled from 'styled-components';
 
 import { Header } from './header/Header';
+import { GlobalStyles } from 'src/components';
+
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/redux/rootReducer';
+import { ThemeMode } from 'src/redux/common/type';
 
 const Container = styled.div({
   display: 'flex',
@@ -17,8 +22,11 @@ interface Props {
 }
 
 export default function Layout(props: Props) {
+  const theme: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+
   return (
     <div>
+      <GlobalStyles theme={theme} />
       <Header name={props.name} />
       <Container>{props.children}</Container>
     </div>

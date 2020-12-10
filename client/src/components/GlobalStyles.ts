@@ -3,7 +3,7 @@ import reset from 'styled-reset';
 
 import { theme } from 'src/resources/theme';
 
-export const GlobalStyles = createGlobalStyle`
+export const GlobalStyles = createGlobalStyle<{ theme: string }>`
 	${reset};
 	a {
 		text-decoration: none;
@@ -13,8 +13,8 @@ export const GlobalStyles = createGlobalStyle`
 		box-sizing: border-box;
 	}
 	body {
-    background-color: ${theme.light.backgroundColor};
-    color: ${theme.light.textColor};
+    background-color: ${(props) => theme[props.theme].backgroundColor};
+    color: ${(props) => theme[props.theme].textColor};
 		line-height: 1.4;
 		font-family: 'Nanum Gothic', sans-serif
 	}
