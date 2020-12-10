@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 import { ThemeMode } from 'src/redux/common/type';
@@ -18,22 +18,12 @@ const Icon = styled.div({
   marginRight: '5px'
 });
 
-const Switch = styled.label({
-  flexShrink: 0,
-  position: 'relative',
-  display: 'inline-block',
-  width: '50px',
-  height: '20px'
-});
-
-const Slider = styled.span`
-  position: absolute;
+const Switch = styled.div<{ isChecked: boolean }>`
+  position: relative;
   cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
+  width: 45px;
+  height: 20px;
+  background-color: ${(props) => (props.isChecked ? '#555657' : '#ccc')};
   transition: 0.4s;
   border-radius: 34px;
   &:before {
@@ -46,20 +36,7 @@ const Slider = styled.span`
     background-color: #fff;
     transition: 0.4s;
     border-radius: 50%;
-  }
-`;
-
-const Input = styled.input`
-  opacity: 0;
-  width: 0;
-  height: 0;
-  &:checked + ${Slider} {
-    background-color: #414243;
-  }
-  &:checked + ${Slider}:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(26px);
+    transform: ${(props) => (props.isChecked ? 'translateX(26px)' : 'translateX(0)')};
   }
 `;
 
@@ -67,26 +44,18 @@ export function ModeSwitch() {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const [isChecked, setIsChecked] = useState(themeMode === ThemeMode.light ? false : true);
 
-  function handleModeSwitch() {
-    () => {
-      setIsChecked(!isChecked);
-    };
+  useEffect(() => {
     if (isChecked) {
-      commonDispatch.SetThemeMode(ThemeMode.light);
-    } else {
       commonDispatch.SetThemeMode(ThemeMode.dark);
+    } else {
+      commonDispatch.SetThemeMode(ThemeMode.light);
     }
-  }
-
-  console.log(themeMode, isChecked);
+  }, [isChecked]);
 
   return (
     <Container>
       <Icon>{isChecked ? <i className='fas fa-moon'></i> : <i className='fas fa-sun'></i>}</Icon>
-      <Switch>
-        <Input type='checkbox' checked={isChecked} onChange={() => handleModeSwitch()} />
-        <Slider></Slider>
-      </Switch>
+      <Switch isChecked={isChecked} onClick={() => setIsChecked(!isChecked)}></Switch>
     </Container>
   );
 }
