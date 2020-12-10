@@ -81,41 +81,76 @@ export function ContentCategory() {
     <div style={{ width: '100%' }}>
       <Title>Content Category</Title>
       <Container>
-        <Link href='/post'>
-          <BorderBox styles={{ margin: '.8rem 0' }}>
-            <Content>
-              <PreviewImage src='/images/FakeProfile.png' alt='preview image' />
-              <PreviewTextWrapper>
-                <PreviewTitle>Hello!</PreviewTitle>
-                <PreviewContent>PreviewContent</PreviewContent>
-              </PreviewTextWrapper>
-            </Content>
-          </BorderBox>
+        <Link href='/post' passHref>
+          <a>
+            <BorderBox styles={{ margin: '.8rem 0' }}>
+              <Content>
+                <PreviewImage src='/images/FakeProfile.png' alt='preview image' />
+                <PreviewTextWrapper>
+                  <PreviewTitle>Hello!</PreviewTitle>
+                  <PreviewContent>PreviewContent</PreviewContent>
+                </PreviewTextWrapper>
+              </Content>
+            </BorderBox>
+          </a>
         </Link>
-        <BorderBox styles={{ margin: '.8rem 0' }}>
-          <Content>
-            <PreviewImage src='/images/FakeProfile.png' alt='preview image' />
-            <PreviewTextWrapper>
-              <PreviewTitle>Very long long long long long long long long longlonglonglonglonglonglonglonglong</PreviewTitle>
-              <PreviewContent>
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard
-                dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen
-                book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially
-                unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more
-                recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-              </PreviewContent>
-            </PreviewTextWrapper>
-          </Content>
-        </BorderBox>
-        <BorderBox styles={{ margin: '.8rem 0' }}>
-          <Content>Content3(미리보기: 사진, 제목, 내용)</Content>
-        </BorderBox>
-        <BorderBox styles={{ margin: '.8rem 0' }}>
-          <Content>Content4(미리보기: 사진, 제목, 내용)</Content>
-        </BorderBox>
-        <BorderBox styles={{ margin: '.8rem 0' }}>
-          <Content>Content5(미리보기: 사진, 제목, 내용)</Content>
-        </BorderBox>
+        <Link href='/post'>
+          <a>
+            <BorderBox styles={{ margin: '.8rem 0' }}>
+              <Content>
+                <PreviewImage src='/images/FakeProfile.png' alt='preview image' />
+                <PreviewTextWrapper>
+                  <PreviewTitle>Very long long long long long long long long longlonglonglonglonglonglonglonglong</PreviewTitle>
+                  <PreviewContent>
+                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard
+                    dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen
+                    book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially
+                    unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more
+                    recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                  </PreviewContent>
+                </PreviewTextWrapper>
+              </Content>
+            </BorderBox>
+          </a>
+        </Link>
+        <Link href='/post'>
+          <a>
+            <BorderBox styles={{ margin: '.8rem 0' }}>
+              <Content>
+                <PreviewImage src='/images/FakeProfile.png' alt='preview image' />
+                <PreviewTextWrapper>
+                  <PreviewTitle>Very long long long long long long long long longlonglonglonglonglonglonglonglong</PreviewTitle>
+                  <PreviewContent>
+                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard
+                    dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen
+                    book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially
+                    unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more
+                    recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                  </PreviewContent>
+                </PreviewTextWrapper>
+              </Content>
+            </BorderBox>
+          </a>
+        </Link>
+        <Link href='/post'>
+          <a>
+            <BorderBox styles={{ margin: '.8rem 0' }}>
+              <Content>
+                <PreviewImage src='/images/FakeProfile.png' alt='preview image' />
+                <PreviewTextWrapper>
+                  <PreviewTitle>Very long long long long long long long long longlonglonglonglonglonglonglonglong</PreviewTitle>
+                  <PreviewContent>
+                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard
+                    dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen
+                    book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially
+                    unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more
+                    recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                  </PreviewContent>
+                </PreviewTextWrapper>
+              </Content>
+            </BorderBox>
+          </a>
+        </Link>
       </Container>
     </div>
   );
