@@ -2,20 +2,23 @@ import React from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
 
+import { ThemeMode } from 'src/redux/common/type';
 import { theme } from 'src/resources';
 import { InputBox } from 'src/components';
 import { ModeSwitch } from './ModeSwitch';
 
-const StyledHeader = styled.header({
-  width: '100vw',
-  alignItems: 'center',
-  borderBottom: '1px solid #ccc',
-  padding: '.5rem 0',
-  fontWeight: 'bold',
-  position: 'fixed',
-  top: '0',
-  backgroundColor: '#fff',
-  zIndex: 9999
+const StyledHeader = styled.header<{ themeMode: ThemeMode }>((props) => {
+  return {
+    width: '100vw',
+    alignItems: 'center',
+    borderBottom: '1px solid #ccc',
+    padding: '.5rem 0',
+    fontWeight: 'bold',
+    position: 'fixed',
+    top: '0',
+    zIndex: 9999,
+    backgroundColor: theme[props.themeMode].backgroundColor
+  };
 });
 
 const Container = styled.div({
@@ -71,11 +74,12 @@ const Flex = styled.div({
 
 interface Props {
   name: string;
+  theme: ThemeMode;
 }
 
 export function Header(props: Props) {
   return (
-    <StyledHeader>
+    <StyledHeader themeMode={props.theme}>
       <Link href='/' passHref>
         <Container>
           <BlogName>{props.name}</BlogName>
