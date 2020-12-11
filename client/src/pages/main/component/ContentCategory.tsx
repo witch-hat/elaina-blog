@@ -83,7 +83,7 @@ export default function ContentCategory() {
       <Container>
         <Link href='/post' passHref>
           <a>
-            <BorderBox styles={{ margin: '.8rem 0' }}>
+            <BorderBox isTransform={true} styles={{ margin: '.8rem 0' }}>
               <Content>
                 <PreviewImage src='/images/FakeProfile.png' alt='preview image' />
                 <PreviewTextWrapper>
@@ -96,7 +96,7 @@ export default function ContentCategory() {
         </Link>
         <Link href='/post'>
           <a>
-            <BorderBox styles={{ margin: '.8rem 0' }}>
+            <BorderBox isTransform={true} styles={{ margin: '.8rem 0' }}>
               <Content>
                 <PreviewImage src='/images/FakeProfile.png' alt='preview image' />
                 <PreviewTextWrapper>
@@ -115,7 +115,7 @@ export default function ContentCategory() {
         </Link>
         <Link href='/post'>
           <a>
-            <BorderBox styles={{ margin: '.8rem 0' }}>
+            <BorderBox isTransform={true} styles={{ margin: '.8rem 0' }}>
               <Content>
                 <PreviewImage src='/images/FakeProfile.png' alt='preview image' />
                 <PreviewTextWrapper>
@@ -134,7 +134,7 @@ export default function ContentCategory() {
         </Link>
         <Link href='/post'>
           <a>
-            <BorderBox styles={{ margin: '.8rem 0' }}>
+            <BorderBox isTransform={true} styles={{ margin: '.8rem 0' }}>
               <Content>
                 <PreviewImage src='/images/FakeProfile.png' alt='preview image' />
                 <PreviewTextWrapper>

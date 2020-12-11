@@ -46,34 +46,34 @@ export default function Category() {
       <Title>Category</Title>
       <HorizontalScrollWrapper>
         <Container>
-          <BorderBox styles={{ margin: '0 10px' }}>
+          <BorderBox isTransform={true} styles={{ margin: '0 10px' }}>
             <Content>Category</Content>
           </BorderBox>
-          <BorderBox styles={{ margin: '0 10px' }}>
+          <BorderBox isTransform={true} styles={{ margin: '0 10px' }}>
             <Content>Category</Content>
           </BorderBox>
-          <BorderBox styles={{ margin: '0 10px' }}>
+          <BorderBox isTransform={true} styles={{ margin: '0 10px' }}>
             <Content>Category</Content>
           </BorderBox>
-          <BorderBox styles={{ margin: '0 10px' }}>
+          <BorderBox isTransform={true} styles={{ margin: '0 10px' }}>
             <Content>Category</Content>
           </BorderBox>
-          <BorderBox styles={{ margin: '0 10px' }}>
+          <BorderBox isTransform={true} styles={{ margin: '0 10px' }}>
             <Content>Category</Content>
           </BorderBox>
-          <BorderBox styles={{ margin: '0 10px' }}>
+          <BorderBox isTransform={true} styles={{ margin: '0 10px' }}>
             <Content>Category</Content>
           </BorderBox>
-          <BorderBox styles={{ margin: '0 10px' }}>
+          <BorderBox isTransform={true} styles={{ margin: '0 10px' }}>
             <Content>Category</Content>
           </BorderBox>
-          <BorderBox styles={{ margin: '0 10px' }}>
+          <BorderBox isTransform={true} styles={{ margin: '0 10px' }}>
             <Content>Category</Content>
           </BorderBox>
-          <BorderBox styles={{ margin: '0 10px' }}>
+          <BorderBox isTransform={true} styles={{ margin: '0 10px' }}>
             <Content>Category</Content>
           </BorderBox>
-          <BorderBox styles={{ margin: '0 10px' }}>
+          <BorderBox isTransform={true} styles={{ margin: '0 10px' }}>
             <Content>Category</Content>
           </BorderBox>
         </Container>

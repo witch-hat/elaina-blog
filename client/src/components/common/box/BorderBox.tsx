@@ -6,29 +6,39 @@ interface Styles {
   margin?: string;
 }
 
-const Box = styled.div<Styles>((props) => {
+interface BoxProps {
+  styles?: Styles;
+  isTransform: boolean;
+}
+
+const Box = styled.div<BoxProps>((props) => {
   return {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     width: 'max-content',
-    margin: props.margin || '10px',
+    margin: props.styles?.margin || '10px',
     border: `1px solid ${theme.light.borderColor}`,
     borderRadius: '12px',
     transition: '.2s all',
-    cursor: 'pointer',
+    cursor: `${props.isTransform ? 'pointer' : 'default'}`,
     '&:hover': {
-      transform: 'translateY(-10px)',
-      boxShadow: '0 10px 4px -2px rgba(38, 38, 38, .2)'
+      transform: `${props.isTransform ? 'translateY(-10px)' : 'none'}`,
+      boxShadow: `${props.isTransform ? '0 10px 4px -2px rgba(38, 38, 38, .2)' : 'none'}`
     }
   };
 });
 
 interface Props {
-  styles?: Styles;
   children: JSX.Element;
+  isTransform: boolean;
+  styles?: Styles;
 }
 
 export function BorderBox(props: Props) {
-  return <Box {...props.styles}>{props.children}</Box>;
+  return (
+    <Box isTransform={props.isTransform} styles={props.styles}>
+      {props.children}
+    </Box>
+  );
 }

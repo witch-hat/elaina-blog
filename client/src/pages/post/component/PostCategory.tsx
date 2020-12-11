@@ -58,7 +58,7 @@ export default function PostCategory() {
   return (
     <Container>
       <CategoryName>카테고리 이름 ex)JS</CategoryName>
-      <BorderBox styles={{ margin: '1rem 0 0' }}>
+      <BorderBox isTransform={true} styles={{ margin: '1rem 0 0' }}>
         <ContentContainer>
           <Title>Post1</Title>
           <Article>
@@ -70,7 +70,7 @@ export default function PostCategory() {
           </Article>
         </ContentContainer>
       </BorderBox>
-      <BorderBox styles={{ margin: '1rem 0 0' }}>
+      <BorderBox isTransform={true} styles={{ margin: '1rem 0 0' }}>
         <ContentContainer>
           <Title>Post Title is very long long longlonglong long long</Title>
           <Article>
@@ -82,12 +82,12 @@ export default function PostCategory() {
           </Article>
         </ContentContainer>
       </BorderBox>
-      <BorderBox styles={{ margin: '1rem 0 0' }}>
+      <BorderBox isTransform={true} styles={{ margin: '1rem 0 0' }}>
         <ContentContainer>
           <Title>Post 3</Title>
         </ContentContainer>
       </BorderBox>
-      <BorderBox styles={{ margin: '1rem 0 0' }}>
+      <BorderBox isTransform={true} styles={{ margin: '1rem 0 0' }}>
         <ContentContainer>
           <Title>Post 4</Title>
         </ContentContainer>
