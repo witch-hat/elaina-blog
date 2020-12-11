@@ -11,13 +11,36 @@ const Container = styled.div({
   alignItems: 'center',
   width: '250px',
   height: 'calc(100vh - 5rem - 20px)',
-  backgroundColor: 'yellow',
   overFlowY: 'auto',
   '&::-webkit-scrollbar': {
     width: '0'
   }
 });
 
+const NavigationContainer = styled.div({
+  width: '100%',
+  padding: '.5rem',
+  fontSize: '.875rem',
+  color: '#777',
+  boxShadow: 'inset 3px 0px #aaaaaa;'
+});
+
 export default function ContentNavigation() {
-  return <Container>Content Navigation</Container>;
+  return (
+    <Container>
+      <NavigationContainer>
+        H1(#)
+        <br />
+        &nbsp;&nbsp;H2(##)
+        <br />
+        &nbsp;&nbsp;&nbsp;&nbsp;H3(###)
+        <br />
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;H4(####)
+        <br />
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;H5(#####)
+        <br />
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;H6(######)
+      </NavigationContainer>
+    </Container>
+  );
 }
