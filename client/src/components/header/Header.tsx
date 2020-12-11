@@ -10,6 +10,7 @@ import { ModeSwitch } from './ModeSwitch';
 const StyledHeader = styled.header<{ themeMode: ThemeMode }>((props) => {
   return {
     width: '100vw',
+    display: 'flex',
     alignItems: 'center',
     borderBottom: '1px solid #ccc',
     padding: '.5rem 0',
@@ -17,6 +18,7 @@ const StyledHeader = styled.header<{ themeMode: ThemeMode }>((props) => {
     position: 'fixed',
     top: '0',
     zIndex: 9999,
+    height: '5rem',
     backgroundColor: theme[props.themeMode].backgroundColor
   };
 });
@@ -80,20 +82,20 @@ interface Props {
 export function Header(props: Props) {
   return (
     <StyledHeader themeMode={props.theme}>
-      <Link href='/' passHref>
-        <Container>
+      <Container>
+        <Link href='/' passHref>
           <BlogName>{props.name}</BlogName>
-          <Flex>
-            <ModeSwitch />
-            <SearchForm method='GET' action='/search'>
-              <InputBox placeholder='Search' id='search' minLength={2} maxLength={10} styles={{ width: '180px' }} />
-              <SearchButton type='submit'>
-                <i className='fas fa-search'></i>
-              </SearchButton>
-            </SearchForm>
-          </Flex>
-        </Container>
-      </Link>
+        </Link>
+        <Flex>
+          <ModeSwitch />
+          <SearchForm method='GET' action='/search'>
+            <InputBox placeholder='Search' id='search' minLength={2} maxLength={10} styles={{ width: '180px' }} />
+            <SearchButton type='submit'>
+              <i className='fas fa-search'></i>
+            </SearchButton>
+          </SearchForm>
+        </Flex>
+      </Container>
     </StyledHeader>
   );
 }
