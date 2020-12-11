@@ -19,6 +19,12 @@ const Container = styled.div({
   }
 });
 
+const CategoryName = styled.div({
+  width: '100%',
+  fontSize: '1.4rem',
+  fontWeight: 'bold'
+});
+
 const ContentContainer = styled.div({
   display: 'flex',
   flexDirection: 'column',
@@ -40,7 +46,7 @@ const Title = styled.div({
 
 const Article = styled.div({
   width: '100%',
-  marginTop: '1rem',
+  marginTop: '1.25rem',
   overflow: 'hidden',
   wordBreak: 'keep-all',
   display: '-webkit-box',
@@ -51,6 +57,7 @@ const Article = styled.div({
 export default function PostCategory() {
   return (
     <Container>
+      <CategoryName>카테고리 이름 ex)JS</CategoryName>
       <BorderBox styles={{ margin: '1rem 0 0' }}>
         <ContentContainer>
           <Title>Post1</Title>
