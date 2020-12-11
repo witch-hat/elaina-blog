@@ -7,7 +7,7 @@ const Container = styled.div({
   flexDirection: 'column',
   jusitfyContent: 'flex-start',
   alignItems: 'center',
-  minHeight: '85vh',
+  minHeight: 'calc(100vh - 5rem - 40px)',
   backgroundColor: 'red'
 });
 
