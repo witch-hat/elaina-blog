@@ -10,7 +10,7 @@ const Container = styled.div({
   justifyContent: 'flex-start',
   alignItems: 'center',
   width: '250px',
-  height: 'calc(100vh - 5rem - 40px)',
+  height: 'calc(100vh - 5rem - 20px)',
   backgroundColor: 'yellow',
   overFlowY: 'auto',
   '&::-webkit-scrollbar': {
