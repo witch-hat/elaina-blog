@@ -5,6 +5,7 @@ const Container = styled.div({
   display: 'flex',
   position: 'sticky',
   top: 'calc(5rem + 20px)',
+  padding: '.5rem',
   flexDirection: 'column',
   justifyContent: 'flex-start',
   alignItems: 'center',

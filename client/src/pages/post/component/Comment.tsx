@@ -5,6 +5,7 @@ const Container = styled.div({
   width: '800px',
   display: 'flex',
   marginTop: '20px',
+  padding: '.5rem 1rem',
   flexDirection: 'column',
   jusitfyContent: 'flex-start',
   alignItems: 'center',
