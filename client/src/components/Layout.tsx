@@ -10,7 +10,7 @@ import { ThemeMode } from 'src/redux/common/type';
 const Container = styled.div({
   display: 'flex',
   width: '1300px',
-  margin: '10vh auto 0',
+  margin: '5rem auto 0',
   padding: '20px 0',
   minHeight: '90vh',
   position: 'relative'
