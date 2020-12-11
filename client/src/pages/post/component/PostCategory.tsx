@@ -5,11 +5,17 @@ const Container = styled.div({
   width: '250px',
   display: 'flex',
   flexDirection: 'column',
+  position: 'sticky',
+  top: 'calc(5rem + 20px)',
   alignItems: 'center',
   justifyContent: 'flex-start',
   backgroundColor: 'blue',
-  minHeight: '100%',
-  padding: '.5rem'
+  height: 'calc(100vh - 5rem - 40px)',
+  padding: '.5rem',
+  overflowY: 'auto',
+  '&::-webkit-scrollbar': {
+    width: '0'
+  }
 });
 
 export default function PostCategory() {
