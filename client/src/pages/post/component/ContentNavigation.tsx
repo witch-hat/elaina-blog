@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Container = styled.div({
+const Container = styled.nav({
   display: 'flex',
   position: 'sticky',
   top: 'calc(5rem + 20px)',

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Container = styled.div({
+const Container = styled.section({
   width: '800px',
   display: 'flex',
   padding: '.5rem 1.5rem',
@@ -11,7 +11,7 @@ const Container = styled.div({
   minHeight: 'calc(100vh - 5rem - 40px)'
 });
 
-const Title = styled.span({
+const Title = styled.header({
   width: '100%',
   fontSize: '2.5rem',
   fontWeight: 'bold'
@@ -24,7 +24,7 @@ const Menu = styled.div({
   alignItems: 'center'
 });
 
-const Article = styled.div({
+const Article = styled.article({
   marginTop: '2rem',
   fontSize: '1.1rem',
   wordBreak: 'keep-all'

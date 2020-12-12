@@ -78,7 +78,7 @@ interface Props {}
 
 export default function ContentCategory() {
   return (
-    <div style={{ width: '100%' }}>
+    <section style={{ width: '100%' }}>
       <Title>Content Category</Title>
       <Container>
         <Link href='/post' passHref>
@@ -152,6 +152,6 @@ export default function ContentCategory() {
           </a>
         </Link>
       </Container>
-    </div>
+    </section>
   );
 }

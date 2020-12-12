@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { BorderBox } from 'src/components';
 
-const Container = styled.div({
+const Container = styled.nav({
   width: '250px',
   display: 'flex',
   flexDirection: 'column',

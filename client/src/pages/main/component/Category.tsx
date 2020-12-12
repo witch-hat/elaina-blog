@@ -41,7 +41,7 @@ const Content = styled.div({
 
 export default function Category() {
   return (
-    <div style={{ width: '100%' }}>
+    <section style={{ width: '100%' }}>
       <Title>Category</Title>
       <HorizontalScrollWrapper>
         <Container>
@@ -77,6 +77,6 @@ export default function Category() {
           </BorderBox>
         </Container>
       </HorizontalScrollWrapper>
-    </div>
+    </section>
   );
 }

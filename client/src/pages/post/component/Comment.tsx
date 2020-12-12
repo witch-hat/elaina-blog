@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { BorderBox } from 'src/components';
 
-const Container = styled.div({
+const Container = styled.section({
   display: 'flex',
   marginTop: '20px',
   padding: '.5rem 1.5rem',

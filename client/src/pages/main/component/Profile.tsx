@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { RoundImage } from 'src/components';
 import { theme } from 'src/resources';
 
-const Container = styled.div({
+const Container = styled.aside({
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'flex-start',
