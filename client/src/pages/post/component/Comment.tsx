@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { BorderBox } from 'src/components';
 
 const Container = styled.div({
-  width: '800px',
   display: 'flex',
   marginTop: '20px',
   padding: '.5rem 1rem',
