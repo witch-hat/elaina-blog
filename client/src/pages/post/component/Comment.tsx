@@ -14,7 +14,8 @@ const Container = styled.div({
   minHeight: '20rem'
 });
 
-const Title = styled.div({
+const Title = styled.span({
+  display: 'block',
   width: '100%',
   fontSize: '1.4rem',
   fontWeight: 'bold'
@@ -36,7 +37,7 @@ const UserInfomation = styled.div({
   alignItems: 'center'
 });
 
-const CommentContent = styled.div({
+const CommentContent = styled.p({
   display: 'flex',
   alignItems: 'center',
   width: '95%',

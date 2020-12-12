@@ -19,7 +19,7 @@ const Container = styled.div({
   }
 });
 
-const CategoryName = styled.div({
+const CategoryName = styled.span({
   width: '100%',
   fontSize: '1.4rem',
   fontWeight: 'bold'
@@ -34,7 +34,7 @@ const ContentContainer = styled.div({
   padding: '.5rem'
 });
 
-const Title = styled.div({
+const Title = styled.span({
   width: '100%',
   fontSize: '1.2rem',
   fontWeight: 'bold',
@@ -44,7 +44,7 @@ const Title = styled.div({
   WebkitBoxOrient: 'vertical'
 });
 
-const Article = styled.div({
+const Article = styled.p({
   width: '100%',
   marginTop: '1.25rem',
   overflow: 'hidden',

@@ -3,8 +3,8 @@ import Link from 'next/link';
 
 import { BorderBox } from 'src/components';
 
-const Title = styled.div({
-  width: '100%',
+const Title = styled.span({
+  display: 'block',
   fontSize: '1.4rem',
   fontWeight: 'bold',
   margin: '25px 0 0'
@@ -48,7 +48,7 @@ const PreviewTextWrapper = styled.div({
   justifyContent: 'center'
 });
 
-const PreviewTitle = styled.div({
+const PreviewTitle = styled.span({
   height: '2rem',
   width: '100%',
   fontSize: '1.4rem',
@@ -60,7 +60,7 @@ const PreviewTitle = styled.div({
   WebkitBoxOrient: 'vertical'
 });
 
-const PreviewContent = styled.div({
+const PreviewContent = styled.span({
   width: '100%',
   height: '5rem',
   fontSize: '1.1rem',

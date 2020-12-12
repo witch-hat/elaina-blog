@@ -2,8 +2,7 @@ import styled from 'styled-components';
 
 import { BorderBox, HorizontalScrollWrapper } from 'src/components';
 
-const Title = styled.div({
-  width: '100%',
+const Title = styled.span({
   fontSize: '1.4rem',
   fontWeight: 'bold'
 });

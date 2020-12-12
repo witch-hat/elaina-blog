@@ -11,7 +11,7 @@ const Container = styled.div({
   minHeight: 'calc(100vh - 5rem - 40px)'
 });
 
-const Title = styled.div({
+const Title = styled.span({
   width: '100%',
   fontSize: '2.5rem',
   fontWeight: 'bold'

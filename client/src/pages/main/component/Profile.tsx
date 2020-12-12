@@ -15,7 +15,8 @@ const Container = styled.div({
   alignSelf: 'stretch'
 });
 
-const Name = styled.div({
+const Name = styled.span({
+  display: 'block',
   fontSize: '1.4rem',
   fontWeight: 'bold',
   width: '100%',
