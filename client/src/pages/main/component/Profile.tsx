@@ -51,16 +51,22 @@ export default function Profile(props: Props) {
       <ListWrapper>
         <Description>Hello My name is Elaina~~~~~~~</Description>
         <Description>
-          <i className='fas fa-link'></i>&nbsp;Link
+          <i className='fas fa-link'></i>&nbsp;
+          <a href='/' target='_blank' rel='noopener noreferer nofollow'>
+            Link
+          </a>
         </Description>
         <Description>
-          <i className='far fa-building'></i>&nbsp;Company
+          <i className='far fa-building'></i>&nbsp;
+          <span>Company</span>
         </Description>
         <Description>
-          <i className='fas fa-map-marker-alt'></i>&nbsp;Location
+          <i className='fas fa-map-marker-alt'></i>&nbsp;
+          <span>Location</span>
         </Description>
         <Description>
-          <i className='far fa-envelope'></i>&nbsp;Email
+          <i className='far fa-envelope'></i>&nbsp;
+          <a href='mailto:'>Email</a>
         </Description>
       </ListWrapper>
     </Container>
