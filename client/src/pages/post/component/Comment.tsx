@@ -6,7 +6,7 @@ import { BorderBox } from 'src/components';
 const Container = styled.div({
   display: 'flex',
   marginTop: '20px',
-  padding: '.5rem 1rem',
+  padding: '.5rem 1.5rem',
   flexDirection: 'column',
   jusitfyContent: 'flex-start',
   alignItems: 'center',

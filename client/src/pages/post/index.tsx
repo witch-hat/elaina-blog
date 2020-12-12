@@ -11,13 +11,10 @@ const Container = styled.div({
 });
 
 const ContentContainer = styled.div({
-  width: '100vw',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  justifyContent: 'center',
-  marginLeft: '24px',
-  marginRight: '24px'
+  justifyContent: 'center'
 });
 
 export default function Post() {
