@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { Navigation, ContentCategory, Profile } from 'src/pages/main/component';
+import { CategoryNavigation, ContentCategory, Profile } from 'src/pages/main/component';
 
 const Container = styled.div({
   display: 'flex',
@@ -23,7 +23,7 @@ export default function Main() {
     <Container>
       <Profile />
       <Wrapper>
-        <Navigation />
+        <CategoryNavigation />
         <ContentCategory />
       </Wrapper>
     </Container>

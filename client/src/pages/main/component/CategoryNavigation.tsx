@@ -1,7 +1,5 @@
 import styled from 'styled-components';
 
-import { BorderBox, HorizontalScrollWrapper } from 'src/components';
-
 const Container = styled.nav({
   width: '100%',
   display: 'flex',
@@ -14,8 +12,9 @@ const NavButtons = styled.div({
   padding: '.5rem 1rem',
   fontSize: '1.25rem',
   cursor: 'pointer',
+  transition: '.2s all',
   '&:hover': {
-    // textShadow: '0 0 4px #1f2f3f, 0 0 7px #1f2f3f, 0 0 10px #1f2f3f'
+    boxShadow: 'inset 0 -2px 0 #999'
   }
 });
 
@@ -23,12 +22,12 @@ const NavName = styled.span({
   fontWeight: 'bold'
 });
 
-export default function Navigation() {
+export default function CategoryNavigation() {
   return (
     <Container>
       <NavButtons>
         <i className='fas fa-book'></i>&nbsp;
-        <NavName>글 목록</NavName>
+        <NavName>게시글</NavName>
       </NavButtons>
       <NavButtons>
         <i className='fas fa-user'></i>&nbsp;
