@@ -5,7 +5,7 @@ import { BorderBox } from 'src/components';
 
 const Container = styled.section({
   display: 'flex',
-  marginTop: '20px',
+  margin: '20px 0',
   padding: '.5rem 1.5rem',
   flexDirection: 'column',
   jusitfyContent: 'flex-start',
@@ -34,7 +34,8 @@ const CommentEditor = styled.textarea({
   padding: '.5rem',
   resize: 'none',
   border: '1px solid #ddd',
-  borderRadius: '12px'
+  borderRadius: '12px',
+  wordBreak: 'keep-all'
 });
 
 const Button = styled.div({
