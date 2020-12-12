@@ -1,21 +1,13 @@
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 import styled from 'styled-components';
+
+import NavigationButton from './NavigationButton';
 
 const Container = styled.nav({
   width: '100%',
   display: 'flex',
   alignItems: 'center'
-});
-
-const NavButtons = styled.div({
-  display: 'flex',
-  alignItems: 'center',
-  padding: '.5rem 1rem',
-  fontSize: '1.25rem',
-  cursor: 'pointer',
-  transition: '.2s all',
-  '&:hover': {
-    boxShadow: 'inset 0 -2px 0 #999'
-  }
 });
 
 const NavName = styled.span({
@@ -25,14 +17,18 @@ const NavName = styled.span({
 export default function CategoryNavigation() {
   return (
     <Container>
-      <NavButtons>
-        <i className='fas fa-book'></i>&nbsp;
-        <NavName>게시글</NavName>
-      </NavButtons>
-      <NavButtons>
-        <i className='fas fa-user'></i>&nbsp;
-        <NavName>About</NavName>
-      </NavButtons>
+      <NavigationButton href='/'>
+        <>
+          <i className='fas fa-book'></i>&nbsp;
+          <NavName>게시글</NavName>
+        </>
+      </NavigationButton>
+      <NavigationButton href='/about'>
+        <>
+          <i className='fas fa-user'></i>&nbsp;
+          <NavName>About</NavName>
+        </>
+      </NavigationButton>
     </Container>
   );
 }

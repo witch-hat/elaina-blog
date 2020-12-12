@@ -1,6 +1,8 @@
 import styled from 'styled-components';
+import { useRouter } from 'next/router';
 
 import { CategoryNavigation, ContentCategory, Profile } from 'src/pages/main/component';
+import About from '../about';
 
 const Container = styled.div({
   display: 'flex',
@@ -19,6 +21,8 @@ const Wrapper = styled.div({
 });
 
 export default function Main() {
+  const router = useRouter();
+
   return (
     <Container>
       <Profile />
