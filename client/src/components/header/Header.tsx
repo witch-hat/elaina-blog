@@ -25,8 +25,9 @@ const StyledHeader = styled.header<{ themeMode: ThemeMode }>((props) => {
 
 const Container = styled.div({
   display: 'flex',
-  width: '1300px',
+  width: '100%',
   height: '100%',
+  padding: '0 4rem',
   margin: '0 auto',
   alignItems: 'center',
   justifyContent: 'space-between'
