@@ -20,12 +20,45 @@ const Title = styled.span({
   fontWeight: 'bold'
 });
 
+const EditorWrapper = styled.div({
+  width: '100%',
+  margin: '2rem 0'
+});
+
+const CommentEditor = styled.textarea({
+  fontFamily: 'Nanum Gothic, sans-serif',
+  width: '100%',
+  height: '5rem',
+  overflowY: 'auto',
+  outline: 'none',
+  padding: '.5rem',
+  resize: 'none',
+  border: '1px solid #ddd',
+  borderRadius: '12px'
+});
+
+const Button = styled.div({
+  width: '8rem',
+  margin: '1rem 0 0',
+  height: '3rem',
+  padding: '.5rem',
+  display: 'flex',
+  border: '1px solid #ddd',
+  cursor: 'pointer',
+  alignItems: 'center',
+  justifyContent: 'center',
+  borderRadius: '12px',
+  '&:hover': {
+    backgroundColor: '#ddd'
+  }
+});
+
 const CommentContainer = styled.div({
   width: '750px',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  height: '8rem',
+  minHeight: '8rem',
   padding: '.5rem'
 });
 
@@ -40,35 +73,48 @@ const CommentContent = styled.p({
   display: 'flex',
   alignItems: 'center',
   width: '95%',
-  height: '5rem',
+  minHeight: '5rem',
   marginTop: '.5rem',
   padding: '.5rem',
   borderRadius: '8px',
   backgroundColor: '#efefef'
 });
 
+const Counter = styled.div({
+  width: '100%',
+  fontSize: '1.15rem',
+  fontWeight: 'bold'
+});
+
 export default function Comment() {
   return (
     <Container>
       <Title>Comments</Title>
-      <BorderBox isTransform={false} styles={{ margin: '1rem 0 0' }}>
-        <CommentContainer>
-          <UserInfomation>덧글 단 사람 정보 + 삭제버튼?</UserInfomation>
-          <CommentContent>Hi~</CommentContent>
-        </CommentContainer>
-      </BorderBox>
-      <BorderBox isTransform={false} styles={{ margin: '1rem 0 0' }}>
-        <CommentContainer>
-          <UserInfomation>덧글 단 사람 정보 + 삭제버튼?</UserInfomation>
-          <CommentContent>좋은 글이였습니다!</CommentContent>
-        </CommentContainer>
-      </BorderBox>
-      <BorderBox isTransform={false} styles={{ margin: '1rem 0 0' }}>
-        <CommentContainer>
-          <UserInfomation>덧글 단 사람 정보 + 삭제버튼?</UserInfomation>
-          <CommentContent>으으...</CommentContent>
-        </CommentContainer>
-      </BorderBox>
+      <EditorWrapper>
+        <CommentEditor placeholder='Write comment...(5자 이상)' minLength={5} />
+        <Button>덧글 작성</Button>
+      </EditorWrapper>
+      <div>
+        <Counter>덧글 수: 3개</Counter>
+        <BorderBox isTransform={false} styles={{ margin: '1rem 0 0' }}>
+          <CommentContainer>
+            <UserInfomation>덧글 단 사람 정보 + 삭제버튼?</UserInfomation>
+            <CommentContent>Hi~</CommentContent>
+          </CommentContainer>
+        </BorderBox>
+        <BorderBox isTransform={false} styles={{ margin: '1rem 0 0' }}>
+          <CommentContainer>
+            <UserInfomation>덧글 단 사람 정보 + 삭제버튼?</UserInfomation>
+            <CommentContent>좋은 글이였습니다!</CommentContent>
+          </CommentContainer>
+        </BorderBox>
+        <BorderBox isTransform={false} styles={{ margin: '1rem 0 0' }}>
+          <CommentContainer>
+            <UserInfomation>덧글 단 사람 정보 + 삭제버튼?</UserInfomation>
+            <CommentContent>으으...</CommentContent>
+          </CommentContainer>
+        </BorderBox>
+      </div>
     </Container>
   );
 }
