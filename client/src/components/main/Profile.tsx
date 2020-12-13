@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 
 import { RoundImage } from 'src/components';
@@ -24,6 +25,17 @@ const Name = styled.span({
   wordBreak: 'keep-all'
 });
 
+const EditProfileButton = styled.div({
+  width: '100%',
+  marginTop: '.5rem',
+  padding: '.5rem',
+  borderRadius: '12px',
+  border: '1px solid #ddd',
+  cursor: 'pointer',
+  display: 'flex',
+  justifyContent: 'center'
+});
+
 const ListWrapper = styled.ul({
   display: 'flex',
   flexDirection: 'column',
@@ -38,9 +50,17 @@ const Description = styled.li({
   margin: '10px 0'
 });
 
+const Input = styled.input({
+  width: '100%',
+  fontSize: '1.1rem',
+  margin: '10px 0'
+});
+
 interface Props {}
 
 export default function Profile(props: Props) {
+  const [isEditMode, setIsEditMode] = useState(false);
+
   return (
     <Container>
       <RoundImage
@@ -69,6 +89,7 @@ export default function Profile(props: Props) {
           <a href='mailto:'>Email</a>
         </Description>
       </ListWrapper>
+      <EditProfileButton>Edit Profile</EditProfileButton>
     </Container>
   );
 }
