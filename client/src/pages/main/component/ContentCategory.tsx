@@ -35,12 +35,13 @@ const Content = styled.div({
 const PreviewImage = styled.img({
   width: '300px',
   height: '8rem',
-  objectFit: 'cover'
+  objectFit: 'cover',
+  float: 'right'
 });
 
 const PreviewTextWrapper = styled.div({
-  padding: '0 1rem',
-  width: 'calc(650px - 2rem)',
+  width: '100%',
+  marginRight: '1rem',
   display: 'flex',
   height: '8rem',
   flexDirection: 'column',
@@ -85,11 +86,11 @@ export default function ContentCategory() {
           <a>
             <BorderBox isTransform={true} styles={{ margin: '.8rem 0' }}>
               <Content>
-                <PreviewImage src='/images/FakeProfile.png' alt='preview image' />
                 <PreviewTextWrapper>
-                  <PreviewTitle>Hello!</PreviewTitle>
+                  <PreviewTitle>React</PreviewTitle>
                   <PreviewContent>PreviewContent</PreviewContent>
                 </PreviewTextWrapper>
+                <PreviewImage src='/images/FakeProfile.png' alt='preview image' />
               </Content>
             </BorderBox>
           </a>
@@ -98,7 +99,6 @@ export default function ContentCategory() {
           <a>
             <BorderBox isTransform={true} styles={{ margin: '.8rem 0' }}>
               <Content>
-                <PreviewImage src='/images/FakeProfile.png' alt='preview image' />
                 <PreviewTextWrapper>
                   <PreviewTitle>Very long long long long long long long long longlonglonglonglonglonglonglonglong</PreviewTitle>
                   <PreviewContent>
@@ -109,6 +109,7 @@ export default function ContentCategory() {
                     recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
                   </PreviewContent>
                 </PreviewTextWrapper>
+                <PreviewImage src='/images/FakeProfile.png' alt='preview image' />
               </Content>
             </BorderBox>
           </a>
@@ -117,9 +118,8 @@ export default function ContentCategory() {
           <a>
             <BorderBox isTransform={true} styles={{ margin: '.8rem 0' }}>
               <Content>
-                <PreviewImage src='/images/FakeProfile.png' alt='preview image' />
                 <PreviewTextWrapper>
-                  <PreviewTitle>Very long long long long long long long long longlonglonglonglonglonglonglonglong</PreviewTitle>
+                  <PreviewTitle>Vue.js</PreviewTitle>
                   <PreviewContent>
                     Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard
                     dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen
@@ -128,6 +128,7 @@ export default function ContentCategory() {
                     recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
                   </PreviewContent>
                 </PreviewTextWrapper>
+                <PreviewImage src='/images/FakeProfile.png' alt='preview image' />
               </Content>
             </BorderBox>
           </a>
@@ -136,9 +137,27 @@ export default function ContentCategory() {
           <a>
             <BorderBox isTransform={true} styles={{ margin: '.8rem 0' }}>
               <Content>
-                <PreviewImage src='/images/FakeProfile.png' alt='preview image' />
                 <PreviewTextWrapper>
-                  <PreviewTitle>Very long long long long long long long long longlonglonglonglonglonglonglonglong</PreviewTitle>
+                  <PreviewTitle>Data Structure</PreviewTitle>
+                  <PreviewContent>
+                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard
+                    dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen
+                    book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially
+                    unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more
+                    recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                  </PreviewContent>
+                </PreviewTextWrapper>
+                <PreviewImage src='/images/FakeProfile.png' alt='preview image' />
+              </Content>
+            </BorderBox>
+          </a>
+        </Link>
+        <Link href='/post'>
+          <a>
+            <BorderBox isTransform={true} styles={{ margin: '.8rem 0' }}>
+              <Content>
+                <PreviewTextWrapper>
+                  <PreviewTitle>No Image</PreviewTitle>
                   <PreviewContent>
                     Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard
                     dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen
