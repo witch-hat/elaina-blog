@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import { ThemeMode } from 'src/redux/common/type';
 import { commonDispatch } from 'src/redux/common/dispatch';
-import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';
 
 const Container = styled.div({
