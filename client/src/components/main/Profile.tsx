@@ -10,9 +10,7 @@ const Container = styled.aside({
   justifyContent: 'flex-start',
   alignItmes: 'center',
   padding: '10px',
-  // justifySelf: 'stretch',
   minHeight: 'calc(90vh - 40px)',
-  // flex: 1
   alignSelf: 'stretch'
 });
 
@@ -23,17 +21,6 @@ const Name = styled.span({
   width: '100%',
   margin: '15px 0',
   wordBreak: 'keep-all'
-});
-
-const EditProfileButton = styled.div({
-  width: '100%',
-  marginTop: '.5rem',
-  padding: '.5rem',
-  borderRadius: '12px',
-  border: '1px solid #ddd',
-  cursor: 'pointer',
-  display: 'flex',
-  justifyContent: 'center'
 });
 
 const ListWrapper = styled.ul({
@@ -48,6 +35,43 @@ const Description = styled.li({
   fontSize: '1.1rem',
   wordBreak: 'keep-all',
   margin: '10px 0'
+});
+
+const ButtonContainer = styled.div({
+  width: '100%',
+  marginTop: '.5rem',
+  display: 'flex'
+});
+
+const EditButton = styled.div({
+  width: '100%',
+  padding: '.5rem',
+  borderRadius: '12px',
+  border: '1px solid #ddd',
+  cursor: 'pointer',
+  display: 'flex',
+  justifyContent: 'center'
+});
+
+const SaveButton = styled.div({
+  width: '60%',
+  marginRight: '5%',
+  padding: '.5rem',
+  borderRadius: '12px',
+  border: '1px solid #ddd',
+  cursor: 'pointer',
+  display: 'flex',
+  justifyContent: 'center'
+});
+
+const CancelButton = styled.div({
+  width: '35%',
+  padding: '.5rem',
+  borderRadius: '12px',
+  border: '1px solid #ddd',
+  cursor: 'pointer',
+  display: 'flex',
+  justifyContent: 'center'
 });
 
 const Input = styled.input({
@@ -89,7 +113,16 @@ export default function Profile(props: Props) {
           <a href='mailto:'>Email</a>
         </Description>
       </ListWrapper>
-      <EditProfileButton>Edit Profile</EditProfileButton>
+      <ButtonContainer>
+        {isEditMode ? (
+          <>
+            <SaveButton onClick={() => setIsEditMode(false)}>Save</SaveButton>
+            <CancelButton onClick={() => setIsEditMode(false)}>Cancel</CancelButton>
+          </>
+        ) : (
+          <EditButton onClick={() => setIsEditMode(true)}>Edit Profile</EditButton>
+        )}
+      </ButtonContainer>
     </Container>
   );
 }
