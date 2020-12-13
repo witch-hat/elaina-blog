@@ -6,6 +6,7 @@ import { ThemeMode } from 'src/redux/common/type';
 import { theme } from 'src/resources';
 import { InputBox } from 'src/components';
 import { ModeSwitch } from './ModeSwitch';
+import AdminMenuButton from './AdminMenuButton';
 
 const StyledHeader = styled.header<{ themeMode: ThemeMode }>((props) => {
   return {
@@ -95,6 +96,7 @@ export function Header(props: Props) {
               <i className='fas fa-search'></i>
             </SearchButton>
           </SearchForm>
+          <AdminMenuButton />
         </Flex>
       </Container>
     </StyledHeader>
