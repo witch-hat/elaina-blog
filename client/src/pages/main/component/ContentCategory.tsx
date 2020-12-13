@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import Link from 'next/link';
 
 import { BorderBox } from 'src/components';
+import ContentCategoryDetails from './ContentCategoryDetails';
 
 const Title = styled.span({
   display: 'block',
@@ -28,13 +29,13 @@ const Content = styled.div({
   justifyContent: 'center',
   alignItems: 'center',
   width: '950px',
-  padding: '1rem',
+  padding: '.8rem',
   height: '10rem'
 });
 
 const PreviewImage = styled.img({
   width: '300px',
-  height: '8rem',
+  height: '8.4rem',
   objectFit: 'cover',
   float: 'right'
 });
@@ -43,13 +44,14 @@ const PreviewTextWrapper = styled.div({
   width: '100%',
   marginRight: '1rem',
   display: 'flex',
-  height: '8rem',
+  height: '8.4rem',
   flexDirection: 'column',
-  alignItems: 'center',
+  alignItems: 'flex-start',
   justifyContent: 'center'
 });
 
 const PreviewTitle = styled.span({
+  flexShrink: 0,
   height: '2rem',
   width: '100%',
   fontSize: '1.4rem',
@@ -62,13 +64,13 @@ const PreviewTitle = styled.span({
 });
 
 const PreviewContent = styled.span({
+  flexShrink: 0,
   width: '100%',
-  height: '5rem',
+  height: '4.5rem',
   fontSize: '1.1rem',
-  margin: '.5rem 0 0',
+  margin: '.25rem 0 0',
   wordBreak: 'keep-all',
   textAlign: 'left',
-  padding: '.5rem 0 0',
   overflow: 'hidden',
   display: '-webkit-box',
   WebkitLineClamp: 3,
@@ -89,6 +91,7 @@ export default function ContentCategory() {
                 <PreviewTextWrapper>
                   <PreviewTitle>React</PreviewTitle>
                   <PreviewContent>PreviewContent</PreviewContent>
+                  <ContentCategoryDetails />
                 </PreviewTextWrapper>
                 <PreviewImage src='/images/FakeProfile.png' alt='preview image' />
               </Content>
@@ -108,6 +111,7 @@ export default function ContentCategory() {
                     unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more
                     recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
                   </PreviewContent>
+                  <ContentCategoryDetails />
                 </PreviewTextWrapper>
                 <PreviewImage src='/images/FakeProfile.png' alt='preview image' />
               </Content>
@@ -127,6 +131,7 @@ export default function ContentCategory() {
                     unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more
                     recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
                   </PreviewContent>
+                  <ContentCategoryDetails />
                 </PreviewTextWrapper>
                 <PreviewImage src='/images/FakeProfile.png' alt='preview image' />
               </Content>
@@ -146,6 +151,7 @@ export default function ContentCategory() {
                     unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more
                     recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
                   </PreviewContent>
+                  <ContentCategoryDetails />
                 </PreviewTextWrapper>
                 <PreviewImage src='/images/FakeProfile.png' alt='preview image' />
               </Content>
@@ -165,6 +171,7 @@ export default function ContentCategory() {
                     unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more
                     recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
                   </PreviewContent>
+                  <ContentCategoryDetails />
                 </PreviewTextWrapper>
               </Content>
             </BorderBox>
