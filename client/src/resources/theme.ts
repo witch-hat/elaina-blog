@@ -16,12 +16,12 @@ export const theme: Theme = {
     backgroundColor: '#fff',
     borderColor: '#ddd',
     textColor: '#111213',
-    blogName: '#ff00f8'
+    blogName: '#1f2f3f'
   },
   dark: {
     backgroundColor: '#262728',
     borderColor: '#ddd',
     textColor: '#f1f2f3',
-    blogName: '#ff00f8'
+    blogName: '#1f2f3f'
   }
 };
