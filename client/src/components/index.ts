@@ -12,3 +12,6 @@ export { HorizontalScrollWrapper } from './common/wrapper/HorizontalScrollWrappe
 
 // Images
 export { RoundImage } from './common/image/RoundImage';
+
+// main
+export { MainPageLayout } from './main/MainPageLayout';
