@@ -48,7 +48,7 @@ const SearchButton = styled.button({
   alignItems: 'center',
   width: '45px',
   height: '45px',
-  margin: '0 10px 0 5px',
+  marginLeft: '5px',
   fontSize: '20px',
   borderRadius: '50%',
   border: 'none',

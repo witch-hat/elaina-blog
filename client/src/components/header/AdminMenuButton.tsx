@@ -5,6 +5,7 @@ const Button = styled.div({
   flexShrink: 0,
   cursor: 'pointer',
   padding: '.5rem',
+  margin: '0 10px',
   borderRadius: '8px',
   '&:hover': {
     backgroundColor: '#eee'
