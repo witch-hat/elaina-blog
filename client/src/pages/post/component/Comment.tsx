@@ -63,19 +63,11 @@ const CommentContainer = styled.div({
   padding: '.5rem'
 });
 
-const UserInfomation = styled.div({
-  width: '100%',
-  display: 'flex',
-  height: '1.5rem',
-  alignItems: 'center'
-});
-
 const CommentContent = styled.p({
   display: 'flex',
   alignItems: 'center',
   width: '95%',
   minHeight: '5rem',
-  marginTop: '.5rem',
   padding: '.5rem',
   borderRadius: '8px',
   backgroundColor: '#efefef'
@@ -107,6 +99,35 @@ const Reply = styled.span({
   cursor: 'pointer',
   '&:hover': {
     textDecoration: 'solid underline #1f2f3f 1px'
+  }
+});
+
+const DetailsContainer = styled.div({
+  display: 'flex',
+  width: '95%',
+  height: '2.1rem',
+  justifyContent: 'space-between'
+});
+
+const InformationContainer = styled.div({
+  display: 'flex',
+  fontSize: '.8rem',
+  alignItems: 'center'
+});
+
+const Author = styled.div({
+  marginRight: '.7rem',
+  display: 'flex',
+  alignItems: 'center'
+});
+
+const MenuButton = styled.div({
+  fontSize: '.8rem',
+  padding: '.5rem .8rem',
+  cursor: 'pointer',
+  borderRadius: '4px',
+  '&:hover': {
+    backgroundColor: '#eee'
   }
 });
 
@@ -146,21 +167,57 @@ export default function Comment() {
         <Counter>덧글 수: 3개</Counter>
         <BorderBox isTransform={false} styles={{ margin: '1rem 0 0' }}>
           <CommentContainer>
-            <UserInfomation>덧글 단 사람 정보 + 삭제버튼?</UserInfomation>
+            <DetailsContainer>
+              <InformationContainer>
+                <Author>
+                  <i className='fas fa-user'></i>&nbsp;Hoit
+                </Author>
+                <span>
+                  <i className='far fa-clock'></i>&nbsp;2020.12.14 15:50
+                </span>
+              </InformationContainer>
+              <MenuButton>
+                <i className='fas fa-ellipsis-v'></i>
+              </MenuButton>
+            </DetailsContainer>
             <CommentContent>Hi~</CommentContent>
             <Reply>Add Reply</Reply>
           </CommentContainer>
         </BorderBox>
         <BorderBox isTransform={false} styles={{ margin: '1rem 0 0' }}>
           <CommentContainer>
-            <UserInfomation>덧글 단 사람 정보 + 삭제버튼?</UserInfomation>
+            <DetailsContainer>
+              <InformationContainer>
+                <Author>
+                  <i className='fas fa-user'></i>&nbsp;Hoit
+                </Author>
+                <span>
+                  <i className='far fa-clock'></i>&nbsp;2020.12.14 15:50
+                </span>
+              </InformationContainer>
+              <MenuButton>
+                <i className='fas fa-ellipsis-v'></i>
+              </MenuButton>
+            </DetailsContainer>
             <CommentContent>좋은 글이였습니다!</CommentContent>
             <Reply>Add Reply</Reply>
           </CommentContainer>
         </BorderBox>
         <BorderBox isTransform={false} styles={{ margin: '1rem 0 0' }}>
           <CommentContainer>
-            <UserInfomation>덧글 단 사람 정보 + 삭제버튼?</UserInfomation>
+            <DetailsContainer>
+              <InformationContainer>
+                <Author>
+                  <i className='fas fa-user'></i>&nbsp;Hoit
+                </Author>
+                <span>
+                  <i className='far fa-clock'></i>&nbsp;2020.12.14 15:50
+                </span>
+              </InformationContainer>
+              <MenuButton>
+                <i className='fas fa-ellipsis-v'></i>
+              </MenuButton>
+            </DetailsContainer>
             <CommentContent>으으...</CommentContent>
             <Reply>Add Reply</Reply>
           </CommentContainer>
