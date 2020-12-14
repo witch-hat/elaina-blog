@@ -98,6 +98,18 @@ const UserInput = styled.div({
   marginRight: '1rem'
 });
 
+const Reply = styled.span({
+  width: '95%',
+  padding: '0 .5rem',
+  marginTop: '.3rem',
+  textAlign: 'right',
+  fontSize: '.8rem',
+  cursor: 'pointer',
+  '&:hover': {
+    textDecoration: 'solid underline #1f2f3f 1px'
+  }
+});
+
 export default function Comment() {
   return (
     <Container>
@@ -136,18 +148,21 @@ export default function Comment() {
           <CommentContainer>
             <UserInfomation>덧글 단 사람 정보 + 삭제버튼?</UserInfomation>
             <CommentContent>Hi~</CommentContent>
+            <Reply>Add Reply</Reply>
           </CommentContainer>
         </BorderBox>
         <BorderBox isTransform={false} styles={{ margin: '1rem 0 0' }}>
           <CommentContainer>
             <UserInfomation>덧글 단 사람 정보 + 삭제버튼?</UserInfomation>
             <CommentContent>좋은 글이였습니다!</CommentContent>
+            <Reply>Add Reply</Reply>
           </CommentContainer>
         </BorderBox>
         <BorderBox isTransform={false} styles={{ margin: '1rem 0 0' }}>
           <CommentContainer>
             <UserInfomation>덧글 단 사람 정보 + 삭제버튼?</UserInfomation>
             <CommentContent>으으...</CommentContent>
+            <Reply>Add Reply</Reply>
           </CommentContainer>
         </BorderBox>
       </div>
