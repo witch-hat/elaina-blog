@@ -18,10 +18,12 @@ const Title = styled.header({
 });
 
 const Menu = styled.div({
-  marginTop: '2rem',
   display: 'flex',
+  justifyContent: 'space-between',
   width: '100%',
-  alignItems: 'center'
+  height: '2.2rem',
+  alignItems: 'center',
+  fontSize: '.875rem'
 });
 
 const Article = styled.article({
@@ -30,11 +32,40 @@ const Article = styled.article({
   wordBreak: 'keep-all'
 });
 
+const ContentInfoWrapper = styled.div({
+  display: 'flex'
+});
+
+const Author = styled.span({
+  marginRight: '1rem'
+});
+
+const MenuButton = styled.div({
+  padding: '.5rem .8rem',
+  cursor: 'pointer',
+  borderRadius: '4px',
+  '&:hover': {
+    backgroundColor: '#eee'
+  }
+});
+
 export default function Content() {
   return (
     <Container>
       <Title>React란 무엇인가</Title>
-      <Menu>메뉴(글쓴이, 시간, 수정 삭제 버튼 등)</Menu>
+      <Menu>
+        <ContentInfoWrapper>
+          <Author>
+            <i className='fas fa-user'></i>&nbsp;Elaina
+          </Author>
+          <span>
+            <i className='far fa-clock'></i>&nbsp;2020.12.14 15:38
+          </span>
+        </ContentInfoWrapper>
+        <MenuButton>
+          <i className='fas fa-ellipsis-v'></i>
+        </MenuButton>
+      </Menu>
       <Article>
         여기 마크다운으로 해야함 <br /> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus viverra eros at quam mattis
         imperdiet. Etiam arcu quam, porttitor eget lobortis ac, scelerisque eget sem. Etiam porttitor, odio sed ultrices rhoncus, nunc lorem
