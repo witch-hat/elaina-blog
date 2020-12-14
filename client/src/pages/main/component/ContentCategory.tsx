@@ -35,6 +35,7 @@ const Content = styled.div({
 
 const PreviewImage = styled.img({
   width: '300px',
+  marginLeft: '1rem',
   height: '8.4rem',
   objectFit: 'cover',
   float: 'right'
@@ -42,7 +43,6 @@ const PreviewImage = styled.img({
 
 const PreviewTextWrapper = styled.div({
   width: '100%',
-  marginRight: '1rem',
   display: 'flex',
   height: '8.4rem',
   flexDirection: 'column',
