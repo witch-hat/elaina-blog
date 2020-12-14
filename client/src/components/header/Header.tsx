@@ -38,7 +38,6 @@ const BlogName = styled.div({
   fontSize: '1.8rem',
   padding: '10px',
   cursor: 'pointer',
-  userSelect: 'none',
   color: theme.light.blogName
 });
 

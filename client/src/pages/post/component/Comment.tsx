@@ -98,6 +98,7 @@ const Reply = styled.span({
   textAlign: 'right',
   fontSize: '.8rem',
   cursor: 'pointer',
+  userSelect: 'none',
   '&:hover': {
     textDecoration: 'solid underline #1f2f3f 1px'
   }
