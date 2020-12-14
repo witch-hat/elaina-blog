@@ -90,10 +90,7 @@ export default function Profile(props: Props) {
 
   return (
     <Container>
-      <RoundImage
-        src={'/images/FakeProfile.png'}
-        styles={{ borderRadius: '50%', border: `4px solid ${theme.light.blogName}`, width: '280px', height: '280px' }}
-      />
+      <RoundImage src={'/images/FakeProfile.png'} styles={{ borderRadius: '50%', width: '280px', height: '280px' }} />
       <Name>Elaina</Name>
       <ListWrapper>
         <Description>Hello My name is Elaina~~~~~~~</Description>
