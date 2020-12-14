@@ -11,8 +11,8 @@ const Container = styled.div({
 });
 
 const Wrapper = styled.div({
-  width: '1000px',
-  padding: '0 0 0 50px',
+  width: '950px',
+  marginLeft: '50px',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
