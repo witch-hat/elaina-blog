@@ -7,6 +7,7 @@ const Button = styled.div({
   padding: '.5rem',
   margin: '0 10px',
   borderRadius: '8px',
+  userSelect: 'none',
   '&:hover': {
     backgroundColor: '#eee'
   }

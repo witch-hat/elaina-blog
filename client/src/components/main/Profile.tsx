@@ -50,7 +50,8 @@ const EditButton = styled.div({
   border: '1px solid #ddd',
   cursor: 'pointer',
   display: 'flex',
-  justifyContent: 'center'
+  justifyContent: 'center',
+  userSelect: 'none'
 });
 
 const SaveButton = styled.div({
@@ -61,7 +62,8 @@ const SaveButton = styled.div({
   border: '1px solid #ddd',
   cursor: 'pointer',
   display: 'flex',
-  justifyContent: 'center'
+  justifyContent: 'center',
+  userSelect: 'none'
 });
 
 const CancelButton = styled.div({
@@ -71,7 +73,8 @@ const CancelButton = styled.div({
   border: '1px solid #ddd',
   cursor: 'pointer',
   display: 'flex',
-  justifyContent: 'center'
+  justifyContent: 'center',
+  userSelect: 'none'
 });
 
 const Input = styled.input({

@@ -10,6 +10,7 @@ const NavButtons = styled.a<{ isSelected: boolean }>((props) => {
     fontSize: '1.25rem',
     cursor: 'pointer',
     transition: '.2s all',
+    userSelect: 'none',
     boxShadow: props.isSelected ? 'inset 0 -3px 0 #555' : 'none',
     '&:hover': {
       boxShadow: props.isSelected ? 'inset 0 -3px 0 #555' : 'inset 0 -3px 0 #888'

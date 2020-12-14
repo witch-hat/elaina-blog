@@ -13,6 +13,8 @@ export const GlobalStyles = createGlobalStyle<{ themeMode: ThemeMode }>`
 	button {
 		background-color: ${(props) => theme[props.themeMode].backgroundColor};
 		color: ${(props) => theme[props.themeMode].textColor};
+		user-select: 'none';
+		outline: 'none';
 	}
 	* {
 		box-sizing: border-box;

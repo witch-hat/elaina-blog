@@ -49,6 +49,7 @@ const SubmitButton = styled.button({
   alignItems: 'center',
   justifyContent: 'center',
   borderRadius: '12px',
+  userSelect: 'none',
   '&:hover': {
     backgroundColor: '#ddd'
   }
