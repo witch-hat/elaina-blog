@@ -11,7 +11,7 @@ const Input = styled.input<Styles>((props) => {
     width: props.width || '100px',
     height: props.height || '40px',
     fontSize: props.fontSize || '16px',
-    border: '2px solid #999',
+    border: '1px solid #ddd',
     borderRadius: '8px',
     '&:focus': {
       outline: 'none'
@@ -39,6 +39,7 @@ export function InputBox(props: Props) {
       type={props.type}
       minLength={props.minLength}
       maxLength={props.maxLength}
+      autoComplete='off'
       {...props.styles}
     />
   );
