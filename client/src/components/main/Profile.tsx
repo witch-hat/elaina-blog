@@ -8,7 +8,7 @@ const Container = styled.aside({
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'flex-start',
-  alignItmes: 'center',
+  alignItems: 'center',
   padding: '10px',
   minHeight: 'calc(90vh - 40px)',
   alignSelf: 'stretch'
