@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { BorderBox } from 'src/components';
+import { BorderBox, InputBox } from 'src/components';
 
 const Container = styled.section({
   display: 'flex',
@@ -20,13 +20,13 @@ const Title = styled.span({
   fontWeight: 'bold'
 });
 
-const EditorWrapper = styled.div({
+const EditorWrapper = styled.form({
   width: '100%',
   margin: '2rem 0'
 });
 
 const CommentEditor = styled.textarea({
-  fontFamily: 'Nanum Gothic, sans-serif',
+  fontFamily: '"Nanum Gothic", sans-serif',
   width: '100%',
   height: '5rem',
   overflowY: 'auto',
@@ -38,7 +38,7 @@ const CommentEditor = styled.textarea({
   wordBreak: 'keep-all'
 });
 
-const Button = styled.div({
+const SubmitButton = styled.button({
   width: '8rem',
   margin: '1rem 0 0',
   height: '3rem',
@@ -87,13 +87,48 @@ const Counter = styled.div({
   fontWeight: 'bold'
 });
 
+const InputWrapper = styled.div({
+  display: 'flex',
+  marginBottom: '.5rem'
+});
+
+const UserInput = styled.div({
+  display: 'flex',
+  alignItems: 'center',
+  marginRight: '1rem'
+});
+
 export default function Comment() {
   return (
     <Container>
       <Title>Comments</Title>
-      <EditorWrapper>
+      <EditorWrapper action='/comment' method='POST'>
+        <InputWrapper>
+          <UserInput>
+            ID:&nbsp;
+            <InputBox
+              id='comment-id'
+              type='text'
+              maxLength={10}
+              minLength={2}
+              placeholder='ID'
+              styles={{ width: '100px', height: '2rem' }}
+            />
+          </UserInput>
+          <UserInput>
+            PW:&nbsp;
+            <InputBox
+              id='comment-pw'
+              type='password'
+              maxLength={12}
+              minLength={4}
+              placeholder='Password'
+              styles={{ width: '100px', height: '2rem' }}
+            />
+          </UserInput>
+        </InputWrapper>
         <CommentEditor placeholder='Write comment...(5자 이상)' minLength={5} />
-        <Button>덧글 작성</Button>
+        <SubmitButton>덧글 작성</SubmitButton>
       </EditorWrapper>
       <div>
         <Counter>덧글 수: 3개</Counter>
