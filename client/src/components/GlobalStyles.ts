@@ -10,6 +10,10 @@ export const GlobalStyles = createGlobalStyle<{ themeMode: ThemeMode }>`
 		text-decoration: none;
 		color: inherit;
 	}
+	button {
+		background-color: ${(props) => theme[props.themeMode].backgroundColor};
+		color: ${(props) => theme[props.themeMode].textColor};
+	}
 	* {
 		box-sizing: border-box;
 	}
