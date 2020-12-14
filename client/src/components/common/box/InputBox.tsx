@@ -24,6 +24,7 @@ const Input = styled.input<Styles>((props) => {
 
 interface Props {
   id: string;
+  type: string;
   minLength: number;
   maxLength: number;
   placeholder: string;
@@ -35,7 +36,7 @@ export function InputBox(props: Props) {
     <Input
       id={props.id}
       placeholder={props.placeholder}
-      type='text'
+      type={props.type}
       minLength={props.minLength}
       maxLength={props.maxLength}
       {...props.styles}

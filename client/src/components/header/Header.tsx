@@ -52,7 +52,6 @@ const SearchButton = styled.button({
   fontSize: '20px',
   borderRadius: '50%',
   border: 'none',
-  backgroundColor: '#fff',
   cursor: 'pointer',
   '&:focus': {
     outline: 'none'
@@ -91,7 +90,7 @@ export function Header(props: Props) {
         <Flex>
           <ModeSwitch />
           <SearchForm method='GET' action='/search'>
-            <InputBox placeholder='Search' id='search' minLength={2} maxLength={10} styles={{ width: '180px' }} />
+            <InputBox type='text' placeholder='Search' id='search' minLength={2} maxLength={10} styles={{ width: '180px' }} />
             <SearchButton type='submit'>
               <i className='fas fa-search'></i>
             </SearchButton>
