@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 const StyledFooter = styled.footer({
   width: '100%',
+  marginTop: '20px',
   height: '3rem',
   display: 'flex',
   justifyContent: 'center',
