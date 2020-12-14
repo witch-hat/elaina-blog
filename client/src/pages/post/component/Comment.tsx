@@ -65,6 +65,7 @@ const CommentContainer = styled.div({
 });
 
 const CommentContent = styled.p({
+  margin: '.2rem',
   display: 'flex',
   alignItems: 'center',
   width: '95%',
