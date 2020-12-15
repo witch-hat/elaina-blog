@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 
 import { ThemeMode } from 'src/redux/common/type';
 import { theme } from 'src/resources';
@@ -86,31 +86,31 @@ const MobileMenuButton = styled.div({
   }
 });
 
-const OpeningAnimation = keyframes`
-  0% {
-    background-color: red;
+const OpeningAnimation = keyframes({
+  from: {
+    opacity: 0
+  },
+  to: {
+    opacity: 1
   }
-  100% {
-    background-color: blue;
-  }
-`;
+});
 
 const ResponsiveMenuBox = styled.div<{ isOpen?: boolean }>((props) => {
   return props.isOpen
-    ? {
-        display: 'flex',
-        '@media screen and (max-width: 768px)': {
-          padding: '10px',
-          position: 'fixed',
-          top: '5rem',
-          right: '0',
-          zIndex: 9999,
-          backgroundColor: '#eee',
-          borderRadius: '12px',
-          boxShadow: '0 8px 4px -4px rgba(38, 38, 38, .4)',
-          animation: `1s ${OpeningAnimation.getName()} .1s ease-out infinite`
+    ? css`
+        display: flex;
+        @media screen and (max-width: 768px) {
+          padding: 10px;
+          position: fixed;
+          top: 5rem;
+          right: 0;
+          z-index: 9999;
+          background-color: #eee;
+          border-radius: 12px;
+          box-shadow: 0 8px 4px -4px rgba(38, 38, 38, 0.4);
+          animation: 0.3s ${OpeningAnimation} forwards;
         }
-      }
+      `
     : {
         display: 'flex',
         '@media screen and (max-width: 768px)': {
