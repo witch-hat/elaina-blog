@@ -88,10 +88,12 @@ const MobileMenuButton = styled.div({
 
 const OpeningAnimation = keyframes({
   from: {
-    opacity: 0
+    opacity: 0,
+    top: '4rem'
   },
   to: {
-    opacity: 1
+    opacity: 1,
+    top: '5rem'
   }
 });
 
@@ -102,7 +104,6 @@ const ResponsiveMenuBox = styled.div<{ isOpen?: boolean }>((props) => {
         @media screen and (max-width: 768px) {
           padding: 10px;
           position: fixed;
-          top: 5rem;
           right: 0;
           z-index: 9999;
           background-color: #eee;
