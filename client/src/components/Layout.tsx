@@ -8,13 +8,14 @@ import { ThemeMode } from 'src/redux/common/type';
 
 const Container = styled.div({
   display: 'flex',
-  maxWidth: '1300px',
+  maxWidth: '1200px',
   margin: '5rem auto 0',
   padding: '20px 0 0',
   minHeight: '90vh',
   position: 'relative',
-  '@media screen and (max-width: 1380px)': {
-    width: '100%'
+  '@media screen and (max-width: 1280px)': {
+    width: '100%',
+    padding: '20px 10px 0'
   }
 });
 

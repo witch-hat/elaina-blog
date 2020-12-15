@@ -28,7 +28,7 @@ const Image = styled.img<Style>((props: Style) => {
     backgroundColor: props.backgroundColor || 'transparent',
     boxShadow: props.boxShadow || 'none',
     objectFit: props.objectFit || 'fill',
-    '@media screen and (max-width: 1380px)': {
+    '@media screen and (max-width: 1280px)': {
       width: props.medium?.width || props.width || '100px',
       height: props.medium?.height || props.height || '100px'
     },

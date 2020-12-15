@@ -4,6 +4,7 @@ import { theme } from 'src/resources/theme';
 
 interface Styles {
   margin?: string;
+  width?: string;
 }
 
 interface BoxProps {
@@ -16,7 +17,7 @@ const Box = styled.div<BoxProps>((props) => {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    width: 'max-content',
+    width: props.styles?.width || 'max-content',
     margin: props.styles?.margin || '10px',
     border: `1px solid ${theme.light.borderColor}`,
     borderRadius: '12px',

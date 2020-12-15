@@ -11,12 +11,16 @@ const Container = styled.div({
 });
 
 const Wrapper = styled.div({
-  width: '950px',
+  width: '850px',
   marginLeft: '50px',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  justifyContent: 'flex-start'
+  justifyContent: 'flex-start',
+  '@media screen and (max-width: 1280px)': {
+    width: '72%',
+    marginLeft: '3%'
+  }
 });
 
 interface Props {

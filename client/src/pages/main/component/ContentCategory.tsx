@@ -28,17 +28,21 @@ const Content = styled.div({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
-  width: '950px',
+  width: '100%',
   padding: '.8rem',
   height: '10rem'
 });
 
 const PreviewImage = styled.img({
-  width: '300px',
+  width: '260px',
   marginLeft: '1rem',
   height: '8.4rem',
   objectFit: 'cover',
-  float: 'right'
+  float: 'right',
+  '@media screen and (max-width: 1280px)': {
+    width: '32%',
+    marginLeft: '3%'
+  }
 });
 
 const PreviewTextWrapper = styled.div({
@@ -57,10 +61,14 @@ const PreviewTitle = styled.span({
   fontSize: '1.4rem',
   fontWeight: 'bold',
   textAlign: 'left',
+  wordBreak: 'keep-all',
   overflow: 'hidden',
   display: '-webkit-box',
   WebkitLineClamp: 1,
-  WebkitBoxOrient: 'vertical'
+  WebkitBoxOrient: 'vertical',
+  '@media screen and (max-width: 1280px)': {
+    wordBreak: 'break-all'
+  }
 });
 
 const PreviewContent = styled.span({
@@ -85,8 +93,8 @@ export default function ContentCategory() {
       <Title>Content Category</Title>
       <Container>
         <Link href='/post' passHref>
-          <a>
-            <BorderBox isTransform={true} styles={{ margin: '.8rem 0' }}>
+          <a style={{ width: '100%' }}>
+            <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
               <Content>
                 <PreviewTextWrapper>
                   <PreviewTitle>React</PreviewTitle>
@@ -99,8 +107,8 @@ export default function ContentCategory() {
           </a>
         </Link>
         <Link href='/post'>
-          <a>
-            <BorderBox isTransform={true} styles={{ margin: '.8rem 0' }}>
+          <a style={{ width: '100%' }}>
+            <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
               <Content>
                 <PreviewTextWrapper>
                   <PreviewTitle>Very long long long long long long long long longlonglonglonglonglonglonglonglong</PreviewTitle>
@@ -119,8 +127,8 @@ export default function ContentCategory() {
           </a>
         </Link>
         <Link href='/post'>
-          <a>
-            <BorderBox isTransform={true} styles={{ margin: '.8rem 0' }}>
+          <a style={{ width: '100%' }}>
+            <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
               <Content>
                 <PreviewTextWrapper>
                   <PreviewTitle>Vue.js</PreviewTitle>
@@ -139,8 +147,8 @@ export default function ContentCategory() {
           </a>
         </Link>
         <Link href='/post'>
-          <a>
-            <BorderBox isTransform={true} styles={{ margin: '.8rem 0' }}>
+          <a style={{ width: '100%' }}>
+            <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
               <Content>
                 <PreviewTextWrapper>
                   <PreviewTitle>Data Structure</PreviewTitle>
@@ -159,8 +167,8 @@ export default function ContentCategory() {
           </a>
         </Link>
         <Link href='/post'>
-          <a>
-            <BorderBox isTransform={true} styles={{ margin: '.8rem 0' }}>
+          <a style={{ width: '100%' }}>
+            <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
               <Content>
                 <PreviewTextWrapper>
                   <PreviewTitle>No Image</PreviewTitle>

@@ -9,9 +9,13 @@ const Container = styled.aside({
   flexDirection: 'column',
   justifyContent: 'flex-start',
   alignItems: 'center',
+  width: '300px',
   padding: '10px',
   minHeight: 'calc(90vh - 40px)',
-  alignSelf: 'stretch'
+  alignSelf: 'stretch',
+  '@media screen and (max-width: 1280px)': {
+    width: '25%'
+  }
 });
 
 const Name = styled.span({
@@ -90,7 +94,10 @@ export default function Profile(props: Props) {
 
   return (
     <Container>
-      <RoundImage src={'/images/FakeProfile.png'} styles={{ borderRadius: '50%', width: '280px', height: '280px' }} />
+      <RoundImage
+        src={'/images/FakeProfile.png'}
+        styles={{ borderRadius: '50%', width: '280px', height: '280px', medium: { width: '100%', height: 'auto' } }}
+      />
       <Name>Elaina</Name>
       <ListWrapper>
         <Description>Hello My name is Elaina~~~~~~~</Description>
