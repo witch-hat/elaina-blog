@@ -5,15 +5,13 @@ import { BorderBox, InputBox } from 'src/components';
 
 const Container = styled.section({
   display: 'flex',
+  width: '100%',
   margin: '20px 0',
   padding: '.5rem 1.5rem',
   flexDirection: 'column',
   jusitfyContent: 'flex-start',
   alignItems: 'center',
-  minHeight: '20rem',
-  '@media screen and (max-width: 1280px)': {
-    width: '75%'
-  }
+  minHeight: '20rem'
 });
 
 const Title = styled.span({
@@ -59,7 +57,7 @@ const SubmitButton = styled.button({
 });
 
 const CommentContainer = styled.div({
-  width: '650px',
+  width: '98%',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
