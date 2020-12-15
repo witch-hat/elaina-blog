@@ -10,7 +10,10 @@ const Container = styled.section({
   flexDirection: 'column',
   jusitfyContent: 'flex-start',
   alignItems: 'center',
-  minHeight: '20rem'
+  minHeight: '20rem',
+  '@media screen and (max-width: 1280px)': {
+    width: '75%'
+  }
 });
 
 const Title = styled.span({
@@ -166,9 +169,9 @@ export default function Comment() {
         <CommentEditor placeholder='Write comment...(5자 이상)' minLength={5} />
         <SubmitButton>덧글 작성</SubmitButton>
       </EditorWrapper>
-      <div>
+      <div style={{ width: '100%' }}>
         <Counter>덧글 수: 3개</Counter>
-        <BorderBox isTransform={false} styles={{ margin: '1rem 0 0' }}>
+        <BorderBox isTransform={false} styles={{ margin: '1rem 0 0', width: '100%' }}>
           <CommentContainer>
             <DetailsContainer>
               <InformationContainer>
@@ -187,7 +190,7 @@ export default function Comment() {
             <Reply>Add Reply</Reply>
           </CommentContainer>
         </BorderBox>
-        <BorderBox isTransform={false} styles={{ margin: '1rem 0 0' }}>
+        <BorderBox isTransform={false} styles={{ margin: '1rem 0 0', width: '100%' }}>
           <CommentContainer>
             <DetailsContainer>
               <InformationContainer>
@@ -206,7 +209,7 @@ export default function Comment() {
             <Reply>Add Reply</Reply>
           </CommentContainer>
         </BorderBox>
-        <BorderBox isTransform={false} styles={{ margin: '1rem 0 0' }}>
+        <BorderBox isTransform={false} styles={{ margin: '1rem 0 0', width: '100%' }}>
           <CommentContainer>
             <DetailsContainer>
               <InformationContainer>

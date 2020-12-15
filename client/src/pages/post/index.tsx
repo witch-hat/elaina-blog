@@ -11,10 +11,12 @@ const Container = styled.div({
 });
 
 const ContentContainer = styled.div({
-  display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  justifyContent: 'center'
+  justifyContent: 'center',
+  '@media screen and (max-width: 1280px)': {
+    width: '72%'
+  }
 });
 
 export default function Post() {

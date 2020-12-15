@@ -9,18 +9,20 @@ const Container = styled.nav({
   flexDirection: 'column',
   position: 'sticky',
   top: 'calc(5rem + 20px)',
-  alignItems: 'center',
+  alignItems: 'stretch',
   justifyContent: 'flex-start',
   height: 'calc(100vh - 5rem - 20px)',
   padding: '.5rem',
   overflowY: 'auto',
   '&::-webkit-scrollbar': {
     width: '0'
+  },
+  '@media screen and (max-width: 1280px)': {
+    width: '28%'
   }
 });
 
 const CategoryName = styled.span({
-  width: '100%',
   fontSize: '1.4rem',
   fontWeight: 'bold'
 });
@@ -29,7 +31,7 @@ const ContentContainer = styled.div({
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'flex-start',
-  width: '14rem',
+  width: '100%',
   height: '10rem',
   padding: '.5rem'
 });
@@ -58,7 +60,7 @@ export default function PostCategory() {
   return (
     <Container>
       <CategoryName>카테고리 이름 ex)JS</CategoryName>
-      <BorderBox isTransform={true} styles={{ margin: '1rem 0 0' }}>
+      <BorderBox isTransform={true} styles={{ margin: '1rem 0 0', width: '100%' }}>
         <ContentContainer>
           <Title>Post1</Title>
           <Article>
@@ -70,7 +72,7 @@ export default function PostCategory() {
           </Article>
         </ContentContainer>
       </BorderBox>
-      <BorderBox isTransform={true} styles={{ margin: '1rem 0 0' }}>
+      <BorderBox isTransform={true} styles={{ margin: '1rem 0 0', width: '100%' }}>
         <ContentContainer>
           <Title>Post Title is very long long longlonglong long long</Title>
           <Article>
@@ -82,12 +84,12 @@ export default function PostCategory() {
           </Article>
         </ContentContainer>
       </BorderBox>
-      <BorderBox isTransform={true} styles={{ margin: '1rem 0 0' }}>
+      <BorderBox isTransform={true} styles={{ margin: '1rem 0 0', width: '100%' }}>
         <ContentContainer>
           <Title>Post 3</Title>
         </ContentContainer>
       </BorderBox>
-      <BorderBox isTransform={true} styles={{ margin: '1rem 0 0' }}>
+      <BorderBox isTransform={true} styles={{ margin: '1rem 0 0', width: '100%' }}>
         <ContentContainer>
           <Title>Post 4</Title>
         </ContentContainer>

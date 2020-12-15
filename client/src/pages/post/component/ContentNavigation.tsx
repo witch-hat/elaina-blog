@@ -14,6 +14,10 @@ const Container = styled.nav({
   overFlowY: 'auto',
   '&::-webkit-scrollbar': {
     width: '0'
+  },
+  '@media screen and (max-width: 1280px)': {
+    display: 'none',
+    opacity: 0
   }
 });
 

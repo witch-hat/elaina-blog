@@ -8,7 +8,10 @@ const Container = styled.section({
   flexDirection: 'column',
   jusitfyContent: 'flex-start',
   alignItems: 'center',
-  minHeight: 'calc(100vh - 5rem - 40px)'
+  minHeight: 'calc(100vh - 5rem - 40px)',
+  '@media screen and (max-width: 1280px)': {
+    width: '100%'
+  }
 });
 
 const Title = styled.header({
