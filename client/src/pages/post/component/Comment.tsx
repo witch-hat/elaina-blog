@@ -56,7 +56,7 @@ const SubmitButton = styled.button({
 });
 
 const CommentContainer = styled.div({
-  width: '750px',
+  width: '650px',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
