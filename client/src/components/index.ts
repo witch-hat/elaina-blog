@@ -15,5 +15,8 @@ export { FocusWrapper } from './common/wrapper/FocusWrapper';
 // Images
 export { RoundImage } from './common/image/RoundImage';
 
+// hook
+export { useWidth } from './common/hook/useWidth';
+
 // main
 export { MainPageLayout } from './main/MainPageLayout';
