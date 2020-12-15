@@ -8,7 +8,7 @@ const Wrapper = styled.div({
 interface Props {
   children: JSX.Element;
   visible: boolean;
-  setVisible: Function;
+  onClickOutside: Function;
 }
 
 export const FocusWrapper = React.forwardRef<HTMLDivElement, Props>((props: Props, forwardedRef) => {
@@ -18,7 +18,7 @@ export const FocusWrapper = React.forwardRef<HTMLDivElement, Props>((props: Prop
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (props.visible && !focusRef.current?.contains(event.target as Node)) {
-        props.setVisible(false);
+        props.onClickOutside(false);
       }
     }
 

@@ -149,7 +149,7 @@ export function Header(props: Props) {
           <BlogName>{props.name}</BlogName>
         </Link>
         <Flex>
-          <FocusWrapper visible={isMobileMenuOpen && windowWidth <= 768} setVisible={() => setIsMobileMenuOpen(false)}>
+          <FocusWrapper visible={isMobileMenuOpen && windowWidth <= 768} onClickOutside={() => setIsMobileMenuOpen(false)}>
             <ResponsiveMenuBox isOpen={isMobileMenuOpen && windowWidth <= 768}>
               <ModeSwitch />
               <SearchForm method='GET' action='/search'>
