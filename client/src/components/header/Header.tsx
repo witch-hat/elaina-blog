@@ -4,7 +4,7 @@ import styled, { keyframes } from 'styled-components';
 
 import { ThemeMode } from 'src/redux/common/type';
 import { theme } from 'src/resources';
-import { InputBox } from 'src/components';
+import { InputBox, FocusWrapper } from 'src/components';
 import { ModeSwitch } from './ModeSwitch';
 import AdminMenuButton from './AdminMenuButton';
 
@@ -149,15 +149,17 @@ export function Header(props: Props) {
           <BlogName>{props.name}</BlogName>
         </Link>
         <Flex>
-          <ResponsiveMenuBox isOpen={isMobileMenuOpen && windowWidth <= 768}>
-            <ModeSwitch />
-            <SearchForm method='GET' action='/search'>
-              <InputBox type='text' placeholder='Search' id='search' minLength={2} maxLength={10} styles={{ width: '180px' }} />
-              <SearchButton type='submit'>
-                <i className='fas fa-search'></i>
-              </SearchButton>
-            </SearchForm>
-          </ResponsiveMenuBox>
+          <FocusWrapper visible={isMobileMenuOpen && windowWidth <= 768} setVisible={() => setIsMobileMenuOpen(false)}>
+            <ResponsiveMenuBox isOpen={isMobileMenuOpen && windowWidth <= 768}>
+              <ModeSwitch />
+              <SearchForm method='GET' action='/search'>
+                <InputBox type='text' placeholder='Search' id='search' minLength={2} maxLength={10} styles={{ width: '180px' }} />
+                <SearchButton type='submit'>
+                  <i className='fas fa-search'></i>
+                </SearchButton>
+              </SearchForm>
+            </ResponsiveMenuBox>
+          </FocusWrapper>
           <AdminMenuButton />
           <MobileMenuButton onClick={() => onMobileMenuButtonClick()}>
             <i className='fas fa-bars'></i>

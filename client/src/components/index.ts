@@ -10,6 +10,7 @@ export { BorderBox } from './common/box/BorderBox';
 
 // Wrapper
 export { HorizontalScrollWrapper } from './common/wrapper/HorizontalScrollWrapper';
+export { FocusWrapper } from './common/wrapper/FocusWrapper';
 
 // Images
 export { RoundImage } from './common/image/RoundImage';
