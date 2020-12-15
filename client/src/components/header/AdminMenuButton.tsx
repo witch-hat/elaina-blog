@@ -30,7 +30,7 @@ export default function AdminMenuButton() {
 
   return (
     <Button onClick={() => setIsMenuOpen(!isMenuOpen)}>
-      메뉴&nbsp;
+      Admin Menu&nbsp;
       <RotateIcon className='fas fa-caret-down' isOpen={isMenuOpen} />
     </Button>
   );
