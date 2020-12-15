@@ -129,22 +129,25 @@ export function Header(props: Props) {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   useEffect(() => {
-    function handleResize() {
-      console.log(window.innerWidth);
-      setWindowWidth(window.innerWidth);
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', handleResize);
+      return window.removeEventListener('resize', handleResize);
     }
+  }, []);
 
-    window.addEventListener('resize', handleResize);
-
+  useEffect(() => {
     if (windowWidth > 768) {
       setIsMenuVisible(true);
     }
-
-    return window.removeEventListener('resize', handleResize);
   }, [windowWidth]);
 
   function onMobileMenuButtonClick() {
     setIsMenuVisible(!isMenuVisible);
+  }
+
+  function handleResize() {
+    console.log(window.innerWidth);
+    setWindowWidth(window.innerWidth);
   }
 
   return (
