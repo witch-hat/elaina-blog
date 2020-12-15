@@ -18,7 +18,10 @@ export default function ContentCategoryDetails() {
 
   return (
     <Container>
-      <LatestTime>{`Lastest Update: ${now.getFullYear()}.${month}.${now.getDate()}`}</LatestTime>
+      <LatestTime>
+        <i className='far fa-clock'></i>&nbsp;
+        {`${now.getFullYear()}.${month}.${now.getDate()}`}
+      </LatestTime>
       <PostCount>
         <i className='fas fa-book'></i>&nbsp;3
       </PostCount>

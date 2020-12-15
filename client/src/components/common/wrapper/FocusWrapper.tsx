@@ -18,7 +18,7 @@ export const FocusWrapper = React.forwardRef<HTMLDivElement, Props>((props: Prop
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (props.visible && !focusRef.current?.contains(event.target as Node)) {
-        props.onClickOutside(false);
+        props.onClickOutside();
       }
     }
 

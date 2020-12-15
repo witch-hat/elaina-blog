@@ -125,21 +125,26 @@ interface Props {
 }
 
 export function Header(props: Props) {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMenuVisible, setIsMenuVisible] = useState(window.innerWidth > 768);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   useEffect(() => {
     function handleResize() {
+      console.log(window.innerWidth);
       setWindowWidth(window.innerWidth);
     }
 
     window.addEventListener('resize', handleResize);
 
+    if (windowWidth > 768) {
+      setIsMenuVisible(true);
+    }
+
     return window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [windowWidth]);
 
   function onMobileMenuButtonClick() {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
+    setIsMenuVisible(!isMenuVisible);
   }
 
   return (
@@ -149,8 +154,13 @@ export function Header(props: Props) {
           <BlogName>{props.name}</BlogName>
         </Link>
         <Flex>
-          <FocusWrapper visible={isMobileMenuOpen && windowWidth <= 768} onClickOutside={() => setIsMobileMenuOpen(false)}>
-            <ResponsiveMenuBox isOpen={isMobileMenuOpen && windowWidth <= 768}>
+          <FocusWrapper
+            visible={isMenuVisible}
+            onClickOutside={() => {
+              if (windowWidth <= 768) setIsMenuVisible(false);
+            }}
+          >
+            <ResponsiveMenuBox isOpen={isMenuVisible}>
               <ModeSwitch />
               <SearchForm method='GET' action='/search'>
                 <InputBox type='text' placeholder='Search' id='search' minLength={2} maxLength={10} styles={{ width: '180px' }} />
