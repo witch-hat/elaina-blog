@@ -4,7 +4,7 @@ import styled, { keyframes } from 'styled-components';
 
 import { ThemeMode } from 'src/redux/common/type';
 import { theme } from 'src/resources';
-import { InputBox, FocusWrapper } from 'src/components';
+import { InputBox, FocusWrapper, useWidth } from 'src/components';
 import { ModeSwitch } from './ModeSwitch';
 import AdminMenuButton from './AdminMenuButton';
 
@@ -126,28 +126,14 @@ interface Props {
 
 export function Header(props: Props) {
   const [isMenuVisible, setIsMenuVisible] = useState(window.innerWidth > 768);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const width = useWidth();
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      window.addEventListener('resize', handleResize);
-      return window.removeEventListener('resize', handleResize);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (windowWidth > 768) {
-      setIsMenuVisible(true);
-    }
-  }, [windowWidth]);
+    setIsMenuVisible(width > 768);
+  }, [width]);
 
   function onMobileMenuButtonClick() {
     setIsMenuVisible(!isMenuVisible);
-  }
-
-  function handleResize() {
-    console.log(window.innerWidth);
-    setWindowWidth(window.innerWidth);
   }
 
   return (
@@ -160,7 +146,7 @@ export function Header(props: Props) {
           <FocusWrapper
             visible={isMenuVisible}
             onClickOutside={() => {
-              if (windowWidth <= 768) setIsMenuVisible(false);
+              if (width <= 768) setIsMenuVisible(false);
             }}
           >
             <ResponsiveMenuBox isOpen={isMenuVisible}>
