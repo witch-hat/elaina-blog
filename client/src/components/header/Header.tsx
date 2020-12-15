@@ -79,7 +79,7 @@ const Flex = styled.div({
 
 const MobileMenuButton = styled.div({
   display: 'none',
-  padding: '.5rem',
+  padding: '10px',
   fontSize: '1.5rem',
   '@media screen and (max-width: 768px)': {
     display: 'block'
