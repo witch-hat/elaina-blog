@@ -7,7 +7,10 @@ const Container = styled.div({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'flex-start',
-  width: '100%'
+  width: '100%',
+  '@media screen and (max-width: 768px)': {
+    flexDirection: 'column'
+  }
 });
 
 const Wrapper = styled.div({
@@ -18,8 +21,12 @@ const Wrapper = styled.div({
   alignItems: 'center',
   justifyContent: 'flex-start',
   '@media screen and (max-width: 1280px)': {
-    width: '72%',
-    marginLeft: '3%'
+    width: '70%',
+    marginLeft: '2%'
+  },
+  '@media screen and (max-width: 768px)': {
+    width: '100%',
+    margin: '0'
   }
 });
 

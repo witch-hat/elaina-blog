@@ -23,6 +23,12 @@ export const GlobalStyles = createGlobalStyle<{ themeMode: ThemeMode }>`
     background-color: ${(props) => theme[props.themeMode].backgroundColor};
     color: ${(props) => theme[props.themeMode].textColor};
 		line-height: 1.4;
-		font-family: 'Nanum Gothic', sans-serif
+		font-family: 'Nanum Gothic', sans-serif;
+		
+	}
+	html {
+		@media screen and (max-width: 768px) {
+			font-size: 14px;
+		}
 	}
 `;

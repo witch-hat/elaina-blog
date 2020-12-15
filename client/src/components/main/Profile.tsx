@@ -14,7 +14,12 @@ const Container = styled.aside({
   minHeight: 'calc(90vh - 40px)',
   alignSelf: 'stretch',
   '@media screen and (max-width: 1280px)': {
-    width: '25%'
+    width: '28%'
+  },
+  '@media screen and (max-width: 768px)': {
+    width: '100%',
+    minHeight: 'max-content',
+    marginBottom: '50px'
   }
 });
 
@@ -24,21 +29,30 @@ const Name = styled.span({
   fontWeight: 'bold',
   width: '100%',
   margin: '15px 0',
-  wordBreak: 'keep-all'
+  wordBreak: 'keep-all',
+  '@media screen and (max-width: 768px)': {
+    textAlign: 'center'
+  }
 });
 
 const ListWrapper = styled.ul({
   display: 'flex',
+  width: '100%',
   flexDirection: 'column',
   justifyContent: 'center',
-  alignItems: 'flex-start'
+  alignItems: 'flex-start',
+  '& > li:nth-child(1)': {
+    '@media screen and (max-width: 768px)': {
+      textAlign: 'center'
+    }
+  }
 });
 
 const Description = styled.li({
   width: '100%',
   fontSize: '1.1rem',
   wordBreak: 'keep-all',
-  margin: '10px 0'
+  margin: '.7rem 0'
 });
 
 const ButtonContainer = styled.div({
@@ -96,7 +110,13 @@ export default function Profile(props: Props) {
     <Container>
       <RoundImage
         src={'/images/FakeProfile.png'}
-        styles={{ borderRadius: '50%', width: '280px', height: '280px', medium: { width: '100%', height: 'auto' } }}
+        styles={{
+          borderRadius: '50%',
+          width: '280px',
+          height: '280px',
+          medium: { width: '100%', height: 'auto' },
+          small: { width: '200px', height: 'auto' }
+        }}
       />
       <Name>Elaina</Name>
       <ListWrapper>
