@@ -33,7 +33,7 @@ const Container = styled.div({
   alignItems: 'center',
   justifyContent: 'space-between',
   '@media screen and (max-width: 768px)': {
-    padding: '0 1rem'
+    padding: '0'
   }
 });
 
@@ -51,7 +51,7 @@ const SearchButton = styled.button({
   width: '45px',
   height: '45px',
   marginLeft: '5px',
-  fontSize: '20px',
+  fontSize: '1.2rem',
   borderRadius: '50%',
   border: 'none',
   cursor: 'pointer',
@@ -60,6 +60,10 @@ const SearchButton = styled.button({
   },
   '&:hover': {
     backgroundColor: '#eee'
+  },
+  '@media screen and (max-width: 768px)': {
+    width: '32px',
+    height: '32px'
   }
 });
 
@@ -153,7 +157,14 @@ export function Header(props: Props) {
             <ResponsiveMenuBox isOpen={isMenuVisible}>
               <ModeSwitch />
               <SearchForm method='GET' action='/search'>
-                <InputBox type='text' placeholder='Search' id='search' minLength={2} maxLength={10} styles={{ width: '180px' }} />
+                <InputBox
+                  type='text'
+                  placeholder='Search'
+                  id='search'
+                  minLength={2}
+                  maxLength={10}
+                  styles={{ width: '180px', small: { width: '120px', height: '32px' } }}
+                />
                 <SearchButton type='submit'>
                   <i className='fas fa-search'></i>
                 </SearchButton>

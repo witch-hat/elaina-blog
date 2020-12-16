@@ -4,13 +4,17 @@ interface Styles {
   width?: string;
   height?: string;
   fontSize?: string;
+  small?: {
+    width?: string;
+    height?: string;
+  };
 }
 
 const Input = styled.input<Styles>((props) => {
   return {
     width: props.width || '100px',
     height: props.height || '40px',
-    fontSize: props.fontSize || '16px',
+    fontSize: props.fontSize || '1rem',
     border: '1px solid #ddd',
     borderRadius: '8px',
     '&:focus': {
@@ -18,6 +22,10 @@ const Input = styled.input<Styles>((props) => {
     },
     '&:invalid': {
       border: '2px solid #ff0000'
+    },
+    '@media screen and (max-width: 768px)': {
+      width: props.small?.width || '100px',
+      height: props.small?.height || '40px'
     }
   };
 });
