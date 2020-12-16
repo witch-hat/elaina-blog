@@ -21,10 +21,11 @@ const Container = styled.nav({
     width: '28%'
   },
   '@media screen and (max-width: 768px)': {
-    width: 'max-content',
-    maxWidth: '220px',
-    flexShrink: 0,
-    float: 'left'
+    // width: 'max-content',
+    // maxWidth: '220px',
+    // flexShrink: 0,
+    // float: 'left'
+    display: 'none'
   }
 });
 
