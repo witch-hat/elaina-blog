@@ -4,13 +4,6 @@ import Link from 'next/link';
 import { BorderBox } from 'src/components';
 import ContentCategoryDetails from './ContentCategoryDetails';
 
-const Title = styled.span({
-  display: 'block',
-  fontSize: '1.4rem',
-  fontWeight: 'bold',
-  margin: '25px 0 0'
-});
-
 const Container = styled.div({
   display: 'flex',
   flexDirection: 'column',
@@ -90,7 +83,6 @@ interface Props {}
 export default function ContentCategory() {
   return (
     <section style={{ width: '100%' }}>
-      <Title>Content Category</Title>
       <Container>
         <Link href='/post' passHref>
           <a style={{ width: '100%' }}>
