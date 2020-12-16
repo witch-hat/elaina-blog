@@ -20,7 +20,10 @@ const Container = styled.section({
 const Title = styled.header({
   width: '100%',
   fontSize: '2.5rem',
-  fontWeight: 'bold'
+  fontWeight: 'bold',
+  '@media screen and (max-width: 768px)': {
+    fontSize: '2rem'
+  }
 });
 
 const Menu = styled.div({

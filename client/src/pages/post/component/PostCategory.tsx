@@ -21,7 +21,9 @@ const Container = styled.nav({
     width: '28%'
   },
   '@media screen and (max-width: 768px)': {
-    width: 'max-content'
+    width: 'max-content',
+    maxWidth: '220px',
+    flexShrink: 0
   }
 });
 
@@ -64,7 +66,6 @@ const ResponsiveButton = styled.div({
   '@media screen and (max-width: 768px)': {
     display: 'flex',
     alignItems: 'center',
-    marginTop: '.5rem',
     justifyContent: 'center',
     fontSize: '1.3rem',
     padding: '.5rem',
@@ -85,7 +86,7 @@ export default function PostCategory() {
   return (
     <Container>
       <ResponsiveButton onClick={() => setIsCategoryOpen(!isCategoryOpen)}>
-        <i className='fas fa-bars'></i>
+        <i className={isCategoryOpen ? 'far fa-times-circle' : 'fas fa-bars'}></i>
       </ResponsiveButton>
       {width > 768 || isCategoryOpen ? (
         <>
