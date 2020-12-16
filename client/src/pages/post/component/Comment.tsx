@@ -84,13 +84,22 @@ const Counter = styled.div({
 
 const InputWrapper = styled.div({
   display: 'flex',
-  marginBottom: '.5rem'
+  marginBottom: '.5rem',
+  '@media screen and (max-width: 400px)': {
+    flexDirection: 'column',
+    '& > div:last-child': {
+      margin: '0'
+    }
+  }
 });
 
 const UserInput = styled.div({
   display: 'flex',
   alignItems: 'center',
-  marginRight: '1rem'
+  marginRight: '1rem',
+  '@media screen and (max-width: 400px)': {
+    margin: '0 0 .5rem'
+  }
 });
 
 const Reply = styled.span({
@@ -149,7 +158,7 @@ export default function Comment() {
               maxLength={10}
               minLength={2}
               placeholder='ID'
-              styles={{ width: '100px', height: '2rem' }}
+              styles={{ width: '100px', height: '2rem', small: { width: '100px', height: '2rem' } }}
             />
           </UserInput>
           <UserInput>
@@ -160,7 +169,7 @@ export default function Comment() {
               maxLength={12}
               minLength={4}
               placeholder='Password'
-              styles={{ width: '100px', height: '2rem' }}
+              styles={{ width: '100px', height: '2rem', small: { width: '100px', height: '2rem' } }}
             />
           </UserInput>
         </InputWrapper>

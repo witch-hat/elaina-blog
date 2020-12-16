@@ -11,6 +11,9 @@ const Container = styled.section({
   minHeight: 'calc(100vh - 5rem - 40px)',
   '@media screen and (max-width: 1280px)': {
     width: '100%'
+  },
+  '@media screen and (max-width: 768px)': {
+    padding: '.5rem'
   }
 });
 

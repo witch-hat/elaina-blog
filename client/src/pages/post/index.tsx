@@ -16,6 +16,9 @@ const ContentContainer = styled.div({
   justifyContent: 'center',
   '@media screen and (max-width: 1280px)': {
     width: '72%'
+  },
+  '@media screen and (max-width: 768px)': {
+    width: '100%'
   }
 });
 
