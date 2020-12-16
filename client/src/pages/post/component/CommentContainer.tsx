@@ -7,7 +7,7 @@ import Comment from './Comment';
 const Container = styled.section({
   display: 'flex',
   width: '100%',
-  margin: '20px 0',
+  marginTop: '20px',
   padding: '.5rem 1.5rem',
   flexDirection: 'column',
   jusitfyContent: 'flex-start',
