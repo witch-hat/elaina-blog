@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Container = styled.section({
-  width: '700px',
+  width: '800px',
   display: 'flex',
   padding: '.5rem 1.5rem',
   flexDirection: 'column',
