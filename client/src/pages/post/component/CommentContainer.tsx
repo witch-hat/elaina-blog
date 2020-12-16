@@ -120,6 +120,9 @@ export default function CommentContainer() {
       </EditorWrapper>
       <div style={{ width: '100%' }}>
         <Counter>덧글 수: 3개</Counter>
+        {/* db에서 comments 꺼내서 각각 <Comment /> 나열, 임시로 3개만 둬봄 */}
+        <Comment />
+        <Comment />
         <Comment />
       </div>
     </Container>
