@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { Content, ContentNavigation, PostCategory, Comment } from './component';
+import { Content, ContentNavigation, PostCategory, CommentContainer } from './component';
 
 const Container = styled.div({
   width: '100%',
@@ -28,7 +28,7 @@ export default function Post() {
       <PostCategory />
       <ContentContainer>
         <Content />
-        <Comment />
+        <CommentContainer />
       </ContentContainer>
       <ContentNavigation />
     </Container>
