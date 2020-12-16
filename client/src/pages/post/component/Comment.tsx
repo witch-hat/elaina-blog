@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { BorderBox } from 'src/components';
@@ -77,6 +77,9 @@ const Reply = styled.span({
 });
 
 export default function Comment() {
+  const [isShowingReply, setIsShowingReply] = useState(false);
+  const [isAddReply, setIsAddReply] = useState(false);
+
   return (
     <div>
       <BorderBox isTransform={false} styles={{ margin: '1rem 0 0', width: '100%' }}>
@@ -96,52 +99,8 @@ export default function Comment() {
           </DetailsContainer>
           <CommentContent>으으...</CommentContent>
           <ReplyButtonContainer>
-            <Reply>Show Reply</Reply>
-            <Reply>Add Reply</Reply>
-          </ReplyButtonContainer>
-        </CommentContainer>
-      </BorderBox>
-      <BorderBox isTransform={false} styles={{ margin: '1rem 0 0', width: '100%' }}>
-        <CommentContainer>
-          <DetailsContainer>
-            <InformationContainer>
-              <Author>
-                <i className='fas fa-user'></i>&nbsp;Hoit
-              </Author>
-              <span>
-                <i className='far fa-clock'></i>&nbsp;2020.12.14 15:50
-              </span>
-            </InformationContainer>
-            <MenuButton>
-              <i className='fas fa-ellipsis-v'></i>
-            </MenuButton>
-          </DetailsContainer>
-          <CommentContent>Hi~</CommentContent>
-          <ReplyButtonContainer>
-            <Reply>Show Reply</Reply>
-            <Reply>Add Reply</Reply>
-          </ReplyButtonContainer>
-        </CommentContainer>
-      </BorderBox>
-      <BorderBox isTransform={false} styles={{ margin: '1rem 0 0', width: '100%' }}>
-        <CommentContainer>
-          <DetailsContainer>
-            <InformationContainer>
-              <Author>
-                <i className='fas fa-user'></i>&nbsp;Hoit
-              </Author>
-              <span>
-                <i className='far fa-clock'></i>&nbsp;2020.12.14 15:50
-              </span>
-            </InformationContainer>
-            <MenuButton>
-              <i className='fas fa-ellipsis-v'></i>
-            </MenuButton>
-          </DetailsContainer>
-          <CommentContent>좋은 글이였습니다!</CommentContent>
-          <ReplyButtonContainer>
-            <Reply>Show Reply</Reply>
-            <Reply>Add Reply</Reply>
+            <Reply onClick={() => setIsShowingReply(!isShowingReply)}>{`${isShowingReply ? 'Hide' : 'Show'} Reply`}</Reply>
+            <Reply onClick={() => setIsAddReply(!isAddReply)}>{isAddReply ? 'Cancel' : `Add Reply`}</Reply>
           </ReplyButtonContainer>
         </CommentContainer>
       </BorderBox>
