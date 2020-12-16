@@ -17,13 +17,14 @@ const Container = styled.nav({
   '&::-webkit-scrollbar': {
     width: '0'
   },
-  '@media screen and (max-width: 1280px)': {
+  '@media screen and (max-width: 1380px)': {
     width: '28%'
   },
   '@media screen and (max-width: 768px)': {
     width: 'max-content',
     maxWidth: '220px',
-    flexShrink: 0
+    flexShrink: 0,
+    float: 'left'
   }
 });
 

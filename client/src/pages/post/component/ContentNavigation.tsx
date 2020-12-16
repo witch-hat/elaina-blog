@@ -15,7 +15,7 @@ const Container = styled.nav({
   '&::-webkit-scrollbar': {
     width: '0'
   },
-  '@media screen and (max-width: 1280px)': {
+  '@media screen and (max-width: 1380px)': {
     display: 'none',
     opacity: 0
   }

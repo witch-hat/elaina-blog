@@ -14,7 +14,7 @@ const ContentContainer = styled.div({
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
-  '@media screen and (max-width: 1280px)': {
+  '@media screen and (max-width: 1380px)': {
     width: '72%'
   },
   '@media screen and (max-width: 768px)': {

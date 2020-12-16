@@ -32,7 +32,7 @@ const PreviewImage = styled.img({
   height: '8.4rem',
   objectFit: 'cover',
   float: 'right',
-  '@media screen and (max-width: 1280px)': {
+  '@media screen and (max-width: 1380px)': {
     width: '32%',
     marginLeft: '3%'
   }
@@ -59,7 +59,7 @@ const PreviewTitle = styled.span({
   display: '-webkit-box',
   WebkitLineClamp: 1,
   WebkitBoxOrient: 'vertical',
-  '@media screen and (max-width: 1280px)': {
+  '@media screen and (max-width: 1380px)': {
     wordBreak: 'break-all'
   }
 });

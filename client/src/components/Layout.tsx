@@ -13,7 +13,7 @@ const Container = styled.div({
   padding: '20px 0 0',
   minHeight: '90vh',
   position: 'relative',
-  '@media screen and (max-width: 1280px)': {
+  '@media screen and (max-width: 1380px)': {
     width: '100%',
     padding: '20px 10px 0'
   }

@@ -20,7 +20,7 @@ const Wrapper = styled.div({
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'flex-start',
-  '@media screen and (max-width: 1280px)': {
+  '@media screen and (max-width: 1380px)': {
     width: '70%',
     marginLeft: '2%'
   },

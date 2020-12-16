@@ -13,7 +13,7 @@ const Container = styled.aside({
   padding: '10px',
   minHeight: 'calc(90vh - 40px)',
   alignSelf: 'stretch',
-  '@media screen and (max-width: 1280px)': {
+  '@media screen and (max-width: 1380px)': {
     width: '28%'
   },
   '@media screen and (max-width: 768px)': {
