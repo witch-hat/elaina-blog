@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 
 import { RoundImage, InputBox } from 'src/components';
@@ -132,6 +132,13 @@ export default function Profile(props: Props) {
   const [isSelectImage, setIsSelecImage] = useState(false);
   const [selectedImagePath, setSelectedImagePath] = useState('');
   const selectedImageRef = useRef<HTMLInputElement>(null);
+
+  // initialize input value to trigger onChange event when select the same image
+  useEffect(() => {
+    if (selectedImagePath && selectedImageRef.current) {
+      selectedImageRef.current.value = '';
+    }
+  }, [selectedImagePath]);
 
   return (
     <Container>
