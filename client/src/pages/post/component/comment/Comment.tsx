@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { BorderBox } from 'src/components';
+import CommentEditor from './CommentEditor';
 
 const CommentContainer = styled.div({
   width: '98%',
@@ -110,6 +111,7 @@ export default function Comment() {
             <ReplyButton onClick={() => setIsShowingReply(!isShowingReply)}>{`${isShowingReply ? 'Hide' : 'Show'} Reply`}</ReplyButton>
             <ReplyButton onClick={() => setIsAddReply(!isAddReply)}>{isAddReply ? 'Cancel' : `Add Reply`}</ReplyButton>
           </ReplyButtonContainer>
+          {isAddReply ? <CommentEditor /> : null}
           {isShowingReply ? (
             <ReplyContainer>
               <DetailsContainer>
