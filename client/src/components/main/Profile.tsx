@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 
 import { RoundImage, InputBox } from 'src/components';
+import { ProfileImageCropper } from './ProfileImageCropper';
 import { theme } from 'src/resources';
 
 const Container = styled.aside({
@@ -128,6 +129,9 @@ interface Props {}
 
 export default function Profile(props: Props) {
   const [isEditMode, setIsEditMode] = useState(false);
+  const [isSelectImage, setIsSelecImage] = useState(false);
+  const [selectedImagePath, setSelectedImagePath] = useState('');
+  const selectedImageRef = useRef<HTMLInputElement>(null);
 
   return (
     <Container>
@@ -147,7 +151,16 @@ export default function Profile(props: Props) {
             <ChangeImageButton htmlFor='profile-select'>
               <i className='fas fa-camera'></i>
             </ChangeImageButton>
-            <FileSelector type='file' id='profile-select' accept='image/x-png,image/gif,image/jpeg' />
+            <FileSelector
+              type='file'
+              id='profile-select'
+              ref={selectedImageRef}
+              accept='image/x-png,image/gif,image/jpeg'
+              onChange={() => {
+                setSelectedImagePath(selectedImageRef.current?.value || '');
+                setIsSelecImage(true);
+              }}
+            />
           </>
         )}
       </div>
@@ -183,6 +196,7 @@ export default function Profile(props: Props) {
           <EditButton onClick={() => setIsEditMode(true)}>Edit Profile</EditButton>
         )}
       </ButtonContainer>
+      <ProfileImageCropper visible={isSelectImage} path={selectedImagePath} />
     </Container>
   );
 }
