@@ -65,7 +65,7 @@ const ReplyButtonContainer = styled.div({
   alignItems: 'center'
 });
 
-const Reply = styled.span({
+const ReplyButton = styled.span({
   padding: '0 .5rem',
   textAlign: 'right',
   fontSize: '.8rem',
@@ -74,6 +74,14 @@ const Reply = styled.span({
   '&:hover': {
     textDecoration: 'solid underline #1f2f3f 1px'
   }
+});
+
+const ReplyContainer = styled.div({
+  width: '95%',
+  margin: '.5rem',
+  padding: '.5rem',
+  borderRadius: '12px',
+  backgroundColor: 'rgba(0,0,0,.01)'
 });
 
 export default function Comment() {
@@ -99,9 +107,27 @@ export default function Comment() {
           </DetailsContainer>
           <CommentContent>으으...</CommentContent>
           <ReplyButtonContainer>
-            <Reply onClick={() => setIsShowingReply(!isShowingReply)}>{`${isShowingReply ? 'Hide' : 'Show'} Reply`}</Reply>
-            <Reply onClick={() => setIsAddReply(!isAddReply)}>{isAddReply ? 'Cancel' : `Add Reply`}</Reply>
+            <ReplyButton onClick={() => setIsShowingReply(!isShowingReply)}>{`${isShowingReply ? 'Hide' : 'Show'} Reply`}</ReplyButton>
+            <ReplyButton onClick={() => setIsAddReply(!isAddReply)}>{isAddReply ? 'Cancel' : `Add Reply`}</ReplyButton>
           </ReplyButtonContainer>
+          {isShowingReply ? (
+            <ReplyContainer>
+              <DetailsContainer>
+                <InformationContainer>
+                  <Author>
+                    <i className='fas fa-user'></i>&nbsp;Hoit
+                  </Author>
+                  <span>
+                    <i className='far fa-clock'></i>&nbsp;2020.12.14 15:50
+                  </span>
+                </InformationContainer>
+                <MenuButton>
+                  <i className='fas fa-ellipsis-v'></i>
+                </MenuButton>
+              </DetailsContainer>
+              <CommentContent>Hello</CommentContent>
+            </ReplyContainer>
+          ) : null}
         </CommentContainer>
       </BorderBox>
     </div>
