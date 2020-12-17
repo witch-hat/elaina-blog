@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import { RoundImage } from 'src/components';
+import { RoundImage, InputBox } from 'src/components';
 import { theme } from 'src/resources';
 
 const Container = styled.aside({
@@ -101,7 +101,7 @@ const Input = styled.input({
   margin: '10px 0'
 });
 
-const ChangeImageButton = styled.div({
+const ChangeImageButton = styled.label({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -115,6 +115,13 @@ const ChangeImageButton = styled.div({
   cursor: 'pointer',
   userSelect: 'none',
   borderRadius: '50%'
+});
+
+const FileSelector = styled.input({
+  width: '0px',
+  height: '0px',
+  overflow: 'hidden',
+  border: 'none'
 });
 
 interface Props {}
@@ -136,9 +143,12 @@ export default function Profile(props: Props) {
           }}
         />
         {isEditMode && (
-          <ChangeImageButton>
-            <i className='fas fa-camera'></i>
-          </ChangeImageButton>
+          <>
+            <ChangeImageButton htmlFor='profile-select'>
+              <i className='fas fa-camera'></i>
+            </ChangeImageButton>
+            <FileSelector type='file' id='profile-select' accept='image/x-png,image/gif,image/jpeg' />
+          </>
         )}
       </div>
       <Name>Elaina</Name>
