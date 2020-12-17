@@ -196,7 +196,7 @@ export default function Profile(props: Props) {
           <EditButton onClick={() => setIsEditMode(true)}>Edit Profile</EditButton>
         )}
       </ButtonContainer>
-      <ProfileImageCropper visible={isSelectImage} path={selectedImagePath} />
+      <ProfileImageCropper visible={isSelectImage} path={selectedImagePath} offVisible={() => setIsSelecImage(false)} />
     </Container>
   );
 }

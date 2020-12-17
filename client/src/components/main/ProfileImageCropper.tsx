@@ -33,6 +33,7 @@ const Button = styled.div({
 interface Props {
   visible: boolean;
   path: string;
+  offVisible: Function;
 }
 
 export function ProfileImageCropper(props: Props) {
@@ -43,8 +44,8 @@ export function ProfileImageCropper(props: Props) {
       <Container>
         <SelectedImage src={props.path} alt={props.path} />
         <ButtonContainer>
-          <Button>Save</Button>
-          <Button>Cancel</Button>
+          <Button onClick={() => props.offVisible()}>Save</Button>
+          <Button onClick={() => props.offVisible()}>Cancel</Button>
         </ButtonContainer>
       </Container>
     </ModalWrapper>
