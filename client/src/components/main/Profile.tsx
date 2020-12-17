@@ -101,6 +101,22 @@ const Input = styled.input({
   margin: '10px 0'
 });
 
+const ChangeImageButton = styled.div({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: '2rem',
+  height: '2rem',
+  position: 'absolute',
+  bottom: 0,
+  right: 0,
+  padding: '.5rem',
+  border: '1px solid #eee',
+  cursor: 'pointer',
+  userSelect: 'none',
+  borderRadius: '50%'
+});
+
 interface Props {}
 
 export default function Profile(props: Props) {
@@ -108,16 +124,23 @@ export default function Profile(props: Props) {
 
   return (
     <Container>
-      <RoundImage
-        src={'/images/FakeProfile.png'}
-        styles={{
-          borderRadius: '50%',
-          width: '280px',
-          height: '280px',
-          medium: { width: '100%', height: 'auto' },
-          small: { width: '200px', height: 'auto' }
-        }}
-      />
+      <div style={{ position: 'relative' }}>
+        <RoundImage
+          src={'/images/FakeProfile.png'}
+          styles={{
+            borderRadius: '50%',
+            width: '280px',
+            height: '280px',
+            medium: { width: '100%', height: 'auto' },
+            small: { width: '200px', height: 'auto' }
+          }}
+        />
+        {isEditMode && (
+          <ChangeImageButton>
+            <i className='fas fa-camera'></i>
+          </ChangeImageButton>
+        )}
+      </div>
       <Name>Elaina</Name>
       <ListWrapper>
         <Description>Hello My name is Elaina~~~~~~~</Description>
