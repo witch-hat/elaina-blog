@@ -14,7 +14,7 @@ const CommentContainer = styled.div({
 
 const DetailsContainer = styled.div({
   display: 'flex',
-  width: '95%',
+  width: '100%',
   height: '2.1rem',
   justifyContent: 'space-between',
   '@media screen and (max-width: 768px)': {
@@ -55,7 +55,7 @@ const CommentContent = styled.p({
   margin: '2rem 0',
   display: 'flex',
   alignItems: 'center',
-  width: '95%'
+  width: '100%'
 });
 
 const ReplyButtonContainer = styled.div({
