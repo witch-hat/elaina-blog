@@ -106,16 +106,19 @@ const ChangeImageButton = styled.label({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  width: '2rem',
+  width: '4.2rem',
   height: '2rem',
   position: 'absolute',
   bottom: 0,
-  right: 0,
+  left: 0,
+  margin: '0 0 .5rem .5rem',
+  backgroundColor: 'rgba(0, 0, 0, .8)',
   padding: '.5rem',
+  color: '#f1f2f3',
   border: '1px solid #eee',
   cursor: 'pointer',
   userSelect: 'none',
-  borderRadius: '50%'
+  borderRadius: '8px'
 });
 
 const FileSelector = styled.input({
@@ -156,7 +159,7 @@ export default function Profile(props: Props) {
         {isEditMode && (
           <>
             <ChangeImageButton htmlFor='profile-select'>
-              <i className='fas fa-camera'></i>
+              <i className='fas fa-camera'></i>&nbsp;Edit
             </ChangeImageButton>
             <FileSelector
               type='file'
