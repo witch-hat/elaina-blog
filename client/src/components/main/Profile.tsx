@@ -167,7 +167,8 @@ export default function Profile(props: Props) {
               ref={selectedImageRef}
               accept='image/x-png,image/gif,image/jpeg'
               onChange={() => {
-                setSelectedImagePath(selectedImageRef.current?.value || '');
+                // @ts-ignore
+                setSelectedImagePath(URL.createObjectURL(selectedImageRef.current.files[0]) || '');
                 setIsSelecImage(true);
               }}
             />

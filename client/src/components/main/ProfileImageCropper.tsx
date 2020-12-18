@@ -4,12 +4,16 @@ import styled from 'styled-components';
 import { ModalWrapper } from 'src/components';
 
 const Container = styled.div({
-  maxWidth: '95%',
-  maxHeight: '60%',
+  width: '500px',
+  Height: '300px',
   padding: '1rem'
 });
 
-const SelectedImage = styled.img({});
+const SelectedImage = styled.img({
+  width: '100%',
+  height: '100%',
+  objectFit: 'contain'
+});
 
 const ButtonContainer = styled.div({
   display: 'flex',
