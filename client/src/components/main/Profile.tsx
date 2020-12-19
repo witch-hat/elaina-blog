@@ -112,10 +112,9 @@ const ChangeImageButton = styled.label({
   bottom: 0,
   left: 0,
   margin: '0 0 .5rem .5rem',
-  backgroundColor: 'rgba(0, 0, 0, .8)',
   padding: '.5rem',
-  color: '#f1f2f3',
-  border: '1px solid #eee',
+  backgroundColor: '#fff',
+  border: '1px solid #222',
   cursor: 'pointer',
   userSelect: 'none',
   borderRadius: '8px'

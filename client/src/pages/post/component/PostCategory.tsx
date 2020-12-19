@@ -18,7 +18,8 @@ const Container = styled.nav({
     width: '0'
   },
   '@media screen and (max-width: 1380px)': {
-    width: '28%'
+    width: '28%',
+    minWidth: '240px'
   },
   '@media screen and (max-width: 768px)': {
     // width: 'max-content',

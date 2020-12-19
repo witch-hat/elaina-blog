@@ -13,12 +13,6 @@ const Container = styled.div({
   }
 });
 
-const SelectedImage = styled.img({
-  width: '100%',
-  height: '100%',
-  objectFit: 'contain'
-});
-
 const ButtonContainer = styled.div({
   display: 'flex',
   width: '100%',

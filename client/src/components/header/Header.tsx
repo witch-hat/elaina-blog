@@ -32,7 +32,7 @@ const Container = styled.div({
   margin: '0 auto',
   alignItems: 'center',
   justifyContent: 'space-between',
-  '@media screen and (max-width: 768px)': {
+  '@media screen and (max-width: 1380px)': {
     padding: '0'
   }
 });
