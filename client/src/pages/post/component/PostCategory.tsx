@@ -1,38 +1,56 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 
 import { BorderBox } from 'src/components';
 
-const Container = styled.nav({
-  width: '250px',
-  display: 'flex',
-  flexDirection: 'column',
-  position: 'sticky',
-  top: 'calc(5rem + 20px)',
-  alignItems: 'stretch',
-  justifyContent: 'flex-start',
-  height: 'calc(100vh - 5rem - 20px)',
-  padding: '.5rem',
-  overflowY: 'auto',
-  '&::-webkit-scrollbar': {
-    width: '0'
+const FadeIn = keyframes({
+  from: {
+    opacity: 0,
+    transform: 'translateX(-1rem)'
   },
-  '@media screen and (max-width: 1380px)': {
-    width: '28%',
-    minWidth: '240px'
-  },
-  '@media screen and (max-width: 768px)': {
-    width: '50%',
-    minWidth: '250px',
-    position: 'fixed',
-    top: '5rem',
-    left: 0,
-    height: 'calc(100vh - 5rem)',
-    backgroundColor: '#eaebec',
-    borderRadius: '0 8px 8px 0',
-    boxShadow: '10px 0 5px rgba(0, 0, 0, .4)'
+  to: {
+    opacity: 1,
+    transform: 'translateX(0)'
   }
 });
+
+const Container = styled.nav(
+  {
+    width: '250px',
+    display: 'flex',
+    flexDirection: 'column',
+    position: 'sticky',
+    top: 'calc(5rem + 20px)',
+    alignItems: 'stretch',
+    justifyContent: 'flex-start',
+    height: 'calc(100vh - 5rem - 20px)',
+    padding: '.5rem',
+    overflowY: 'auto',
+    '&::-webkit-scrollbar': {
+      width: '0'
+    },
+    '@media screen and (max-width: 1380px)': {
+      width: '28%',
+      minWidth: '240px'
+    },
+    '@media screen and (max-width: 768px)': {
+      width: '50%',
+      minWidth: '250px',
+      position: 'fixed',
+      top: '5rem',
+      left: 0,
+      height: 'calc(100vh - 5rem)',
+      backgroundColor: '#eaebec',
+      borderRadius: '0 8px 8px 0',
+      boxShadow: '10px 0 5px rgba(0, 0, 0, .4)'
+    }
+  },
+  css`
+    @media screen and (max-width: 768px) {
+      animation: 0.4s ${FadeIn} forwards;
+    }
+  `
+);
 
 const CategoryName = styled.span({
   fontSize: '1.4rem',
