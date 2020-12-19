@@ -8,7 +8,9 @@ import { ModalWrapper } from 'src/components';
 const Container = styled.div({
   width: '500px',
   Height: '300px',
-  padding: '1rem'
+  '@media screen and (max-width: 768px)': {
+    width: '100%'
+  }
 });
 
 const SelectedImage = styled.img({
@@ -48,7 +50,8 @@ export function ProfileImageCropper(props: Props) {
   return (
     <ModalWrapper visible={props.visible}>
       <Container>
-        <ReactCrop src={props.path} crop={crop} onChange={(newCrop) => setCrop(newCrop)} />
+        <p style={{ marginBottom: '.3rem' }}>Drag to crop image</p>
+        <ReactCrop src={props.path} crop={crop} onChange={(newCrop) => setCrop(newCrop)} imageAlt='edit-profile-image' circularCrop />
         <ButtonContainer>
           <Button onClick={() => props.offVisible()}>Save</Button>
           <Button onClick={() => props.offVisible()}>Cancel</Button>
