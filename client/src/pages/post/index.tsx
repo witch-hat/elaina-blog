@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 
 import { Content, ContentNavigation, PostCategory, CommentContainer } from './component';
@@ -81,19 +81,23 @@ const Alert = styled.div(
 export default function Post() {
   const width = useWidth();
   const [showPostCategory, setShowPostCategory] = useState(false);
+  const isAlerted = useRef<boolean>(false);
+  let touchStartX: number;
+  let touchStartY: number;
+  let touchEndX: number;
+  let touchEndY: number;
 
-  useEffect(() => {
-    let touchStartX: number;
-    let touchStartY: number;
-    let touchEndX: number;
-    let touchEndY: number;
-    function handleTouchStart(event: React.TouchEvent<HTMLElement>) {
+  function handleTouchStart(event: React.TouchEvent) {
+    if (width <= 768) {
+      console.log('here');
       const touch = event.touches[0];
       touchStartX = touch.clientX;
       touchStartY = touch.clientY;
     }
+  }
 
-    function handleTouchEnd(event: React.TouchEvent<HTMLElement>) {
+  function handleTouchEnd(event: React.TouchEvent) {
+    if (width <= 768) {
       const touch = event.changedTouches[event.changedTouches.length - 1];
       touchEndX = touch.clientX;
       touchEndY = touch.clientY;
@@ -103,28 +107,19 @@ export default function Post() {
 
       if (Math.abs(touchOffsetX) >= 50 && Math.abs(touchOffsetY) <= 20) {
         if (touchOffsetX > 0) {
-          console.log(touchOffsetX);
           setShowPostCategory(true);
         } else {
-          console.log(touchOffsetX);
           setShowPostCategory(false);
         }
       }
     }
-
-    if (width <= 768) {
-      window.addEventListener('touchstart', (event: React.TouchEvent<HTMLElement>) => handleTouchStart(event));
-      window.addEventListener('touchend', (event: React.TouchEvent<HTMLElement>) => handleTouchEnd(event));
-
-      return () => {
-        window.removeEventListener('touchstart', (event: React.TouchEvent<HTMLElement>) => handleTouchStart(event));
-        window.removeEventListener('touchend', (event: React.TouchEvent<HTMLElement>) => handleTouchEnd(event));
-      };
-    }
-  }, [width]);
+  }
 
   return (
-    <Container>
+    <Container
+      onTouchStart={(event: React.TouchEvent) => handleTouchStart(event)}
+      onTouchEnd={(event: React.TouchEvent) => handleTouchEnd(event)}
+    >
       {width > 768 ? (
         <PostCategory />
       ) : (
@@ -137,8 +132,9 @@ export default function Post() {
         <CommentContainer />
       </ContentContainer>
       <ContentNavigation />
-      {width <= 768 && (
-        <Alert>
+      {/* TODO: Alert shows only first... */}
+      {width <= 768 && !isAlerted.current.valueOf() && (
+        <Alert onAnimationEnd={() => (isAlerted.current = true)}>
           <p style={{ fontSize: '1.3rem' }}>Swipe LEFT to RIGHT to show list</p>
         </Alert>
       )}
