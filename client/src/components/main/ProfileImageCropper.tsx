@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import ReactCrop, { Crop } from 'react-image-crop';
+import 'react-image-crop/dist/ReactCrop.css';
 
 import { ModalWrapper } from 'src/components';
 
@@ -41,12 +43,12 @@ interface Props {
 }
 
 export function ProfileImageCropper(props: Props) {
-  console.log(props.path);
+  const [crop, setCrop] = useState<Crop>({ aspect: 1 / 1 });
 
   return (
     <ModalWrapper visible={props.visible}>
       <Container>
-        <SelectedImage src={props.path} alt={props.path} />
+        <ReactCrop src={props.path} crop={crop} onChange={(newCrop) => setCrop(newCrop)} />
         <ButtonContainer>
           <Button onClick={() => props.offVisible()}>Save</Button>
           <Button onClick={() => props.offVisible()}>Cancel</Button>
