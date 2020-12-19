@@ -14,7 +14,7 @@ const Container = styled.div({
   }
 });
 
-const ContentContainer = styled.div({
+const ContentContainer = styled.div<{ isOpenList: boolean }>((props) => ({
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
@@ -22,10 +22,9 @@ const ContentContainer = styled.div({
     width: '72%'
   },
   '@media screen and (max-width: 768px)': {
-    width: '100%',
-    marginLeft: '.75rem'
+    width: '100%'
   }
-});
+}));
 
 const Index = styled.div({
   display: 'none',
@@ -130,7 +129,7 @@ export default function Post() {
       {/* <Index onClick={() => setShowPostCategory(!showPostCategory)}>
         <StyledP>Show List</StyledP>
       </Index> */}
-      <ContentContainer>
+      <ContentContainer isOpenList={showPostCategory}>
         <Content />
         <CommentContainer />
       </ContentContainer>

@@ -22,8 +22,14 @@ const Container = styled.nav({
     minWidth: '240px'
   },
   '@media screen and (max-width: 768px)': {
-    width: '70%'
-    // display: 'none'
+    width: '70%',
+    position: 'fixed',
+    top: '5rem',
+    left: 0,
+    height: 'calc(100vh - 5rem)',
+    backgroundColor: '#eaebec',
+    borderRadius: '0 8px 8px 0',
+    boxShadow: '10px 0 5px rgba(0, 0, 0, .4)'
   }
 });
 
