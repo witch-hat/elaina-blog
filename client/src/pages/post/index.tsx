@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 
 import { Content, ContentNavigation, PostCategory, CommentContainer } from './component';
 import { useWidth } from 'src/components';
@@ -52,6 +52,33 @@ const StyledP = styled.p({
   flexShrink: 0
 });
 
+const FadeOut = keyframes({
+  from: {
+    opacity: 1
+  },
+  to: {
+    opacity: 0
+  }
+});
+
+const Alert = styled.div(
+  {
+    position: 'fixed',
+    top: '50%',
+    width: '150px',
+    height: '150px',
+    backgroundColor: 'rgba(0,0,0,.8)',
+    color: '#f1f2f3',
+    padding: '.5rem',
+    borderRadius: '12px',
+    display: 'flex',
+    alignItems: 'center'
+  },
+  css`
+    animation: 2.5s ${FadeOut} 1s forwards;
+  `
+);
+
 export default function Post() {
   const width = useWidth();
   const [showPostCategory, setShowPostCategory] = useState(false);
@@ -99,7 +126,7 @@ export default function Post() {
 
   return (
     <Container>
-      {width > 768 || showPostCategory ? <PostCategory /> : null}
+      {(width > 768 || showPostCategory) && <PostCategory />}
       {/* <Index onClick={() => setShowPostCategory(!showPostCategory)}>
         <StyledP>Show List</StyledP>
       </Index> */}
@@ -108,6 +135,11 @@ export default function Post() {
         <CommentContainer />
       </ContentContainer>
       <ContentNavigation />
+      {width <= 768 && (
+        <Alert>
+          <p style={{ fontSize: '1.3rem' }}>Swipe LEFT to RIGHT to show list</p>
+        </Alert>
+      )}
     </Container>
   );
 }
