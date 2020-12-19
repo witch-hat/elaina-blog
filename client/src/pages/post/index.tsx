@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 
 import { Content, ContentNavigation, PostCategory, CommentContainer } from './component';
-import { useWidth } from 'src/components';
+import { useWidth, FocusWrapper } from 'src/components';
 
 const Container = styled.div({
   width: '100%',
@@ -125,10 +125,13 @@ export default function Post() {
 
   return (
     <Container>
-      {(width > 768 || showPostCategory) && <PostCategory />}
-      {/* <Index onClick={() => setShowPostCategory(!showPostCategory)}>
-        <StyledP>Show List</StyledP>
-      </Index> */}
+      {width > 768 ? (
+        <PostCategory />
+      ) : (
+        <FocusWrapper visible={showPostCategory} onClickOutside={() => setShowPostCategory(false)}>
+          <PostCategory />
+        </FocusWrapper>
+      )}
       <ContentContainer isOpenList={showPostCategory}>
         <Content />
         <CommentContainer />
