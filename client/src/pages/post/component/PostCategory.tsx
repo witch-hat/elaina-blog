@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
-import { BorderBox, useWidth } from 'src/components';
+import { BorderBox } from 'src/components';
 
 const Container = styled.nav({
   width: '250px',
@@ -22,7 +22,8 @@ const Container = styled.nav({
     minWidth: '240px'
   },
   '@media screen and (max-width: 768px)': {
-    width: '70%',
+    width: '50%',
+    minWidth: '250px',
     position: 'fixed',
     top: '5rem',
     left: 0,
@@ -67,28 +68,7 @@ const Article = styled.p({
   WebkitBoxOrient: 'vertical'
 });
 
-const ResponsiveButton = styled.div({
-  display: 'none',
-  '@media screen and (max-width: 768px)': {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: '1.3rem',
-    padding: '.5rem',
-    width: '2.5rem',
-    height: '2.5rem',
-    border: '1px solid #ddd',
-    borderRadius: '50%',
-    '&:hover': {
-      backgroundColor: '#eee'
-    }
-  }
-});
-
 export default function PostCategory() {
-  const width = useWidth();
-  const [isCategoryOpen, setIsCategoryOpen] = useState(window.innerWidth > 768);
-
   return (
     <Container>
       <CategoryName>카테고리 이름 ex)JS</CategoryName>
