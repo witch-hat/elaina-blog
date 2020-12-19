@@ -101,7 +101,7 @@ export default function Post() {
       const touchOffsetX = touchEndX - touchStartX;
       const touchOffsetY = touchEndY - touchStartY;
 
-      if (Math.abs(touchOffsetX) >= 80 && Math.abs(touchOffsetY) <= 20) {
+      if (Math.abs(touchOffsetX) >= 50 && Math.abs(touchOffsetY) <= 20) {
         if (touchOffsetX > 0) {
           console.log(touchOffsetX);
           setShowPostCategory(true);
