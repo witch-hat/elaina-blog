@@ -23,8 +23,10 @@ export const FocusWrapper = React.forwardRef<HTMLDivElement, Props>((props: Prop
     }
 
     document.addEventListener('click', handleClickOutside);
+    document.addEventListener('drag', handleClickOutside);
     return () => {
       document.removeEventListener('click', handleClickOutside);
+      document.removeEventListener('drag', handleClickOutside);
     };
   }, [props]);
 
