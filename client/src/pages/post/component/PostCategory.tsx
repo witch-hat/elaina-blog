@@ -22,11 +22,8 @@ const Container = styled.nav({
     minWidth: '240px'
   },
   '@media screen and (max-width: 768px)': {
-    // width: 'max-content',
-    // maxWidth: '220px',
-    // flexShrink: 0,
-    // float: 'left'
-    display: 'none'
+    width: '70%'
+    // display: 'none'
   }
 });
 
@@ -88,48 +85,41 @@ export default function PostCategory() {
 
   return (
     <Container>
-      <ResponsiveButton onClick={() => setIsCategoryOpen(!isCategoryOpen)}>
-        <i className={isCategoryOpen ? 'far fa-times-circle' : 'fas fa-bars'}></i>
-      </ResponsiveButton>
-      {width > 768 || isCategoryOpen ? (
-        <>
-          <CategoryName>카테고리 이름 ex)JS</CategoryName>
-          <BorderBox isTransform={true} styles={{ margin: '1rem 0 0', width: '100%' }}>
-            <ContentContainer>
-              <Title>Post1</Title>
-              <Article>
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard
-                dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen
-                book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially
-                unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more
-                recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-              </Article>
-            </ContentContainer>
-          </BorderBox>
-          <BorderBox isTransform={true} styles={{ margin: '1rem 0 0', width: '100%' }}>
-            <ContentContainer>
-              <Title>Post Title is very long long longlonglong long long</Title>
-              <Article>
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard
-                dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen
-                book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially
-                unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more
-                recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-              </Article>
-            </ContentContainer>
-          </BorderBox>
-          <BorderBox isTransform={true} styles={{ margin: '1rem 0 0', width: '100%' }}>
-            <ContentContainer>
-              <Title>Post 3</Title>
-            </ContentContainer>
-          </BorderBox>
-          <BorderBox isTransform={true} styles={{ margin: '1rem 0 0', width: '100%' }}>
-            <ContentContainer>
-              <Title>Post 4</Title>
-            </ContentContainer>
-          </BorderBox>
-        </>
-      ) : null}
+      <CategoryName>카테고리 이름 ex)JS</CategoryName>
+      <BorderBox isTransform={true} styles={{ margin: '1rem 0 0', width: '100%' }}>
+        <ContentContainer>
+          <Title>Post1</Title>
+          <Article>
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy
+            text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has
+            survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was
+            popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop
+            publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+          </Article>
+        </ContentContainer>
+      </BorderBox>
+      <BorderBox isTransform={true} styles={{ margin: '1rem 0 0', width: '100%' }}>
+        <ContentContainer>
+          <Title>Post Title is very long long longlonglong long long</Title>
+          <Article>
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy
+            text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has
+            survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was
+            popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop
+            publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+          </Article>
+        </ContentContainer>
+      </BorderBox>
+      <BorderBox isTransform={true} styles={{ margin: '1rem 0 0', width: '100%' }}>
+        <ContentContainer>
+          <Title>Post 3</Title>
+        </ContentContainer>
+      </BorderBox>
+      <BorderBox isTransform={true} styles={{ margin: '1rem 0 0', width: '100%' }}>
+        <ContentContainer>
+          <Title>Post 4</Title>
+        </ContentContainer>
+      </BorderBox>
     </Container>
   );
 }
