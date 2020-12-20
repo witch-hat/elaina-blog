@@ -42,7 +42,7 @@ const Container = styled.nav(
       height: 'calc(100vh - 5rem)',
       backgroundColor: '#eaebec',
       borderRadius: '0 8px 8px 0',
-      boxShadow: '10px 0 5px rgba(0, 0, 0, .4)'
+      boxShadow: '5px 0 4px rgba(38, 38, 38, .4)'
     }
   },
   css`
@@ -57,73 +57,83 @@ const CategoryName = styled.span({
   fontWeight: 'bold'
 });
 
-const ContentContainer = styled.div({
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'flex-start',
+const TitleContainer = styled.ul({
+  marginTop: '.5rem',
+  padding: '0 .75rem',
+  width: '100%'
+});
+
+const TitleList = styled.li({
   width: '100%',
-  height: '10rem',
-  padding: '.5rem'
+  padding: '.2rem 0',
+  margin: '.4rem 0',
+  fontSize: '1.2rem',
+  overflow: 'hidden',
+  cursor: 'pointer',
+  '&:hover': {
+    fontWeight: 'bold',
+    textDecoration: 'underline'
+  }
 });
 
 const Title = styled.span({
-  width: '100%',
-  fontSize: '1.2rem',
-  fontWeight: 'bold',
-  overflow: 'hidden',
-  display: '-webkit-box',
-  WebkitLineClamp: 2,
-  WebkitBoxOrient: 'vertical'
-});
-
-const Article = styled.p({
-  width: '100%',
-  marginTop: '1.25rem',
-  overflow: 'hidden',
-  wordBreak: 'keep-all',
   display: '-webkit-box',
   WebkitLineClamp: 3,
-  WebkitBoxOrient: 'vertical'
+  WebkitBoxOrient: 'vertical',
+  maxHeight: '5.35rem'
 });
 
 export default function PostCategory() {
   return (
     <Container>
-      <CategoryName>카테고리 이름 ex)JS</CategoryName>
-      <BorderBox isTransform={true} styles={{ margin: '1rem 0 0', width: '100%' }}>
-        <ContentContainer>
+      <CategoryName>React</CategoryName>
+      <TitleContainer>
+        <TitleList>
           <Title>Post1</Title>
-          <Article>
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy
-            text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has
-            survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was
-            popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop
-            publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-          </Article>
-        </ContentContainer>
-      </BorderBox>
-      <BorderBox isTransform={true} styles={{ margin: '1rem 0 0', width: '100%' }}>
-        <ContentContainer>
-          <Title>Post Title is very long long longlonglong long long</Title>
-          <Article>
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy
-            text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has
-            survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was
-            popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop
-            publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-          </Article>
-        </ContentContainer>
-      </BorderBox>
-      <BorderBox isTransform={true} styles={{ margin: '1rem 0 0', width: '100%' }}>
-        <ContentContainer>
+        </TitleList>
+        <TitleList>
+          <Title>Post TitleList is very long long longlonglong long long long long long long long long long long long long long </Title>
+        </TitleList>
+        <TitleList>
           <Title>Post 3</Title>
-        </ContentContainer>
-      </BorderBox>
-      <BorderBox isTransform={true} styles={{ margin: '1rem 0 0', width: '100%' }}>
-        <ContentContainer>
+        </TitleList>
+        <TitleList>
           <Title>Post 4</Title>
-        </ContentContainer>
-      </BorderBox>
+        </TitleList>
+        <TitleList>
+          <Title>Post 5</Title>
+        </TitleList>
+        <TitleList>
+          <Title>Post 6</Title>
+        </TitleList>
+        <TitleList>
+          <Title>Post 7</Title>
+        </TitleList>
+        <TitleList>
+          <Title>Post 8</Title>
+        </TitleList>
+        <TitleList>
+          <Title>Post 9</Title>
+        </TitleList>
+        <TitleList>
+          <Title>Post 10</Title>
+        </TitleList>
+        <TitleList>
+          <Title>Post 11</Title>
+        </TitleList>
+        <TitleList>
+          <Title>Post 12</Title>
+        </TitleList>
+        <TitleList>
+          <Title>Post 13</Title>
+        </TitleList>
+        <TitleList>
+          <Title>Post 14</Title>
+        </TitleList>
+        <TitleList>
+          <Title>Post 15</Title>
+        </TitleList>
+      </TitleContainer>
     </Container>
   );
 }
