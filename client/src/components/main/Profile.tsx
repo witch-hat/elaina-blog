@@ -32,6 +32,7 @@ const Name = styled.span({
   margin: '15px 0',
   wordBreak: 'keep-all',
   '@media screen and (max-width: 768px)': {
+    margin: '10px 0',
     textAlign: 'center'
   }
 });
@@ -42,7 +43,8 @@ const ListWrapper = styled.ul({
   flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'flex-start',
-  '& > li:nth-child(1)': {
+  '& > li:first-child': {
+    margin: '0 0 .7rem',
     '@media screen and (max-width: 768px)': {
       textAlign: 'center'
     }
