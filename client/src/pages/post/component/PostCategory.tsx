@@ -67,7 +67,6 @@ const TitleList = styled.li({
   width: '100%',
   padding: '.2rem 0',
   margin: '.4rem 0',
-  fontSize: '1.2rem',
   cursor: 'pointer',
   '&:hover': {
     fontWeight: 'bold',
@@ -78,7 +77,7 @@ const TitleList = styled.li({
 const Title = styled.span({
   overflow: 'hidden',
   display: '-webkit-box',
-  WebkitLineClamp: 3,
+  WebkitLineClamp: 1,
   WebkitBoxOrient: 'vertical'
 });
 
