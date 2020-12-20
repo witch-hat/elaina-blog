@@ -68,7 +68,6 @@ const TitleList = styled.li({
   padding: '.2rem 0',
   margin: '.4rem 0',
   fontSize: '1.2rem',
-  overflow: 'hidden',
   cursor: 'pointer',
   '&:hover': {
     fontWeight: 'bold',
@@ -77,10 +76,10 @@ const TitleList = styled.li({
 });
 
 const Title = styled.span({
+  overflow: 'hidden',
   display: '-webkit-box',
   WebkitLineClamp: 3,
-  WebkitBoxOrient: 'vertical',
-  maxHeight: '5.35rem'
+  WebkitBoxOrient: 'vertical'
 });
 
 export default function PostCategory() {
