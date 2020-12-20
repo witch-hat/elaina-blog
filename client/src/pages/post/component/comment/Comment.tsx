@@ -18,7 +18,7 @@ const DetailsContainer = styled.div({
   width: '100%',
   height: '2.1rem',
   justifyContent: 'space-between',
-  '@media screen and (max-width: 768px)': {
+  '@media screen and (max-width: 767px)': {
     margin: '0 0 .2rem'
   }
 });
@@ -27,7 +27,7 @@ const InformationContainer = styled.div({
   display: 'flex',
   fontSize: '.8rem',
   alignItems: 'center',
-  '@media screen and (max-width: 768px)': {
+  '@media screen and (max-width: 767px)': {
     flexDirection: 'column',
     alignItems: 'flex-start'
   }
@@ -37,7 +37,7 @@ const Author = styled.div({
   marginRight: '.7rem',
   display: 'flex',
   alignItems: 'center',
-  '@media screen and (max-width: 768px)': {
+  '@media screen and (max-width: 767px)': {
     margin: '0 0 .2rem'
   }
 });

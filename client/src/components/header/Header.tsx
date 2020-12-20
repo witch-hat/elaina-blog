@@ -35,7 +35,7 @@ const Container = styled.div({
   '@media screen and (max-width: 1380px)': {
     padding: '0 10px'
   },
-  '@media screen and (max-width: 768px)': {
+  '@media screen and (max-width: 767px)': {
     padding: '0'
   }
 });
@@ -64,7 +64,7 @@ const SearchButton = styled.button({
   '&:hover': {
     backgroundColor: '#eee'
   },
-  '@media screen and (max-width: 768px)': {
+  '@media screen and (max-width: 767px)': {
     width: '32px',
     height: '32px'
   }
@@ -88,7 +88,7 @@ const MobileMenuButton = styled.div({
   display: 'none',
   padding: '10px',
   fontSize: '1.5rem',
-  '@media screen and (max-width: 768px)': {
+  '@media screen and (max-width: 767px)': {
     display: 'block'
   }
 });
@@ -108,7 +108,7 @@ const ResponsiveMenuBox = styled.div<{ isOpen?: boolean }>((props) => {
   return props.isOpen
     ? css`
         display: flex;
-        @media screen and (max-width: 768px) {
+        @media screen and (max-width: 767px) {
           padding: 10px;
           position: fixed;
           right: 0;
@@ -121,7 +121,7 @@ const ResponsiveMenuBox = styled.div<{ isOpen?: boolean }>((props) => {
       `
     : {
         display: 'flex',
-        '@media screen and (max-width: 768px)': {
+        '@media screen and (max-width: 767px)': {
           display: 'none'
         }
       };
@@ -133,11 +133,11 @@ interface Props {
 }
 
 export function Header(props: Props) {
-  const [isMenuVisible, setIsMenuVisible] = useState(window.innerWidth > 768);
+  const [isMenuVisible, setIsMenuVisible] = useState(window.innerWidth > 767);
   const width = useWidth();
 
   useEffect(() => {
-    setIsMenuVisible(width > 768);
+    setIsMenuVisible(width > 767);
   }, [width]);
 
   function onMobileMenuButtonClick() {
@@ -154,7 +154,7 @@ export function Header(props: Props) {
           <FocusWrapper
             visible={isMenuVisible}
             onClickOutside={() => {
-              if (width <= 768) setIsMenuVisible(false);
+              if (width <= 767) setIsMenuVisible(false);
             }}
           >
             <ResponsiveMenuBox isOpen={isMenuVisible}>

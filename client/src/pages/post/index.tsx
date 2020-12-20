@@ -9,7 +9,7 @@ const Container = styled.div({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'flex-start',
-  '@media screen and (max-width: 768px)': {
+  '@media screen and (max-width: 767px)': {
     overflowX: 'hidden'
   }
 });
@@ -21,14 +21,14 @@ const ContentContainer = styled.div<{ isOpenList: boolean }>((props) => ({
   '@media screen and (max-width: 1380px)': {
     width: '72%'
   },
-  '@media screen and (max-width: 768px)': {
+  '@media screen and (max-width: 767px)': {
     width: '100%'
   }
 }));
 
 const Index = styled.div({
   display: 'none',
-  '@media screen and (max-width: 768px)': {
+  '@media screen and (max-width: 767px)': {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -88,7 +88,7 @@ export default function Post() {
   let touchEndY: number;
 
   function handleTouchStart(event: React.TouchEvent) {
-    if (width <= 768) {
+    if (width <= 767) {
       console.log('here');
       const touch = event.touches[0];
       touchStartX = touch.clientX;
@@ -97,7 +97,7 @@ export default function Post() {
   }
 
   function handleTouchEnd(event: React.TouchEvent) {
-    if (width <= 768) {
+    if (width <= 767) {
       const touch = event.changedTouches[event.changedTouches.length - 1];
       touchEndX = touch.clientX;
       touchEndY = touch.clientY;
@@ -120,7 +120,7 @@ export default function Post() {
       onTouchStart={(event: React.TouchEvent) => handleTouchStart(event)}
       onTouchEnd={(event: React.TouchEvent) => handleTouchEnd(event)}
     >
-      {width > 768 ? (
+      {width > 767 ? (
         <PostCategory />
       ) : (
         <FocusWrapper visible={showPostCategory} onClickOutside={() => setShowPostCategory(false)}>
@@ -133,7 +133,7 @@ export default function Post() {
       </ContentContainer>
       <ContentNavigation />
       {/* TODO: Alert shows only first... */}
-      {width <= 768 && !isAlerted.current.valueOf() && (
+      {width <= 767 && !isAlerted.current.valueOf() && (
         <Alert onAnimationEnd={() => (isAlerted.current = true)}>
           <p style={{ fontSize: '1.3rem' }}>Swipe LEFT to RIGHT to show list</p>
         </Alert>

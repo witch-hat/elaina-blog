@@ -23,7 +23,7 @@ const Input = styled.input<Styles>((props) => {
     '&:invalid': {
       border: '2px solid #ff0000'
     },
-    '@media screen and (max-width: 768px)': {
+    '@media screen and (max-width: 767px)': {
       width: props.small?.width || '100px',
       height: props.small?.height || '40px'
     }

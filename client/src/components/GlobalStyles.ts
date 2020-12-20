@@ -27,7 +27,10 @@ export const GlobalStyles = createGlobalStyle<{ themeMode: ThemeMode }>`
 		
 	}
 	html {
-		@media screen and (max-width: 768px) {
+		@media screen and (max-width: 1380px) {
+			font-size: 15px;
+		}
+		@media screen and (max-width: 767px) {
 			font-size: 14px;
 		}
 	}

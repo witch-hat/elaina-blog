@@ -33,7 +33,7 @@ const Container = styled.nav(
       width: '28%',
       minWidth: '240px'
     },
-    '@media screen and (max-width: 768px)': {
+    '@media screen and (max-width: 767px)': {
       width: '50%',
       minWidth: '250px',
       position: 'fixed',
@@ -46,7 +46,7 @@ const Container = styled.nav(
     }
   },
   css`
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 767px) {
       animation: 0.4s ${FadeIn} forwards;
     }
   `

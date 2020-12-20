@@ -12,7 +12,7 @@ const Container = styled.section({
   '@media screen and (max-width: 1380px)': {
     width: '100%'
   },
-  '@media screen and (max-width: 768px)': {
+  '@media screen and (max-width: 767px)': {
     padding: '0'
   }
 });
@@ -21,7 +21,7 @@ const Title = styled.header({
   width: '100%',
   fontSize: '2.5rem',
   fontWeight: 'bold',
-  '@media screen and (max-width: 768px)': {
+  '@media screen and (max-width: 767px)': {
     fontSize: '2rem'
   }
 });

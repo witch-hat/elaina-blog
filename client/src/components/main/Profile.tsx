@@ -15,9 +15,10 @@ const Container = styled.aside({
   minHeight: 'calc(90vh - 40px)',
   alignSelf: 'stretch',
   '@media screen and (max-width: 1380px)': {
-    width: '28%'
+    width: '28%',
+    minWidth: '230px'
   },
-  '@media screen and (max-width: 768px)': {
+  '@media screen and (max-width: 767px)': {
     width: '100%',
     minHeight: 'max-content',
     marginBottom: '50px'
@@ -31,7 +32,7 @@ const Name = styled.span({
   width: '100%',
   margin: '15px 0',
   wordBreak: 'keep-all',
-  '@media screen and (max-width: 768px)': {
+  '@media screen and (max-width: 767px)': {
     margin: '10px 0',
     textAlign: 'center'
   }
@@ -45,7 +46,7 @@ const ListWrapper = styled.ul({
   alignItems: 'flex-start',
   '& > li:first-child': {
     margin: '0 0 .7rem',
-    '@media screen and (max-width: 768px)': {
+    '@media screen and (max-width: 767px)': {
       textAlign: 'center'
     }
   }

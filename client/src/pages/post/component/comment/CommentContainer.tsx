@@ -14,7 +14,7 @@ const Container = styled.section({
   jusitfyContent: 'flex-start',
   alignItems: 'center',
   minHeight: '20rem',
-  '@media screen and (max-width: 768px)': {
+  '@media screen and (max-width: 767px)': {
     padding: '0'
   }
 });
