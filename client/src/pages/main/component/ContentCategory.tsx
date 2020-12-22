@@ -3,6 +3,7 @@ import Link from 'next/link';
 
 import { BorderBox } from 'src/components';
 import ContentCategoryDetails from './ContentCategoryDetails';
+import { ThemeMode } from 'src/redux/common/type';
 
 const Container = styled.div({
   display: 'flex',
@@ -78,15 +79,17 @@ const PreviewContent = styled.span({
   WebkitBoxOrient: 'vertical'
 });
 
-interface Props {}
+interface Props {
+  theme: ThemeMode;
+}
 
-export default function ContentCategory() {
+export default function ContentCategory(props: Props) {
   return (
     <section style={{ width: '100%' }}>
       <Container>
         <Link href='/post' passHref>
           <a style={{ width: '100%' }}>
-            <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
+            <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }} theme={props.theme}>
               <Content>
                 <PreviewTextWrapper>
                   <PreviewTitle>React</PreviewTitle>
@@ -100,7 +103,7 @@ export default function ContentCategory() {
         </Link>
         <Link href='/post'>
           <a style={{ width: '100%' }}>
-            <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
+            <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }} theme={props.theme}>
               <Content>
                 <PreviewTextWrapper>
                   <PreviewTitle>Very long long long long long long long long longlonglonglonglonglonglonglonglong</PreviewTitle>
@@ -120,7 +123,7 @@ export default function ContentCategory() {
         </Link>
         <Link href='/post'>
           <a style={{ width: '100%' }}>
-            <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
+            <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }} theme={props.theme}>
               <Content>
                 <PreviewTextWrapper>
                   <PreviewTitle>Vue.js</PreviewTitle>
@@ -140,7 +143,7 @@ export default function ContentCategory() {
         </Link>
         <Link href='/post'>
           <a style={{ width: '100%' }}>
-            <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
+            <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }} theme={props.theme}>
               <Content>
                 <PreviewTextWrapper>
                   <PreviewTitle>Data Structure</PreviewTitle>
@@ -160,7 +163,7 @@ export default function ContentCategory() {
         </Link>
         <Link href='/post'>
           <a style={{ width: '100%' }}>
-            <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
+            <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }} theme={props.theme}>
               <Content>
                 <PreviewTextWrapper>
                   <PreviewTitle>No Image</PreviewTitle>

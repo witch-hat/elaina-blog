@@ -96,7 +96,7 @@ export default function Comment(props: Props) {
 
   return (
     <div>
-      <BorderBox isTransform={false} styles={{ margin: '1rem 0 0', width: '100%' }}>
+      <BorderBox isTransform={false} styles={{ margin: '1rem 0 0', width: '100%' }} theme={props.theme}>
         <CommentContainer>
           <DetailsContainer>
             <InformationContainer>

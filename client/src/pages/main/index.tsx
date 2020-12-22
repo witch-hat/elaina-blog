@@ -10,7 +10,7 @@ export default function Main() {
 
   return (
     <MainPageLayout>
-      <ContentCategory />
+      <ContentCategory theme={theme} />
     </MainPageLayout>
   );
 }

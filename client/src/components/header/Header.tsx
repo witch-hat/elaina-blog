@@ -20,7 +20,7 @@ const StyledHeader = styled.header<{ themeMode: ThemeMode }>((props) => {
     top: '0',
     zIndex: 9999,
     height: '5rem',
-    backgroundColor: theme[props.themeMode].mainBackground
+    backgroundColor: theme[props.themeMode].headerBackground
   };
 });
 

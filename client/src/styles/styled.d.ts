@@ -5,6 +5,7 @@ declare module 'styled-components' {
     [key: string]: {
       // Background Color
       mainBackground: string;
+      headerBackground: string;
       inputBackground: string;
       buttonBackground: string;
       hoverBackground: string;
@@ -19,6 +20,7 @@ declare module 'styled-components' {
       inputBorder: string;
       // Others
       navUnderBar: string;
+      shadowColor: string;
     };
   }
 }
