@@ -129,7 +129,9 @@ const FileSelector = styled.input({
   border: 'none'
 });
 
-interface Props {}
+interface Props {
+  theme: string;
+}
 
 export default function Profile(props: Props) {
   const [isEditMode, setIsEditMode] = useState(false);

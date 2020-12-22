@@ -4,6 +4,10 @@ import styled, { keyframes, css } from 'styled-components';
 import { Content, ContentNavigation, PostCategory, CommentContainer } from './component';
 import { useWidth, FocusWrapper } from 'src/components';
 
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/redux/rootReducer';
+import { ThemeMode } from 'src/redux/common/type';
+
 const Container = styled.div({
   width: '100%',
   display: 'flex',
@@ -79,6 +83,7 @@ const Alert = styled.div(
 );
 
 export default function Post() {
+  const theme: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const width = useWidth();
   const [showPostCategory, setShowPostCategory] = useState(false);
   const isAlerted = useRef<boolean>(false);

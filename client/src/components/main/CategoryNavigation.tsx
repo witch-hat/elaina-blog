@@ -14,7 +14,11 @@ const NavName = styled.span({
   fontWeight: 'bold'
 });
 
-export default function CategoryNavigation() {
+interface Props {
+  theme: string;
+}
+
+export default function CategoryNavigation(props: Props) {
   return (
     <Container>
       <NavigationButton href='/'>
