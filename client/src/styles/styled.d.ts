@@ -13,9 +13,10 @@ declare module 'styled-components' {
       mainText: string;
       detailText: string;
       hoverText: string;
-      // Other
+      // Border
       borderColor: string;
       inputBorder: string;
+      // Others
       navUnderBar: string;
     };
   }

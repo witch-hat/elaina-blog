@@ -12,9 +12,10 @@ export const theme: DefaultTheme = {
     mainText: '#f1f2f3',
     detailText: '#666',
     hoverText: '',
-    // Other
+    // Border
     borderColor: '#ddd',
     inputBorder: '#111',
+    // Others
     navUnderBar: ''
   },
   light: {
@@ -28,9 +29,10 @@ export const theme: DefaultTheme = {
     mainText: '#111213',
     detailText: '#888',
     hoverText: '',
-    // Other
+    // Border
     borderColor: '#ddd',
     inputBorder: '#ccc',
+    // Others
     navUnderBar: ''
   }
 };
