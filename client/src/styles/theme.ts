@@ -12,6 +12,7 @@ export const theme: DefaultTheme = {
     mainText: '#f1f2f3',
     detailText: '#666',
     hoverText: '',
+    placeholderText: '#f1f2f3',
     // Border
     borderColor: '#ddd',
     inputBorder: '#111',
@@ -29,6 +30,7 @@ export const theme: DefaultTheme = {
     mainText: '#111213',
     detailText: '#888',
     hoverText: '',
+    placeholderText: '#888',
     // Border
     borderColor: '#ddd',
     inputBorder: '#ccc',

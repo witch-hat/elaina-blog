@@ -32,6 +32,9 @@ const Input = styled.input<InputProps>((props) => {
     '&:invalid': {
       border: '2px solid #ff0000'
     },
+    '&::placeholder': {
+      color: theme[props.themeMode].placeholderText
+    },
     '@media screen and (max-width: 767px)': {
       width: props.styles?.small?.width || '100px',
       height: props.styles?.small?.height || '40px'

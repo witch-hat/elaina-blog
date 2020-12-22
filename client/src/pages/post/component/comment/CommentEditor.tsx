@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import { theme } from 'src/styles';
 import { InputBox } from 'src/components';
 import { ThemeMode } from 'src/redux/common/type';
 
@@ -29,7 +30,7 @@ const UserInput = styled.div({
   }
 });
 
-const Editor = styled.textarea({
+const Editor = styled.textarea<{ themeMode: ThemeMode }>((props) => ({
   fontFamily: '"Nanum Gothic", sans-serif',
   width: '100%',
   height: '5rem',
@@ -37,10 +38,14 @@ const Editor = styled.textarea({
   outline: 'none',
   padding: '.5rem',
   resize: 'none',
-  border: '1px solid #ddd',
+  border: `1px solid ${theme[props.themeMode].inputBorder}`,
   borderRadius: '12px',
-  wordBreak: 'keep-all'
-});
+  wordBreak: 'keep-all',
+  backgroundColor: theme[props.themeMode].inputBackground,
+  '&::placeholder': {
+    color: theme[props.themeMode].placeholderText
+  }
+}));
 
 const SubmitButton = styled.button({
   width: '8rem',
@@ -92,7 +97,7 @@ export default function CommentEditor(props: Props) {
           />
         </UserInput>
       </InputWrapper>
-      <Editor placeholder='Write comment...(5자 이상)' minLength={5} />
+      <Editor placeholder='Write comment...(5자 이상)' minLength={5} themeMode={props.theme} />
       <SubmitButton>덧글 작성</SubmitButton>
     </EditorContainer>
   );

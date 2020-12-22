@@ -13,6 +13,7 @@ declare module 'styled-components' {
       mainText: string;
       detailText: string;
       hoverText: string;
+      placeholderText: string;
       // Border
       borderColor: string;
       inputBorder: string;
