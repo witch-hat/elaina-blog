@@ -2,27 +2,20 @@ import 'styled-components';
 
 declare module 'styled-components' {
   export interface DefaultTheme {
-    dark: {
+    [key: string]: {
+      // Background Color
       mainBackground: string;
+      inputBackground: string;
+      buttonBackground: string;
+      hoverBackground: string;
+      // Text Color
       blogName: string;
       mainText: string;
       detailText: string;
-      borderColor: string;
-      inputBackground: string;
-      hoverBackground: string;
       hoverText: string;
-      buttonBackground: string;
-    };
-    light: {
-      mainBackground: string;
-      blogName: string;
-      mainText: string;
-      detailText: string;
+      // Other
       borderColor: string;
-      inputBackground: string;
-      hoverBackground: string;
-      hoverText: string;
-      buttonBackground: string;
+      navUnderBar: string;
     };
   }
 }

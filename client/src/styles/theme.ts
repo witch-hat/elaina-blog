@@ -2,25 +2,33 @@ import { DefaultTheme } from 'styled-components';
 
 export const theme: DefaultTheme = {
   dark: {
+    // Background Color
     mainBackground: '#262728',
-    borderColor: '#ddd',
-    mainText: '#f1f2f3',
-    blogName: '#f1f2f3',
-    detailText: '#666',
     inputBackground: '',
     hoverBackground: '',
+    buttonBackground: '',
+    // Text Color
+    blogName: '#f1f2f3',
+    mainText: '#f1f2f3',
+    detailText: '#666',
     hoverText: '',
-    buttonBackground: ''
+    // Other
+    borderColor: '#ddd',
+    navUnderBar: ''
   },
   light: {
+    // Background Color
     mainBackground: '#fff',
-    borderColor: '#ddd',
-    mainText: '#111213',
-    blogName: '#1f2f3f',
-    detailText: '#888',
     inputBackground: '',
     hoverBackground: '',
+    buttonBackground: '',
+    // Text Color
+    blogName: '#1f2f3f',
+    mainText: '#111213',
+    detailText: '#888',
     hoverText: '',
-    buttonBackground: ''
+    // Other
+    borderColor: '#ddd',
+    navUnderBar: ''
   }
 };
