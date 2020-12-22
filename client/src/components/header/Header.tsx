@@ -167,6 +167,7 @@ export function Header(props: Props) {
                   minLength={2}
                   maxLength={10}
                   styles={{ width: '180px', small: { width: '120px', height: '32px' } }}
+                  theme={props.theme}
                 />
                 <SearchButton type='submit'>
                   <i className='fas fa-search'></i>

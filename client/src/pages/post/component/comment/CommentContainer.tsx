@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { BorderBox, InputBox } from 'src/components';
 import Comment from './Comment';
 import CommentEditor from './CommentEditor';
+import { ThemeMode } from 'src/redux/common/type';
 
 const Container = styled.section({
   display: 'flex',
@@ -32,17 +33,21 @@ const Counter = styled.div({
   fontWeight: 'bold'
 });
 
-export default function CommentContainer() {
+interface Props {
+  theme: ThemeMode;
+}
+
+export default function CommentContainer(props: Props) {
   return (
     <Container>
       <Title>Comments</Title>
-      <CommentEditor />
+      <CommentEditor theme={props.theme} />
       <div style={{ width: '100%' }}>
         <Counter>덧글 수: 3개</Counter>
         {/* db에서 comments 꺼내서 각각 <Comment /> 나열, 임시로 3개만 둬봄 */}
-        <Comment />
-        <Comment />
-        <Comment />
+        <Comment theme={props.theme} />
+        <Comment theme={props.theme} />
+        <Comment theme={props.theme} />
       </div>
     </Container>
   );

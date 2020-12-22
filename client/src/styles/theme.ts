@@ -4,7 +4,7 @@ export const theme: DefaultTheme = {
   dark: {
     // Background Color
     mainBackground: '#262728',
-    inputBackground: '',
+    inputBackground: '#888',
     hoverBackground: '',
     buttonBackground: '',
     // Text Color
@@ -14,12 +14,13 @@ export const theme: DefaultTheme = {
     hoverText: '',
     // Other
     borderColor: '#ddd',
+    inputBorder: '#111',
     navUnderBar: ''
   },
   light: {
     // Background Color
     mainBackground: '#fff',
-    inputBackground: '',
+    inputBackground: '#fff',
     hoverBackground: '',
     buttonBackground: '',
     // Text Color
@@ -29,6 +30,7 @@ export const theme: DefaultTheme = {
     hoverText: '',
     // Other
     borderColor: '#ddd',
+    inputBorder: '#ccc',
     navUnderBar: ''
   }
 };

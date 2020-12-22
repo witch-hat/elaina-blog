@@ -15,6 +15,7 @@ declare module 'styled-components' {
       hoverText: string;
       // Other
       borderColor: string;
+      inputBorder: string;
       navUnderBar: string;
     };
   }

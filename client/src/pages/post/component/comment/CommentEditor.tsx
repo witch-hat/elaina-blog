@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { InputBox } from 'src/components';
+import { ThemeMode } from 'src/redux/common/type';
 
 const EditorContainer = styled.form({
   width: '100%',
@@ -58,7 +59,11 @@ const SubmitButton = styled.button({
   }
 });
 
-export default function CommentEditor() {
+interface Props {
+  theme: ThemeMode;
+}
+
+export default function CommentEditor(props: Props) {
   return (
     <EditorContainer action='/comment' method='POST'>
       <InputWrapper>
@@ -71,6 +76,7 @@ export default function CommentEditor() {
             minLength={2}
             placeholder='ID'
             styles={{ width: '100px', height: '2rem', small: { width: '100px', height: '2rem' } }}
+            theme={props.theme}
           />
         </UserInput>
         <UserInput>
@@ -82,6 +88,7 @@ export default function CommentEditor() {
             minLength={4}
             placeholder='Password'
             styles={{ width: '100px', height: '2rem', small: { width: '100px', height: '2rem' } }}
+            theme={props.theme}
           />
         </UserInput>
       </InputWrapper>

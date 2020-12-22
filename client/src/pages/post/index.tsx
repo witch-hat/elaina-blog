@@ -134,7 +134,7 @@ export default function Post() {
       )}
       <ContentContainer isOpenList={showPostCategory}>
         <Content />
-        <CommentContainer />
+        <CommentContainer theme={theme} />
       </ContentContainer>
       <ContentNavigation />
       {/* TODO: Alert shows only first... */}

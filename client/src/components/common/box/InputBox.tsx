@@ -1,5 +1,8 @@
 import styled from 'styled-components';
 
+import { theme } from 'src/styles';
+import { ThemeMode } from 'src/redux/common/type';
+
 interface Styles {
   width?: string;
   height?: string;
@@ -10,13 +13,19 @@ interface Styles {
   };
 }
 
-const Input = styled.input<Styles>((props) => {
+interface InputProps {
+  styles?: Styles;
+  themeMode: ThemeMode;
+}
+
+const Input = styled.input<InputProps>((props) => {
   return {
-    width: props.width || '100px',
-    height: props.height || '40px',
-    fontSize: props.fontSize || '1rem',
-    border: '1px solid #ddd',
+    width: props.styles?.width || '100px',
+    height: props.styles?.height || '40px',
+    fontSize: props.styles?.fontSize || '1rem',
+    border: `1px solid ${theme[props.themeMode].inputBorder}`,
     borderRadius: '8px',
+    backgroundColor: theme[props.themeMode].inputBackground,
     '&:focus': {
       outline: 'none'
     },
@@ -24,8 +33,8 @@ const Input = styled.input<Styles>((props) => {
       border: '2px solid #ff0000'
     },
     '@media screen and (max-width: 767px)': {
-      width: props.small?.width || '100px',
-      height: props.small?.height || '40px'
+      width: props.styles?.small?.width || '100px',
+      height: props.styles?.small?.height || '40px'
     }
   };
 });
@@ -37,6 +46,7 @@ interface Props {
   maxLength: number;
   placeholder: string;
   styles?: Styles;
+  theme: ThemeMode;
 }
 
 export function InputBox(props: Props) {
@@ -48,7 +58,8 @@ export function InputBox(props: Props) {
       minLength={props.minLength}
       maxLength={props.maxLength}
       autoComplete='off'
-      {...props.styles}
+      styles={props.styles}
+      themeMode={props.theme}
     />
   );
 }

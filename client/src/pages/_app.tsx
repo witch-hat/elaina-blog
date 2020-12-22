@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 
-import { GlobalStyles } from 'src/components';
 import Layout from 'src/components/Layout';
 
 import { Provider, useSelector } from 'react-redux';
