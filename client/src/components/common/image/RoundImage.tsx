@@ -32,7 +32,7 @@ const Image = styled.img<Style>((props: Style) => {
       width: props.medium?.width || props.width || '100px',
       height: props.medium?.height || props.height || '100px'
     },
-    '@media screen and (max-width: 768px)': {
+    '@media screen and (max-width: 767px)': {
       objectFit: props.small?.objectFit || props.objectFit || 'fill',
       width: props.small?.width || props.width || '100px',
       height: props.small?.height || props.height || '100px'

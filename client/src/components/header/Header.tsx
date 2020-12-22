@@ -3,7 +3,7 @@ import Link from 'next/link';
 import styled, { keyframes, css } from 'styled-components';
 
 import { ThemeMode } from 'src/redux/common/type';
-import { theme } from 'src/resources';
+import { theme } from 'src/styles';
 import { InputBox, FocusWrapper, useWidth } from 'src/components';
 import { ModeSwitch } from './ModeSwitch';
 import AdminMenuButton from './AdminMenuButton';
@@ -20,7 +20,7 @@ const StyledHeader = styled.header<{ themeMode: ThemeMode }>((props) => {
     top: '0',
     zIndex: 9999,
     height: '5rem',
-    backgroundColor: theme[props.themeMode].backgroundColor
+    backgroundColor: theme[props.themeMode].mainBackground
   };
 });
 
@@ -40,12 +40,12 @@ const Container = styled.div({
   }
 });
 
-const BlogName = styled.div({
+const BlogName = styled.div<{ themeMode: ThemeMode }>((props) => ({
   fontSize: '1.8rem',
   padding: '10px',
   cursor: 'pointer',
-  color: theme.light.blogName
-});
+  color: theme[props.themeMode].blogName
+}));
 
 const SearchButton = styled.button({
   display: 'flex',
@@ -148,7 +148,7 @@ export function Header(props: Props) {
     <StyledHeader themeMode={props.theme}>
       <Container>
         <Link href='/' passHref>
-          <BlogName>{props.name}</BlogName>
+          <BlogName themeMode={props.theme}>{props.name}</BlogName>
         </Link>
         <Flex>
           <FocusWrapper

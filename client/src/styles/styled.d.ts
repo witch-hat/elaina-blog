@@ -8,6 +8,10 @@ declare module 'styled-components' {
       mainText: string;
       detailText: string;
       borderColor: string;
+      inputBackground: string;
+      hoverBackground: string;
+      hoverText: string;
+      buttonBackground: string;
     };
     light: {
       mainBackground: string;
@@ -15,6 +19,10 @@ declare module 'styled-components' {
       mainText: string;
       detailText: string;
       borderColor: string;
+      inputBackground: string;
+      hoverBackground: string;
+      hoverText: string;
+      buttonBackground: string;
     };
   }
 }

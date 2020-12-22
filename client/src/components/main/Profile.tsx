@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 import { RoundImage, InputBox } from 'src/components';
 import { ProfileImageCropper } from './ProfileImageCropper';
-import { theme } from 'src/resources';
 
 const Container = styled.aside({
   display: 'flex',

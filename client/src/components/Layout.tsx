@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
-import { GlobalStyles, Header, Footer } from 'src/components';
+import { Header, Footer } from 'src/components';
+import { GlobalStyles } from 'src/styles';
 
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';
@@ -28,11 +29,13 @@ export default function Layout(props: Props) {
   const theme: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   return (
-    <div>
+    <>
       <GlobalStyles themeMode={theme} />
-      <Header name={props.name} theme={theme} />
-      <Container>{props.children}</Container>
-      <Footer />
-    </div>
+      <div>
+        <Header name={props.name} theme={theme} />
+        <Container>{props.children}</Container>
+        <Footer />
+      </div>
+    </>
   );
 }
