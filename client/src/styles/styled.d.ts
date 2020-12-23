@@ -9,6 +9,7 @@ declare module 'styled-components' {
       inputBackground: string;
       buttonBackground: string;
       hoverBackground: string;
+      articleBackground: string;
       // Text Color
       blogName: string;
       mainText: string;
@@ -20,6 +21,7 @@ declare module 'styled-components' {
       inputBorder: string;
       // Others
       navUnderBar: string;
+      navHoverUnderBar: string;
       shadowColor: string;
     };
   }

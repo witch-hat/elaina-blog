@@ -21,13 +21,13 @@ interface Props {
 export default function CategoryNavigation(props: Props) {
   return (
     <Container>
-      <NavigationButton href='/'>
+      <NavigationButton href='/' theme={props.theme}>
         <>
           <i className='fas fa-book'></i>&nbsp;
           <NavName>게시글</NavName>
         </>
       </NavigationButton>
-      <NavigationButton href='/about'>
+      <NavigationButton href='/about' theme={props.theme}>
         <>
           <i className='fas fa-user'></i>&nbsp;
           <NavName>About</NavName>

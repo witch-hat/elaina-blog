@@ -2,7 +2,14 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import styled from 'styled-components';
 
-const NavButtons = styled.a<{ isSelected: boolean }>((props) => {
+import { theme } from 'src/styles';
+
+interface ButtonProps {
+  isSelected: boolean;
+  themeMode: string;
+}
+
+const NavButtons = styled.a<ButtonProps>((props) => {
   return {
     display: 'flex',
     alignItems: 'center',
@@ -11,9 +18,11 @@ const NavButtons = styled.a<{ isSelected: boolean }>((props) => {
     cursor: 'pointer',
     transition: '.2s all',
     userSelect: 'none',
-    boxShadow: props.isSelected ? 'inset 0 -3px 0 #555' : 'none',
+    boxShadow: props.isSelected ? `inset 0 -3px 0 ${theme[props.themeMode].navUnderBar}` : 'none',
     '&:hover': {
-      boxShadow: props.isSelected ? 'inset 0 -3px 0 #555' : 'inset 0 -3px 0 #888'
+      boxShadow: props.isSelected
+        ? `inset 0 -3px 0 ${theme[props.themeMode].navUnderBar}`
+        : `inset 0 -3px 0 ${theme[props.themeMode].navHoverUnderBar}`
     }
   };
 });
@@ -21,6 +30,7 @@ const NavButtons = styled.a<{ isSelected: boolean }>((props) => {
 interface Props {
   href: string;
   children: JSX.Element;
+  theme: string;
 }
 
 export default function NavigationButton(props: Props) {
@@ -28,7 +38,9 @@ export default function NavigationButton(props: Props) {
 
   return (
     <Link href={props.href}>
-      <NavButtons isSelected={router.pathname === props.href}>{props.children}</NavButtons>
+      <NavButtons isSelected={router.pathname === props.href} themeMode={props.theme}>
+        {props.children}
+      </NavButtons>
     </Link>
   );
 }

@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 
-const Button = styled.div({
+import { theme } from 'src/styles';
+
+const Button = styled.div<{ themeMode: string }>((props) => ({
   flexShrink: 0,
   cursor: 'pointer',
   padding: '.5rem',
@@ -9,9 +11,9 @@ const Button = styled.div({
   borderRadius: '8px',
   userSelect: 'none',
   '&:hover': {
-    backgroundColor: '#eee'
+    backgroundColor: theme[props.themeMode].hoverBackground
   }
-});
+}));
 
 const RotateIcon = styled.i<{ isOpen: boolean }>((props) => {
   return {
@@ -21,15 +23,15 @@ const RotateIcon = styled.i<{ isOpen: boolean }>((props) => {
   };
 });
 
-interface Props {}
+interface Props {
+  theme: string;
+}
 
-export default function AdminMenuButton() {
+export default function AdminMenuButton(props: Props) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  console.log(isMenuOpen);
-
   return (
-    <Button onClick={() => setIsMenuOpen(!isMenuOpen)}>
+    <Button onClick={() => setIsMenuOpen(!isMenuOpen)} themeMode={props.theme}>
       Menu&nbsp;
       <RotateIcon className='fas fa-caret-down' isOpen={isMenuOpen} />
     </Button>

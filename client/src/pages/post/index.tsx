@@ -3,10 +3,16 @@ import styled, { keyframes, css } from 'styled-components';
 
 import { Content, ContentNavigation, PostCategory, CommentContainer } from './component';
 import { useWidth, FocusWrapper } from 'src/components';
+import { theme } from 'src/styles';
 
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
+
+// interface ContentContainerProps {
+//   isOpenList: boolean;
+//   themeMode: ThemeMode;
+// }
 
 const Container = styled.div({
   width: '100%',
@@ -18,10 +24,12 @@ const Container = styled.div({
   }
 });
 
-const ContentContainer = styled.div<{ isOpenList: boolean }>((props) => ({
+const ContentContainer = styled.div<{ themeMode: ThemeMode }>((props) => ({
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
+  borderRadius: '12px',
+  backgroundColor: theme[props.themeMode].articleBackground,
   '@media screen and (max-width: 1380px)': {
     width: '72%'
   },
@@ -132,7 +140,7 @@ export default function Post() {
           <PostCategory />
         </FocusWrapper>
       )}
-      <ContentContainer isOpenList={showPostCategory}>
+      <ContentContainer themeMode={theme}>
         <Content />
         <CommentContainer theme={theme} />
       </ContentContainer>

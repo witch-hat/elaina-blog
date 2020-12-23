@@ -47,7 +47,7 @@ const BlogName = styled.div<{ themeMode: ThemeMode }>((props) => ({
   color: theme[props.themeMode].blogName
 }));
 
-const SearchButton = styled.button({
+const SearchButton = styled.button<{ themeMode: ThemeMode }>((props) => ({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
@@ -56,19 +56,20 @@ const SearchButton = styled.button({
   marginLeft: '5px',
   fontSize: '1.2rem',
   borderRadius: '50%',
+  backgroundColor: theme[props.themeMode].headerBackground,
   border: 'none',
   cursor: 'pointer',
   '&:focus': {
     outline: 'none'
   },
   '&:hover': {
-    backgroundColor: '#eee'
+    backgroundColor: theme[props.themeMode].hoverBackground
   },
   '@media screen and (max-width: 767px)': {
     width: '32px',
     height: '32px'
   }
-});
+}));
 
 const SearchForm = styled.form({
   width: '100%',
@@ -168,7 +169,7 @@ export function Header(props: Props) {
                       styles={{ width: '180px', small: { width: '120px', height: '32px' } }}
                       theme={props.theme}
                     />
-                    <SearchButton type='submit'>
+                    <SearchButton type='submit' themeMode={props.theme}>
                       <i className='fas fa-search'></i>
                     </SearchButton>
                   </SearchForm>
@@ -176,7 +177,7 @@ export function Header(props: Props) {
               )}
             </>
           </FocusWrapper>
-          <AdminMenuButton />
+          <AdminMenuButton theme={props.theme} />
           <MobileMenuButton onClick={() => onMobileMenuButtonClick()}>
             <i className='fas fa-bars'></i>
           </MobileMenuButton>

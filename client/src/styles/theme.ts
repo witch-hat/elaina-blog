@@ -3,11 +3,12 @@ import { DefaultTheme } from 'styled-components';
 export const theme: DefaultTheme = {
   dark: {
     // Background Color
-    mainBackground: '#262728',
+    mainBackground: '#1a1a1a',
     inputBackground: '#888',
-    hoverBackground: '',
+    hoverBackground: '#333',
     buttonBackground: '',
-    headerBackground: '#121314',
+    headerBackground: '#252525',
+    articleBackground: '#252525',
     // Text Color
     blogName: '#f1f2f3',
     mainText: '#f1f2f3',
@@ -18,16 +19,18 @@ export const theme: DefaultTheme = {
     borderColor: '#aaa',
     inputBorder: '#111',
     // Others
-    navUnderBar: '',
+    navUnderBar: '#888',
+    navHoverUnderBar: '#aaa',
     shadowColor: 'rgba(0, 0, 0, 0.9)'
   },
   light: {
     // Background Color
     mainBackground: '#fff',
     inputBackground: '#fff',
-    hoverBackground: '',
+    hoverBackground: 'rgba(0, 0, 0, 0.125)',
     buttonBackground: '',
     headerBackground: '#fff',
+    articleBackground: '#fff',
     // Text Color
     blogName: '#121314',
     mainText: '#121314',
@@ -38,7 +41,8 @@ export const theme: DefaultTheme = {
     borderColor: '#ddd',
     inputBorder: '#ccc',
     // Others
-    navUnderBar: '',
+    navUnderBar: '#555',
+    navHoverUnderBar: '#888',
     shadowColor: 'rgba(38, 38, 38, 0.4)'
   }
 };
