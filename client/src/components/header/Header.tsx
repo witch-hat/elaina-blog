@@ -104,28 +104,25 @@ const OpeningAnimation = keyframes({
   }
 });
 
-const ResponsiveMenuBox = styled.div<{ isOpen?: boolean }>((props) => {
-  return props.isOpen
-    ? css`
-        display: flex;
-        @media screen and (max-width: 767px) {
-          padding: 10px;
-          position: fixed;
-          right: 0;
-          z-index: 9999;
-          background-color: #eee;
-          border-radius: 12px;
-          box-shadow: 0 8px 4px -4px rgba(38, 38, 38, 0.4);
-          animation: 0.3s ${OpeningAnimation} forwards;
-        }
-      `
-    : {
-        display: 'flex',
-        '@media screen and (max-width: 767px)': {
-          display: 'none'
-        }
-      };
-});
+const ResponsiveMenuBox = styled.div(
+  {
+    display: 'flex',
+    '@media screen and (max-width: 767px)': {
+      padding: '10px',
+      position: 'fixed',
+      right: '0',
+      zIndex: 9999,
+      backgroundColor: '#eee',
+      borderRadius: '12px',
+      boxShadow: '0 8px 4px -4px rgba(38, 38, 38, 0.4)'
+    }
+  },
+  css`
+    @media screen and (max-width: 767px) {
+      animation: 0.3s ${OpeningAnimation} forwards;
+    }
+  `
+);
 
 interface Props {
   name: string;
@@ -133,8 +130,8 @@ interface Props {
 }
 
 export function Header(props: Props) {
-  const [isMenuVisible, setIsMenuVisible] = useState(window.innerWidth > 767);
   const width = useWidth();
+  const [isMenuVisible, setIsMenuVisible] = useState(width > 767);
 
   useEffect(() => {
     setIsMenuVisible(width > 767);
@@ -157,23 +154,27 @@ export function Header(props: Props) {
               if (width <= 767) setIsMenuVisible(false);
             }}
           >
-            <ResponsiveMenuBox isOpen={isMenuVisible}>
-              <ModeSwitch />
-              <SearchForm method='GET' action='/search'>
-                <InputBox
-                  type='text'
-                  placeholder='Search'
-                  id='search'
-                  minLength={2}
-                  maxLength={10}
-                  styles={{ width: '180px', small: { width: '120px', height: '32px' } }}
-                  theme={props.theme}
-                />
-                <SearchButton type='submit'>
-                  <i className='fas fa-search'></i>
-                </SearchButton>
-              </SearchForm>
-            </ResponsiveMenuBox>
+            <>
+              {isMenuVisible && (
+                <ResponsiveMenuBox>
+                  <ModeSwitch />
+                  <SearchForm method='GET' action='/search'>
+                    <InputBox
+                      type='text'
+                      placeholder='Search'
+                      id='search'
+                      minLength={2}
+                      maxLength={10}
+                      styles={{ width: '180px', small: { width: '120px', height: '32px' } }}
+                      theme={props.theme}
+                    />
+                    <SearchButton type='submit'>
+                      <i className='fas fa-search'></i>
+                    </SearchButton>
+                  </SearchForm>
+                </ResponsiveMenuBox>
+              )}
+            </>
           </FocusWrapper>
           <AdminMenuButton />
           <MobileMenuButton onClick={() => onMobileMenuButtonClick()}>
