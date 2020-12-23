@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import { RoundImage, InputBox } from 'src/components';
 import { ProfileImageCropper } from './ProfileImageCropper';
 import { mockUpData } from 'src/resources';
+import { theme } from 'src/styles';
+import { ThemeMode } from 'src/redux/common/type';
 
 const Container = styled.aside({
   display: 'flex',
@@ -105,7 +107,7 @@ const Input = styled.input({
   margin: '10px 0'
 });
 
-const ChangeImageButton = styled.label({
+const ChangeImageButton = styled.label<{ themeMode: ThemeMode }>((props) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -113,15 +115,15 @@ const ChangeImageButton = styled.label({
   height: '2rem',
   position: 'absolute',
   bottom: 0,
-  left: 0,
+  left: '10%',
   margin: '0 0 .5rem .5rem',
   padding: '.5rem',
-  backgroundColor: '#fff',
+  backgroundColor: theme[props.themeMode].secondaryContentBackground,
   border: '1px solid #222',
   cursor: 'pointer',
   userSelect: 'none',
   borderRadius: '8px'
-});
+}));
 
 const FileSelector = styled.input({
   width: '0px',
@@ -162,7 +164,7 @@ export default function Profile(props: Props) {
         />
         {isEditMode && (
           <>
-            <ChangeImageButton htmlFor='profile-select'>
+            <ChangeImageButton htmlFor='profile-select' themeMode={props.theme}>
               <i className='fas fa-camera'></i>&nbsp;Edit
             </ChangeImageButton>
             <FileSelector
