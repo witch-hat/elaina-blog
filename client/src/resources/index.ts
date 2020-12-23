@@ -29,10 +29,12 @@ export interface Data {
     password: string;
   };
   profile: {
+    image: string;
     name: string;
     introduce: string;
     link: string;
     company: string;
+    location: string;
     email: string;
   };
   category: Array<CategoryData>;
