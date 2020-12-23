@@ -16,7 +16,7 @@ export const FocusWrapper = React.forwardRef<HTMLDivElement, Props>((props: Prop
   useImperativeHandle(forwardedRef, () => focusRef.current as HTMLDivElement);
 
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
+    function handleClickOutside(event: Event) {
       if (props.visible && !focusRef.current?.contains(event.target as Node)) {
         props.onClickOutside();
       }
@@ -24,9 +24,11 @@ export const FocusWrapper = React.forwardRef<HTMLDivElement, Props>((props: Prop
 
     document.addEventListener('click', handleClickOutside);
     document.addEventListener('drag', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
     return () => {
       document.removeEventListener('click', handleClickOutside);
       document.removeEventListener('drag', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
     };
   }, [props]);
 
