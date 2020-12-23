@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import { theme } from 'src/styles';
 import { InputBox } from 'src/components';
@@ -30,23 +30,33 @@ const UserInput = styled.div({
   }
 });
 
-const Editor = styled.textarea<{ themeMode: ThemeMode }>((props) => ({
-  fontFamily: '"Nanum Gothic", sans-serif',
-  width: '100%',
-  height: '5rem',
-  overflowY: 'auto',
-  outline: 'none',
-  padding: '.5rem',
-  resize: 'none',
-  border: `1px solid ${theme[props.themeMode].inputBorder}`,
-  borderRadius: '12px',
-  wordBreak: 'keep-all',
-  backgroundColor: theme[props.themeMode].inputBackground,
-  color: theme[props.themeMode].inputText,
-  '&::placeholder': {
-    color: theme[props.themeMode].placeholderText
-  }
-}));
+const Editor = styled.span<{ themeMode: ThemeMode }>(
+  (props) => ({
+    display: 'block',
+    fontFamily: '"Nanum Gothic", sans-serif',
+    width: '100%',
+    minHeight: '5rem',
+    overflowY: 'hidden',
+    outline: 'none',
+    padding: '.5rem',
+    resize: 'none',
+    border: `1px solid ${theme[props.themeMode].inputBorder}`,
+    borderRadius: '12px',
+    wordBreak: 'keep-all',
+    backgroundColor: theme[props.themeMode].inputBackground,
+    color: theme[props.themeMode].inputText
+  }),
+  // Cannot use &[contenteditable]:empty::before in styled-object...
+  css<{ themeMode: ThemeMode }>`
+    &[contenteditable]:empty::before {
+      content: 'Write comment...';
+      color: ${(props) => theme[props.themeMode].placeholderText};
+    }
+    &[contenteditable]:empty:focus::before {
+      content: '';
+    }
+  `
+);
 
 const SubmitButton = styled.button<{ themeMode: ThemeMode }>((props) => ({
   width: '8rem',
@@ -98,7 +108,7 @@ export default function CommentEditor(props: Props) {
           />
         </UserInput>
       </InputWrapper>
-      <Editor placeholder='Write comment...(5자 이상)' minLength={5} themeMode={props.theme} />
+      <Editor role='textbox' themeMode={props.theme} contentEditable />
       <SubmitButton themeMode={props.theme}>덧글 작성</SubmitButton>
     </EditorContainer>
   );
