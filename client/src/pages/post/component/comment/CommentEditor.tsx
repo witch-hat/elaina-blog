@@ -42,6 +42,7 @@ const Editor = styled.textarea<{ themeMode: ThemeMode }>((props) => ({
   borderRadius: '12px',
   wordBreak: 'keep-all',
   backgroundColor: theme[props.themeMode].inputBackground,
+  color: theme[props.themeMode].inputText,
   '&::placeholder': {
     color: theme[props.themeMode].placeholderText
   }

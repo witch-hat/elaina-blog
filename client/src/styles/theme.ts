@@ -4,7 +4,7 @@ export const theme: DefaultTheme = {
   dark: {
     // Background Color
     mainBackground: '#1a1a1a',
-    inputBackground: '#888',
+    inputBackground: '#555',
     hoverBackground: '#444',
     buttonBackground: '',
     headerBackground: '#252525',
@@ -16,6 +16,7 @@ export const theme: DefaultTheme = {
     detailText: '#666',
     hoverText: '',
     placeholderText: '#f1f2f3',
+    inputText: '#f1f2f3',
     // Border
     borderColor: '#aaa',
     inputBorder: '#111',
@@ -39,6 +40,7 @@ export const theme: DefaultTheme = {
     detailText: '#888',
     hoverText: '',
     placeholderText: '#888',
+    inputText: '#121314',
     // Border
     borderColor: '#ddd',
     inputBorder: '#ccc',

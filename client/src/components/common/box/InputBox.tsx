@@ -25,6 +25,7 @@ const Input = styled.input<InputProps>((props) => {
     fontSize: props.styles?.fontSize || '1rem',
     border: `1px solid ${theme[props.themeMode].inputBorder}`,
     borderRadius: '8px',
+    color: theme[props.themeMode].inputText,
     backgroundColor: theme[props.themeMode].inputBackground,
     '&:focus': {
       outline: 'none'
