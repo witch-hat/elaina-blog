@@ -10,6 +10,7 @@ declare module 'styled-components' {
       buttonBackground: string;
       hoverBackground: string;
       articleBackground: string;
+      secondaryContentBackground: string;
       // Text Color
       blogName: string;
       mainText: string;

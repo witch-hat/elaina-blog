@@ -47,7 +47,7 @@ const Editor = styled.textarea<{ themeMode: ThemeMode }>((props) => ({
   }
 }));
 
-const SubmitButton = styled.button({
+const SubmitButton = styled.button<{ themeMode: ThemeMode }>((props) => ({
   width: '8rem',
   margin: '1rem 0 0',
   height: '3rem',
@@ -60,9 +60,9 @@ const SubmitButton = styled.button({
   borderRadius: '12px',
   userSelect: 'none',
   '&:hover': {
-    backgroundColor: '#ddd'
+    backgroundColor: theme[props.themeMode].hoverBackground
   }
-});
+}));
 
 interface Props {
   theme: ThemeMode;
@@ -98,7 +98,7 @@ export default function CommentEditor(props: Props) {
         </UserInput>
       </InputWrapper>
       <Editor placeholder='Write comment...(5자 이상)' minLength={5} themeMode={props.theme} />
-      <SubmitButton>덧글 작성</SubmitButton>
+      <SubmitButton themeMode={props.theme}>덧글 작성</SubmitButton>
     </EditorContainer>
   );
 }

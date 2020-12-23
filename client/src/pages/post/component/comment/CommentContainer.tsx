@@ -16,7 +16,7 @@ const Container = styled.section({
   alignItems: 'center',
   minHeight: '20rem',
   '@media screen and (max-width: 767px)': {
-    padding: '0'
+    padding: '.5rem'
   }
 });
 

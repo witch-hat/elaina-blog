@@ -11,7 +11,7 @@ export const GlobalStyles = createGlobalStyle<{ themeMode: ThemeMode }>`
 		color: inherit;
 	}
 	button {
-		background-color: ${(props) => theme[props.themeMode].mainBackground};
+		background-color: inherit;
 		color: ${(props) => theme[props.themeMode].mainText};
 		user-select: 'none';
 		outline: 'none';
@@ -24,7 +24,7 @@ export const GlobalStyles = createGlobalStyle<{ themeMode: ThemeMode }>`
     color: ${(props) => theme[props.themeMode].mainText};
 		line-height: 1.4;
 		font-family: 'Nanum Gothic', sans-serif;
-		
+	
 	}
 	html {
 		@media screen and (max-width: 1380px) {

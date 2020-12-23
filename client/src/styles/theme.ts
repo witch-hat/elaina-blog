@@ -5,10 +5,11 @@ export const theme: DefaultTheme = {
     // Background Color
     mainBackground: '#1a1a1a',
     inputBackground: '#888',
-    hoverBackground: '#333',
+    hoverBackground: '#444',
     buttonBackground: '',
     headerBackground: '#252525',
     articleBackground: '#252525',
+    secondaryContentBackground: '#313131',
     // Text Color
     blogName: '#f1f2f3',
     mainText: '#f1f2f3',
@@ -31,6 +32,7 @@ export const theme: DefaultTheme = {
     buttonBackground: '',
     headerBackground: '#fff',
     articleBackground: '#fff',
+    secondaryContentBackground: '#eee',
     // Text Color
     blogName: '#121314',
     mainText: '#121314',

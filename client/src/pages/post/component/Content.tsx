@@ -13,7 +13,7 @@ const Container = styled.section({
     width: '100%'
   },
   '@media screen and (max-width: 767px)': {
-    padding: '0'
+    padding: '.5rem'
   }
 });
 

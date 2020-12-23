@@ -67,7 +67,8 @@ const SearchButton = styled.button<{ themeMode: ThemeMode }>((props) => ({
   },
   '@media screen and (max-width: 767px)': {
     width: '32px',
-    height: '32px'
+    height: '32px',
+    backgroundColor: theme[props.themeMode].secondaryContentBackground
   }
 }));
 
@@ -105,19 +106,19 @@ const OpeningAnimation = keyframes({
   }
 });
 
-const ResponsiveMenuBox = styled.div(
-  {
+const ResponsiveMenuBox = styled.div<{ themeMode: ThemeMode }>(
+  (props) => ({
     display: 'flex',
     '@media screen and (max-width: 767px)': {
       padding: '10px',
       position: 'fixed',
       right: '0',
       zIndex: 9999,
-      backgroundColor: '#eee',
+      backgroundColor: theme[props.themeMode].secondaryContentBackground,
       borderRadius: '12px',
-      boxShadow: '0 8px 4px -4px rgba(38, 38, 38, 0.4)'
+      boxShadow: `0 8px 4px -4px ${theme[props.themeMode].shadowColor}`
     }
-  },
+  }),
   css`
     @media screen and (max-width: 767px) {
       animation: 0.3s ${OpeningAnimation} forwards;
@@ -157,7 +158,7 @@ export function Header(props: Props) {
           >
             <>
               {isMenuVisible && (
-                <ResponsiveMenuBox>
+                <ResponsiveMenuBox themeMode={props.theme}>
                   <ModeSwitch />
                   <SearchForm method='GET' action='/search'>
                     <InputBox

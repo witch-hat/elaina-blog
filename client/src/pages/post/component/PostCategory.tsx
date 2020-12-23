@@ -1,6 +1,9 @@
 import React from 'react';
 import styled, { keyframes, css } from 'styled-components';
 
+import { theme } from 'src/styles';
+import { ThemeMode } from 'src/redux/common/type';
+
 import { BorderBox } from 'src/components';
 
 const FadeIn = keyframes({
@@ -14,8 +17,8 @@ const FadeIn = keyframes({
   }
 });
 
-const Container = styled.nav(
-  {
+const Container = styled.nav<{ themeMode: ThemeMode }>(
+  (props) => ({
     width: '250px',
     display: 'flex',
     flexDirection: 'column',
@@ -40,11 +43,11 @@ const Container = styled.nav(
       top: '5rem',
       left: 0,
       height: 'calc(100vh - 5rem)',
-      backgroundColor: '#eaebec',
+      backgroundColor: theme[props.themeMode].secondaryContentBackground,
       borderRadius: '0 8px 8px 0',
-      boxShadow: '5px 0 4px rgba(38, 38, 38, .4)'
+      boxShadow: `5px 0 4px ${theme[props.themeMode].shadowColor}`
     }
-  },
+  }),
   css`
     @media screen and (max-width: 767px) {
       animation: 0.4s ${FadeIn} forwards;
@@ -81,9 +84,13 @@ const Title = styled.span({
   WebkitBoxOrient: 'vertical'
 });
 
-export default function PostCategory() {
+interface Props {
+  theme: ThemeMode;
+}
+
+export default function PostCategory(props: Props) {
   return (
-    <Container>
+    <Container themeMode={props.theme}>
       <CategoryName>React</CategoryName>
       <TitleContainer>
         <TitleList>

@@ -91,7 +91,7 @@ const Alert = styled.div(
 );
 
 export default function Post() {
-  const theme: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  const themeStore: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const width = useWidth();
   const [showPostCategory, setShowPostCategory] = useState(false);
   const isAlerted = useRef<boolean>(false);
@@ -134,15 +134,15 @@ export default function Post() {
       onTouchEnd={(event: React.TouchEvent) => handleTouchEnd(event)}
     >
       {width > 767 ? (
-        <PostCategory />
+        <PostCategory theme={themeStore} />
       ) : (
         <FocusWrapper visible={showPostCategory} onClickOutside={() => setShowPostCategory(false)}>
-          <PostCategory />
+          <PostCategory theme={themeStore} />
         </FocusWrapper>
       )}
-      <ContentContainer themeMode={theme}>
+      <ContentContainer themeMode={themeStore}>
         <Content />
-        <CommentContainer theme={theme} />
+        <CommentContainer theme={themeStore} />
       </ContentContainer>
       <ContentNavigation />
       {/* TODO: Alert shows only first... */}
