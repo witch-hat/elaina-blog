@@ -1,9 +1,11 @@
 import styled from 'styled-components';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 import { BorderBox } from 'src/components';
 import ContentCategoryDetails from './ContentCategoryDetails';
 import { ThemeMode } from 'src/redux/common/type';
+import { mockUpData } from 'src/resources';
 
 const Container = styled.div({
   display: 'flex',
@@ -84,102 +86,30 @@ interface Props {
 }
 
 export default function ContentCategory(props: Props) {
+  const router = useRouter();
+  const { postId } = router.query;
+
   return (
     <section style={{ width: '100%' }}>
       <Container>
-        <Link href='/post' passHref>
-          <a style={{ width: '100%' }}>
-            <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }} theme={props.theme}>
-              <Content>
-                <PreviewTextWrapper>
-                  <PreviewTitle>React</PreviewTitle>
-                  <PreviewContent>PreviewContent</PreviewContent>
-                  <ContentCategoryDetails />
-                </PreviewTextWrapper>
-                <PreviewImage src='/images/FakeProfile.png' alt='preview image' />
-              </Content>
-            </BorderBox>
-          </a>
-        </Link>
-        <Link href='/post'>
-          <a style={{ width: '100%' }}>
-            <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }} theme={props.theme}>
-              <Content>
-                <PreviewTextWrapper>
-                  <PreviewTitle>Very long long long long long long long long longlonglonglonglonglonglonglonglong</PreviewTitle>
-                  <PreviewContent>
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard
-                    dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen
-                    book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially
-                    unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more
-                    recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                  </PreviewContent>
-                  <ContentCategoryDetails />
-                </PreviewTextWrapper>
-                <PreviewImage src='/images/FakeProfile.png' alt='preview image' />
-              </Content>
-            </BorderBox>
-          </a>
-        </Link>
-        <Link href='/post'>
-          <a style={{ width: '100%' }}>
-            <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }} theme={props.theme}>
-              <Content>
-                <PreviewTextWrapper>
-                  <PreviewTitle>Vue.js</PreviewTitle>
-                  <PreviewContent>
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard
-                    dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen
-                    book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially
-                    unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more
-                    recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                  </PreviewContent>
-                  <ContentCategoryDetails />
-                </PreviewTextWrapper>
-                <PreviewImage src='/images/FakeProfile.png' alt='preview image' />
-              </Content>
-            </BorderBox>
-          </a>
-        </Link>
-        <Link href='/post'>
-          <a style={{ width: '100%' }}>
-            <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }} theme={props.theme}>
-              <Content>
-                <PreviewTextWrapper>
-                  <PreviewTitle>Data Structure</PreviewTitle>
-                  <PreviewContent>
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard
-                    dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen
-                    book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially
-                    unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more
-                    recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                  </PreviewContent>
-                  <ContentCategoryDetails />
-                </PreviewTextWrapper>
-                <PreviewImage src='/images/FakeProfile.png' alt='preview image' />
-              </Content>
-            </BorderBox>
-          </a>
-        </Link>
-        <Link href='/post'>
-          <a style={{ width: '100%' }}>
-            <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }} theme={props.theme}>
-              <Content>
-                <PreviewTextWrapper>
-                  <PreviewTitle>No Image</PreviewTitle>
-                  <PreviewContent>
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard
-                    dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen
-                    book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially
-                    unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more
-                    recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                  </PreviewContent>
-                  <ContentCategoryDetails />
-                </PreviewTextWrapper>
-              </Content>
-            </BorderBox>
-          </a>
-        </Link>
+        {mockUpData.category.map((category) => {
+          return (
+            <Link key={category.name} href='/post' passHref>
+              <a style={{ width: '100%' }}>
+                <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }} theme={props.theme}>
+                  <Content>
+                    <PreviewTextWrapper>
+                      <PreviewTitle>{category.name}</PreviewTitle>
+                      <PreviewContent>{category.description}</PreviewContent>
+                      <ContentCategoryDetails time='' count={category.posts.length} />
+                    </PreviewTextWrapper>
+                    <PreviewImage src='/images/FakeProfile.png' alt='preview image' />
+                  </Content>
+                </BorderBox>
+              </a>
+            </Link>
+          );
+        })}
       </Container>
     </section>
   );

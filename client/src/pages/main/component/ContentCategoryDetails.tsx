@@ -12,7 +12,12 @@ const LatestTime = styled.span({
 
 const PostCount = styled.span({});
 
-export default function ContentCategoryDetails() {
+interface Props {
+  time: string;
+  count: number;
+}
+
+export default function ContentCategoryDetails(props: Props) {
   const now = new Date();
   const month = now.getMonth() < 12 ? now.getMonth() + 1 : 1;
 
@@ -23,7 +28,7 @@ export default function ContentCategoryDetails() {
         {`${now.getFullYear()}.${month}.${now.getDate()}`}
       </LatestTime>
       <PostCount>
-        <i className='fas fa-book'></i>&nbsp;3
+        <i className='fas fa-book'></i>&nbsp;{props.count}
       </PostCount>
     </Container>
   );

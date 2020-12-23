@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import { RoundImage, InputBox } from 'src/components';
 import { ProfileImageCropper } from './ProfileImageCropper';
+import { mockUpData } from 'src/resources';
 
 const Container = styled.aside({
   display: 'flex',
@@ -150,7 +151,7 @@ export default function Profile(props: Props) {
     <Container>
       <div style={{ position: 'relative' }}>
         <RoundImage
-          src={'/images/FakeProfile.png'}
+          src={mockUpData.profile.image}
           styles={{
             borderRadius: '50%',
             width: '280px',
@@ -178,26 +179,26 @@ export default function Profile(props: Props) {
           </>
         )}
       </div>
-      <Name>Elaina</Name>
+      <Name>{mockUpData.profile.name}</Name>
       <ListWrapper>
-        <Description>Hello My name is Elaina~~~~~~~</Description>
+        <Description>{mockUpData.profile.introduce}</Description>
         <Description>
           <i className='fas fa-link'></i>&nbsp;
-          <a href='/' target='_blank' rel='noopener noreferer nofollow'>
-            Link
+          <a href={mockUpData.profile.link} target='_blank' rel='noopener noreferer nofollow'>
+            {mockUpData.profile.link}
           </a>
         </Description>
         <Description>
           <i className='far fa-building'></i>&nbsp;
-          <span>Company</span>
+          <span>{mockUpData.profile.company}</span>
         </Description>
         <Description>
           <i className='fas fa-map-marker-alt'></i>&nbsp;
-          <span>Location</span>
+          <span>{mockUpData.profile.location}</span>
         </Description>
         <Description>
           <i className='far fa-envelope'></i>&nbsp;
-          <a href='mailto:'>Email</a>
+          <a href='mailto:'>{mockUpData.profile.email}</a>
         </Description>
       </ListWrapper>
       <ButtonContainer>

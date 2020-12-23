@@ -6,6 +6,7 @@ import { GlobalStyles } from 'src/styles';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
+import { mockUpData } from 'src/resources';
 
 const Container = styled.div({
   display: 'flex',
@@ -22,7 +23,6 @@ const Container = styled.div({
 
 interface Props {
   children: JSX.Element | JSX.Element[];
-  name: string;
 }
 
 export default function Layout(props: Props) {
@@ -32,7 +32,7 @@ export default function Layout(props: Props) {
     <>
       <GlobalStyles themeMode={theme} />
       <div>
-        <Header name={props.name} theme={theme} />
+        <Header name={mockUpData.blogName} theme={theme} />
         <Container>{props.children}</Container>
         <Footer />
       </div>

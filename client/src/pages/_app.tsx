@@ -33,7 +33,7 @@ export default function ElainaBlog({ Component, pageProps }: AppProps) {
           />
           <title>Elaina Blog</title>
         </Head>
-        <Layout name='ElainaBlog'>
+        <Layout>
           <Component {...pageProps} />
         </Layout>
       </PersistGate>
