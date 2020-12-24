@@ -18,12 +18,14 @@ const Container = styled.aside({
   alignSelf: 'stretch',
   '@media screen and (max-width: 1380px)': {
     width: '28%',
-    minWidth: '230px'
+    minWidth: '230px',
+    maxWidth: '300px'
   },
   '@media screen and (max-width: 767px)': {
     width: '100%',
     minHeight: 'max-content',
-    marginBottom: '50px'
+    marginBottom: '50px',
+    maxWidth: '100%'
   }
 });
 
@@ -64,7 +66,8 @@ const Description = styled.li({
 const ButtonContainer = styled.div({
   width: '100%',
   marginTop: '.5rem',
-  display: 'flex'
+  display: 'flex',
+  justifyContent: 'center'
 });
 
 const EditButton = styled.div({
@@ -75,11 +78,14 @@ const EditButton = styled.div({
   cursor: 'pointer',
   display: 'flex',
   justifyContent: 'center',
-  userSelect: 'none'
+  userSelect: 'none',
+  '@media screen and (max-width: 767px)': {
+    width: '200px'
+  }
 });
 
 const SaveButton = styled.div({
-  width: '60%',
+  width: '47.5%',
   marginRight: '5%',
   padding: '.5rem',
   borderRadius: '12px',
@@ -87,18 +93,24 @@ const SaveButton = styled.div({
   cursor: 'pointer',
   display: 'flex',
   justifyContent: 'center',
-  userSelect: 'none'
+  userSelect: 'none',
+  '@media screen and (max-width: 767px)': {
+    maxWidth: '150px'
+  }
 });
 
 const CancelButton = styled.div({
-  width: '35%',
+  width: '47.5%',
   padding: '.5rem',
   borderRadius: '12px',
   border: '1px solid #ddd',
   cursor: 'pointer',
   display: 'flex',
   justifyContent: 'center',
-  userSelect: 'none'
+  userSelect: 'none',
+  '@media screen and (max-width: 767px)': {
+    maxWidth: '150px'
+  }
 });
 
 const Input = styled.input({
@@ -133,7 +145,7 @@ const FileSelector = styled.input({
 });
 
 interface Props {
-  theme: string;
+  theme: ThemeMode;
 }
 
 export default function Profile(props: Props) {

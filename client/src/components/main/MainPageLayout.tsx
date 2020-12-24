@@ -26,6 +26,7 @@ const Wrapper = styled.div({
   justifyContent: 'flex-start',
   '@media screen and (max-width: 1380px)': {
     width: '70%',
+    maxWidth: '850px',
     marginLeft: '2%'
   },
   '@media screen and (max-width: 767px)': {
