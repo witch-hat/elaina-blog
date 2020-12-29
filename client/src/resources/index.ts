@@ -15,7 +15,6 @@ export interface PostData {
 }
 
 export interface CategoryData {
-  url: string;
   name: string;
   description: string;
   previewImage: string;
