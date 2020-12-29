@@ -8,7 +8,7 @@ import { ModalWrapper } from 'src/components';
 const Container = styled.div({
   width: '500px',
   Height: '300px',
-  '@media screen and (max-width: 768px)': {
+  '@media screen and (max-width: 767px)': {
     width: '100%'
   }
 });

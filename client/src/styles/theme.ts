@@ -10,6 +10,7 @@ export const theme: DefaultTheme = {
     headerBackground: '#252525',
     articleBackground: '#252525',
     secondaryContentBackground: '#313131',
+    submitButtonColor: 'rgb(21, 158, 57)',
     // Text Color
     blogName: '#f1f2f3',
     mainText: '#f1f2f3',
@@ -34,6 +35,7 @@ export const theme: DefaultTheme = {
     headerBackground: '#fff',
     articleBackground: '#fff',
     secondaryContentBackground: '#eee',
+    submitButtonColor: 'rgb(21, 158, 57)',
     // Text Color
     blogName: '#121314',
     mainText: '#121314',

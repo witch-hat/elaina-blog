@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import { RoundImage, InputBox } from 'src/components';
 import { ProfileImageCropper } from './ProfileImageCropper';
@@ -57,6 +57,8 @@ const ListWrapper = styled.ul({
 });
 
 const Description = styled.li({
+  display: 'flex',
+  alignItems: 'center',
   width: '100%',
   fontSize: '1.1rem',
   wordBreak: 'keep-all',
@@ -84,20 +86,21 @@ const EditButton = styled.div({
   }
 });
 
-const SaveButton = styled.div({
+const SaveButton = styled.div<{ themeMode: ThemeMode }>((props) => ({
   width: '47.5%',
   marginRight: '5%',
   padding: '.5rem',
   borderRadius: '12px',
-  border: '1px solid #ddd',
   cursor: 'pointer',
   display: 'flex',
   justifyContent: 'center',
+  color: '#f1f2f3',
   userSelect: 'none',
+  backgroundColor: theme[props.themeMode].submitButtonColor,
   '@media screen and (max-width: 767px)': {
     maxWidth: '150px'
   }
-});
+}));
 
 const CancelButton = styled.div({
   width: '47.5%',
@@ -113,11 +116,19 @@ const CancelButton = styled.div({
   }
 });
 
-const Input = styled.input({
-  width: '100%',
+const Input = styled.input<{ themeMode: ThemeMode }>((props) => ({
+  display: 'inline-block',
+  flexShrink: 0,
+  width: 'calc(100% - 1.6rem)',
+  height: '2rem',
   fontSize: '1.1rem',
-  margin: '10px 0'
-});
+  padding: '.2rem',
+  outline: 'none',
+  border: `1px solid ${theme[props.themeMode].inputBorder}`,
+  borderRadius: '8px',
+  color: theme[props.themeMode].inputText,
+  backgroundColor: theme[props.themeMode].inputBackground
+}));
 
 const ChangeImageButton = styled.label<{ themeMode: ThemeMode }>((props) => ({
   display: 'flex',
@@ -143,6 +154,31 @@ const FileSelector = styled.input({
   overflow: 'hidden',
   border: 'none'
 });
+
+const Icon = styled.i({
+  display: 'inline-flex',
+  width: '1.2rem',
+  justifyContent: 'flex-start'
+});
+
+const Editor = styled.span<{ themeMode: ThemeMode }>((props) => ({
+  display: 'block',
+  width: '100%',
+  borderRadius: '8px',
+  padding: '.2rem',
+  outline: 'none',
+  border: `1px solid ${theme[props.themeMode].inputBorder}`,
+  borderRadius: '8px',
+  color: theme[props.themeMode].inputText,
+  backgroundColor: theme[props.themeMode].inputBackground,
+  '&:empty::before': {
+    content: "'Add introduce'",
+    color: '#888'
+  },
+  '&:empty:focus::before': {
+    content: "''"
+  }
+}));
 
 interface Props {
   theme: ThemeMode;
@@ -195,30 +231,58 @@ export default function Profile(props: Props) {
       </div>
       <Name>{mockUpData.profile.name}</Name>
       <ListWrapper>
-        <Description>{mockUpData.profile.introduce}</Description>
         <Description>
-          <i className='fas fa-link'></i>&nbsp;
-          <a href={mockUpData.profile.link} target='_blank' rel='noopener noreferer nofollow'>
-            {mockUpData.profile.link}
-          </a>
+          {isEditMode ? (
+            <Editor themeMode={props.theme} role='textbox' contentEditable defaultValue={mockUpData.profile.introduce}>
+              {mockUpData.profile.introduce}
+            </Editor>
+          ) : (
+            <span>{mockUpData.profile.introduce}</span>
+          )}
         </Description>
         <Description>
-          <i className='far fa-building'></i>&nbsp;
-          <span>{mockUpData.profile.company}</span>
+          <Icon className='fas fa-link'></Icon>&nbsp;
+          {isEditMode ? (
+            <Input themeMode={props.theme} type='text' defaultValue={mockUpData.profile.link} />
+          ) : (
+            <a href={mockUpData.profile.link} target='_blank' rel='noopener noreferer nofollow'>
+              <span>{mockUpData.profile.link}</span>
+            </a>
+          )}
         </Description>
         <Description>
-          <i className='fas fa-map-marker-alt'></i>&nbsp;
-          <span>{mockUpData.profile.location}</span>
+          <Icon className='far fa-building'></Icon>&nbsp;
+          {isEditMode ? (
+            <Input themeMode={props.theme} type='text' defaultValue={mockUpData.profile.company} />
+          ) : (
+            <span>{mockUpData.profile.company}</span>
+          )}
         </Description>
         <Description>
-          <i className='far fa-envelope'></i>&nbsp;
-          <a href='mailto:'>{mockUpData.profile.email}</a>
+          <Icon className='fas fa-map-marker-alt'></Icon>&nbsp;
+          {isEditMode ? (
+            <Input themeMode={props.theme} type='text' defaultValue={mockUpData.profile.location} />
+          ) : (
+            <span>{mockUpData.profile.location}</span>
+          )}
+        </Description>
+        <Description>
+          <Icon className='far fa-envelope'></Icon>&nbsp;
+          {isEditMode ? (
+            <Input themeMode={props.theme} type='text' defaultValue={mockUpData.profile.email} />
+          ) : (
+            <a href='mailto:'>
+              <span>{mockUpData.profile.email}</span>
+            </a>
+          )}
         </Description>
       </ListWrapper>
       <ButtonContainer>
         {isEditMode ? (
           <>
-            <SaveButton onClick={() => setIsEditMode(false)}>Save</SaveButton>
+            <SaveButton themeMode={props.theme} onClick={() => setIsEditMode(false)}>
+              Save
+            </SaveButton>
             <CancelButton onClick={() => setIsEditMode(false)}>Cancel</CancelButton>
           </>
         ) : (

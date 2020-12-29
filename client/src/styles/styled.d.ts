@@ -11,6 +11,7 @@ declare module 'styled-components' {
       hoverBackground: string;
       articleBackground: string;
       secondaryContentBackground: string;
+      submitButtonColor: string;
       // Text Color
       blogName: string;
       mainText: string;
