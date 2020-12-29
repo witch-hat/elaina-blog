@@ -1,11 +1,10 @@
 import { createGlobalStyle } from 'styled-components';
-import reset from 'styled-reset';
+import 'normalize.css';
 
 import { theme } from 'src/styles/theme';
 import { ThemeMode } from 'src/redux/common/type';
 
 export const GlobalStyles = createGlobalStyle<{ themeMode: ThemeMode }>`
-	${reset};
 	a {
 		text-decoration: none;
 		color: inherit;
@@ -19,6 +18,12 @@ export const GlobalStyles = createGlobalStyle<{ themeMode: ThemeMode }>`
 	input {
 		font-weight: 200;
 	}
+	ul {
+		padding: 0;
+	}
+	li {
+		list-style: none;
+	}
 	* {
 		box-sizing: border-box;
 	}
@@ -26,10 +31,11 @@ export const GlobalStyles = createGlobalStyle<{ themeMode: ThemeMode }>`
     background-color: ${(props) => theme[props.themeMode].mainBackground};
     color: ${(props) => theme[props.themeMode].mainText};
 		line-height: 1.4;
-		font-family: 'Nanum Gothic', sans-serif;
-	
 	}
 	html {
+		font-size: 16px;
+		font-family: 'Nanum Gothic', sans-serif;
+		vertical-align: baseline;
 		@media screen and (max-width: 1380px) {
 			font-size: 15px;
 		}
