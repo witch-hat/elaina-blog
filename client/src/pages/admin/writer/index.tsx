@@ -1,12 +1,19 @@
-import ReactMarkdown from 'react-markdown';
-import { render } from 'react-dom';
+import React from 'react';
+import styled from 'styled-components';
+import { MenuButton } from './component/MenuButton';
+import { Writer } from './component/Writer';
 
-export default function Writer() {
-  const source = `# 제목`;
+const Container = styled.div({
+  display: 'flex',
+  width: '100%',
+  backgroundColor: '#ffffff'
+});
 
+export default function Admin() {
   return (
-    <div>
-      <ReactMarkdown children={source} />
-    </div>
+    <Container>
+      {/* <MenuButton isActive={true} desc={'D'}></MenuButton> */}
+      <Writer></Writer>
+    </Container>
   );
 }

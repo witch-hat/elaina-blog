@@ -5,9 +5,18 @@ import { theme } from 'src/styles/theme';
 import { ThemeMode } from 'src/redux/common/type';
 
 export const GlobalStyles = createGlobalStyle<{ themeMode: ThemeMode }>`
+* {
+	box-sizing: border-box;
+}
 	a {
 		text-decoration: none;
 		color: inherit;
+	}
+	p {
+		margin: 0;
+	}
+	pre[contentEditable] {
+		margin: 0;
 	}
 	button {
 		background-color: inherit;
@@ -23,9 +32,6 @@ export const GlobalStyles = createGlobalStyle<{ themeMode: ThemeMode }>`
 	}
 	li {
 		list-style: none;
-	}
-	* {
-		box-sizing: border-box;
 	}
 	body {
     background-color: ${(props) => theme[props.themeMode].mainBackground};
