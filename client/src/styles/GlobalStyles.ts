@@ -16,6 +16,9 @@ export const GlobalStyles = createGlobalStyle<{ themeMode: ThemeMode }>`
 		user-select: 'none';
 		outline: 'none';
 	}
+	input {
+		font-weight: 200;
+	}
 	* {
 		box-sizing: border-box;
 	}

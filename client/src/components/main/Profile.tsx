@@ -124,6 +124,7 @@ const Input = styled.input<{ themeMode: ThemeMode }>((props) => ({
   fontSize: '1.1rem',
   padding: '.2rem',
   outline: 'none',
+  fontWeight: 'normal',
   border: `1px solid ${theme[props.themeMode].inputBorder}`,
   borderRadius: '8px',
   color: theme[props.themeMode].inputText,
@@ -164,7 +165,6 @@ const Icon = styled.i({
 const Editor = styled.span<{ themeMode: ThemeMode }>((props) => ({
   display: 'block',
   width: '100%',
-  borderRadius: '8px',
   padding: '.2rem',
   outline: 'none',
   border: `1px solid ${theme[props.themeMode].inputBorder}`,
