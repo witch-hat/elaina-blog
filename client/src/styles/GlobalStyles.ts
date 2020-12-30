@@ -21,8 +21,10 @@ export const GlobalStyles = createGlobalStyle<{ themeMode: ThemeMode }>`
 	button {
 		background-color: inherit;
 		color: ${(props) => theme[props.themeMode].mainText};
-		user-select: 'none';
-		outline: 'none';
+		user-select: none;
+		outline: none;
+		cursor: pointer;
+		border: 1px solid ${(props) => theme[props.themeMode].borderColor};
 	}
 	input {
 		font-weight: 200;
