@@ -58,7 +58,11 @@ const MenuButton = styled.div({
   }
 });
 
-export default function Content() {
+interface Props {
+  url: string | string[];
+}
+
+export default function Content(props: Props) {
   return (
     <Container>
       <Title>React란 무엇인가</Title>

@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import styled, { keyframes, css } from 'styled-components';
+import { useRouter } from 'next/router';
 
 import { Content, ContentNavigation, PostCategory, CommentContainer } from './component';
 import { useWidth, FocusWrapper } from 'src/components';
@@ -90,7 +91,8 @@ const Alert = styled.div(
   `
 );
 
-export default function Post() {
+export default function PostId() {
+  const router = useRouter();
   const themeStore: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const width = useWidth();
   const [showPostCategory, setShowPostCategory] = useState(false);
@@ -141,8 +143,8 @@ export default function Post() {
         </FocusWrapper>
       )}
       <ContentContainer themeMode={themeStore}>
-        <Content />
-        <CommentContainer theme={themeStore} />
+        <Content url={router.query.post} />
+        <CommentContainer theme={themeStore} url={router.query.post} />
       </ContentContainer>
       <ContentNavigation />
       {/* TODO: Alert shows only first... */}

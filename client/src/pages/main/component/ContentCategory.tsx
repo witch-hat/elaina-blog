@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -94,7 +95,7 @@ export default function ContentCategory(props: Props) {
       <Container>
         {mockUpData.category.map((category) => {
           return (
-            <Link key={category.name} href='/post' passHref>
+            <Link key={category.name} href={`post/${category.posts[category.posts.length - 1].url}`} passHref>
               <a style={{ width: '100%' }}>
                 <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }} theme={props.theme}>
                   <Content>

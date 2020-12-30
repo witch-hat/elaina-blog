@@ -35,6 +35,7 @@ const Counter = styled.div({
 
 interface Props {
   theme: ThemeMode;
+  url: string | string[];
 }
 
 export default function CommentContainer(props: Props) {
