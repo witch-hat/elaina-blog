@@ -1,3 +1,14 @@
+import React, { useState } from 'react';
+
+import { LogIn } from './component/LogIn';
+
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/redux/rootReducer';
+import { ThemeMode } from 'src/redux/common/type';
+
 export default function Admin() {
-  return null;
+  const theme: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+
+  const [isLogIn, setIsLogIn] = useState(false);
+  return <>{isLogIn ? <></> : <LogIn theme={theme} />}</>;
 }
