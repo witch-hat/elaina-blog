@@ -33,6 +33,12 @@ export default function CategoryNavigation(props: Props) {
           <NavName>About</NavName>
         </>
       </NavigationButton>
+      <NavigationButton href='/timeline' theme={props.theme}>
+        <>
+          <i className='fas fa-stream'></i>&nbsp;
+          <NavName>TimeLine</NavName>
+        </>
+      </NavigationButton>
     </Container>
   );
 }
