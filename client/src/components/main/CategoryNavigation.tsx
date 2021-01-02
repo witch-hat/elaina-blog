@@ -27,16 +27,16 @@ export default function CategoryNavigation(props: Props) {
           <NavName>게시글</NavName>
         </>
       </NavigationButton>
-      <NavigationButton href='/about' theme={props.theme}>
-        <>
-          <i className='fas fa-user'></i>&nbsp;
-          <NavName>About</NavName>
-        </>
-      </NavigationButton>
       <NavigationButton href='/timeline' theme={props.theme}>
         <>
           <i className='fas fa-stream'></i>&nbsp;
           <NavName>TimeLine</NavName>
+        </>
+      </NavigationButton>
+      <NavigationButton href='/about' theme={props.theme}>
+        <>
+          <i className='fas fa-user'></i>&nbsp;
+          <NavName>About</NavName>
         </>
       </NavigationButton>
     </Container>
