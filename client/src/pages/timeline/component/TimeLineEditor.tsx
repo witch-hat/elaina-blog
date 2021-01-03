@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import ReactMarkdown from 'react-markdown';
 const gfm = require('remark-gfm');
@@ -26,7 +26,7 @@ const TabButton = styled.button<{ isSelected: boolean }>((props) => ({
 }));
 
 const Editor = styled.pre({
-  display: 'block',
+  display: 'inline-block',
   width: '100%',
   minHeight: '8rem',
   padding: '.5rem',
@@ -36,6 +36,7 @@ const Editor = styled.pre({
   whiteSpace: 'pre-wrap',
   wordBreak: 'break-all',
   fontFamily: "'Nanum Gothic', sans-serif",
+  fontSize: '1rem',
   '&:empty::before': {
     content: "'Write your life styles...'",
     color: '#888'
@@ -53,6 +54,27 @@ const PreviewContainer = styled.div({
   borderRadius: '12px'
 });
 
+const Paragraph = styled.p({
+  display: 'inline-block',
+  width: '100%'
+});
+
+const ParagraphContent = styled.span({
+  display: 'inline-block',
+  height: '100%',
+  '&:empty::before': {
+    content: "'Write your post...'"
+  }
+});
+
+function Text(props: { children?: string }) {
+  return (
+    <Paragraph>
+      <ParagraphContent>{props.children}</ParagraphContent>
+    </Paragraph>
+  );
+}
+
 export function TimeLineEditor() {
   enum Mode {
     write = 'Write',
@@ -61,13 +83,28 @@ export function TimeLineEditor() {
   const [viewerMode, setViewerMode] = useState<Mode>(Mode.write);
   const editorRef = useRef<HTMLPreElement>(null);
   const remainText = useRef<string>();
+  const [tagText, setTagText] = useState<string>('');
+  const [initlizedP, setInitilizedP] = useState<Node>();
+  const [initilizeSpan, setInitilizeSpan] = useState<Node>();
   let text: string;
+
+  useEffect(() => {
+    if (editorRef.current?.firstChild?.firstChild) {
+      setTagText(editorRef.current.firstElementChild?.outerHTML || '');
+      setInitilizedP(editorRef.current.firstChild);
+      setInitilizeSpan(editorRef.current.firstChild.firstChild);
+    }
+  }, []);
 
   if (editorRef.current) {
     text = editorRef.current.innerText;
     remainText.current = editorRef.current.innerText;
   } else {
     text = '';
+  }
+
+  function handlePasteEvent(e: React.ClipboardEvent<HTMLPreElement>) {
+    e.preventDefault();
   }
 
   return (
@@ -81,7 +118,7 @@ export function TimeLineEditor() {
         </TabButton>
       </TabBar>
       {viewerMode === Mode.write ? (
-        <Editor contentEditable ref={editorRef}>
+        <Editor contentEditable ref={editorRef} onPaste={handlePasteEvent} suppressContentEditableWarning>
           {remainText.current}
         </Editor>
       ) : (

@@ -59,12 +59,11 @@
 .markdown-body {
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
-  line-height: 1.5;
   color: #24292e;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
-  font-size: 16px;
-  line-height: 1.5;
+  font-size: 1rem;
+  line-height: 1.4;
   word-wrap: break-word;
+  font-family: 'Nanum Gothic', sans-serif;
 }
 
 .markdown-body details {
@@ -213,34 +212,14 @@
   font-weight: 600;
 }
 
-.markdown-body h2 {
-  font-size: 24px;
-}
-
-.markdown-body h3 {
-  font-size: 20px;
-}
-
 .markdown-body h3,
 .markdown-body h4 {
   font-weight: 600;
 }
 
-.markdown-body h4 {
-  font-size: 16px;
-}
-
-.markdown-body h5 {
-  font-size: 14px;
-}
-
 .markdown-body h5,
 .markdown-body h6 {
   font-weight: 600;
-}
-
-.markdown-body h6 {
-  font-size: 12px;
 }
 
 .markdown-body p {
@@ -674,37 +653,32 @@
   margin-bottom: 16px;
   font-weight: 600;
   line-height: 1.25;
-}
-
-.markdown-body h1 {
-  font-size: 2em;
-}
-
-.markdown-body h1,
-.markdown-body h2 {
   padding-bottom: 0.3em;
   border-bottom: 1px solid #eaecef;
 }
 
+.markdown-body h1 {
+  font-size: 2.5rem;
+}
+
 .markdown-body h2 {
-  font-size: 1.5em;
+  font-size: 2rem;
 }
 
 .markdown-body h3 {
-  font-size: 1.25em;
+  font-size: 1.5rem;
 }
 
 .markdown-body h4 {
-  font-size: 1em;
+  font-size: 1.25em;
 }
 
 .markdown-body h5 {
-  font-size: 0.875em;
+  font-size: 1em;
 }
 
 .markdown-body h6 {
-  font-size: 0.85em;
-  color: #6a737d;
+  font-size: 0.875em;
 }
 
 .markdown-body ol,
