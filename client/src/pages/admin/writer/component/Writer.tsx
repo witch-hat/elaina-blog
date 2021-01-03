@@ -175,6 +175,8 @@ export function Writer(props: Props) {
         focusNextNode = textNode?.nextSibling;
       }
     }
+
+    parseTextContent();
   }
 
   function keyDown(e: React.KeyboardEvent<HTMLPreElement>) {
