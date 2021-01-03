@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import ReactMarkdown from 'react-markdown';
-import Gfm from 'remark-gfm';
+const gfm = require('remark-gfm');
 
 import styles from 'src/styles/MarkdownStyles.module.css';
 
@@ -32,6 +32,9 @@ const Editor = styled.pre({
   backgroundColor: '#fff',
   outline: 'none',
   borderRadius: '12px',
+  whiteSpace: 'pre-wrap',
+  wordBreak: 'break-all',
+  fontFamily: "'Nanum Gothic', sans-serif",
   '&:empty::before': {
     content: "'Write your life styles...'",
     color: '#888'
@@ -58,8 +61,7 @@ export function TimeLineEditor() {
       {viewerMode === Mode.write ? (
         <Editor contentEditable ref={editorRef}></Editor>
       ) : (
-        /* @ts-ignore */
-        <ReactMarkdown plugins={Gfm} children={editorRef.current?.innerText} className={styles['markdown-body']} />
+        <ReactMarkdown className={styles['markdown-body']} plugins={gfm} children={editorRef.current?.innerText} />
       )}
     </Container>
   );

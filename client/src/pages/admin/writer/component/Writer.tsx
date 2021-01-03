@@ -9,7 +9,14 @@ const gfm = require('remark-gfm');
 const Editor = styled.pre({
   display: 'flex',
   flexDirection: 'column',
-  width: '500px'
+  width: '500px',
+  fontFamily: "'Nanum Gothic', sans-serif",
+  whiteSpace: 'pre-wrap',
+  wordBreak: 'break-all',
+  outline: 'none',
+  padding: '.5rem',
+  border: '1px solid #888',
+  borderRadius: '12px'
 });
 
 const Paragraph = styled.p({
@@ -19,7 +26,13 @@ const Paragraph = styled.p({
 
 const ParagraphContent = styled.span({
   display: 'inline-block',
-  height: '100%'
+  height: '100%',
+  '&:empty::before': {
+    content: "'Write your post...'"
+  },
+  '&:empty:focus::before': {
+    content: "''"
+  }
 });
 
 function Text(props: { children?: string }) {
@@ -142,7 +155,7 @@ export function Writer(props: Props) {
       >
         <Text></Text>
       </Editor>
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
+      <div style={{ marginLeft: '2rem', display: 'flex', flexDirection: 'column' }}>
         <ReactMarkdown plugins={gfm} className={styles['markdown-body']} children={text}></ReactMarkdown>
       </div>
     </div>
