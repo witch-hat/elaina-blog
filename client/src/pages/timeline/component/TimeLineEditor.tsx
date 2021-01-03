@@ -14,7 +14,8 @@ const Container = styled.div({
 });
 
 const TabBar = styled.div({
-  width: '100%'
+  width: '100%',
+  marginBottom: '.5rem'
 });
 
 const TabButton = styled.button({
@@ -28,7 +29,6 @@ const Editor = styled.pre({
   width: '100%',
   minHeight: '8rem',
   padding: '.5rem',
-  margin: '.3rem 0 0',
   backgroundColor: '#fff',
   outline: 'none',
   borderRadius: '12px',
@@ -44,6 +44,14 @@ const Editor = styled.pre({
   }
 });
 
+const PreviewContainer = styled.div({
+  width: '100%',
+  minHeight: '8rem',
+  padding: '.5rem',
+  backgroundColor: '#fff',
+  borderRadius: '12px'
+});
+
 export function TimeLineEditor() {
   enum Mode {
     write = 'Write',
@@ -51,6 +59,15 @@ export function TimeLineEditor() {
   }
   const [viewerMode, setViewerMode] = useState<Mode>(Mode.write);
   const editorRef = useRef<HTMLPreElement>(null);
+  const remainText = useRef<string>();
+  let text: string;
+
+  if (editorRef.current) {
+    text = editorRef.current.innerText;
+    remainText.current = editorRef.current.innerText;
+  } else {
+    text = '';
+  }
 
   return (
     <Container>
@@ -59,9 +76,13 @@ export function TimeLineEditor() {
         <TabButton onClick={() => setViewerMode(Mode.preview)}>Preview</TabButton>
       </TabBar>
       {viewerMode === Mode.write ? (
-        <Editor contentEditable ref={editorRef}></Editor>
+        <Editor contentEditable ref={editorRef}>
+          {remainText.current}
+        </Editor>
       ) : (
-        <ReactMarkdown className={styles['markdown-body']} plugins={gfm} children={editorRef.current?.innerText} />
+        <PreviewContainer>
+          <ReactMarkdown className={styles['markdown-body']} plugins={gfm} children={text} />
+        </PreviewContainer>
       )}
     </Container>
   );
