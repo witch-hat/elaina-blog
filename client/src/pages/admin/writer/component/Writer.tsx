@@ -52,12 +52,12 @@ export function Writer(props: Props) {
   }, []);
 
   useEffect(() => {
-    const createdParagraph = editor.current?.lastChild;
-    if (createdParagraph?.firstChild?.nodeName === 'BR') {
+    const lastParagraph = editor.current?.lastChild;
+    if (lastParagraph?.firstChild?.nodeName === 'BR') {
       if (initilizedSpan) {
-        createdParagraph.firstChild.remove();
+        lastParagraph.firstChild.remove();
         initilizedSpan.textContent = '';
-        createdParagraph.appendChild(initilizedSpan);
+        lastParagraph.appendChild(initilizedSpan);
       }
     }
   }, [editor.current?.lastChild]);
