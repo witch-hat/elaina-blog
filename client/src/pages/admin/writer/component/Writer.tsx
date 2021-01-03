@@ -3,6 +3,8 @@ import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import styled from 'styled-components';
 import { createNode } from 'typescript';
+import styles from 'src/styles/MarkdownStyles.module.css';
+const gfm = require('remark-gfm');
 
 const Editor = styled.pre({
   display: 'flex',
@@ -141,7 +143,7 @@ export function Writer(props: Props) {
         <Text></Text>
       </Editor>
       <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <ReactMarkdown children={text}></ReactMarkdown>
+        <ReactMarkdown plugins={gfm} className={styles['markdown-body']} children={text}></ReactMarkdown>
       </div>
     </div>
   );
