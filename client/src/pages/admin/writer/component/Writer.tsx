@@ -76,7 +76,6 @@ export function Writer(props: Props) {
     const anchorNode: Node = selection.anchorNode;
     const focusNode: Node = selection.focusNode;
     let lastEndText: string = '';
-    let lastEndOffSet: number;
 
     // 처음부터 붙여넣기 하는 경우 SPAN의 firstChildNode가 없어서 예외처리
     if (focusNode?.nodeName === 'SPAN') {
@@ -91,15 +90,15 @@ export function Writer(props: Props) {
       if (anchorNode === focusNode) {
         const startOffset = anchorOffset < focusOffset ? anchorOffset : focusOffset;
         const endOffset = anchorOffset > focusOffset ? anchorOffset : focusOffset;
-        const beforeText = focusText?.slice(0, startOffset);
-        const afterText = focusText?.slice(endOffset, focusText.length);
+        const startText = focusText?.slice(0, startOffset);
+        const endText = focusText?.slice(endOffset, focusText.length);
 
         if (isOncePaste) {
-          focusNode.textContent = `${beforeText}${splitedData[0]}${afterText}`;
+          focusNode.textContent = `${startText}${splitedData[0]}${endText}`;
           selectionRange.setStart(focusNode, startOffset + splitedData[0].length);
         } else {
-          focusNode.textContent = `${beforeText}${splitedData[0]}`;
-          lastEndText = afterText;
+          focusNode.textContent = `${startText}${splitedData[0]}`;
+          lastEndText = endText;
         }
       } else {
         const editorChildNodes: Array<ChildNode> = [];
@@ -123,16 +122,13 @@ export function Writer(props: Props) {
         }
 
         let startOffset;
-        let endOffset;
         let startText, endText;
         if (startNode === anchorNode.parentNode.parentNode) {
           startOffset = anchorOffset + splitedData[0].length;
-          endOffset = focusOffset;
           startText = startNode?.firstChild.textContent?.slice(0, anchorOffset);
           endText = endNode?.firstChild.textContent?.slice(focusOffset);
         } else {
           startOffset = focusOffset + splitedData[0].length;
-          endOffset = anchorOffset;
           startText = startNode?.firstChild.textContent?.slice(0, focusOffset);
           endText = endNode?.firstChild.textContent?.slice(anchorOffset);
         }
@@ -148,7 +144,6 @@ export function Writer(props: Props) {
           selectionRange?.setStart(startNode.firstChild.firstChild, startOffset);
           selectionRange?.setEnd(startNode.firstChild.firstChild, startOffset);
         } else {
-          lastEndOffSet = endOffset;
           lastEndText = endText;
           startNode.firstChild.textContent = `${startText}${splitedData[0]}`;
         }
@@ -175,11 +170,7 @@ export function Writer(props: Props) {
       editor.current.insertBefore(textNode, focusNextNode);
 
       if (index === splitedData.length - 1) {
-        if (lastEndOffSet) {
-          selectionRange.setStart(textNode.firstChild?.firstChild, lastEndOffSet);
-        } else {
-          selectionRange.setStart(textNode.firstChild?.firstChild, targetData.length);
-        }
+        selectionRange.setStart(textNode.firstChild?.firstChild, targetData.length);
       } else {
         focusNextNode = textNode?.nextSibling;
       }
