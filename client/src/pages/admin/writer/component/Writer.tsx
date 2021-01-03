@@ -2,9 +2,8 @@ import React, { createElement, useEffect, useRef } from 'react';
 import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import styled from 'styled-components';
-import { createNode } from 'typescript';
 import styles from 'src/styles/MarkdownStyles.module.css';
-const gfm = require('remark-gfm');
+import gfm from 'remark-gfm';
 
 const Editor = styled.pre({
   display: 'flex',
@@ -29,9 +28,6 @@ const ParagraphContent = styled.span({
   height: '100%',
   '&:empty::before': {
     content: "'Write your post...'"
-  },
-  '&:empty:focus::before': {
-    content: "''"
   }
 });
 
@@ -47,25 +43,23 @@ interface Props {}
 
 export function Writer(props: Props) {
   const editor = useRef<HTMLPreElement>(null);
-  const [tagText, setTagText] = useState<string>('');
   const [initlizedP, setInitilizedP] = useState<Node>();
-  const [initilizeSpan, setInitilizeSpan] = useState<Node>();
+  const [initilizedSpan, setInitilizedSpan] = useState<Node>();
   const [text, setText] = useState<string>('');
 
   useEffect(() => {
     if (editor.current?.firstChild?.firstChild) {
-      setTagText(editor.current.firstElementChild?.outerHTML);
       setInitilizedP(editor.current.firstChild);
-      setInitilizeSpan(editor.current.firstChild.firstChild);
+      setInitilizedSpan(editor.current.firstChild.firstChild);
     }
   }, []);
 
   useEffect(() => {
     if (editor.current?.firstChild?.firstChild?.nodeName === 'BR') {
-      if (initilizeSpan) {
+      if (initilizedSpan) {
         editor.current?.firstChild?.firstChild.remove();
-        initilizeSpan.textContent = '';
-        editor.current?.firstChild?.appendChild(initilizeSpan);
+        initilizedSpan.textContent = '';
+        editor.current?.firstChild?.appendChild(initilizedSpan);
       }
     }
   }, [editor.current?.firstChild?.firstChild]);
@@ -75,63 +69,130 @@ export function Writer(props: Props) {
 
     const clipboardData = e.clipboardData.getData('text/plain');
     const splitedData = clipboardData.split('\n');
-    console.log(splitedData);
 
-    const selection = window.getSelection()?.getRangeAt(0);
+    const isOncePaste: boolean = splitedData.length === 1 ? true : false;
+    const selection: Selection = window.getSelection();
+    const selectionRange: Range = selection?.getRangeAt(0);
+    const anchorNode: Node = selection.anchorNode;
+    const focusNode: Node = selection.focusNode;
+    let lastEndText: string = '';
+    let lastEndOffSet: number;
 
-    const node = initlizedP?.cloneNode(true);
-    node.textContent = splitedData[0];
+    // 처음부터 붙여넣기 하는 경우 SPAN의 firstChildNode가 없어서 예외처리
+    if (focusNode?.nodeName === 'SPAN') {
+      const textNode = document.createTextNode(splitedData[0]);
+      focusNode.appendChild(textNode);
+      selectionRange.setStart(textNode, splitedData[0].length);
+    } else {
+      const anchorOffset = selection.anchorOffset;
+      const focusOffset = selection.focusOffset;
+      const focusText = focusNode?.textContent;
 
-    editor.current?.insertBefore(node, null);
+      if (anchorNode === focusNode) {
+        const startOffset = anchorOffset < focusOffset ? anchorOffset : focusOffset;
+        const endOffset = anchorOffset > focusOffset ? anchorOffset : focusOffset;
+        const beforeText = focusText?.slice(0, startOffset);
+        const afterText = focusText?.slice(endOffset, focusText.length);
 
-    console.log(selection?.commonAncestorContainer.parentNode?.parentNode);
+        if (isOncePaste) {
+          focusNode.textContent = `${beforeText}${splitedData[0]}${afterText}`;
+          selectionRange.setStart(focusNode, startOffset + splitedData[0].length);
+        } else {
+          focusNode.textContent = `${beforeText}${splitedData[0]}`;
+          lastEndText = afterText;
+        }
+      } else {
+        const editorChildNodes: Array<ChildNode> = [];
+        let startNode, endNode;
 
-    // console.log(selection?.getRangeAt(0));
-    // console.log(selection?.getRangeAt(0).commonAncestorContainer.parentElement?.parentElement);
-    // selection?.getRangeAt(0).commonAncestorContainer.parentNode?.parentElement?.insertBefore()
+        // Selection된 영역의 노드 시작지점 및 끝나는 지점 구하기
+        for (let editorChildNode of editor.current.childNodes) {
+          if (startNode) {
+            editorChildNodes.push(editorChildNode);
+          }
 
-    // document.execCommand('insertHTML', false, `<a>${splitedData[0]}</a>`);
+          if (editorChildNode === anchorNode.parentNode.parentNode || editorChildNode === focusNode?.parentNode?.parentNode) {
+            if (startNode === undefined) {
+              startNode = editorChildNode;
+              editorChildNodes.push(editorChildNode);
+            } else {
+              endNode = editorChildNode;
+              break;
+            }
+          }
+        }
 
-    // for (let text of splitedData) {
-    //   if (text === splitedData[0]) {
-    //     document.execCommand('insertHTML', false, '<span>span</span>');
-    //   } else {
-    //     const parent = window.getSelection()?.focusNode?.parentNode?.parentNode?.parentElement;
-    //     // parent.focus();
-    //     console.log(parent);
-    //     document.execCommand('insertHTML', false, '<div>div</div>');
-    //   }
+        let startOffset;
+        let endOffset;
+        let startText, endText;
+        if (startNode === anchorNode.parentNode.parentNode) {
+          startOffset = anchorOffset + splitedData[0].length;
+          endOffset = focusOffset;
+          startText = startNode?.firstChild.textContent?.slice(0, anchorOffset);
+          endText = endNode?.firstChild.textContent?.slice(focusOffset);
+        } else {
+          startOffset = focusOffset + splitedData[0].length;
+          endOffset = anchorOffset;
+          startText = startNode?.firstChild.textContent?.slice(0, focusOffset);
+          endText = endNode?.firstChild.textContent?.slice(anchorOffset);
+        }
 
-    // e.preventDefault();
-    // const parent = window.getSelection()?.focusNode?.parentNode?.parentElement;
-    // console.log(parent);
-    // parent?.focus();
-    // const p = tagText.replace('></span>', `>${text}</span>`);
-    // console.log(p);
-    // document.execCommand('insertHTML', false, p);
+        for (let editorChildNode of editorChildNodes) {
+          if (editorChildNode !== startNode) {
+            editorChildNode.remove();
+          }
+        }
 
-    // const clonedNode = initlizedP?.cloneNode(true);
-    // if (clonedNode) {
-    //   if (text === '') {
-    //     clonedNode.textContent = '  \n';
-    //   } else {
-    //     clonedNode.textContent = text;
-    //   }
+        if (isOncePaste) {
+          startNode.firstChild.textContent = `${startText}${splitedData[0]}${endText}`;
+          selectionRange?.setStart(startNode.firstChild.firstChild, startOffset);
+          selectionRange?.setEnd(startNode.firstChild.firstChild, startOffset);
+        } else {
+          lastEndOffSet = endOffset;
+          lastEndText = endText;
+          startNode.firstChild.textContent = `${startText}${splitedData[0]}`;
+        }
+      }
+    }
 
-    //   const parent = window.getSelection()?.focusNode?.parentNode?.parentNode;
-    //   parent?.append(clonedNode);
+    let focusNextNode: ChildNode;
+    if (focusNode?.nodeName === 'SPAN') {
+      focusNextNode = focusNode?.parentNode?.nextSibling;
+    } else {
+      focusNextNode = focusNode?.parentNode?.parentNode?.nextSibling;
+    }
 
-    //   e.preventDefault();
-    // }
+    for (let index = 1; index < splitedData.length; index++) {
+      const targetData = splitedData[index];
+      const textNode: Node = initlizedP.cloneNode(true);
+
+      if (index === splitedData.length - 1) {
+        textNode.firstChild.textContent = `${targetData}${lastEndText}`;
+      } else {
+        textNode.firstChild.textContent = targetData;
+      }
+
+      editor.current.insertBefore(textNode, focusNextNode);
+
+      if (index === splitedData.length - 1) {
+        if (lastEndOffSet) {
+          selectionRange.setStart(textNode.firstChild?.firstChild, lastEndOffSet);
+        } else {
+          selectionRange.setStart(textNode.firstChild?.firstChild, targetData.length);
+        }
+      } else {
+        focusNextNode = textNode?.nextSibling;
+      }
+    }
   }
 
   function keyDown(e: React.KeyboardEvent<HTMLPreElement>) {
     if (e.key === 'Backspace') {
       if (text.length <= 1) {
         if (editor.current?.firstChild?.firstChild) {
+          e.preventDefault();
           setText('');
           editor.current.firstChild.firstChild.textContent = '';
-          e.preventDefault();
         }
       }
     }
@@ -156,7 +217,7 @@ export function Writer(props: Props) {
         <Text></Text>
       </Editor>
       <div style={{ marginLeft: '2rem', display: 'flex', flexDirection: 'column' }}>
-        <ReactMarkdown plugins={gfm} className={styles['markdown-body']} children={text}></ReactMarkdown>
+        <ReactMarkdown plugins={[gfm]} className={styles['markdown-body']} children={text}></ReactMarkdown>
       </div>
     </div>
   );
