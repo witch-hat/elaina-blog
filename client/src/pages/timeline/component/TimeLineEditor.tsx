@@ -1,6 +1,9 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import ReactMarkdown from 'react-markdown';
+import Gfm from 'remark-gfm';
+
+import styles from 'src/styles/MarkdownStyles.module.css';
 
 const Container = styled.div({
   width: '500px',
@@ -20,7 +23,7 @@ const TabButton = styled.button({
   border: 'none'
 });
 
-const Editor = styled.span({
+const Editor = styled.pre({
   display: 'block',
   width: '100%',
   minHeight: '8rem',
@@ -44,7 +47,7 @@ export function TimeLineEditor() {
     preview = 'Preview'
   }
   const [viewerMode, setViewerMode] = useState<Mode>(Mode.write);
-  const editorRef = useRef<HTMLSpanElement>(null);
+  const editorRef = useRef<HTMLPreElement>(null);
 
   return (
     <Container>
@@ -53,10 +56,10 @@ export function TimeLineEditor() {
         <TabButton onClick={() => setViewerMode(Mode.preview)}>Preview</TabButton>
       </TabBar>
       {viewerMode === Mode.write ? (
-        <Editor role='textbox' contentEditable ref={editorRef}></Editor>
+        <Editor contentEditable ref={editorRef}></Editor>
       ) : (
-        // @ts-ignore
-        <ReactMarkdown children={editorRef.current?.innerText} />
+        /* @ts-ignore */
+        <ReactMarkdown plugins={Gfm} children={editorRef.current?.innerText} className={styles['markdown-body']} />
       )}
     </Container>
   );
