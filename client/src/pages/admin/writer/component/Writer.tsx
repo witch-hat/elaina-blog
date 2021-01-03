@@ -25,10 +25,7 @@ const Paragraph = styled.p({
 
 const ParagraphContent = styled.span({
   display: 'inline-block',
-  height: '100%',
-  '&:empty::before': {
-    content: "'Write your post...'"
-  }
+  height: '100%'
 });
 
 function Text(props: { children?: string }) {
