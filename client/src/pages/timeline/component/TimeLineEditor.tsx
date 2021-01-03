@@ -18,11 +18,12 @@ const TabBar = styled.div({
   marginBottom: '.5rem'
 });
 
-const TabButton = styled.button({
+const TabButton = styled.button<{ isSelected: boolean }>((props) => ({
   width: '100px',
   padding: '.5rem',
-  border: 'none'
-});
+  border: 'none',
+  boxShadow: props.isSelected ? 'inset 0 -3px 0 #888' : 'none'
+}));
 
 const Editor = styled.pre({
   display: 'block',
@@ -72,8 +73,12 @@ export function TimeLineEditor() {
   return (
     <Container>
       <TabBar>
-        <TabButton onClick={() => setViewerMode(Mode.write)}>Writer</TabButton>
-        <TabButton onClick={() => setViewerMode(Mode.preview)}>Preview</TabButton>
+        <TabButton onClick={() => setViewerMode(Mode.write)} isSelected={viewerMode === Mode.write}>
+          Writer
+        </TabButton>
+        <TabButton onClick={() => setViewerMode(Mode.preview)} isSelected={viewerMode === Mode.preview}>
+          Preview
+        </TabButton>
       </TabBar>
       {viewerMode === Mode.write ? (
         <Editor contentEditable ref={editorRef}>
