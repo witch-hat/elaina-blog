@@ -32,9 +32,6 @@ export const GlobalStyles = createGlobalStyle<{ themeMode: ThemeMode }>`
 	ul {
 		padding: 0;
 	}
-	li {
-		list-style: none;
-	}
 	body {
     background-color: ${(props) => theme[props.themeMode].mainBackground};
     color: ${(props) => theme[props.themeMode].mainText};
