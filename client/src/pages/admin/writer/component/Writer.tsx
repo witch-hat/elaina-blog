@@ -55,14 +55,15 @@ export function Writer(props: Props) {
   }, []);
 
   useEffect(() => {
-    if (editor.current?.firstChild?.firstChild?.nodeName === 'BR') {
+    const createdParagraph = editor.current?.lastChild;
+    if (createdParagraph?.firstChild?.nodeName === 'BR') {
       if (initilizedSpan) {
-        editor.current?.firstChild?.firstChild.remove();
+        createdParagraph.firstChild.remove();
         initilizedSpan.textContent = '';
-        editor.current?.firstChild?.appendChild(initilizedSpan);
+        createdParagraph.appendChild(initilizedSpan);
       }
     }
-  }, [editor.current?.firstChild?.firstChild]);
+  }, [editor.current?.lastChild]);
 
   function paste(e: React.ClipboardEvent<HTMLPreElement>) {
     e.preventDefault();
