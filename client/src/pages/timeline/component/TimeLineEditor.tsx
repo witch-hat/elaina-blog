@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
+import ReactMarkdown from 'react-markdown';
 
 const Container = styled.div({
   width: '500px',
@@ -27,6 +28,7 @@ const Editor = styled.span({
   margin: '.3rem 0 0',
   backgroundColor: '#fff',
   outline: 'none',
+  borderRadius: '12px',
   '&:empty::before': {
     content: "'Write your life styles...'",
     color: '#888'
@@ -37,13 +39,25 @@ const Editor = styled.span({
 });
 
 export function TimeLineEditor() {
+  enum Mode {
+    write = 'Write',
+    preview = 'Preview'
+  }
+  const [viewerMode, setViewerMode] = useState<Mode>(Mode.write);
+  const editorRef = useRef<HTMLSpanElement>(null);
+
   return (
     <Container>
       <TabBar>
-        <TabButton>Writer</TabButton>
-        <TabButton>Preview</TabButton>
+        <TabButton onClick={() => setViewerMode(Mode.write)}>Writer</TabButton>
+        <TabButton onClick={() => setViewerMode(Mode.preview)}>Preview</TabButton>
       </TabBar>
-      <Editor role='textbox' contentEditable></Editor>
+      {viewerMode === Mode.write ? (
+        <Editor role='textbox' contentEditable ref={editorRef}></Editor>
+      ) : (
+        // @ts-ignore
+        <ReactMarkdown children={editorRef.current?.innerText} />
+      )}
     </Container>
   );
 }
