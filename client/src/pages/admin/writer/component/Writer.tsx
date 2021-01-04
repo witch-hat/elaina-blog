@@ -15,11 +15,7 @@ const Editor = styled.div({
   outline: 'none',
   padding: '.5rem',
   border: '1px solid #888',
-  borderRadius: '12px',
-  '&::after': {
-    display: 'block',
-    content: "''"
-  }
+  borderRadius: '12px'
 });
 
 const Paragraph = styled.p({
@@ -29,10 +25,10 @@ const Paragraph = styled.p({
 
 const ParagraphContent = styled.span({
   display: 'inline-block',
-  height: '100%',
-  '&::after': {
-    content: "'\\200B'"
-  }
+  height: '100%'
+  // '&:empty::after': {
+  //   content: "'\\200B'"
+  // }
 });
 
 function Text(props: { children?: string }) {
@@ -47,39 +43,14 @@ interface Props {}
 
 export function Writer(props: Props) {
   const editor = useRef<HTMLDivElement>(null);
-  const [initlizedP, setInitilizedP] = useState<Node>();
-  const [initilizedSpan, setInitilizedSpan] = useState<Node>();
+  const [initilizedP, setInitilizedP] = useState<Node>();
   const [text, setText] = useState<string>('');
 
   useEffect(() => {
     if (editor.current?.firstChild?.firstChild) {
-      setInitilizedP(editor.current.firstChild);
-      setInitilizedSpan(editor.current.firstChild.firstChild);
+      setInitilizedP(editor.current.firstChild.cloneNode(true));
     }
   }, []);
-
-  useEffect(() => {
-    // const lastParagraph = editor.current?.lastChild;
-    // if (lastParagraph?.firstChild?.nodeName === 'BR') {
-    //   if (initilizedSpan) {
-    //     lastParagraph.firstChild.remove();
-    //     initilizedSpan.textContent = '';
-    //     lastParagraph.appendChild(initilizedSpan);
-    //   }
-    // }
-    // console.log('useEffect');
-    // if (editor.current?.lastChild?.firstChild?.nodeName === 'BR') {
-    //   editor.current?.lastChild?.firstChild.remove();
-    //   console.log(initilizedSpan);
-    //   initilizedSpan.textContent = '';
-    //   editor.current?.lastChild?.appendChild(initilizedSpan);
-    // } else if (editor.current?.childNodes[editor.current?.childNodes.length - 2]?.firstChild?.nodeName === 'BR') {
-    //   editor.current?.childNodes[editor.current?.childNodes.length - 2].firstChild?.remove();
-    //   console.log(initilizedSpan);
-    //   initilizedSpan.textContent = '';
-    //   editor.current?.childNodes[editor.current?.childNodes.length - 2].firstChild?.appendChild(initilizedSpan);
-    // }
-  }, [editor.current?.lastChild?.firstChild, editor.current?.childNodes[editor.current?.childNodes.length - 2], initilizedSpan]);
 
   function paste(e: React.ClipboardEvent<HTMLDivElement>) {
     e.preventDefault();
@@ -176,7 +147,7 @@ export function Writer(props: Props) {
 
     for (let index = 1; index < splitedData.length; index++) {
       const targetData = splitedData[index];
-      const textNode: Node = initlizedP.cloneNode(true);
+      const textNode: Node = initilizedP.cloneNode(true);
 
       if (index === splitedData.length - 1) {
         textNode.firstChild.textContent = `${targetData}${lastEndText}`;
@@ -197,6 +168,11 @@ export function Writer(props: Props) {
   }
 
   function keyDown(e: React.KeyboardEvent<HTMLDivElement>) {
+    const selection = window.getSelection();
+    const selectionRange = selection?.getRangeAt(0);
+
+    console.log(selection?.anchorNode, selection?.anchorNode?.parentNode?.parentNode);
+
     if (e.key === 'Backspace') {
       if (text.length <= 1) {
         if (editor.current?.firstChild?.firstChild) {
@@ -208,24 +184,13 @@ export function Writer(props: Props) {
     }
     if (e.key === 'Enter') {
       e.preventDefault();
-      // console.log('enter');
-      // document.execCommand('insertHTML', false, '<br></br>');
-      const selection = window.getSelection();
-      const anchorNode = selection?.anchorNode;
-      initilizedSpan.textContent = '';
-      initlizedP?.appendChild(initilizedSpan);
-      const paragraph = initlizedP;
-      // // const element = React.createElement(Text, { children: '' });
-      console.log(anchorNode?.nodeName);
-      if (anchorNode?.nodeName === 'SPAN' || 'P') {
-        editor.current?.append(paragraph?.cloneNode(true));
-      } else {
-        // initilizedSpan.textContent = '';
-        // initlizedP?.appendChild(initilizedSpan);
-        // const paragraph = initlizedP;
-        // console.log(paragraph);
-        // insertAfter(paragraph, anchorNode?.parentNode);
-      }
+
+      const textNode = initilizedP.cloneNode(true);
+      textNode.firstChild.textContent = '\n';
+      editor.current?.insertBefore(textNode, selection?.anchorNode?.parentNode?.nextSibling);
+
+      selectionRange?.setStart(textNode.firstChild, 0);
+      selectionRange?.setEnd(textNode.firstChild, 0);
     }
   }
 
