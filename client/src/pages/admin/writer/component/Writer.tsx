@@ -206,7 +206,7 @@ export function Writer(props: Props) {
       //   insertAfter(paragraph?.cloneNode(true), anchorNode);
       // } else {
       //   insertAfter(paragraph?.cloneNode(true), anchorNode?.parentNode?.parentNode);
-      }
+      // }
     }
   }
 
