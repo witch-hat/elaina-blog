@@ -191,6 +191,22 @@ export function Writer(props: Props) {
 
       selectionRange?.setStart(textNode.firstChild, 0);
       selectionRange?.setEnd(textNode.firstChild, 0);
+      // console.log('enter');
+      // document.execCommand('insertHTML', false, '<br></br>');
+      // const selection = window.getSelection();
+      // const anchorNode = selection?.anchorNode;
+      // initilizedSpan.textContent = '';
+      // initlizedP?.appendChild(initilizedSpan);
+      // const paragraph = initlizedP;
+      // // // const element = React.createElement(Text, { children: '' });
+      // console.log(anchorNode?.nodeName);
+      // if (anchorNode?.nodeName === 'SPAN') {
+      //   insertAfter(paragraph?.cloneNode(true), anchorNode?.parentNode);
+      // } else if (anchorNode?.nodeName === 'P') {
+      //   insertAfter(paragraph?.cloneNode(true), anchorNode);
+      // } else {
+      //   insertAfter(paragraph?.cloneNode(true), anchorNode?.parentNode?.parentNode);
+      }
     }
   }
 
@@ -202,7 +218,7 @@ export function Writer(props: Props) {
 
   function insertAfter(newNode: Node, referenceNode: Node) {
     console.log('before', referenceNode.parentNode?.childNodes);
-    referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+    referenceNode?.parentNode?.insertBefore(newNode, referenceNode.nextSibling);
     console.log('after', referenceNode.parentNode?.childNodes);
   }
 
