@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import styles from 'src/styles/MarkdownStyles.module.css';
 import gfm from 'remark-gfm';
 
-const Editor = styled.pre({
+const Editor = styled.div({
   display: 'flex',
   flexDirection: 'column',
   width: '500px',
@@ -15,7 +15,11 @@ const Editor = styled.pre({
   outline: 'none',
   padding: '.5rem',
   border: '1px solid #888',
-  borderRadius: '12px'
+  borderRadius: '12px',
+  '&::after': {
+    display: 'block',
+    content: "''"
+  }
 });
 
 const Paragraph = styled.p({
@@ -25,7 +29,10 @@ const Paragraph = styled.p({
 
 const ParagraphContent = styled.span({
   display: 'inline-block',
-  height: '100%'
+  height: '100%',
+  '&::after': {
+    content: "'\\200B'"
+  }
 });
 
 function Text(props: { children?: string }) {
@@ -39,7 +46,7 @@ function Text(props: { children?: string }) {
 interface Props {}
 
 export function Writer(props: Props) {
-  const editor = useRef<HTMLPreElement>(null);
+  const editor = useRef<HTMLDivElement>(null);
   const [initlizedP, setInitilizedP] = useState<Node>();
   const [initilizedSpan, setInitilizedSpan] = useState<Node>();
   const [text, setText] = useState<string>('');
@@ -52,24 +59,36 @@ export function Writer(props: Props) {
   }, []);
 
   useEffect(() => {
-    const lastParagraph = editor.current?.lastChild;
-    if (lastParagraph?.firstChild?.nodeName === 'BR') {
-      if (initilizedSpan) {
-        lastParagraph.firstChild.remove();
-        initilizedSpan.textContent = '';
-        lastParagraph.appendChild(initilizedSpan);
-      }
-    }
-  }, [editor.current?.lastChild]);
+    // const lastParagraph = editor.current?.lastChild;
+    // if (lastParagraph?.firstChild?.nodeName === 'BR') {
+    //   if (initilizedSpan) {
+    //     lastParagraph.firstChild.remove();
+    //     initilizedSpan.textContent = '';
+    //     lastParagraph.appendChild(initilizedSpan);
+    //   }
+    // }
+    // console.log('useEffect');
+    // if (editor.current?.lastChild?.firstChild?.nodeName === 'BR') {
+    //   editor.current?.lastChild?.firstChild.remove();
+    //   console.log(initilizedSpan);
+    //   initilizedSpan.textContent = '';
+    //   editor.current?.lastChild?.appendChild(initilizedSpan);
+    // } else if (editor.current?.childNodes[editor.current?.childNodes.length - 2]?.firstChild?.nodeName === 'BR') {
+    //   editor.current?.childNodes[editor.current?.childNodes.length - 2].firstChild?.remove();
+    //   console.log(initilizedSpan);
+    //   initilizedSpan.textContent = '';
+    //   editor.current?.childNodes[editor.current?.childNodes.length - 2].firstChild?.appendChild(initilizedSpan);
+    // }
+  }, [editor.current?.lastChild?.firstChild, editor.current?.childNodes[editor.current?.childNodes.length - 2], initilizedSpan]);
 
-  function paste(e: React.ClipboardEvent<HTMLPreElement>) {
+  function paste(e: React.ClipboardEvent<HTMLDivElement>) {
     e.preventDefault();
 
     const clipboardData = e.clipboardData.getData('text/plain');
     const splitedData = clipboardData.split('\n');
 
-    const isOncePaste: boolean = splitedData.length === 1 ? true : false;
     const selection: Selection = window.getSelection();
+    const isOncePaste: boolean = splitedData.length === 1 ? true : false;
     const selectionRange: Range = selection?.getRangeAt(0);
     const anchorNode: Node = selection.anchorNode;
     const focusNode: Node = selection.focusNode;
@@ -177,7 +196,7 @@ export function Writer(props: Props) {
     parseTextContent();
   }
 
-  function keyDown(e: React.KeyboardEvent<HTMLPreElement>) {
+  function keyDown(e: React.KeyboardEvent<HTMLDivElement>) {
     if (e.key === 'Backspace') {
       if (text.length <= 1) {
         if (editor.current?.firstChild?.firstChild) {
@@ -187,12 +206,39 @@ export function Writer(props: Props) {
         }
       }
     }
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      // console.log('enter');
+      // document.execCommand('insertHTML', false, '<br></br>');
+      const selection = window.getSelection();
+      const anchorNode = selection?.anchorNode;
+      initilizedSpan.textContent = '';
+      initlizedP?.appendChild(initilizedSpan);
+      const paragraph = initlizedP;
+      // // const element = React.createElement(Text, { children: '' });
+      console.log(anchorNode?.nodeName);
+      if (anchorNode?.nodeName === 'SPAN' || 'P') {
+        editor.current?.append(paragraph?.cloneNode(true));
+      } else {
+        // initilizedSpan.textContent = '';
+        // initlizedP?.appendChild(initilizedSpan);
+        // const paragraph = initlizedP;
+        // console.log(paragraph);
+        // insertAfter(paragraph, anchorNode?.parentNode);
+      }
+    }
   }
 
   function parseTextContent() {
     if (editor.current !== null) {
       setText(editor.current.innerText.replaceAll('\n\n', '  \n').replaceAll('\n  \n', '\n&#8203;  \n').replaceAll('\n\n', '\n'));
     }
+  }
+
+  function insertAfter(newNode: Node, referenceNode: Node) {
+    console.log('before', referenceNode.parentNode?.childNodes);
+    referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+    console.log('after', referenceNode.parentNode?.childNodes);
   }
 
   return (
