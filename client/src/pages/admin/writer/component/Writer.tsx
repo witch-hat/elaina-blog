@@ -20,15 +20,17 @@ const Editor = styled.div({
 
 const Paragraph = styled.p({
   display: 'inline-block',
-  width: '100%'
+  width: '100%',
+  wordBreak: 'keep-all',
+  whiteSpace: 'pre-wrap'
 });
 
 const ParagraphContent = styled.span({
   display: 'inline-block',
-  height: '100%'
-  // '&:empty::after': {
-  //   content: "'\\200B'"
-  // }
+  height: '100%',
+  '&:empty::after': {
+    content: "'\\200B'"
+  }
 });
 
 function Text(props: { children?: string }) {
@@ -64,6 +66,8 @@ export function Writer(props: Props) {
     const anchorNode: Node = selection.anchorNode;
     const focusNode: Node = selection.focusNode;
     let lastEndText: string = '';
+
+    console.log(splitedData);
 
     // 처음부터 붙여넣기 하는 경우 SPAN의 firstChildNode가 없어서 예외처리
     if (focusNode?.nodeName === 'SPAN') {
@@ -127,6 +131,7 @@ export function Writer(props: Props) {
           }
         }
 
+        console.log(startNode);
         if (isOncePaste) {
           startNode.firstChild.textContent = `${startText}${splitedData[0]}${endText}`;
           selectionRange?.setStart(startNode.firstChild.firstChild, startOffset);
@@ -147,6 +152,7 @@ export function Writer(props: Props) {
 
     for (let index = 1; index < splitedData.length; index++) {
       const targetData = splitedData[index];
+      console.log(targetData);
       const textNode: Node = initilizedP.cloneNode(true);
 
       if (index === splitedData.length - 1) {
@@ -157,8 +163,8 @@ export function Writer(props: Props) {
 
       editor.current.insertBefore(textNode, focusNextNode);
 
-      if (index === splitedData.length - 1) {
-        selectionRange.setStart(textNode.firstChild?.firstChild, targetData.length);
+      if (index === splitedData.length - 1 && textNode?.firstChild?.firstChild) {
+        selectionRange.setStart(textNode?.firstChild?.firstChild, targetData.length);
       } else {
         focusNextNode = textNode?.nextSibling;
       }
@@ -172,6 +178,7 @@ export function Writer(props: Props) {
     const selectionRange = selection?.getRangeAt(0);
 
     console.log(selection?.anchorNode, selection?.anchorNode?.parentNode?.parentNode);
+    console.log(selection?.anchorOffset);
 
     if (e.key === 'Backspace') {
       if (text.length <= 1) {
@@ -185,28 +192,17 @@ export function Writer(props: Props) {
     if (e.key === 'Enter') {
       e.preventDefault();
 
-      const textNode = initilizedP.cloneNode(true);
-      textNode.firstChild.textContent = '\n';
-      editor.current?.insertBefore(textNode, selection?.anchorNode?.parentNode?.nextSibling);
+      if (initilizedP) {
+        const textNode = initilizedP.cloneNode(true);
+        if (textNode.firstChild) {
+          textNode.firstChild.textContent = '';
+          editor.current?.insertBefore(textNode, findParagraph(selection.anchorNode)?.nextSibling);
 
-      selectionRange?.setStart(textNode.firstChild, 0);
-      selectionRange?.setEnd(textNode.firstChild, 0);
-      // console.log('enter');
-      // document.execCommand('insertHTML', false, '<br></br>');
-      // const selection = window.getSelection();
-      // const anchorNode = selection?.anchorNode;
-      // initilizedSpan.textContent = '';
-      // initlizedP?.appendChild(initilizedSpan);
-      // const paragraph = initlizedP;
-      // // // const element = React.createElement(Text, { children: '' });
-      // console.log(anchorNode?.nodeName);
-      // if (anchorNode?.nodeName === 'SPAN') {
-      //   insertAfter(paragraph?.cloneNode(true), anchorNode?.parentNode);
-      // } else if (anchorNode?.nodeName === 'P') {
-      //   insertAfter(paragraph?.cloneNode(true), anchorNode);
-      // } else {
-      //   insertAfter(paragraph?.cloneNode(true), anchorNode?.parentNode?.parentNode);
-      // }
+          selectionRange?.setStart(textNode.firstChild, 0);
+          selectionRange?.setEnd(textNode.firstChild, 0);
+          selectionRange?.detach();
+        }
+      }
     }
   }
 
@@ -216,10 +212,13 @@ export function Writer(props: Props) {
     }
   }
 
-  function insertAfter(newNode: Node, referenceNode: Node) {
-    console.log('before', referenceNode.parentNode?.childNodes);
-    referenceNode?.parentNode?.insertBefore(newNode, referenceNode.nextSibling);
-    console.log('after', referenceNode.parentNode?.childNodes);
+  function findParagraph(node: Node | null): Node | null {
+    if (node?.nodeName === 'P') {
+      console.log(node);
+      return node;
+    } else {
+      return findParagraph(node.parentNode);
+    }
   }
 
   return (
