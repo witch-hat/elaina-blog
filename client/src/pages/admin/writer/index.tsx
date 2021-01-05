@@ -6,6 +6,7 @@ import { Writer } from './component/Writer';
 const Container = styled.div({
   display: 'flex',
   width: '100%',
+  height: '100%',
   backgroundColor: '#ffffff'
 });
 
@@ -13,7 +14,7 @@ export default function Admin() {
   return (
     <Container>
       {/* <MenuButton isActive={true} desc={'D'}></MenuButton> */}
-      <Writer></Writer>
+      <Writer />
     </Container>
   );
 }
