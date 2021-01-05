@@ -182,11 +182,13 @@ export function Writer(props: Props) {
 
     if (e.key === 'Backspace') {
       console.log(text, text.length);
-      if (text === '' || '\n') {
-        console.log('child length', editor.current?.childNodes.length);
-        if (editor.current?.childNodes.length === 1) {
+      if (editor.current?.childNodes.length === 1) {
+        if (text === '' || text === '\n') {
           console.log('not delete');
           e.preventDefault();
+          if (editor.current?.firstElementChild?.firstElementChild?.innerHTML === '<br>') {
+            editor.current.firstElementChild.firstElementChild.innerHTML = '';
+          }
         }
       }
     }
