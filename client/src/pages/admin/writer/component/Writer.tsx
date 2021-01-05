@@ -187,7 +187,7 @@ export function Writer(props: Props) {
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
     if (e.key === 'Backspace') {
-      if (editor.current?.textContent?.length === 0) {
+      if (editor.current?.childElementCount === 1 && editor.current?.textContent?.length === 0) {
         e.preventDefault();
       }
     }
