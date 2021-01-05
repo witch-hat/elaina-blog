@@ -190,6 +190,10 @@ export function Writer(props: Props) {
             editor.current.firstElementChild.firstElementChild.innerHTML = '';
           }
         }
+        if (text.length === 1) {
+          editor.current.firstChild.firstChild.textContent = '';
+          e.preventDefault();
+        }
       }
     }
     if (e.key === 'Enter') {
