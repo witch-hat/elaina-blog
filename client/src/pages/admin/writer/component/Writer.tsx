@@ -173,19 +173,20 @@ export function Writer(props: Props) {
     parseTextContent();
   }
 
-  function keyDown(e: React.KeyboardEvent<HTMLDivElement>) {
+  function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
     const selection = window.getSelection();
     const selectionRange = selection?.getRangeAt(0);
 
     console.log(selection?.anchorNode, selection?.anchorNode?.parentNode?.parentNode);
-    console.log(selection?.anchorOffset);
+    console.log(e.key);
 
     if (e.key === 'Backspace') {
-      if (text.length <= 1) {
-        if (editor.current?.firstChild?.firstChild) {
+      console.log(text, text.length);
+      if (text === '' || '\n') {
+        console.log('child length', editor.current?.childNodes.length);
+        if (editor.current?.childNodes.length === 1) {
+          console.log('not delete');
           e.preventDefault();
-          setText('');
-          editor.current.firstChild.firstChild.textContent = '';
         }
       }
     }
@@ -196,7 +197,7 @@ export function Writer(props: Props) {
         const textNode = initilizedP.cloneNode(true);
         if (textNode.firstChild) {
           textNode.firstChild.textContent = '';
-          editor.current?.insertBefore(textNode, findNodeWithNodeName(selection.anchorNode, 'P')?.nextSibling);
+          editor.current?.insertBefore(textNode, findParentNodeWithNodeName(selection.anchorNode, 'P')?.nextSibling);
 
           selectionRange?.setStart(textNode.firstChild, 0);
           selectionRange?.setEnd(textNode.firstChild, 0);
@@ -212,12 +213,12 @@ export function Writer(props: Props) {
     }
   }
 
-  function findNodeWithNodeName(node: Node | null, nodeName: string): Node | null {
+  function findParentNodeWithNodeName(node: Node | null, nodeName: string): Node | null {
     if (node?.nodeName === nodeName) {
       console.log(node);
       return node;
     } else {
-      return findNodeWithNodeName(node.parentNode, nodeName);
+      return findParentNodeWithNodeName(node.parentNode, nodeName);
     }
   }
 
@@ -228,10 +229,10 @@ export function Writer(props: Props) {
         contentEditable={true}
         suppressContentEditableWarning={true}
         onPaste={paste}
-        onKeyDown={keyDown}
+        onKeyDown={handleKeyDown}
         onInput={parseTextContent}
       >
-        <Text></Text>
+        <Text onKeyDown={handleKeyDown}></Text>
       </Editor>
       <div style={{ marginLeft: '2rem', display: 'flex', flexDirection: 'column' }}>
         <ReactMarkdown plugins={[gfm]} className={styles['markdown-body']} children={text}></ReactMarkdown>
