@@ -196,7 +196,7 @@ export function Writer(props: Props) {
         const textNode = initilizedP.cloneNode(true);
         if (textNode.firstChild) {
           textNode.firstChild.textContent = '';
-          editor.current?.insertBefore(textNode, findParagraph(selection.anchorNode)?.nextSibling);
+          editor.current?.insertBefore(textNode, findNodeWithNodeName(selection.anchorNode, 'P')?.nextSibling);
 
           selectionRange?.setStart(textNode.firstChild, 0);
           selectionRange?.setEnd(textNode.firstChild, 0);
@@ -212,12 +212,12 @@ export function Writer(props: Props) {
     }
   }
 
-  function findParagraph(node: Node | null): Node | null {
-    if (node?.nodeName === 'P') {
+  function findNodeWithNodeName(node: Node | null, nodeName: string): Node | null {
+    if (node?.nodeName === nodeName) {
       console.log(node);
       return node;
     } else {
-      return findParagraph(node.parentNode);
+      return findNodeWithNodeName(node.parentNode, nodeName);
     }
   }
 
