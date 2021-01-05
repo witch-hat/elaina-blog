@@ -189,9 +189,9 @@ export function Writer(props: Props) {
           if (editor.current?.firstElementChild?.firstElementChild?.innerHTML === '<br>') {
             editor.current.firstElementChild.firstElementChild.innerHTML = '';
           }
-        }
-        if (text.length === 1) {
+        } else if (text.length === 1) {
           editor.current.firstChild.firstChild.textContent = '';
+          setText('');
           e.preventDefault();
         }
       }
@@ -238,7 +238,7 @@ export function Writer(props: Props) {
         onKeyDown={handleKeyDown}
         onInput={parseTextContent}
       >
-        <Text onKeyDown={handleKeyDown}></Text>
+        <Text></Text>
       </Editor>
       <div style={{ marginLeft: '2rem', display: 'flex', flexDirection: 'column' }}>
         <ReactMarkdown plugins={[gfm]} className={styles['markdown-body']} children={text}></ReactMarkdown>
