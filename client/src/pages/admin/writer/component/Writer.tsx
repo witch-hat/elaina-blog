@@ -21,14 +21,17 @@ const Editor = styled.div({
   border: '1px solid #888',
   borderRadius: '12px',
   wordBreak: 'break-word',
-  whiteSpace: 'pre-wrap'
+  whiteSpace: 'pre-wrap',
+  overflowY: 'auto'
 });
 
 const PreviewContainer = styled.div({
   display: 'flex',
   flex: '1',
+  height: 'calc(100vh - 5rem - 40px)',
   marginLeft: '2rem',
-  padding: '.5rem'
+  padding: '.5rem',
+  overflowY: 'auto'
 });
 
 const Paragraph = styled.p({
@@ -59,7 +62,7 @@ export function Writer(props: Props) {
     //   e.preventDefault();
     // }
     if (e.key === 'Backspace') {
-      if (editor.current?.textContent?.length === 0) {
+      if (editor.current?.textContent?.length === 0 && editor.current.childNodes.length === 1) {
         e.preventDefault();
       }
     }
@@ -68,6 +71,7 @@ export function Writer(props: Props) {
   function handlePaste(e: React.ClipboardEvent<HTMLDivElement>) {
     e.preventDefault();
     const clipedData = e.clipboardData.getData('text/plain');
+    console.log(clipedData.split('\n').map((t) => t === '\n'));
     document.execCommand('insertText', false, clipedData);
   }
 
