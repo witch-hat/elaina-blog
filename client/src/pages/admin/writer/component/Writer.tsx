@@ -5,20 +5,36 @@ import styled from 'styled-components';
 import styles from 'src/styles/MarkdownStyles.module.css';
 import gfm from 'remark-gfm';
 
+const Container = styled.div({
+  display: 'flex',
+  width: '100%'
+});
+
 const Editor = styled.div({
   display: 'flex',
+  flex: '1',
   flexDirection: 'column',
-  width: '500px',
+  height: 'calc(100vh - 5rem - 40px)',
   fontFamily: "'Nanum Gothic', sans-serif",
   outline: 'none',
   padding: '.5rem',
   border: '1px solid #888',
-  borderRadius: '12px'
+  borderRadius: '12px',
+  wordBreak: 'break-word',
+  whiteSpace: 'pre-wrap'
+});
+
+const PreviewContainer = styled.div({
+  display: 'flex',
+  flex: '1',
+  marginLeft: '2rem',
+  padding: '.5rem'
 });
 
 const Paragraph = styled.p({
   display: 'inline-block',
-  width: '100%'
+  width: '100%',
+  wordBreak: 'keep-all'
 });
 
 function Text(props: { children?: string }) {
@@ -56,7 +72,7 @@ export function Writer(props: Props) {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'row' }}>
+    <Container>
       <Editor
         ref={editor}
         contentEditable={true}
@@ -67,9 +83,9 @@ export function Writer(props: Props) {
       >
         <Text></Text>
       </Editor>
-      <div style={{ marginLeft: '2rem', display: 'flex', flexDirection: 'column' }}>
+      <PreviewContainer>
         <ReactMarkdown plugins={[gfm]} className={styles['markdown-body']} children={text}></ReactMarkdown>
-      </div>
-    </div>
+      </PreviewContainer>
+    </Container>
   );
 }
