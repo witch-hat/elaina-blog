@@ -6,7 +6,7 @@ import { Writer } from './component/Writer';
 const Container = styled.div({
   display: 'flex',
   width: '100%',
-  height: '100%',
+  height: '600px',
   backgroundColor: '#ffffff'
 });
 

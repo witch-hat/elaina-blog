@@ -1,53 +1,75 @@
-import 'codemirror/lib/codemirror.css';
-import '@toast-ui/editor/dist/toastui-editor.css';
+import React, { createElement, useEffect, useRef } from 'react';
+import { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import styled from 'styled-components';
+import styles from 'src/styles/MarkdownStyles.module.css';
+import gfm from 'remark-gfm';
 
-import dynamic from 'next/dynamic';
-import * as React from 'react';
-import { Editor as EditorType, EditorProps } from '@toast-ui/react-editor';
-import { WriterWrapperProps } from './WriterWrapper';
+const Editor = styled.div({
+  display: 'flex',
+  flexDirection: 'column',
+  width: '500px',
+  fontFamily: "'Nanum Gothic', sans-serif",
+  outline: 'none',
+  padding: '.5rem',
+  border: '1px solid #888',
+  borderRadius: '12px'
+});
 
-interface EditorPropsWithHandlers extends EditorProps {
-  onChange?(value: string): void;
+const Paragraph = styled.p({
+  display: 'inline-block',
+  width: '100%'
+});
+
+function Text(props: { children?: string }) {
+  return <Paragraph>{props.children !== undefined ? props.children : <br></br>}</Paragraph>;
 }
 
-const Editor = dynamic<WriterWrapperProps>(() => import('./WriterWrapper'), { ssr: false });
-const EditorWithForwardedRef = React.forwardRef<EditorType | undefined, EditorPropsWithHandlers>((props, ref) => (
-  <Editor {...props} forwardedRef={ref as React.MutableRefObject<EditorType>} />
-));
+interface Props {}
 
-interface Props extends EditorProps {
-  onChange(value: string): void;
+export function Writer(props: Props) {
+  const editor = useRef<HTMLDivElement>(null);
+  const [text, setText] = useState<string>('');
 
-  valueType?: 'markdown' | 'html';
-}
+  function parseTextContent() {
+    if (editor.current !== null) {
+      setText(editor.current.innerText.replaceAll('\n\n', '  \n').replaceAll('\n  \n', '\n&#8203;  \n').replaceAll('\n\n', '\n'));
+    }
+  }
 
-export function Writer(props: any) {
-  const { initialValue, previewStyle, height, initialEditType, useCommandShortcut } = props;
+  function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
+    // if (e.key === '1') {
+    //   document.execCommand('insertHTML', false, '<span>**dsa**</span>');
+    //   e.preventDefault();
+    // }
+    if (e.key === 'Backspace') {
+      if (editor.current?.textContent?.length === 0) {
+        e.preventDefault();
+      }
+    }
+  }
 
-  const editorRef = React.useRef<EditorType>();
-  // const handleChange = React.useCallback(() => {
-  //   if (!editorRef.current) {
-  //     return;
-  //   }
-
-  //   const instance = editorRef.current.getInstance();
-  //   const valueType = props.valueType || 'markdown';
-
-  //   props.onChange(valueType === 'markdown' ? instance.getMarkdown() : instance.getHtml());
-  // }, [props, editorRef]);
+  function handlePaste(e: React.ClipboardEvent<HTMLDivElement>) {
+    e.preventDefault();
+    const clipedData = e.clipboardData.getData('text/plain');
+    document.execCommand('insertText', false, clipedData);
+  }
 
   return (
-    <div>
-      <EditorWithForwardedRef
-        {...props}
-        initialValue={initialValue || 'hello react editor world!'}
-        previewStyle={previewStyle || 'vertical'}
-        height={height || '600px'}
-        initialEditType={initialEditType || 'markdown'}
-        useCommandShortcut={useCommandShortcut || true}
-        ref={editorRef}
-        // onChange={handleChange}
-      />
+    <div style={{ display: 'flex', flexDirection: 'row' }}>
+      <Editor
+        ref={editor}
+        contentEditable={true}
+        suppressContentEditableWarning={true}
+        onKeyDown={handleKeyDown}
+        onPaste={handlePaste}
+        onInput={parseTextContent}
+      >
+        <Text></Text>
+      </Editor>
+      <div style={{ marginLeft: '2rem', display: 'flex', flexDirection: 'column' }}>
+        <ReactMarkdown plugins={[gfm]} className={styles['markdown-body']} children={text}></ReactMarkdown>
+      </div>
     </div>
   );
 }
