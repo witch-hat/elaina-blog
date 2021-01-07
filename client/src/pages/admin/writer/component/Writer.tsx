@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import styles from 'src/styles/MarkdownStyles.module.css';
 import gfm from 'remark-gfm';
 
+import { Menu } from './Menu';
+
 const Container = styled.div({
   display: 'flex',
   width: '100%'
@@ -13,11 +15,12 @@ const Container = styled.div({
 const Editor = styled.div({
   display: 'flex',
   flex: '1',
+  position: 'relative',
   flexDirection: 'column',
   height: 'calc(100vh - 5rem - 40px)',
   fontFamily: "'Nanum Gothic', sans-serif",
   outline: 'none',
-  padding: '.5rem',
+  padding: '3.5rem .5rem .5rem',
   border: '1px solid #888',
   borderRadius: '12px',
   wordBreak: 'break-word',
@@ -70,8 +73,8 @@ export function Writer(props: Props) {
 
   function handlePaste(e: React.ClipboardEvent<HTMLDivElement>) {
     e.preventDefault();
-    const clipedData = e.clipboardData.getData('text/plain');
-    console.log(clipedData.split('\n').map((t) => t === '\n'));
+    const clipedData = e.clipboardData.getData('text/plain').replaceAll('&#8203;', '');
+    console.log(clipedData.split('').map((t) => t === ''));
     document.execCommand('insertText', false, clipedData);
   }
 
@@ -85,6 +88,7 @@ export function Writer(props: Props) {
         onPaste={handlePaste}
         onInput={parseTextContent}
       >
+        <Menu />
         <Text></Text>
       </Editor>
       <PreviewContainer>
