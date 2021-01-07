@@ -13,7 +13,8 @@ const Toggle = styled.div({
   top: '2.1rem',
   padding: '.2rem',
   left: '0',
-  backgroundColor: 'rgba(0,0,0,.2)',
+  backgroundColor: 'rgba(0,0,0,.8)',
+  color: '#f1f2f3',
   display: 'none'
 });
 

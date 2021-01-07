@@ -22,36 +22,32 @@ interface Props {}
 
 export function Menu(props: Props) {
   const selection: Selection = window.getSelection();
-  const selectionRange: Range = selection.getRangeAt(0);
 
   console.log(selection.anchorOffset, selection.focusOffset);
 
-  function insertMarkdownStartAndEnd(text: string, markdown: string) {
+  function insertMarkdownStartAndEnd(text: string, markdown: string) {}
 
-  }
-
-  function insertMarkdownLineStart(text: string, markdown: string) {
-
-  }
+  function insertMarkdownLineStart(text: string, markdown: string) {}
 
   return (
     <Container contentEditable={false}>
-      <MenuButton isActive desc='Bold' onClick={() => console.log(selection.anchorNode?.textContent, selection.focusOffset, selection)}>
-        <FormatBoldBlack />
+      <MenuButton isActive desc='Bold' onClick={() => {}}>
+        {/* <FormatBoldBlack /> */}
+        <i className='fas fa-bold'></i>
       </MenuButton>
-      <MenuButton isActive desc='Italic' onClick={() => console.log(selection.anchorNode?.textContent, selection.focusOffset, selection)}>
+      <MenuButton isActive desc='Italic' onClick={() => {}}>
         <span>
-          <i>Ɪ</i>
+          <i className='fas fa-italic'></i>
         </span>
       </MenuButton>
-      <MenuButton isActive desc='Code Block' onClick={() => console.log(selection.anchorNode?.textContent, selection.focusOffset, selection)}>
-        <span>&lt;&nbsp;&gt;</span>
+      <MenuButton isActive desc='Code Block' onClick={() => {}}>
+        <i className='fas fa-code'></i>
       </MenuButton>
-      <MenuButton isActive desc='List' onClick={() => console.log(selection.anchorNode?.textContent, selection.focusOffset, selection)}>
-        <span>*</span>
+      <MenuButton isActive desc='List' onClick={() => {}}>
+        <i className='fas fa-list-ul'></i>
       </MenuButton>
-      <MenuButton isActive desc='Quote' onClick={() => console.log(selection.anchorNode?.textContent, selection.focusOffset, selection)}>
-        <span>></span>
+      <MenuButton isActive desc='Quote' onClick={() => {}}>
+        <i className='fas fa-quote-left'></i>
       </MenuButton>
     </Container>
   );
