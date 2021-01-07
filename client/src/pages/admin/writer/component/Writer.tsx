@@ -12,15 +12,21 @@ const Container = styled.div({
   width: '100%'
 });
 
+const EditorContainer = styled.div({
+  display: 'flex',
+  flexDirection: 'column',
+  flex: '1'
+});
+
 const Editor = styled.div({
   display: 'flex',
-  flex: '1',
-  position: 'relative',
+  width: '100%',
   flexDirection: 'column',
-  height: 'calc(100vh - 5rem - 40px)',
+  marginTop: '.75rem',
+  height: 'calc(100vh - 8.75rem - 40px)',
   fontFamily: "'Nanum Gothic', sans-serif",
   outline: 'none',
-  padding: '3.5rem .5rem .5rem',
+  padding: '.5rem',
   border: '1px solid #888',
   borderRadius: '12px',
   wordBreak: 'break-word',
@@ -64,6 +70,7 @@ export function Writer(props: Props) {
     //   document.execCommand('insertHTML', false, '<span>**dsa**</span>');
     //   e.preventDefault();
     // }
+    console.log(editor.current.childNodes.length);
     if (e.key === 'Backspace') {
       if (editor.current?.textContent?.length === 0 && editor.current.childNodes.length === 1) {
         e.preventDefault();
@@ -80,17 +87,19 @@ export function Writer(props: Props) {
 
   return (
     <Container>
-      <Editor
-        ref={editor}
-        contentEditable={true}
-        suppressContentEditableWarning={true}
-        onKeyDown={handleKeyDown}
-        onPaste={handlePaste}
-        onInput={parseTextContent}
-      >
+      <EditorContainer>
         <Menu />
-        <Text></Text>
-      </Editor>
+        <Editor
+          ref={editor}
+          contentEditable={true}
+          suppressContentEditableWarning={true}
+          onKeyDown={handleKeyDown}
+          onPaste={handlePaste}
+          onInput={parseTextContent}
+        >
+          <Text></Text>
+        </Editor>
+      </EditorContainer>
       <PreviewContainer>
         <ReactMarkdown plugins={[gfm]} className={styles['markdown-body']} children={text}></ReactMarkdown>
       </PreviewContainer>

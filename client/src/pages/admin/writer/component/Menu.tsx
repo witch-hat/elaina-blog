@@ -8,14 +8,9 @@ const Container = styled.div({
   display: 'flex',
   width: '100%',
   height: '3rem',
-  backgroundColor: '#eee',
   alignItems: 'center',
-  position: 'absolute',
-  top: '0',
-  left: '0',
-  right: '0',
   userSelect: 'none',
-  padding: '.4rem'
+  padding: '.4rem 0'
 });
 
 interface Props {}
@@ -36,9 +31,10 @@ export function Menu(props: Props) {
         <i className='fas fa-bold'></i>
       </MenuButton>
       <MenuButton isActive desc='Italic' onClick={() => {}}>
-        <span>
-          <i className='fas fa-italic'></i>
-        </span>
+        <i className='fas fa-italic'></i>
+      </MenuButton>
+      <MenuButton isActive desc='Color' onClick={() => {}}>
+        <i className='fas fa-font'></i>
       </MenuButton>
       <MenuButton isActive desc='Code Block' onClick={() => {}}>
         <i className='fas fa-code'></i>
@@ -48,6 +44,9 @@ export function Menu(props: Props) {
       </MenuButton>
       <MenuButton isActive desc='Quote' onClick={() => {}}>
         <i className='fas fa-quote-left'></i>
+      </MenuButton>
+      <MenuButton isActive desc='Upload Image' onClick={() => {}}>
+        <i className='far fa-images'></i>
       </MenuButton>
     </Container>
   );
