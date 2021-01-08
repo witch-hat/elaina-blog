@@ -16,21 +16,41 @@ const Container = styled.div({
 interface Props {}
 
 export function Menu(props: Props) {
-  const selection: Selection = window.getSelection();
+  function insertMarkdownStartAndEnd(markdown: string) {
+    const selection: Selection = window.getSelection();
+    if (selection.anchorNode === selection.focusNode) {
+      const newText =
+        selection.anchorNode?.textContent?.slice(0, selection.anchorOffset) +
+        markdown +
+        selection.anchorNode?.textContent?.slice(selection.anchorOffset, selection.focusOffset) +
+        markdown +
+        selection.anchorNode?.textContent?.slice(selection.focusOffset);
 
-  console.log(selection.anchorOffset, selection.focusOffset);
+      selection.anchorNode.textContent = newText;
+    } else {
+      const newAnchorText =
+        selection.anchorNode?.textContent?.slice(0, selection.anchorOffset) +
+        markdown +
+        selection.anchorNode?.textContent?.slice(selection.anchorOffset);
+      const newFocusText =
+        selection.focusNode?.textContent?.slice(0, selection.focusOffset) +
+        markdown +
+        selection.focusNode?.textContent?.slice(selection.focusOffset);
 
-  function insertMarkdownStartAndEnd(text: string, markdown: string) {}
+      selection.anchorNode.textContent = newAnchorText;
+      selection.focusNode.textContent = newFocusText;
+    }
+  }
 
-  function insertMarkdownLineStart(text: string, markdown: string) {}
+  function insertMarkdownLineStart(markdown: string) {}
 
   return (
     <Container contentEditable={false}>
-      <MenuButton isActive desc='Bold' onClick={() => {}}>
+      <MenuButton isActive desc='Bold' onClick={() => insertMarkdownStartAndEnd('**')}>
         {/* <FormatBoldBlack /> */}
         <i className='fas fa-bold'></i>
       </MenuButton>
-      <MenuButton isActive desc='Italic' onClick={() => {}}>
+      <MenuButton isActive desc='Italic' onClick={() => insertMarkdownStartAndEnd('*')}>
         <i className='fas fa-italic'></i>
       </MenuButton>
       <MenuButton isActive desc='Color' onClick={() => {}}>
