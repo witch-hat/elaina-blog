@@ -18,16 +18,35 @@ interface Props {}
 export function Menu(props: Props) {
   const selection: Selection = window.getSelection();
 
+  function findNodeWithNodeName(startNode: Node, name: string): Node {
+    if (startNode.nodeName === name) {
+      return startNode;
+    } else {
+      return findNodeWithNodeName(startNode.parentNode, name);
+    }
+  }
+
   function insertMarkdownStartAndEnd(startMarkdown: string, endMarkdown: string = startMarkdown) {
     if (selection.anchorNode === selection.focusNode) {
-      const newText =
-        selection.anchorNode?.textContent?.slice(0, selection.anchorOffset) +
-        startMarkdown +
-        selection.anchorNode?.textContent?.slice(selection.anchorOffset, selection.focusOffset) +
-        endMarkdown +
-        selection.anchorNode?.textContent?.slice(selection.focusOffset);
+      if (selection.anchorOffset <= selection.focusOffset) {
+        const newText =
+          selection.anchorNode?.textContent?.slice(0, selection.anchorOffset) +
+          startMarkdown +
+          selection.anchorNode?.textContent?.slice(selection.anchorOffset, selection.focusOffset) +
+          endMarkdown +
+          selection.anchorNode?.textContent?.slice(selection.focusOffset);
 
-      selection.anchorNode.textContent = newText;
+        selection.anchorNode.textContent = newText;
+      } else {
+        const newText =
+          selection.anchorNode?.textContent?.slice(0, selection.focusOffset) +
+          startMarkdown +
+          selection.anchorNode?.textContent?.slice(selection.focusOffset, selection.anchorOffset) +
+          endMarkdown +
+          selection.anchorNode?.textContent?.slice(selection.anchorOffset);
+
+        selection.anchorNode.textContent = newText;
+      }
     } else {
       const newAnchorText =
         selection.anchorNode?.textContent?.slice(0, selection.anchorOffset) +
@@ -62,14 +81,6 @@ export function Menu(props: Props) {
     }
   }
 
-  function findNodeWithNodeName(startNode: Node, name: string): Node {
-    if (startNode.nodeName === name) {
-      return startNode;
-    } else {
-      return findNodeWithNodeName(startNode.parentNode, name);
-    }
-  }
-
   return (
     <Container contentEditable={false}>
       <MenuButton isActive desc='Bold' onClick={() => insertMarkdownStartAndEnd('**')}>
@@ -82,7 +93,7 @@ export function Menu(props: Props) {
       <MenuButton isActive desc='Color' onClick={() => insertMarkdownStartAndEnd("<span style='color:#ccc'>", '</span>')}>
         <i className='fas fa-font'></i>
       </MenuButton>
-      <MenuButton isActive desc='Code Block' onClick={() => {}}>
+      <MenuButton isActive desc='Code Block' onClick={() => insertMarkdownStartAndEnd('\n```\n')}>
         <i className='fas fa-code'></i>
       </MenuButton>
       <MenuButton isActive desc='List' onClick={() => insertMarkdownLineStart('* ')}>
