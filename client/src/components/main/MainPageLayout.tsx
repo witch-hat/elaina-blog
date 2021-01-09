@@ -3,10 +3,6 @@ import styled from 'styled-components';
 import CategoryNavigation from './CategoryNavigation';
 import Profile from './Profile';
 
-import { useSelector } from 'react-redux';
-import { RootState } from 'src/redux/rootReducer';
-import { ThemeMode } from 'src/redux/common/type';
-
 const Container = styled.div({
   display: 'flex',
   justifyContent: 'center',
@@ -40,13 +36,11 @@ interface Props {
 }
 
 export function MainPageLayout(props: Props) {
-  const theme: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
-
   return (
     <Container>
-      <Profile theme={theme} />
+      <Profile />
       <Wrapper>
-        <CategoryNavigation theme={theme} />
+        <CategoryNavigation />
         {props.children}
       </Wrapper>
     </Container>

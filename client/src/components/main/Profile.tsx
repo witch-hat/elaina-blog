@@ -5,6 +5,9 @@ import { RoundImage, InputBox } from 'src/components';
 import { ProfileImageCropper } from './ProfileImageCropper';
 import { mockUpData } from 'src/resources';
 import { theme } from 'src/styles';
+
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 
 const Container = styled.aside({
@@ -180,11 +183,10 @@ const Editor = styled.span<{ themeMode: ThemeMode }>((props) => ({
   }
 }));
 
-interface Props {
-  theme: ThemeMode;
-}
+interface Props {}
 
 export default function Profile(props: Props) {
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const [isEditMode, setIsEditMode] = useState(false);
   const [isSelectImage, setIsSelecImage] = useState(false);
   const [selectedImagePath, setSelectedImagePath] = useState('');
@@ -212,7 +214,7 @@ export default function Profile(props: Props) {
         />
         {isEditMode && (
           <>
-            <ChangeImageButton htmlFor='profile-select' themeMode={props.theme}>
+            <ChangeImageButton htmlFor='profile-select' themeMode={themeMode}>
               <i className='fas fa-camera'></i>&nbsp;Edit
             </ChangeImageButton>
             <FileSelector
@@ -233,7 +235,7 @@ export default function Profile(props: Props) {
       <ListWrapper>
         <Description>
           {isEditMode ? (
-            <Editor themeMode={props.theme} role='textbox' contentEditable defaultValue={mockUpData.profile.introduce}>
+            <Editor themeMode={themeMode} role='textbox' contentEditable defaultValue={mockUpData.profile.introduce}>
               {mockUpData.profile.introduce}
             </Editor>
           ) : (
@@ -243,7 +245,7 @@ export default function Profile(props: Props) {
         <Description>
           <Icon className='fas fa-link'></Icon>&nbsp;
           {isEditMode ? (
-            <Input themeMode={props.theme} type='text' defaultValue={mockUpData.profile.link} />
+            <Input themeMode={themeMode} type='text' defaultValue={mockUpData.profile.link} />
           ) : (
             <a href={mockUpData.profile.link} target='_blank' rel='noopener noreferer nofollow'>
               <span>{mockUpData.profile.link}</span>
@@ -253,7 +255,7 @@ export default function Profile(props: Props) {
         <Description>
           <Icon className='far fa-building'></Icon>&nbsp;
           {isEditMode ? (
-            <Input themeMode={props.theme} type='text' defaultValue={mockUpData.profile.company} />
+            <Input themeMode={themeMode} type='text' defaultValue={mockUpData.profile.company} />
           ) : (
             <span>{mockUpData.profile.company}</span>
           )}
@@ -261,7 +263,7 @@ export default function Profile(props: Props) {
         <Description>
           <Icon className='fas fa-map-marker-alt'></Icon>&nbsp;
           {isEditMode ? (
-            <Input themeMode={props.theme} type='text' defaultValue={mockUpData.profile.location} />
+            <Input themeMode={themeMode} type='text' defaultValue={mockUpData.profile.location} />
           ) : (
             <span>{mockUpData.profile.location}</span>
           )}
@@ -269,7 +271,7 @@ export default function Profile(props: Props) {
         <Description>
           <Icon className='far fa-envelope'></Icon>&nbsp;
           {isEditMode ? (
-            <Input themeMode={props.theme} type='text' defaultValue={mockUpData.profile.email} />
+            <Input themeMode={themeMode} type='text' defaultValue={mockUpData.profile.email} />
           ) : (
             <a href='mailto:'>
               <span>{mockUpData.profile.email}</span>
@@ -280,7 +282,7 @@ export default function Profile(props: Props) {
       <ButtonContainer>
         {isEditMode ? (
           <>
-            <SaveButton themeMode={props.theme} onClick={() => setIsEditMode(false)}>
+            <SaveButton themeMode={themeMode} onClick={() => setIsEditMode(false)}>
               Save
             </SaveButton>
             <CancelButton onClick={() => setIsEditMode(false)}>Cancel</CancelButton>

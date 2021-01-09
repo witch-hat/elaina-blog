@@ -2,8 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { InputBox } from 'src/components';
-import { ThemeMode } from 'src/redux/common/type';
 import { theme } from 'src/styles';
+
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/redux/rootReducer';
+import { ThemeMode } from 'src/redux/common/type';
 
 const Container = styled.div({
   display: 'flex',
@@ -48,39 +51,23 @@ const LogInButton = styled.button<{ themeMode: ThemeMode }>((props) => ({
   color: '#f1f2f3'
 }));
 
-interface Props {
-  theme: ThemeMode;
-}
+interface Props {}
 
 export function LogIn(props: Props) {
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+
   return (
     <Container>
       <LogInForm>
         <Wrapper>
           <Label>ID</Label>
-          <InputBox
-            id='admin-id'
-            type='email'
-            minLength={4}
-            maxLength={100}
-            placeholder='Email'
-            theme={props.theme}
-            styles={{ width: '60%' }}
-          />
+          <InputBox id='admin-id' type='email' minLength={4} maxLength={100} placeholder='Email' styles={{ width: '60%' }} />
         </Wrapper>
         <Wrapper>
           <Label>PW</Label>
-          <InputBox
-            id='admin-id'
-            type='password'
-            minLength={4}
-            maxLength={16}
-            placeholder='PW'
-            theme={props.theme}
-            styles={{ width: '60%' }}
-          />
+          <InputBox id='admin-id' type='password' minLength={4} maxLength={16} placeholder='PW' styles={{ width: '60%' }} />
         </Wrapper>
-        <LogInButton themeMode={props.theme}>Log In</LogInButton>
+        <LogInButton themeMode={themeMode}>Log In</LogInButton>
       </LogInForm>
     </Container>
   );

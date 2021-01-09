@@ -93,7 +93,7 @@ const Alert = styled.div(
 
 export default function PostId() {
   const router = useRouter();
-  const themeStore: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const width = useWidth();
   const [showPostCategory, setShowPostCategory] = useState(false);
   const isAlerted = useRef<boolean>(false);
@@ -136,15 +136,15 @@ export default function PostId() {
       onTouchEnd={(event: React.TouchEvent) => handleTouchEnd(event)}
     >
       {width > 767 ? (
-        <PostCategory theme={themeStore} />
+        <PostCategory />
       ) : (
         <FocusWrapper visible={showPostCategory} onClickOutside={() => setShowPostCategory(false)}>
-          <PostCategory theme={themeStore} />
+          <PostCategory />
         </FocusWrapper>
       )}
-      <ContentContainer themeMode={themeStore}>
+      <ContentContainer themeMode={themeMode}>
         <Content url={router.query.post} />
-        <CommentContainer theme={themeStore} url={router.query.post} />
+        <CommentContainer url={router.query.post} />
       </ContentContainer>
       <ContentNavigation />
       {/* TODO: Alert shows only first... */}

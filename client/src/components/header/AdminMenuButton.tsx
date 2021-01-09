@@ -3,6 +3,10 @@ import styled from 'styled-components';
 
 import { theme } from 'src/styles';
 
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/redux/rootReducer';
+import { ThemeMode } from 'src/redux/common/type';
+
 const Button = styled.div<{ themeMode: string }>((props) => ({
   flexShrink: 0,
   cursor: 'pointer',
@@ -23,15 +27,14 @@ const RotateIcon = styled.i<{ isOpen: boolean }>((props) => {
   };
 });
 
-interface Props {
-  theme: string;
-}
+interface Props {}
 
 export default function AdminMenuButton(props: Props) {
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <Button onClick={() => setIsMenuOpen(!isMenuOpen)} themeMode={props.theme}>
+    <Button onClick={() => setIsMenuOpen(!isMenuOpen)} themeMode={themeMode}>
       Menu&nbsp;
       <RotateIcon className='fas fa-caret-down' isOpen={isMenuOpen} />
     </Button>

@@ -32,7 +32,7 @@ export default function Layout(props: Props) {
     <>
       <GlobalStyles themeMode={theme} />
       <div>
-        <Header name={mockUpData.blogName} theme={theme} />
+        <Header name={mockUpData.blogName} />
         <Container>{props.children}</Container>
         <Footer />
       </div>

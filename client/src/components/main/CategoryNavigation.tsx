@@ -4,6 +4,10 @@ import styled from 'styled-components';
 
 import NavigationButton from './NavigationButton';
 
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/redux/rootReducer';
+import { ThemeMode } from 'src/redux/common/type';
+
 const Container = styled.nav({
   width: '100%',
   display: 'flex',
@@ -14,26 +18,26 @@ const NavName = styled.span({
   fontWeight: 'bold'
 });
 
-interface Props {
-  theme: string;
-}
+interface Props {}
 
 export default function CategoryNavigation(props: Props) {
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+
   return (
     <Container>
-      <NavigationButton href='/' theme={props.theme}>
+      <NavigationButton href='/'>
         <>
           <i className='fas fa-book'></i>&nbsp;
           <NavName>게시글</NavName>
         </>
       </NavigationButton>
-      <NavigationButton href='/timeline' theme={props.theme}>
+      <NavigationButton href='/timeline'>
         <>
           <i className='fas fa-stream'></i>&nbsp;
           <NavName>TimeLine</NavName>
         </>
       </NavigationButton>
-      <NavigationButton href='/about' theme={props.theme}>
+      <NavigationButton href='/about'>
         <>
           <i className='fas fa-user'></i>&nbsp;
           <NavName>About</NavName>

@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import styled, { keyframes, css } from 'styled-components';
 
-import { ThemeMode } from 'src/redux/common/type';
 import { theme } from 'src/styles';
 import { InputBox, FocusWrapper, useWidth } from 'src/components';
 import { ModeSwitch } from './ModeSwitch';
 import AdminMenuButton from './AdminMenuButton';
+
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/redux/rootReducer';
+import { ThemeMode } from 'src/redux/common/type';
 
 const StyledHeader = styled.header<{ themeMode: ThemeMode }>((props) => {
   return {
@@ -128,10 +131,10 @@ const ResponsiveMenuBox = styled.div<{ themeMode: ThemeMode }>(
 
 interface Props {
   name: string;
-  theme: ThemeMode;
 }
 
 export function Header(props: Props) {
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const width = useWidth();
   const [isMenuVisible, setIsMenuVisible] = useState(width > 767);
 
@@ -144,10 +147,10 @@ export function Header(props: Props) {
   }
 
   return (
-    <StyledHeader themeMode={props.theme}>
+    <StyledHeader themeMode={themeMode}>
       <Container>
         <Link href='/' passHref>
-          <BlogName themeMode={props.theme}>{props.name}</BlogName>
+          <BlogName themeMode={themeMode}>{props.name}</BlogName>
         </Link>
         <Flex>
           <FocusWrapper
@@ -158,7 +161,7 @@ export function Header(props: Props) {
           >
             <>
               {isMenuVisible && (
-                <ResponsiveMenuBox themeMode={props.theme}>
+                <ResponsiveMenuBox themeMode={themeMode}>
                   <ModeSwitch />
                   <SearchForm method='GET' action='/search'>
                     <InputBox
@@ -168,9 +171,8 @@ export function Header(props: Props) {
                       minLength={2}
                       maxLength={10}
                       styles={{ width: '180px', small: { width: '120px', height: '32px' } }}
-                      theme={props.theme}
                     />
-                    <SearchButton type='submit' themeMode={props.theme}>
+                    <SearchButton type='submit' themeMode={themeMode}>
                       <i className='fas fa-search'></i>
                     </SearchButton>
                   </SearchForm>
@@ -178,7 +180,7 @@ export function Header(props: Props) {
               )}
             </>
           </FocusWrapper>
-          <AdminMenuButton theme={props.theme} />
+          <AdminMenuButton />
           <MobileMenuButton onClick={() => onMobileMenuButtonClick()}>
             <i className='fas fa-bars'></i>
           </MobileMenuButton>

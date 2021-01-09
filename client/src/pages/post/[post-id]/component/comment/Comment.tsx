@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 import { BorderBox } from 'src/components';
 import CommentEditor from './CommentEditor';
-import { ThemeMode } from 'src/redux/common/type';
 
 const CommentContainer = styled.div({
   width: '98%',
@@ -86,9 +85,7 @@ const ReplyContainer = styled.div({
   backgroundColor: 'rgba(0,0,0,.01)'
 });
 
-interface Props {
-  theme: ThemeMode;
-}
+interface Props {}
 
 export default function Comment(props: Props) {
   const [isShowingReply, setIsShowingReply] = useState(false);
@@ -96,7 +93,7 @@ export default function Comment(props: Props) {
 
   return (
     <div>
-      <BorderBox isTransform={false} styles={{ margin: '1rem 0 0', width: '100%' }} theme={props.theme}>
+      <BorderBox isTransform={false} styles={{ margin: '1rem 0 0', width: '100%' }}>
         <CommentContainer>
           <DetailsContainer>
             <InformationContainer>
@@ -116,7 +113,7 @@ export default function Comment(props: Props) {
             <ReplyButton onClick={() => setIsShowingReply(!isShowingReply)}>{`${isShowingReply ? 'Hide' : 'Show'} Reply`}</ReplyButton>
             <ReplyButton onClick={() => setIsAddReply(!isAddReply)}>{isAddReply ? 'Cancel' : `Add Reply`}</ReplyButton>
           </ReplyButtonContainer>
-          {isAddReply ? <CommentEditor theme={props.theme} /> : null}
+          {isAddReply ? <CommentEditor /> : null}
           {isShowingReply ? (
             <ReplyContainer>
               <DetailsContainer>

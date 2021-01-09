@@ -1,6 +1,9 @@
 import styled from 'styled-components';
 
 import { theme } from 'src/styles';
+
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 
 interface Styles {
@@ -50,10 +53,11 @@ interface Props {
   maxLength: number;
   placeholder: string;
   styles?: Styles;
-  theme: ThemeMode;
 }
 
 export function InputBox(props: Props) {
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+
   return (
     <Input
       id={props.id}
@@ -63,7 +67,7 @@ export function InputBox(props: Props) {
       maxLength={props.maxLength}
       autoComplete='off'
       styles={props.styles}
-      themeMode={props.theme}
+      themeMode={themeMode}
     />
   );
 }

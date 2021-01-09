@@ -5,7 +5,6 @@ import { useRouter } from 'next/router';
 
 import { BorderBox } from 'src/components';
 import ContentCategoryDetails from './ContentCategoryDetails';
-import { ThemeMode } from 'src/redux/common/type';
 import { mockUpData } from 'src/resources';
 
 const Container = styled.div({
@@ -82,9 +81,7 @@ const PreviewContent = styled.span({
   WebkitBoxOrient: 'vertical'
 });
 
-interface Props {
-  theme: ThemeMode;
-}
+interface Props {}
 
 export default function ContentCategory(props: Props) {
   const router = useRouter();
@@ -97,7 +94,7 @@ export default function ContentCategory(props: Props) {
           return (
             <Link key={category.name} href={`post/${category.posts[category.posts.length - 1].url}`} passHref>
               <a style={{ width: '100%' }}>
-                <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }} theme={props.theme}>
+                <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
                   <Content>
                     <PreviewTextWrapper>
                       <PreviewTitle>{category.name}</PreviewTitle>

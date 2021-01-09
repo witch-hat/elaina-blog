@@ -4,6 +4,10 @@ import styled from 'styled-components';
 
 import { theme } from 'src/styles';
 
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/redux/rootReducer';
+import { ThemeMode } from 'src/redux/common/type';
+
 interface ButtonProps {
   isSelected: boolean;
   themeMode: string;
@@ -30,15 +34,15 @@ const NavButtons = styled.a<ButtonProps>((props) => {
 interface Props {
   href: string;
   children: JSX.Element;
-  theme: string;
 }
 
 export default function NavigationButton(props: Props) {
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const router = useRouter();
 
   return (
     <Link href={props.href}>
-      <NavButtons isSelected={router.pathname === props.href} themeMode={props.theme}>
+      <NavButtons isSelected={router.pathname === props.href} themeMode={themeMode}>
         {props.children}
       </NavButtons>
     </Link>

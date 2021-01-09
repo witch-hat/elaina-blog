@@ -3,6 +3,9 @@ import styled, { css } from 'styled-components';
 
 import { theme } from 'src/styles';
 import { InputBox } from 'src/components';
+
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 
 const EditorContainer = styled.form({
@@ -75,11 +78,11 @@ const SubmitButton = styled.button<{ themeMode: ThemeMode }>((props) => ({
   }
 }));
 
-interface Props {
-  theme: ThemeMode;
-}
+interface Props {}
 
 export default function CommentEditor(props: Props) {
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+
   return (
     <EditorContainer action='/comment' method='POST'>
       <InputWrapper>
@@ -92,7 +95,6 @@ export default function CommentEditor(props: Props) {
             minLength={2}
             placeholder='ID'
             styles={{ width: '100px', height: '2rem', small: { width: '100px', height: '2rem' } }}
-            theme={props.theme}
           />
         </UserInput>
         <UserInput>
@@ -104,12 +106,11 @@ export default function CommentEditor(props: Props) {
             minLength={4}
             placeholder='Password'
             styles={{ width: '100px', height: '2rem', small: { width: '100px', height: '2rem' } }}
-            theme={props.theme}
           />
         </UserInput>
       </InputWrapper>
-      <Editor role='textbox' themeMode={props.theme} contentEditable />
-      <SubmitButton themeMode={props.theme}>덧글 작성</SubmitButton>
+      <Editor role='textbox' themeMode={themeMode} contentEditable />
+      <SubmitButton themeMode={themeMode}>덧글 작성</SubmitButton>
     </EditorContainer>
   );
 }

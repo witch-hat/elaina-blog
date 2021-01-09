@@ -1,6 +1,9 @@
 import styled from 'styled-components';
 
 import { theme } from 'src/styles';
+
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 
 interface Styles {
@@ -36,12 +39,13 @@ interface Props {
   children: JSX.Element;
   isTransform: boolean;
   styles?: Styles;
-  theme: ThemeMode;
 }
 
 export function BorderBox(props: Props) {
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+
   return (
-    <Box isTransform={props.isTransform} styles={props.styles} themeMode={props.theme}>
+    <Box isTransform={props.isTransform} styles={props.styles} themeMode={themeMode}>
       {props.children}
     </Box>
   );

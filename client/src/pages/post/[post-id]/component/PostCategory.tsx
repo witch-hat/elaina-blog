@@ -2,9 +2,11 @@ import React from 'react';
 import styled, { keyframes, css } from 'styled-components';
 
 import { theme } from 'src/styles';
-import { ThemeMode } from 'src/redux/common/type';
-
 import { BorderBox } from 'src/components';
+
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/redux/rootReducer';
+import { ThemeMode } from 'src/redux/common/type';
 
 const FadeIn = keyframes({
   from: {
@@ -84,13 +86,13 @@ const Title = styled.span({
   WebkitBoxOrient: 'vertical'
 });
 
-interface Props {
-  theme: ThemeMode;
-}
+interface Props {}
 
 export default function PostCategory(props: Props) {
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+
   return (
-    <Container themeMode={props.theme}>
+    <Container themeMode={themeMode}>
       <CategoryName>React</CategoryName>
       <TitleContainer>
         <TitleList>
