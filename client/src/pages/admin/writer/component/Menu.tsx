@@ -13,7 +13,9 @@ const Container = styled.div({
   padding: '.4rem 0'
 });
 
-interface Props {}
+interface Props {
+  setText: React.Dispatch<React.SetStateAction<string>>;
+}
 
 export const Menu = React.forwardRef((props: Props, ref: React.RefObject<HTMLDivElement>) => {
   const selection: Selection = window.getSelection();
@@ -67,7 +69,7 @@ export const Menu = React.forwardRef((props: Props, ref: React.RefObject<HTMLDiv
       selection.focusNode.textContent = newFocusText;
       ref.current?.focus();
     }
-    console.log(selection.anchorNode?.parentNode?.parentNode);
+    props.setText(ref.current?.textContent);
   }
 
   function insertMarkdownLineStart(markdown: string) {
@@ -87,6 +89,7 @@ export const Menu = React.forwardRef((props: Props, ref: React.RefObject<HTMLDiv
       if (insertFlag) child[NODE].textContent = markdown + child[NODE].textContent;
     }
     ref.current?.focus();
+    props.setText(ref.current?.textContent);
   }
 
   return (

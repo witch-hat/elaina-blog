@@ -92,7 +92,7 @@ export function Writer(props: Props) {
   return (
     <Container>
       <EditorContainer>
-        <Menu ref={editor} />
+        <Menu ref={editor} setText={setText} />
         <Editor
           ref={editor}
           contentEditable={true}
