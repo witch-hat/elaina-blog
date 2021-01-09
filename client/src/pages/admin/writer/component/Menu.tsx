@@ -16,33 +16,59 @@ const Container = styled.div({
 interface Props {}
 
 export function Menu(props: Props) {
-  function insertMarkdownStartAndEnd(markdown: string) {
-    const selection: Selection = window.getSelection();
+  const selection: Selection = window.getSelection();
+
+  function insertMarkdownStartAndEnd(startMarkdown: string, endMarkdown: string = startMarkdown) {
     if (selection.anchorNode === selection.focusNode) {
       const newText =
         selection.anchorNode?.textContent?.slice(0, selection.anchorOffset) +
-        markdown +
+        startMarkdown +
         selection.anchorNode?.textContent?.slice(selection.anchorOffset, selection.focusOffset) +
-        markdown +
+        endMarkdown +
         selection.anchorNode?.textContent?.slice(selection.focusOffset);
 
       selection.anchorNode.textContent = newText;
     } else {
       const newAnchorText =
         selection.anchorNode?.textContent?.slice(0, selection.anchorOffset) +
-        markdown +
+        startMarkdown +
         selection.anchorNode?.textContent?.slice(selection.anchorOffset);
       const newFocusText =
         selection.focusNode?.textContent?.slice(0, selection.focusOffset) +
-        markdown +
+        endMarkdown +
         selection.focusNode?.textContent?.slice(selection.focusOffset);
 
       selection.anchorNode.textContent = newAnchorText;
       selection.focusNode.textContent = newFocusText;
     }
+    console.log(selection.anchorNode?.parentNode?.parentNode);
   }
 
-  function insertMarkdownLineStart(markdown: string) {}
+  function insertMarkdownLineStart(markdown: string) {
+    const NODE = 1;
+    const list = findNodeWithNodeName(selection.anchorNode, 'DIV').childNodes;
+    const anchorParagraph = findNodeWithNodeName(selection.anchorNode, 'P');
+    const focusParagraph = findNodeWithNodeName(selection.focusNode, 'P');
+    let insertFlag: boolean = false;
+    for (const child of list.entries()) {
+      if (anchorParagraph.isSameNode(child[NODE])) {
+        insertFlag = true;
+      } else if (focusParagraph.isSameNode(child[NODE])) {
+        focusParagraph.textContent = markdown + focusParagraph.textContent;
+        break;
+      }
+
+      if (insertFlag) child[NODE].textContent = markdown + child[NODE].textContent;
+    }
+  }
+
+  function findNodeWithNodeName(startNode: Node, name: string): Node {
+    if (startNode.nodeName === name) {
+      return startNode;
+    } else {
+      return findNodeWithNodeName(startNode.parentNode, name);
+    }
+  }
 
   return (
     <Container contentEditable={false}>
@@ -53,16 +79,16 @@ export function Menu(props: Props) {
       <MenuButton isActive desc='Italic' onClick={() => insertMarkdownStartAndEnd('*')}>
         <i className='fas fa-italic'></i>
       </MenuButton>
-      <MenuButton isActive desc='Color' onClick={() => {}}>
+      <MenuButton isActive desc='Color' onClick={() => insertMarkdownStartAndEnd("<span style='color:#ccc'>", '</span>')}>
         <i className='fas fa-font'></i>
       </MenuButton>
       <MenuButton isActive desc='Code Block' onClick={() => {}}>
         <i className='fas fa-code'></i>
       </MenuButton>
-      <MenuButton isActive desc='List' onClick={() => {}}>
+      <MenuButton isActive desc='List' onClick={() => insertMarkdownLineStart('* ')}>
         <i className='fas fa-list-ul'></i>
       </MenuButton>
-      <MenuButton isActive desc='Quote' onClick={() => {}}>
+      <MenuButton isActive desc='Quote' onClick={() => insertMarkdownLineStart('> ')}>
         <i className='fas fa-quote-left'></i>
       </MenuButton>
       <MenuButton isActive desc='Upload Image' onClick={() => {}}>
