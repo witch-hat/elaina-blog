@@ -15,7 +15,7 @@ const Container = styled.div({
 
 interface Props {}
 
-export function Menu(props: Props) {
+export const Menu = React.forwardRef((props: Props, ref: React.RefObject<HTMLDivElement>) => {
   const selection: Selection = window.getSelection();
 
   function findNodeWithNodeName(startNode: Node, name: string): Node {
@@ -27,6 +27,8 @@ export function Menu(props: Props) {
   }
 
   function insertMarkdownStartAndEnd(startMarkdown: string, endMarkdown: string = startMarkdown) {
+    const selectionRange = selection.getRangeAt(0);
+
     if (selection.anchorNode === selection.focusNode) {
       if (selection.anchorOffset <= selection.focusOffset) {
         const newText =
@@ -37,6 +39,8 @@ export function Menu(props: Props) {
           selection.anchorNode?.textContent?.slice(selection.focusOffset);
 
         selection.anchorNode.textContent = newText;
+        ref.current?.focus();
+        // selectionRange.setStart(selection.anchorNode, selection.anchorOffset + startMarkdown.length);
       } else {
         const newText =
           selection.anchorNode?.textContent?.slice(0, selection.focusOffset) +
@@ -46,6 +50,8 @@ export function Menu(props: Props) {
           selection.anchorNode?.textContent?.slice(selection.anchorOffset);
 
         selection.anchorNode.textContent = newText;
+        ref.current?.focus();
+        // selectionRange.setStart(selection.anchorNode, selection.anchorOffset + startMarkdown.length);
       }
     } else {
       const newAnchorText =
@@ -59,6 +65,7 @@ export function Menu(props: Props) {
 
       selection.anchorNode.textContent = newAnchorText;
       selection.focusNode.textContent = newFocusText;
+      ref.current?.focus();
     }
     console.log(selection.anchorNode?.parentNode?.parentNode);
   }
@@ -79,6 +86,7 @@ export function Menu(props: Props) {
 
       if (insertFlag) child[NODE].textContent = markdown + child[NODE].textContent;
     }
+    ref.current?.focus();
   }
 
   return (
@@ -107,4 +115,4 @@ export function Menu(props: Props) {
       </MenuButton>
     </Container>
   );
-}
+});

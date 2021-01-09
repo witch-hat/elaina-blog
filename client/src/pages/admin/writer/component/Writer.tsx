@@ -59,6 +59,10 @@ export function Writer(props: Props) {
   const editor = useRef<HTMLDivElement>(null);
   const [text, setText] = useState<string>('');
 
+  useEffect(() => {
+    editor.current?.focus();
+  }, []);
+
   function parseTextContent() {
     if (editor.current !== null) {
       setText(editor.current.innerText.replaceAll('\n\n', '  \n').replaceAll('\n  \n', '\n&#8203;  \n').replaceAll('\n\n', '\n'));
@@ -88,7 +92,7 @@ export function Writer(props: Props) {
   return (
     <Container>
       <EditorContainer>
-        <Menu />
+        <Menu ref={editor} />
         <Editor
           ref={editor}
           contentEditable={true}
