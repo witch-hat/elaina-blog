@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { LogIn } from './component/LogIn';
+import { LogIn } from './login';
 import { AdminMainPage } from './component/AdminMainPage';
 
 import { useSelector } from 'react-redux';
