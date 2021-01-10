@@ -10,6 +10,7 @@ interface Styles {
   width?: string;
   height?: string;
   fontSize?: string;
+  margin: string;
   small?: {
     width?: string;
     height?: string;
@@ -26,6 +27,7 @@ const Input = styled.input<InputProps>((props) => {
     width: props.styles?.width || '100px',
     height: props.styles?.height || '40px',
     fontSize: props.styles?.fontSize || '1rem',
+    margin: props.styles?.margin,
     border: `1px solid ${theme[props.themeMode].inputBorder}`,
     borderRadius: '8px',
     color: theme[props.themeMode].inputText,
@@ -51,6 +53,7 @@ interface Props {
   type: string;
   minLength: number;
   maxLength: number;
+  ref?: (instance: HTMLInputElement) => void;
   onFocus?: Function;
   onBlur?: Function;
   placeholder?: string;
@@ -62,6 +65,7 @@ export function InputBox(props: Props) {
 
   return (
     <Input
+      ref={props.ref}
       id={props.id}
       placeholder={props.placeholder}
       type={props.type}

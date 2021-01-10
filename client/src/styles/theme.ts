@@ -24,6 +24,7 @@ export const theme: DefaultTheme = {
     inputBorder: '#111',
     focusBorder: '#324123',
     hoverBorderColor: '#f1f2f3',
+    invalidBorder: '#ff3d41',
     // Others
     navUnderBar: '#888',
     navHoverUnderBar: '#aaa',
@@ -52,6 +53,7 @@ export const theme: DefaultTheme = {
     inputBorder: '#ccc',
     focusBorder: '#2a9df4',
     hoverBorderColor: '#121314',
+    invalidBorder: '#ff3d41',
     // Others
     navUnderBar: '#555',
     navHoverUnderBar: '#888',
