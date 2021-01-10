@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import Link from 'next/link';
 
 import { theme } from 'src/styles';
 
@@ -19,14 +20,6 @@ const Button = styled.div<{ themeMode: string }>((props) => ({
   }
 }));
 
-const RotateIcon = styled.i<{ isOpen: boolean }>((props) => {
-  return {
-    display: 'inline-block',
-    transition: '.3s all',
-    transform: props.isOpen ? 'rotate(180deg)' : 'none'
-  };
-});
-
 interface Props {}
 
 export default function AdminMenuButton(props: Props) {
@@ -34,9 +27,10 @@ export default function AdminMenuButton(props: Props) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <Button onClick={() => setIsMenuOpen(!isMenuOpen)} themeMode={themeMode}>
-      Menu&nbsp;
-      <RotateIcon className='fas fa-caret-down' isOpen={isMenuOpen} />
-    </Button>
+    <Link href='/admin'>
+      <Button onClick={() => setIsMenuOpen(!isMenuOpen)} themeMode={themeMode}>
+        Menu&nbsp;
+      </Button>
+    </Link>
   );
 }

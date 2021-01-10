@@ -10,7 +10,11 @@ const Container = styled.div({
   height: '3rem',
   alignItems: 'center',
   userSelect: 'none',
-  padding: '.4rem 0'
+  padding: '.4rem 0',
+  '@media screen and (max-width: 767px)': {
+    flexWrap: 'wrap',
+    height: 'max-content'
+  }
 });
 
 interface Props {
@@ -20,11 +24,11 @@ interface Props {
 export const Menu = React.forwardRef((props: Props, ref: React.RefObject<HTMLDivElement>) => {
   const selection: Selection = window.getSelection();
 
-  function findNodeWithNodeName(startNode: Node, name: string): Node {
+  function getNodeWithNodeName(startNode: Node, name: string): Node {
     if (startNode.nodeName === name) {
       return startNode;
     } else {
-      return findNodeWithNodeName(startNode.parentNode, name);
+      return getNodeWithNodeName(startNode.parentNode, name);
     }
   }
 
@@ -42,7 +46,8 @@ export const Menu = React.forwardRef((props: Props, ref: React.RefObject<HTMLDiv
 
         selection.anchorNode.textContent = newText;
         ref.current?.focus();
-        // selectionRange.setStart(selection.anchorNode, selection.anchorOffset + startMarkdown.length);
+        console.log(selection.getRangeAt(0));
+        // selection.getRangeAt(0).setStart(getNodeWithNodeName(selection.focusNode, 'P'), selection.focusOffset + startMarkdown.length);
       } else {
         const newText =
           selection.anchorNode?.textContent?.slice(0, selection.focusOffset) +
@@ -74,9 +79,9 @@ export const Menu = React.forwardRef((props: Props, ref: React.RefObject<HTMLDiv
 
   function insertMarkdownLineStart(markdown: string) {
     const NODE = 1;
-    const list = findNodeWithNodeName(selection.anchorNode, 'DIV').childNodes;
-    const anchorParagraph = findNodeWithNodeName(selection.anchorNode, 'P');
-    const focusParagraph = findNodeWithNodeName(selection.focusNode, 'P');
+    const list = getNodeWithNodeName(selection.anchorNode, 'DIV').childNodes;
+    const anchorParagraph = getNodeWithNodeName(selection.anchorNode, 'P');
+    const focusParagraph = getNodeWithNodeName(selection.focusNode, 'P');
     let insertFlag: boolean = false;
     for (const child of list.entries()) {
       if (anchorParagraph.isSameNode(child[NODE])) {

@@ -64,6 +64,7 @@
   line-height: 1.4;
   word-wrap: break-word;
   font-family: 'Nanum Gothic', sans-serif;
+  padding: 0.5rem;
 }
 
 .markdown-body details {
@@ -225,6 +226,8 @@
 .markdown-body p {
   margin-top: 0;
   margin-bottom: 10px;
+  word-break: break-word;
+  white-space: pre-wrap;
 }
 
 .markdown-body blockquote {

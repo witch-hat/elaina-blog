@@ -6,6 +6,7 @@ import styles from 'src/styles/MarkdownStyles.module.css';
 import gfm from 'remark-gfm';
 
 import { Menu } from './Menu';
+import { useWidth } from 'src/components';
 
 const Container = styled.div({
   display: 'flex',
@@ -40,17 +41,35 @@ const PreviewContainer = styled.div({
   height: 'calc(100vh - 5rem - 40px)',
   marginLeft: '2rem',
   padding: '.5rem',
-  overflowY: 'auto'
+  overflowY: 'auto',
+  '@media screen and (max-width: 767px)': {
+    display: 'none'
+  }
 });
 
 const Paragraph = styled.p({
   display: 'inline-block',
   width: '100%',
-  wordBreak: 'keep-all'
+  wordBreak: 'break-word',
+  whiteSpace: 'pre-wrap'
+});
+
+const Button = styled.button({
+  borderRadius: '8px',
+  padding: '.3rem',
+  display: 'none',
+  '@media screen and (max-width: 767px)': {
+    display: 'block'
+  }
 });
 
 function Text(props: { children?: string }) {
   return <Paragraph>{props.children !== undefined ? props.children : <br></br>}</Paragraph>;
+}
+
+enum Mode {
+  write = 'Editor',
+  preview = 'Preview'
 }
 
 interface Props {}
@@ -58,10 +77,14 @@ interface Props {}
 export function Writer(props: Props) {
   const editor = useRef<HTMLDivElement>(null);
   const [text, setText] = useState<string>('');
+  const width = useWidth();
+  const [mode, setMode] = useState(Mode.write);
 
   useEffect(() => {
-    editor.current?.focus();
-  }, []);
+    if (mode == Mode.write) {
+      editor.current?.focus();
+    }
+  }, [mode]);
 
   function parseTextContent() {
     if (editor.current !== null) {
@@ -89,20 +112,36 @@ export function Writer(props: Props) {
     document.execCommand('insertText', false, clipedData);
   }
 
+  function handleButtonClick() {
+    if (mode === Mode.write) {
+      setMode(Mode.preview);
+    } else {
+      setMode(Mode.write);
+    }
+  }
+
   return (
     <Container>
       <EditorContainer>
-        <Menu ref={editor} setText={setText} />
-        <Editor
-          ref={editor}
-          contentEditable={true}
-          suppressContentEditableWarning={true}
-          onKeyDown={handleKeyDown}
-          onPaste={handlePaste}
-          onInput={parseTextContent}
-        >
-          <Text></Text>
-        </Editor>
+        <Button onClick={() => handleButtonClick()}>{mode === Mode.write ? Mode.preview : Mode.write}</Button>
+        {((width <= 767 && mode === Mode.write) || width > 767) && (
+          <>
+            <Menu ref={editor} setText={setText} />
+            <Editor
+              ref={editor}
+              contentEditable={true}
+              suppressContentEditableWarning={true}
+              onKeyDown={handleKeyDown}
+              onPaste={handlePaste}
+              onInput={parseTextContent}
+            >
+              <Text></Text>
+            </Editor>
+          </>
+        )}
+        {width <= 767 && mode === Mode.preview && (
+          <ReactMarkdown plugins={[gfm]} className={styles['markdown-body']} children={text}></ReactMarkdown>
+        )}
       </EditorContainer>
       <PreviewContainer>
         <ReactMarkdown plugins={[gfm]} className={styles['markdown-body']} children={text}></ReactMarkdown>

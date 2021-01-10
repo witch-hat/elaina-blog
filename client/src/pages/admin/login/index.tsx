@@ -65,7 +65,7 @@ export function LogIn(props: Props) {
         </Wrapper>
         <Wrapper>
           <Label>PW</Label>
-          <InputBox id='admin-id' type='password' minLength={4} maxLength={16} placeholder='PW' styles={{ width: '60%' }} />
+          <InputBox id='admin-pw' type='password' minLength={4} maxLength={16} placeholder='PW' styles={{ width: '60%' }} />
         </Wrapper>
         <LogInButton themeMode={themeMode}>Log In</LogInButton>
       </LogInForm>
