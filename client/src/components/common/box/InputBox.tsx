@@ -31,10 +31,10 @@ const Input = styled.input<InputProps>((props) => {
     color: theme[props.themeMode].inputText,
     backgroundColor: theme[props.themeMode].inputBackground,
     '&:focus': {
-      outline: 'none'
-    },
-    '&:invalid': {
-      border: '2px solid #ff0000'
+      outline: 'none',
+      padding: '1px',
+      borderWidth: '2px',
+      borderColor: theme[props.themeMode].focusBorder
     },
     '&::placeholder': {
       color: theme[props.themeMode].placeholderText
@@ -51,7 +51,9 @@ interface Props {
   type: string;
   minLength: number;
   maxLength: number;
-  placeholder: string;
+  onFocus?: Function;
+  onBlur?: Function;
+  placeholder?: string;
   styles?: Styles;
 }
 
@@ -68,6 +70,16 @@ export function InputBox(props: Props) {
       autoComplete='off'
       styles={props.styles}
       themeMode={themeMode}
+      onFocus={() => {
+        if (props.onFocus) {
+          props.onFocus();
+        }
+      }}
+      onBlur={() => {
+        if (props.onBlur) {
+          props.onBlur();
+        }
+      }}
     />
   );
 }

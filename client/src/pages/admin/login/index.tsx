@@ -28,46 +28,60 @@ const LogInForm = styled.form({
   alignItems: 'center'
 });
 
-const Wrapper = styled.div({
+const InputWrapper = styled.div({
   display: 'flex',
-  margin: '10px 0',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: '100%'
+  width: '80%',
+  flexDirection: 'column',
+  margin: '10px 0'
+});
+
+const HelpWrapper = styled.div({
+  display: 'flex',
+  width: '80%',
+  flexDirection: 'column',
+  margin: '10px 0'
 });
 
 const Label = styled.label({
-  width: '2rem',
   display: 'inline-block',
-  textAlign: 'center',
-  marginRight: '.5rem'
+  textAlign: 'left',
+  marginBottom: '8px',
+  fontWeight: 'bold'
 });
 
 const LogInButton = styled.button<{ themeMode: ThemeMode }>((props) => ({
-  width: '70px',
+  width: '85%',
   height: '2.5rem',
+  marginTop: '24px',
   borderRadius: '8px',
   backgroundColor: theme[props.themeMode].submitButtonColor,
   color: '#f1f2f3'
 }));
 
+const LogInText = styled.span({
+  fontWeight: 'bold'
+});
+
 interface Props {}
 
-export function LogIn(props: Props) {
+export default function Login(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   return (
     <Container>
       <LogInForm>
-        <Wrapper>
-          <Label>ID</Label>
-          <InputBox id='admin-id' type='email' minLength={4} maxLength={100} placeholder='Email' styles={{ width: '60%' }} />
-        </Wrapper>
-        <Wrapper>
-          <Label>PW</Label>
-          <InputBox id='admin-pw' type='password' minLength={4} maxLength={16} placeholder='PW' styles={{ width: '60%' }} />
-        </Wrapper>
-        <LogInButton themeMode={themeMode}>Log In</LogInButton>
+        <InputWrapper>
+          <Label>Email ID</Label>
+          <InputBox id='admin-id' type='email' minLength={4} maxLength={100} placeholder='Email ID' styles={{ width: '100%' }} />
+        </InputWrapper>
+        <InputWrapper>
+          <Label>암호</Label>
+          <InputBox id='admin-pw' type='password' minLength={4} maxLength={16} placeholder='암호' styles={{ width: '100%' }} />
+        </InputWrapper>
+        <LogInButton themeMode={themeMode}>
+          <LogInText>로그인</LogInText>
+        </LogInButton>
+        <HelpWrapper></HelpWrapper>
       </LogInForm>
     </Container>
   );

@@ -22,6 +22,7 @@ declare module 'styled-components' {
       // Border
       borderColor: string;
       inputBorder: string;
+      focusBorder: string;
       // Others
       navUnderBar: string;
       navHoverUnderBar: string;
