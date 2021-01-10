@@ -13,10 +13,11 @@ const Container = styled.div({
   marginRight: '20px'
 });
 
-const Icon = styled.div({
+const Icon = styled.div<{ left?: boolean }>((props) => ({
   fontSize: '1.5rem',
-  marginRight: '5px'
-});
+  marginRight: props.left ? '5px' : '0',
+  marginLeft: props.left ? '0' : '5px'
+}));
 
 const Switch = styled.div<{ isChecked: boolean }>`
   position: relative;
@@ -54,8 +55,9 @@ export function ModeSwitch() {
 
   return (
     <Container>
-      <Icon>{isChecked ? <i className='fas fa-moon'></i> : <i className='fas fa-sun'></i>}</Icon>
+      <Icon left>{!isChecked && <i className='fas fa-sun'></i>}</Icon>
       <Switch isChecked={isChecked} onClick={() => setIsChecked(!isChecked)}></Switch>
+      <Icon>{isChecked && <i className='fas fa-moon'></i>}</Icon>
     </Container>
   );
 }
