@@ -1,8 +1,15 @@
 import styled from 'styled-components';
+
 import { FormatBoldBlack } from 'src/resources/svg/FormatBoldBlack';
+import { theme } from 'src/styles';
+
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/redux/rootReducer';
+import { ThemeMode } from 'src/redux/common/type';
 
 interface ContainerProps {
   isActive: boolean;
+  themeMode: ThemeMode;
 }
 
 const Toggle = styled.div({
@@ -31,7 +38,7 @@ const Container = styled.div<ContainerProps>((props: ContainerProps) => {
     borderRadius: '4px',
     cursor: props.isActive ? 'pointer' : 'not-allowed',
     '&:hover': {
-      border: props.isActive ? '1px solid #111' : '1px solid transparent'
+      border: props.isActive ? `1px solid ${theme[props.themeMode].hoverBorderColor}` : '1px solid transparent'
     },
     [`&:hover ${Toggle}`]: {
       display: 'block'
@@ -47,8 +54,10 @@ interface Props {
 }
 
 export function MenuButton(props: Props) {
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+
   return (
-    <Container onClick={() => props.onClick()} isActive={props.isActive}>
+    <Container onClick={() => props.onClick()} isActive={props.isActive} themeMode={themeMode}>
       {props.children}
       <Toggle>
         <p>{props.desc}</p>

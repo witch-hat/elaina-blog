@@ -7,11 +7,16 @@ import gfm from 'remark-gfm';
 
 import { Menu } from './Menu';
 import { useWidth } from 'src/components';
+import { theme } from 'src/styles';
 
-const Container = styled.div({
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/redux/rootReducer';
+import { ThemeMode } from 'src/redux/common/type';
+
+const Container = styled.div<{ themeMode: ThemeMode }>((props) => ({
   display: 'flex',
   width: '100%'
-});
+}));
 
 const EditorContainer = styled.div({
   display: 'flex',
@@ -19,7 +24,7 @@ const EditorContainer = styled.div({
   flex: '1'
 });
 
-const Editor = styled.div({
+const Editor = styled.div<{ themeMode: ThemeMode }>((props) => ({
   display: 'flex',
   width: '100%',
   flexDirection: 'column',
@@ -28,12 +33,13 @@ const Editor = styled.div({
   fontFamily: "'Nanum Gothic', sans-serif",
   outline: 'none',
   padding: '.5rem',
-  border: '1px solid #888',
+  border: `1px solid ${theme[props.themeMode].borderColor}`,
   borderRadius: '12px',
   wordBreak: 'break-word',
   whiteSpace: 'pre-wrap',
-  overflowY: 'auto'
-});
+  overflowY: 'auto',
+  backgroundColor: theme[props.themeMode].editorBackground
+}));
 
 const PreviewContainer = styled.div({
   display: 'flex',
@@ -75,6 +81,7 @@ enum Mode {
 interface Props {}
 
 export function Writer(props: Props) {
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const editor = useRef<HTMLDivElement>(null);
   const [text, setText] = useState<string>('');
   const width = useWidth();
@@ -119,9 +126,10 @@ export function Writer(props: Props) {
       setMode(Mode.write);
     }
   }
+  console.log(editor.current?.childNodes);
 
   return (
-    <Container>
+    <Container themeMode={themeMode}>
       <EditorContainer>
         <Button onClick={() => handleButtonClick()}>{mode === Mode.write ? Mode.preview : Mode.write}</Button>
         {((width <= 767 && mode === Mode.write) || width > 767) && (
@@ -134,6 +142,7 @@ export function Writer(props: Props) {
               onKeyDown={handleKeyDown}
               onPaste={handlePaste}
               onInput={parseTextContent}
+              themeMode={themeMode}
             >
               <Text></Text>
             </Editor>

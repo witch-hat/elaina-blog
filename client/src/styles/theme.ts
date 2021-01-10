@@ -11,6 +11,7 @@ export const theme: DefaultTheme = {
     articleBackground: '#252525',
     secondaryContentBackground: '#313131',
     submitButtonColor: '#2a9df4',
+    editorBackground: '#313131',
     // Text Color
     blogName: '#f1f2f3',
     mainText: '#f1f2f3',
@@ -22,6 +23,7 @@ export const theme: DefaultTheme = {
     borderColor: '#aaa',
     inputBorder: '#111',
     focusBorder: '#324123',
+    hoverBorderColor: '#f1f2f3',
     // Others
     navUnderBar: '#888',
     navHoverUnderBar: '#aaa',
@@ -37,6 +39,7 @@ export const theme: DefaultTheme = {
     articleBackground: '#fff',
     secondaryContentBackground: '#eee',
     submitButtonColor: '#2a9df4',
+    editorBackground: 'fff',
     // Text Color
     blogName: '#121314',
     mainText: '#121314',
@@ -48,6 +51,7 @@ export const theme: DefaultTheme = {
     borderColor: '#ddd',
     inputBorder: '#ccc',
     focusBorder: '#2a9df4',
+    hoverBorderColor: '#121314',
     // Others
     navUnderBar: '#555',
     navHoverUnderBar: '#888',

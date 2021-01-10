@@ -12,6 +12,7 @@ declare module 'styled-components' {
       articleBackground: string;
       secondaryContentBackground: string;
       submitButtonColor: string;
+      editorBackground: string;
       // Text Color
       blogName: string;
       mainText: string;
@@ -23,6 +24,7 @@ declare module 'styled-components' {
       borderColor: string;
       inputBorder: string;
       focusBorder: string;
+      hoverBorderColor: string;
       // Others
       navUnderBar: string;
       navHoverUnderBar: string;
