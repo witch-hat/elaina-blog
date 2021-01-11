@@ -10,8 +10,7 @@
   },
   "scripts": {
     "prestart": "tsc",
-    "test": "echo \"server\"",
-    "dev": "nodemon src/index.ts"
+    "dev": "node src/index.ts"
   },
   "author": {
     "name": "elaina-blog",
