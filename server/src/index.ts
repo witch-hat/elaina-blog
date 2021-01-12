@@ -1,4 +1,4 @@
-const { ApolloServer, gql } = require('apollo-server');
+import { gql, ApolloServer } from 'apollo-server';
 
 const typeDefs = gql`
   type Book {
