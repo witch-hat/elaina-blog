@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
 
 import LogIn from './login';
-import { AdminMainPage } from './component/AdminMainPage';
+import { AdminPageLayout } from './component/AdminPageLayout';
 
 export default function Admin() {
   const [isLogIn, setIsLogIn] = useState(true);
 
-  return isLogIn ? <AdminMainPage /> : <LogIn />;
+  return isLogIn ? (
+    <AdminPageLayout>
+      <div>메인입니다.</div>
+    </AdminPageLayout>
+  ) : (
+    <LogIn />
+  );
 }

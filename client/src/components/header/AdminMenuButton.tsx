@@ -71,19 +71,19 @@ export default function AdminMenuButton(props: Props) {
         <FocusWrapper visible={isMenuOpen} onClickOutside={() => setIsMenuOpen(false)}>
           <ListContainer themeMode={themeMode}>
             <Link href='/admin'>
-              <List>Admin</List>
+              <List onClick={() => setIsMenuOpen(false)}>Admin</List>
             </Link>
             <Link href='/admin'>
-              <List>Admin</List>
+              <List onClick={() => setIsMenuOpen(false)}>Admin</List>
             </Link>
             <Link href='/admin'>
-              <List>Admin</List>
+              <List onClick={() => setIsMenuOpen(false)}>Admin</List>
             </Link>
             <Link href='/admin'>
-              <List>Admin</List>
+              <List onClick={() => setIsMenuOpen(false)}>Admin</List>
             </Link>
             <Link href='/admin'>
-              <List>Admin</List>
+              <List onClick={() => setIsMenuOpen(false)}>Admin</List>
             </Link>
           </ListContainer>
         </FocusWrapper>

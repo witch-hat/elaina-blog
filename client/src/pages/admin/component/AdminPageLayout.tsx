@@ -22,16 +22,17 @@ const Section = styled.section({
   marginLeft: '50px'
 });
 
-export function AdminMainPage() {
+interface Props {
+  children: JSX.Element;
+}
+
+export function AdminPageLayout(props: Props) {
   return (
     <Container>
       <Side>
         <SideBar />
       </Side>
-      <Section>
-        <ViewCountAnalyst />
-        <ContentCategoryModifier />
-      </Section>
+      <Section>{props.children}</Section>
     </Container>
   );
 }

@@ -56,7 +56,7 @@ const Button = styled.button({
 export function SideBar() {
   return (
     <Container>
-      <Link href='admin/writer'>
+      <Link href='/admin/writer'>
         <Button>글쓰기</Button>
       </Link>
       <TitleWrapper>
@@ -66,7 +66,11 @@ export function SideBar() {
         <Title>컨텐츠</Title>
       </TitleWrapper>
       <ListContainer>
-        <List>카테고리 관리</List>
+        <Link href='/admin/category' passHref>
+          <a>
+            <List>카테고리 관리</List>
+          </a>
+        </Link>
         <List>글 관리</List>
         <List>댓글 관리</List>
       </ListContainer>
