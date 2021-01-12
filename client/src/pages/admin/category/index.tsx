@@ -4,6 +4,11 @@ import styled from 'styled-components';
 import { BorderBox } from 'src/components';
 import { mockUpData } from 'src/resources';
 import { AdminPageLayout } from '../component/AdminPageLayout';
+import { theme } from 'src/styles';
+
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/redux/rootReducer';
+import { ThemeMode } from 'src/redux/common/type';
 
 const Container = styled.div({
   width: '100%',
@@ -84,18 +89,22 @@ const ButtonContainer = styled.div({
   height: 'max-content'
 });
 
-const Button = styled.button({
+const Button = styled.button<{ danger?: boolean; themeMode: ThemeMode }>((props) => ({
   marginRight: '.5rem',
   fontSize: '.9rem',
   borderRadius: '4px',
   padding: '.5rem',
   height: 'max-content',
+  backgroundColor: props.danger ? theme[props.themeMode].dangerButtonColor : theme[props.themeMode].buttonBackground,
+  color: props.danger ? theme[props.themeMode].dangerContentText : 'inherit',
   '&:hover': {
     textDecoration: 'underline'
   }
-});
+}));
 
 export default function Category() {
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+
   return (
     <AdminPageLayout>
       <Container>
@@ -112,8 +121,10 @@ export default function Category() {
                 </Content>
               </BorderBox>
               <ButtonContainer>
-                <Button>Edit</Button>
-                <Button>Delete</Button>
+                <Button themeMode={themeMode}>Edit</Button>
+                <Button themeMode={themeMode} danger>
+                  Delete
+                </Button>
               </ButtonContainer>
             </CategoryContainer>
           );

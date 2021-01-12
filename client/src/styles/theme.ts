@@ -12,6 +12,7 @@ export const theme: DefaultTheme = {
     secondaryContentBackground: '#313131',
     submitButtonColor: '#2a9df4',
     editorBackground: '#313131',
+    dangerButtonColor: '#dd0000',
     // Text Color
     blogName: '#f1f2f3',
     mainText: '#f1f2f3',
@@ -19,6 +20,7 @@ export const theme: DefaultTheme = {
     hoverText: '',
     placeholderText: '#f1f2f3',
     inputText: '#f1f2f3',
+    dangerContentText: '#f1f2f3',
     // Border
     borderColor: '#aaa',
     inputBorder: '#111',
@@ -40,7 +42,8 @@ export const theme: DefaultTheme = {
     articleBackground: '#fff',
     secondaryContentBackground: '#eee',
     submitButtonColor: '#2a9df4',
-    editorBackground: 'fff',
+    editorBackground: '#fff',
+    dangerButtonColor: '#ff0000',
     // Text Color
     blogName: '#121314',
     mainText: '#121314',
@@ -48,6 +51,7 @@ export const theme: DefaultTheme = {
     hoverText: '',
     placeholderText: '#888',
     inputText: '#121314',
+    dangerContentText: '#f1f2f3',
     // Border
     borderColor: '#ddd',
     inputBorder: '#ccc',

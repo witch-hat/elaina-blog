@@ -1,8 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { ContentCategoryModifier } from './ContentCategoryModifier';
-import { ViewCountAnalyst } from './ViewCountAnalyst';
 import { SideBar } from './SideBar';
 
 const Container = styled.div({
