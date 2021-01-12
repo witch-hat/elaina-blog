@@ -20,10 +20,13 @@ const RotateAnimation = keyframes({
 
 const RotatingIcon = styled.span(
   {
+    width: '1.5rem',
+    display: 'flex',
+    justifyContent: 'center',
     marginRight: '.25rem'
   },
   css`
-    animation: ${RotateAnimation} 0.75s infinite;
+    animation: ${RotateAnimation} 0.75s linear infinite;
   `
 );
 
@@ -33,7 +36,9 @@ export function Loading() {
       <RotatingIcon>
         <i className='fas fa-spinner'></i>
       </RotatingIcon>
-      <p>Loading</p>
+      <p>
+        <b>Loading...</b>
+      </p>
     </Container>
   );
 }
