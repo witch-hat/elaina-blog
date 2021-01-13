@@ -25,5 +25,7 @@
     "url": "https://github.com/lumyjuwon/elaina-blog.git"
   },
   "license": "MIT",
-  "devDependencies": {}
+  "devDependencies": {
+    "dotenv": "^8.2.0"
+  }
 }
