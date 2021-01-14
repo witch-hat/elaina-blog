@@ -1,47 +1,12 @@
 import { gql, ApolloServer } from 'apollo-server';
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 import dotenv from 'dotenv';
+import { profileTypeDef } from './graphql/schema/profile';
+import { profileResolver } from './graphql/resolver/profile';
 
 dotenv.config();
 
-const typeDefs = gql`
-  type Book {
-    title: String
-    author: String
-  }
-
-  type Query {
-    books: [Book]
-  }
-`;
-
-const books = [
-  {
-    title: 'Book1',
-    author: 'Me'
-  },
-  {
-    title: 'Book2',
-    author: 'You'
-  }
-];
-
-const resolvers = {
-  Query: {
-    books: () => books
-  }
-};
-
-const server = new ApolloServer({ typeDefs, resolvers });
-
-server.listen().then(({ url }) => {
-  console.log(`Server Ready at ${url}`);
-});
-
-console.log(process.env.DB_USER);
-
-const MONGO_URL = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@elainatest.c88ha.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
-
+const MONGO_URL = `${process.env.DB_URL}`;
 mongoose
   .connect(MONGO_URL, {
     useNewUrlParser: true,
@@ -53,3 +18,12 @@ mongoose
   .catch((err) => {
     console.log(err);
   });
+
+const db = mongoose.connection;
+console.log(db.name);
+
+const server = new ApolloServer({ typeDefs: profileTypeDef, resolvers: profileResolver });
+
+server.listen().then(({ url }) => {
+  console.log(`Server Ready at ${url}`);
+});
