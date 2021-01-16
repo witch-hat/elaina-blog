@@ -1,6 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 
-const profileSchema = new Schema({
+export const profileSchema = new Schema({
   image: {
     type: String,
     required: true

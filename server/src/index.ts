@@ -1,12 +1,11 @@
-import { gql, ApolloServer } from 'apollo-server';
-import mongoose, { Schema } from 'mongoose';
+import { gql, ApolloServer, ApolloError } from 'apollo-server';
+import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import { profileTypeDef } from './graphql/schema/profile';
-import { profileResolver } from './graphql/resolver/profile';
+import { schema } from './graphql';
 
 dotenv.config();
 
-const MONGO_URL = `${process.env.DB_URL}`;
+const MONGO_URL = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@elainatest.c88ha.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 mongoose
   .connect(MONGO_URL, {
     useNewUrlParser: true,
@@ -20,9 +19,8 @@ mongoose
   });
 
 const db = mongoose.connection;
-console.log(db.name);
 
-const server = new ApolloServer({ typeDefs: profileTypeDef, resolvers: profileResolver });
+const server = new ApolloServer({ schema });
 
 server.listen().then(({ url }) => {
   console.log(`Server Ready at ${url}`);
