@@ -1,24 +1,23 @@
 import React from 'react';
-import { useQuery, gql, useMutation } from '@apollo/client';
+import { useQuery, gql } from '@apollo/client';
 
 import { Loading } from 'src/components';
 import { ContentCategory } from 'src/pages/main/component';
 import { MainPageLayout } from 'src/components';
 
-const BOOKS = gql`
-  query getBooks {
-    books {
-      title
-      author
+const GET_NAME = gql`
+  query profile {
+    profile {
+      name
     }
   }
 `;
 
 export default function Main() {
-  const { loading, error, data } = useQuery(BOOKS);
+  const { loading, error, data } = useQuery(GET_NAME);
 
   if (loading) return <Loading />;
-  console.log('test', data);
+  console.log('test', data.profile[0].name);
 
   return (
     <MainPageLayout>
