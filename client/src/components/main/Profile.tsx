@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled, { css } from 'styled-components';
+import { gql, useQuery, useMutation } from '@apollo/client';
 
-import { RoundImage, InputBox } from 'src/components';
+import { RoundImage, InputBox, Loading } from 'src/components';
 import { ProfileImageCropper } from './ProfileImageCropper';
-import { mockUpData } from 'src/resources';
 import { theme } from 'src/styles';
+import { initializeApollo, useApollo } from '../apolloClient';
 
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';
@@ -183,14 +184,48 @@ const Editor = styled.span<{ themeMode: ThemeMode }>((props) => ({
   }
 }));
 
+const GET_NAME = gql`
+  query profile {
+    profile {
+      image
+      name
+      introduce
+      link
+      company
+      location
+      email
+    }
+  }
+`;
+
+interface Profile {
+  image?: string;
+  name?: string;
+  introduce?: string;
+  link?: string;
+  company?: string;
+  location?: string;
+  email?: string;
+  _typename?: string;
+}
+
 interface Props {}
 
-export default function Profile(props: Props) {
+export default function Profile(props: any) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const [isEditMode, setIsEditMode] = useState(false);
   const [isSelectImage, setIsSelecImage] = useState(false);
   const [selectedImagePath, setSelectedImagePath] = useState('');
   const selectedImageRef = useRef<HTMLInputElement>(null);
+  const apolloClient = useApollo();
+  const [profile, setProfile] = useState<Profile>({});
+
+  useEffect(() => {
+    (async () => {
+      const { loading, data, error } = await apolloClient.query({ query: GET_NAME });
+      setProfile(data.profile[0]);
+    })();
+  }, []);
 
   // initialize input value to trigger onChange event when select the same image
   useEffect(() => {
@@ -203,7 +238,7 @@ export default function Profile(props: Props) {
     <Container>
       <div style={{ position: 'relative' }}>
         <RoundImage
-          src={mockUpData.profile.image}
+          src={profile.image || ''}
           styles={{
             borderRadius: '50%',
             width: '280px',
@@ -231,50 +266,42 @@ export default function Profile(props: Props) {
           </>
         )}
       </div>
-      <Name>{mockUpData.profile.name}</Name>
+      <Name>{profile.name}</Name>
       <ListWrapper>
         <Description>
           {isEditMode ? (
-            <Editor themeMode={themeMode} role='textbox' contentEditable defaultValue={mockUpData.profile.introduce}>
-              {mockUpData.profile.introduce}
+            <Editor themeMode={themeMode} role='textbox' contentEditable defaultValue={profile.introduce}>
+              {profile.introduce}
             </Editor>
           ) : (
-            <span>{mockUpData.profile.introduce}</span>
+            <span>{profile.introduce}</span>
           )}
         </Description>
         <Description>
           <Icon className='fas fa-link'></Icon>&nbsp;
           {isEditMode ? (
-            <Input themeMode={themeMode} type='text' defaultValue={mockUpData.profile.link} />
+            <Input themeMode={themeMode} type='text' defaultValue={profile.link} />
           ) : (
-            <a href={mockUpData.profile.link} target='_blank' rel='noopener noreferer nofollow'>
-              <span>{mockUpData.profile.link}</span>
+            <a href={profile.link} target='_blank' rel='noopener noreferer nofollow'>
+              <span>{profile.link}</span>
             </a>
           )}
         </Description>
         <Description>
           <Icon className='far fa-building'></Icon>&nbsp;
-          {isEditMode ? (
-            <Input themeMode={themeMode} type='text' defaultValue={mockUpData.profile.company} />
-          ) : (
-            <span>{mockUpData.profile.company}</span>
-          )}
+          {isEditMode ? <Input themeMode={themeMode} type='text' defaultValue={profile.company} /> : <span>{profile.company}</span>}
         </Description>
         <Description>
           <Icon className='fas fa-map-marker-alt'></Icon>&nbsp;
-          {isEditMode ? (
-            <Input themeMode={themeMode} type='text' defaultValue={mockUpData.profile.location} />
-          ) : (
-            <span>{mockUpData.profile.location}</span>
-          )}
+          {isEditMode ? <Input themeMode={themeMode} type='text' defaultValue={profile.location} /> : <span>{profile.location}</span>}
         </Description>
         <Description>
           <Icon className='far fa-envelope'></Icon>&nbsp;
           {isEditMode ? (
-            <Input themeMode={themeMode} type='text' defaultValue={mockUpData.profile.email} />
+            <Input themeMode={themeMode} type='text' defaultValue={profile.email} />
           ) : (
             <a href='mailto:'>
-              <span>{mockUpData.profile.email}</span>
+              <span>{profile.email}</span>
             </a>
           )}
         </Description>
