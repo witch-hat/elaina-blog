@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
+import { initializeApollo } from '../components/apolloClient';
 
 import Layout from 'src/components/Layout';
 
@@ -12,10 +13,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 
-const client = new ApolloClient({
-  uri: 'http://localhost:4000',
-  cache: new InMemoryCache()
-});
+const client = initializeApollo();
 
 export default function ElainaBlog({ Component, pageProps }: AppProps) {
   return (
