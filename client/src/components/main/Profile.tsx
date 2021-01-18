@@ -1,11 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled, { css } from 'styled-components';
-import { gql, useQuery, useMutation } from '@apollo/client';
 
-import { RoundImage, InputBox, Loading } from 'src/components';
+import { RoundImage, InputBox, Loading, GET_PROFILE, ProfileType } from 'src/components';
 import { ProfileImageCropper } from './ProfileImageCropper';
 import { theme } from 'src/styles';
-import { initializeApollo, useApollo } from '../apolloClient';
+import { useApollo } from '../apolloClient';
 
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';
@@ -184,31 +183,6 @@ const Editor = styled.span<{ themeMode: ThemeMode }>((props) => ({
   }
 }));
 
-const GET_NAME = gql`
-  query profile {
-    profile {
-      image
-      name
-      introduce
-      link
-      company
-      location
-      email
-    }
-  }
-`;
-
-interface Profile {
-  image?: string;
-  name?: string;
-  introduce?: string;
-  link?: string;
-  company?: string;
-  location?: string;
-  email?: string;
-  _typename?: string;
-}
-
 interface Props {}
 
 export default function Profile(props: any) {
@@ -218,11 +192,13 @@ export default function Profile(props: any) {
   const [selectedImagePath, setSelectedImagePath] = useState('');
   const selectedImageRef = useRef<HTMLInputElement>(null);
   const apolloClient = useApollo();
-  const [profile, setProfile] = useState<Profile>({});
+  const [profile, setProfile] = useState<ProfileType>({});
 
   useEffect(() => {
     (async () => {
-      const { loading, data, error } = await apolloClient.query({ query: GET_NAME });
+      const { loading, data, error } = await apolloClient.query({ query: GET_PROFILE });
+      if (loading) return <Loading />;
+      if (error) throw error;
       setProfile(data.profile[0]);
     })();
   }, []);
