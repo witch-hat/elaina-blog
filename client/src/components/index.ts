@@ -21,3 +21,7 @@ export { useWidth } from './common/hook/useWidth';
 
 // main
 export { MainPageLayout } from './main/MainPageLayout';
+
+// graphql
+export { GET_PROFILE } from './graphql/profile';
+export type { ProfileType } from './graphql/profile';
