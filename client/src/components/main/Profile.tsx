@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled, { css } from 'styled-components';
+import { useMutation } from '@apollo/client';
 
-import { RoundImage, InputBox, Loading, GET_PROFILE, ProfileType } from 'src/components';
+import { RoundImage, InputBox, Loading, GET_PROFILE, ProfileType, UPDATE_PROFILE } from 'src/components';
 import { ProfileImageCropper } from './ProfileImageCropper';
 import { theme } from 'src/styles';
 import { useApollo } from '../apolloClient';
@@ -89,7 +90,7 @@ const EditButton = styled.div({
   }
 });
 
-const SaveButton = styled.div<{ themeMode: ThemeMode }>((props) => ({
+const SaveButton = styled.button<{ themeMode: ThemeMode }>((props) => ({
   width: '47.5%',
   marginRight: '5%',
   padding: '.5rem',
@@ -122,7 +123,7 @@ const CancelButton = styled.div({
 const Input = styled.input<{ themeMode: ThemeMode }>((props) => ({
   display: 'inline-block',
   flexShrink: 0,
-  width: 'calc(100% - 1.6rem)',
+  width: '100%',
   height: '2rem',
   fontSize: '1.1rem',
   padding: '.2rem',
@@ -165,7 +166,7 @@ const Icon = styled.i({
   justifyContent: 'flex-start'
 });
 
-const Editor = styled.span<{ themeMode: ThemeMode }>((props) => ({
+const Editor = styled.textarea<{ themeMode: ThemeMode }>((props) => ({
   display: 'block',
   width: '100%',
   padding: '.2rem',
@@ -174,6 +175,8 @@ const Editor = styled.span<{ themeMode: ThemeMode }>((props) => ({
   borderRadius: '8px',
   color: theme[props.themeMode].inputText,
   backgroundColor: theme[props.themeMode].inputBackground,
+  whiteSpace: 'pre-wrap',
+  wordBreak: 'break-word',
   '&:empty::before': {
     content: "'Add introduce'",
     color: '#888'
@@ -193,6 +196,8 @@ export default function Profile(props: any) {
   const selectedImageRef = useRef<HTMLInputElement>(null);
   const apolloClient = useApollo();
   const [profile, setProfile] = useState<ProfileType>({});
+  const [mutateProfile, setMutateProfile] = useState<ProfileType>({});
+  const [updateProfile, { data }] = useMutation(UPDATE_PROFILE);
 
   useEffect(() => {
     (async () => {
@@ -200,6 +205,7 @@ export default function Profile(props: any) {
       if (loading) return <Loading />;
       if (error) throw error;
       setProfile(data.profile[0]);
+      setMutateProfile(data.profile[0]);
     })();
   }, []);
 
@@ -242,53 +248,115 @@ export default function Profile(props: any) {
           </>
         )}
       </div>
-      <Name>{profile.name}</Name>
-      <ListWrapper>
-        <Description>
-          {isEditMode ? (
-            <Editor themeMode={themeMode} role='textbox' contentEditable defaultValue={profile.introduce}>
-              {profile.introduce}
-            </Editor>
-          ) : (
+      {isEditMode || <Name>{profile.name}</Name>}
+      {isEditMode ? (
+        <form
+          id='profile-form'
+          onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
+            event.preventDefault();
+            updateProfile({
+              variables: {
+                image: mutateProfile.image,
+                name: mutateProfile.name,
+                introduce: mutateProfile.introduce,
+                link: mutateProfile.link,
+                company: mutateProfile.company,
+                location: mutateProfile.location,
+                email: mutateProfile.email
+              }
+            });
+          }}
+        >
+          <Input
+            themeMode={themeMode}
+            type='text'
+            defaultValue={profile.name}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              setMutateProfile({ ...mutateProfile, name: event.target.value });
+            }}
+          />
+          <Editor
+            themeMode={themeMode}
+            role='textbox'
+            defaultValue={profile.introduce}
+            onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
+              setMutateProfile({ ...mutateProfile, introduce: event.target.value });
+            }}
+          />
+          <Input
+            themeMode={themeMode}
+            type='text'
+            defaultValue={profile.link}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              setMutateProfile({ ...mutateProfile, link: event.target.value });
+            }}
+          />
+          <Input
+            themeMode={themeMode}
+            type='text'
+            defaultValue={profile.company}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              setMutateProfile({ ...mutateProfile, company: event.target.value });
+            }}
+          />
+          <Input
+            themeMode={themeMode}
+            type='text'
+            defaultValue={profile.location}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              setMutateProfile({ ...mutateProfile, location: event.target.value });
+            }}
+          />
+          <Input
+            themeMode={themeMode}
+            type='text'
+            defaultValue={profile.email}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              setMutateProfile({ ...mutateProfile, email: event.target.value });
+            }}
+          />
+        </form>
+      ) : (
+        <ListWrapper>
+          <Description>
             <span>{profile.introduce}</span>
-          )}
-        </Description>
-        <Description>
-          <Icon className='fas fa-link'></Icon>&nbsp;
-          {isEditMode ? (
-            <Input themeMode={themeMode} type='text' defaultValue={profile.link} />
-          ) : (
+          </Description>
+          <Description>
+            <Icon className='fas fa-link'></Icon>&nbsp;
             <a href={profile.link} target='_blank' rel='noopener noreferer nofollow'>
               <span>{profile.link}</span>
             </a>
-          )}
-        </Description>
-        <Description>
-          <Icon className='far fa-building'></Icon>&nbsp;
-          {isEditMode ? <Input themeMode={themeMode} type='text' defaultValue={profile.company} /> : <span>{profile.company}</span>}
-        </Description>
-        <Description>
-          <Icon className='fas fa-map-marker-alt'></Icon>&nbsp;
-          {isEditMode ? <Input themeMode={themeMode} type='text' defaultValue={profile.location} /> : <span>{profile.location}</span>}
-        </Description>
-        <Description>
-          <Icon className='far fa-envelope'></Icon>&nbsp;
-          {isEditMode ? (
-            <Input themeMode={themeMode} type='text' defaultValue={profile.email} />
-          ) : (
+          </Description>
+          <Description>
+            <Icon className='far fa-building'></Icon>&nbsp;
+            <span>{profile.company}</span>
+          </Description>
+          <Description>
+            <Icon className='fas fa-map-marker-alt'></Icon>&nbsp;
+            <span>{profile.location}</span>
+          </Description>
+          <Description>
+            <Icon className='far fa-envelope'></Icon>&nbsp;
             <a href='mailto:'>
               <span>{profile.email}</span>
             </a>
-          )}
-        </Description>
-      </ListWrapper>
+          </Description>
+        </ListWrapper>
+      )}
       <ButtonContainer>
         {isEditMode ? (
           <>
-            <SaveButton themeMode={themeMode} onClick={() => setIsEditMode(false)}>
+            <SaveButton themeMode={themeMode} form='profile-form' type='submit'>
               Save
             </SaveButton>
-            <CancelButton onClick={() => setIsEditMode(false)}>Cancel</CancelButton>
+            <CancelButton
+              onClick={() => {
+                setMutateProfile({ ...profile });
+                setIsEditMode(false);
+              }}
+            >
+              Cancel
+            </CancelButton>
           </>
         ) : (
           <EditButton onClick={() => setIsEditMode(true)}>Edit Profile</EditButton>
