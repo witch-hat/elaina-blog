@@ -35,8 +35,9 @@ export const profileResolver = {
     }
   },
   Mutation: {
-    async updateProfile(args: any) {
+    async updateProfile(_: any, args: any) {
       try {
+        console.log(args);
         const result = await Profile.findByIdAndUpdate('600308975f10bd62bfa2d59d', {
           ...args
         });
