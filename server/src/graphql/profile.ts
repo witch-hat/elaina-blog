@@ -3,7 +3,7 @@ import { Profile } from '../model/profile';
 
 export const profileTypeDef = gql`
   type Query {
-    profile: [Profile]
+    profile: Profile!
   }
 
   type Mutation {
@@ -26,7 +26,7 @@ export const profileResolver = {
   Query: {
     async profile() {
       try {
-        const profile = await Profile.find();
+        const profile = await Profile.findOne();
         return profile;
       } catch (err) {
         console.log(err);
@@ -35,12 +35,11 @@ export const profileResolver = {
     }
   },
   Mutation: {
-    async updateProfile(obj: any, args: any) {
+    async updateProfile(args: any) {
       try {
-        const profile = new Profile({
+        const result = await Profile.findByIdAndUpdate('600308975f10bd62bfa2d59d', {
           ...args
         });
-        const result = await profile.save();
         return result;
       } catch (err) {
         throw err;
