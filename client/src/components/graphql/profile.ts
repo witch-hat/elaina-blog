@@ -15,7 +15,8 @@ export const GET_PROFILE = gql`
 `;
 
 export const UPDATE_PROFILE = gql`
-  mutation UpdateProfile(
+  mutation updateProfile(
+    $id: String
     $image: String
     $name: String
     $introduce: String
@@ -24,7 +25,16 @@ export const UPDATE_PROFILE = gql`
     $location: String
     $email: String
   ) {
-    updataProfile(image: $image, name: $name, introduce: $introduce, link: $link, company: $company, location: $location, email: $email) {
+    updateProfile(
+      id: $id
+      image: $image
+      name: $name
+      introduce: $introduce
+      link: $link
+      company: $company
+      location: $location
+      email: $email
+    ) {
       image
       name
       introduce
@@ -37,6 +47,7 @@ export const UPDATE_PROFILE = gql`
 `;
 
 export interface ProfileType {
+  _id?: string;
   image?: string;
   name?: string;
   introduce?: string;

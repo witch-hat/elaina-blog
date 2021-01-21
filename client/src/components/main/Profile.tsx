@@ -267,6 +267,7 @@ export default function Profile(props: any) {
             event.preventDefault();
             updateProfile({
               variables: {
+                id: profile._id,
                 image: mutateProfile.image,
                 name: mutateProfile.name,
                 introduce: mutateProfile.introduce,
@@ -276,6 +277,7 @@ export default function Profile(props: any) {
                 email: mutateProfile.email
               }
             });
+            setIsEditMode(false);
           }}
         >
           <Input
