@@ -7,7 +7,16 @@ export const profileTypeDef = gql`
   }
 
   type Mutation {
-    updateProfile(image: String, name: String, introduce: String, link: String, company: String, location: String, email: String): Profile!
+    updateProfile(
+      id: String
+      image: String
+      name: String
+      introduce: String
+      link: String
+      company: String
+      location: String
+      email: String
+    ): Profile!
   }
 
   type Profile {
@@ -38,8 +47,14 @@ export const profileResolver = {
     async updateProfile(_: any, args: any) {
       try {
         console.log(args);
-        const result = await Profile.findByIdAndUpdate('600308975f10bd62bfa2d59d', {
-          ...args
+        const result = await Profile.findByIdAndUpdate(args.id, {
+          image: args.image,
+          name: args.name,
+          introduce: args.introduce,
+          link: args.link,
+          company: args.company,
+          location: args.location,
+          email: args.email
         });
         return result;
       } catch (err) {
