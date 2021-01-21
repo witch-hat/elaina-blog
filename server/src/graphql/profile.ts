@@ -16,18 +16,18 @@ export const profileTypeDef = gql`
       company: String
       location: String
       email: String
-    ): Profile!
+    ): Profile
   }
 
   type Profile {
-    _id: ID
-    image: String
-    name: String
-    introduce: String
-    link: String
-    company: String
-    location: String
-    email: String
+    _id: ID!
+    image: String!
+    name: String!
+    introduce: String!
+    link: String!
+    company: String!
+    location: String!
+    email: String!
   }
 `;
 
