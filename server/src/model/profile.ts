@@ -1,4 +1,4 @@
-import mongoose, { Schema } from 'mongoose';
+import { Schema, model, Document } from 'mongoose';
 
 export const profileSchema = new Schema({
   image: {
@@ -31,4 +31,14 @@ export const profileSchema = new Schema({
   }
 });
 
-export const Profile = mongoose.model('Profile', profileSchema);
+interface Profile extends Document {
+  image: string;
+  name: string;
+  introduce: string;
+  link: string;
+  company: string;
+  location: string;
+  email: string;
+}
+
+export const Profile = model<Profile>('Profile', profileSchema);
