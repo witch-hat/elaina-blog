@@ -10,7 +10,7 @@ interface Styles {
   width?: string;
   height?: string;
   fontSize?: string;
-  margin: string;
+  margin?: string;
   small?: {
     width?: string;
     height?: string;
