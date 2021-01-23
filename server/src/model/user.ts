@@ -7,16 +7,21 @@ export interface UserModel extends Document {
   password: string;
 }
 
-export const userSchema = new Schema<UserModel>({
-  emailId: {
-    type: String,
-    required: true
+export const userSchema = new Schema<UserModel>(
+  {
+    emailId: {
+      type: String,
+      required: true
+    },
+    password: {
+      type: String,
+      required: true
+    }
   },
-  password: {
-    type: String,
-    required: true
+  {
+    collection: 'user'
   }
-});
+);
 
 userSchema.pre('save', function (next) {
   console.log('update!');
