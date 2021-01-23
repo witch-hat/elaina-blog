@@ -1,8 +1,13 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model, Document, Model } from 'mongoose';
 import bcrypt from 'bcrypt';
 const saltRounds = 10;
 
-export const userSchema = new Schema({
+export interface UserModel extends Document {
+  emailId: string;
+  password: string;
+}
+
+export const userSchema = new Schema<UserModel>({
   emailId: {
     type: String,
     required: true
@@ -13,12 +18,7 @@ export const userSchema = new Schema({
   }
 });
 
-interface User extends Document {
-  emailId: string;
-  password: string;
-}
-
-userSchema.pre<User>('updateOne', function (next) {
+userSchema.pre('save', function (next) {
   console.log('update!');
   if (this.isModified('password')) {
     bcrypt.genSalt(saltRounds, (err: Error, salt: string) => {
@@ -35,4 +35,4 @@ userSchema.pre<User>('updateOne', function (next) {
   }
 });
 
-export const User = model<User>('User', userSchema);
+export const User: Model<UserModel> = model('User', userSchema);

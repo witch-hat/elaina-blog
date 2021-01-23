@@ -1,5 +1,5 @@
 import { gql } from 'apollo-server';
-import { User } from '../model/user';
+import { User, UserModel } from '../model/user';
 
 export const userTypeDef = gql`
   type User {
@@ -12,7 +12,7 @@ export const userResolver = {
   Query: {
     async user() {
       try {
-        const user = await User.findOne();
+        const user = await User.find();
         return user;
       } catch (err) {
         console.log(err);
@@ -23,12 +23,10 @@ export const userResolver = {
   Mutation: {
     async updatePassword(_: any, args: any) {
       try {
-        const result = await User.updateOne(
-          { emailId: args.emailId },
-          {
-            password: args.password
-          }
-        );
+        const result = await User.create({
+          emailId: args.emailId,
+          password: args.password
+        });
         return result;
       } catch (err) {
         throw err;

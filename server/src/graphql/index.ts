@@ -6,7 +6,7 @@ import { userTypeDef, userResolver } from './user';
 const Query = gql`
   type Query {
     profile: Profile
-    user: User
+    user: [User]
   }
 
   type Mutation {
