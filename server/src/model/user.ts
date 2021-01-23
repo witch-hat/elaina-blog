@@ -18,7 +18,8 @@ interface User extends Document {
   password: string;
 }
 
-userSchema.pre<User>('save', function (next) {
+userSchema.pre<User>('updateOne', function (next) {
+  console.log('update!');
   if (this.isModified('password')) {
     bcrypt.genSalt(saltRounds, (err: Error, salt: string) => {
       if (err) return next(err);

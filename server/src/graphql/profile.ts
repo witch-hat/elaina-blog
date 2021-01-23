@@ -1,24 +1,11 @@
 import { gql } from 'apollo-server';
 import { Profile } from '../model/profile';
 
+// type Query {
+//   profile: Profile!
+// }
+
 export const profileTypeDef = gql`
-  type Query {
-    profile: Profile!
-  }
-
-  type Mutation {
-    updateProfile(
-      id: String
-      image: String
-      name: String
-      introduce: String
-      link: String
-      company: String
-      location: String
-      email: String
-    ): Profile
-  }
-
   type Profile {
     _id: ID!
     image: String!
