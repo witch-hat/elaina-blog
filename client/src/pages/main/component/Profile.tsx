@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled, { css } from 'styled-components';
-import { useMutation } from '@apollo/client';
+import { useMutation, gql } from '@apollo/client';
 
 import { RoundImage, InputBox, Loading, GET_PROFILE, ProfileType, UPDATE_PROFILE } from 'src/components';
 import { ProfileImageCropper } from './ProfileImageCropper';
@@ -197,16 +197,17 @@ export default function Profile(props: any) {
   const apolloClient = useApollo();
   const [profile, setProfile] = useState<ProfileType>({});
   const [mutateProfile, setMutateProfile] = useState<ProfileType>({});
-  // const [updateProfile, { data }] = useMutation(UPDATE_PROFILE, {
-  //   update(cache, { data: { updateProfile } }) {
-  //     const { profile } = cache.readQuery({ query: GET_PROFILE });
-  //     cache.writeQuery({
-  //       query: GET_PROFILE,
-  //       data: { profile }
-  //     });
-  //   }
-  // });
-  const [updateProfile, { data }] = useMutation(UPDATE_PROFILE);
+  const [updateProfile, { data }] = useMutation<{ updateProfile: ProfileType }, { data: ProfileType }>(UPDATE_PROFILE, {
+    update(cache, { data: { updateProfile } }) {
+      const { profile } = cache.readQuery({ query: GET_PROFILE });
+      // cache.writeQuery({
+      //   query: GET_PROFILE,
+      //   data: { ...updateProfile }
+      // });
+      console.log('profile', profile);
+      console.log('updateprofile', updateProfile);
+    }
+  });
 
   useEffect(() => {
     (async () => {
