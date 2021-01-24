@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
-import { initializeApollo } from '../components/apolloClient';
+import { initializeApollo } from './apolloClient';
 
 import Layout from 'src/components/Layout';
 

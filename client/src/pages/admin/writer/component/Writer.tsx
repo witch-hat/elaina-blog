@@ -100,11 +100,6 @@ export function Writer(props: Props) {
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
-    // if (e.key === '1') {
-    //   document.execCommand('insertHTML', false, '<span>**dsa**</span>');
-    //   e.preventDefault();
-    // }
-    console.log(editor.current.childNodes.length);
     if (e.key === 'Backspace') {
       if (editor.current?.textContent?.length === 0 && editor.current.childNodes.length === 1) {
         e.preventDefault();

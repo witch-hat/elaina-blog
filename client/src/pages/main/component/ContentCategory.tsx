@@ -83,7 +83,7 @@ const PreviewContent = styled.span({
 
 interface Props {}
 
-export default function ContentCategory(props: Props) {
+export function ContentCategory(props: Props) {
   const router = useRouter();
   const { postId } = router.query;
 
