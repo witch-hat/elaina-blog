@@ -9,7 +9,8 @@ const MONGO_URL = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWOR
 mongoose
   .connect(MONGO_URL, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false
   })
   .then(() => {
     console.log('MongoDB connected');
