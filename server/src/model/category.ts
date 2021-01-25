@@ -1,4 +1,4 @@
-import mongoose, { Schema, model, Document, SchemaType } from 'mongoose';
+import { Schema, model, Document, SchemaType } from 'mongoose';
 
 interface Comment {
   username: string;
@@ -24,14 +24,18 @@ interface CategoryModel extends Document {
   posts?: [Post];
 }
 
-function PostType(key: string, options: any): void {
+function PostType(this: SchemaType, key: any, options: any): void {
   SchemaType.call(this, key, options, 'PostType');
 }
-PostType.prototype = Object.create(SchemaType.prototype);
+Object.setPrototypeOf(PostType.prototype, SchemaType.prototype);
 
 PostType.prototype.cast = function (value: Post): Post {
   return value;
 };
+
+// @ts-ignore
+// need to fix
+Schema.Types.PostType = PostType;
 
 export const categorySchema = new Schema<CategoryModel>({
   name: {
@@ -49,4 +53,4 @@ export const categorySchema = new Schema<CategoryModel>({
   }
 });
 
-export const Category = model<CategoryModel>('Category');
+export const Category = model<CategoryModel>('Category', categorySchema);
