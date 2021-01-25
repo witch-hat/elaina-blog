@@ -197,16 +197,28 @@ export default function Profile(props: any) {
   const apolloClient = useApollo();
   const [profile, setProfile] = useState<ProfileType>({});
   const [mutateProfile, setMutateProfile] = useState<ProfileType>({});
-  const [updateProfile, { data }] = useMutation<{ updateProfile: ProfileType }, { data: ProfileType }>(UPDATE_PROFILE, {
-    update(cache, { data: { updateProfile } }) {
-      const { profile } = cache.readQuery({ query: GET_PROFILE });
-      // cache.writeQuery({
-      //   query: GET_PROFILE,
-      //   data: { ...updateProfile }
-      // });
-      console.log('profile', profile);
-      console.log('updateprofile', updateProfile);
-    }
+  const [updateProfile] = useMutation<{ updateProfile: ProfileType }, { data: ProfileType }>(UPDATE_PROFILE, {
+    // update(cache, { data: { updateProfile } }) {
+    //   const { profile } = cache.readQuery({ query: GET_PROFILE });
+    //   cache.writeQuery({
+    //     query: GET_PROFILE,
+    //     data: { ...profile, ...updateProfile }
+    //   });
+    //   console.log(profile);
+    //   console.log(updateProfile);
+    // }
+    variables: {
+      id: profile._id,
+      image: mutateProfile.image,
+      name: mutateProfile.name,
+      introduce: mutateProfile.introduce,
+      link: mutateProfile.link,
+      company: mutateProfile.company,
+      location: mutateProfile.location,
+      email: mutateProfile.email
+    },
+    onCompleted: () => window.location.reload()
+    // refetchQueries: [{ query: GET_PROFILE }]
   });
 
   useEffect(() => {
@@ -225,8 +237,6 @@ export default function Profile(props: any) {
       selectedImageRef.current.value = '';
     }
   }, [selectedImagePath]);
-
-  console.log(profile);
 
   return (
     <Container>
@@ -266,18 +276,7 @@ export default function Profile(props: any) {
           id='profile-form'
           onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
             event.preventDefault();
-            updateProfile({
-              variables: {
-                id: profile._id,
-                image: mutateProfile.image,
-                name: mutateProfile.name,
-                introduce: mutateProfile.introduce,
-                link: mutateProfile.link,
-                company: mutateProfile.company,
-                location: mutateProfile.location,
-                email: mutateProfile.email
-              }
-            });
+            updateProfile();
             setIsEditMode(false);
           }}
         >
