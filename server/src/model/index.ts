@@ -1,6 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
 import { profileSchema, Profile } from './profile';
 import { userSchema, User } from './user';
+import { categorySchema } from './category';
 
 const blogSchema = new Schema({
   profile: {
@@ -11,6 +12,10 @@ const blogSchema = new Schema({
   user: {
     type: userSchema,
     required: true,
+    default: {}
+  },
+  category: {
+    type: categorySchema,
     default: {}
   }
 });
