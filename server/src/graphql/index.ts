@@ -1,30 +1,36 @@
 import merge from 'lodash/merge';
-import { GraphQLScalarType, Kind } from 'graphql';
+import { GraphQLScalarType, Kind, ValueNode } from 'graphql';
 import { makeExecutableSchema, gql } from 'apollo-server';
 
 import { profileTypeDef, profileResolver } from './profile';
 import { userTypeDef, userResolver } from './user';
 import { categoryTypeDef, categoryResolver } from './category';
 
-const dateScalar = new GraphQLScalarType({
-  name: 'Date',
-  description: 'Date custom scalar type',
-  serialize(value) {
-    return value.getTime();
-  },
-  parseValue(value) {
-    return new Date(value);
-  },
-  parseLiteral(ast) {
-    if (ast.kind === Kind.INT) {
-      return parseInt(ast.value, 10);
-    }
-    return null;
+function serialize(value: Date) {
+  return value.toISOString();
+}
+
+function parseValue(value: any) {
+  return new Date(value);
+}
+
+function parseLiteral(ast: ValueNode) {
+  if (ast.kind === Kind.STRING) {
+    return parseValue(ast.value);
   }
+  return null;
+}
+
+const dateScalar = new GraphQLScalarType({
+  name: 'DateTime',
+  description: 'Date custom scalar type',
+  serialize,
+  parseValue,
+  parseLiteral
 });
 
 const Query = gql`
-  scalar Date
+  scalar DateTime
 
   type Query {
     profile: Profile
@@ -49,7 +55,7 @@ const Query = gql`
 `;
 
 const resolvers = {
-  Date: dateScalar
+  DateTime: dateScalar
 };
 
 export const schema = makeExecutableSchema({

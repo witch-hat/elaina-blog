@@ -2,19 +2,25 @@ import { gql } from 'apollo-server';
 import { Category } from '../model/category';
 
 export const categoryTypeDef = gql`
+  type Reply {
+    username: String!
+    password: String!
+    createdAt: DateTime
+  }
+
   type Comment {
     username: String!
     password: String!
-    createdAt: Date!
+    createdAt: DateTime
     comment: String!
-    replies: [Comment]
+    replies: [Reply]
   }
 
   type Post {
     author: String!
     postUrl: String!
     title: String!
-    createdAt: Date!
+    createdAt: DateTime
     article: String!
     comments: [Comment]
   }
