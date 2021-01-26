@@ -39,7 +39,7 @@ Schema.Types.PostType = PostType;
 
 export const categorySchema = new Schema<CategoryModel>(
   {
-    name: {
+    title: {
       type: String,
       required: true
     },
