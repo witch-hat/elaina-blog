@@ -11,7 +11,7 @@ export const categoryTypeDef = gql`
   }
 
   type Post {
-    username: String!
+    author: String!
     postUrl: String!
     title: String!
     createdAt: Date!
@@ -21,7 +21,7 @@ export const categoryTypeDef = gql`
 
   type Category {
     _id: ID!
-    name: String!
+    title: String!
     description: String!
     previewImage: String!
     posts: [Post]

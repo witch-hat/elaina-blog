@@ -9,7 +9,7 @@ interface Comment {
 }
 
 interface Post {
-  username: string;
+  author: string;
   postUrl: string;
   title: string;
   createdAt: Date;
@@ -18,7 +18,7 @@ interface Post {
 }
 
 interface CategoryModel extends Document {
-  name: string;
+  title: string;
   description: string;
   previewImage: string;
   posts?: [Post];
