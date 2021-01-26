@@ -37,20 +37,25 @@ PostType.prototype.cast = function (value: Post): Post {
 // need to fix
 Schema.Types.PostType = PostType;
 
-export const categorySchema = new Schema<CategoryModel>({
-  name: {
-    type: String,
-    required: true
+export const categorySchema = new Schema<CategoryModel>(
+  {
+    name: {
+      type: String,
+      required: true
+    },
+    description: {
+      type: String
+    },
+    previewImage: {
+      type: String
+    },
+    posts: {
+      type: [PostType]
+    }
   },
-  description: {
-    type: String
-  },
-  previewImage: {
-    type: String
-  },
-  posts: {
-    type: [PostType]
+  {
+    collection: 'category'
   }
-});
+);
 
 export const Category = model<CategoryModel>('Category', categorySchema);
