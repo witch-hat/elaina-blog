@@ -5,13 +5,13 @@ export const categoryTypeDef = gql`
   type Reply {
     username: String!
     password: String!
-    createdAt: DateTime
+    createAt: DateTime
   }
 
   type Comment {
     username: String!
     password: String!
-    createdAt: DateTime
+    createAt: DateTime
     comment: String!
     replies: [Reply]
   }
@@ -20,7 +20,7 @@ export const categoryTypeDef = gql`
     author: String!
     postUrl: String!
     title: String!
-    createdAt: DateTime
+    createAt: DateTime
     article: String!
     comments: [Comment]
   }

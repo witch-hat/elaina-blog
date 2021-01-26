@@ -7,14 +7,16 @@ import { userTypeDef, userResolver } from './user';
 import { categoryTypeDef, categoryResolver } from './category';
 
 function serialize(value: Date) {
-  return value.toISOString();
+  return value.toString();
 }
 
 function parseValue(value: any) {
+  console.log(value);
   return new Date(value);
 }
 
 function parseLiteral(ast: ValueNode) {
+  console.log(ast);
   if (ast.kind === Kind.STRING) {
     return parseValue(ast.value);
   }
