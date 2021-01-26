@@ -1,18 +1,25 @@
 import { Schema, model, Document, SchemaType } from 'mongoose';
 
+interface Reply {
+  username: string;
+  password: string;
+  createAt: Date;
+  comment: string;
+}
+
 interface Comment {
   username: string;
   password: string;
-  createdAt: Date;
+  createAt: Date;
   comment: string;
-  replies?: [Comment];
+  replies?: [Reply];
 }
 
 interface Post {
   author: string;
   postUrl: string;
   title: string;
-  createdAt: Date;
+  createAt: Date;
   article: string;
   comments?: [Comment];
 }
