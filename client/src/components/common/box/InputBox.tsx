@@ -1,3 +1,4 @@
+import React from 'react';
 import styled from 'styled-components';
 
 import { theme } from 'src/styles';
@@ -53,19 +54,18 @@ interface Props {
   type: string;
   minLength: number;
   maxLength: number;
-  ref?: (instance: HTMLInputElement) => void;
   onFocus?: Function;
   onBlur?: Function;
   placeholder?: string;
   styles?: Styles;
 }
 
-export function InputBox(props: Props) {
+export const InputBox = React.forwardRef<HTMLInputElement, Props>((props, forwardedRef) => {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   return (
     <Input
-      ref={props.ref}
+      ref={forwardedRef}
       id={props.id}
       placeholder={props.placeholder}
       type={props.type}
@@ -86,4 +86,4 @@ export function InputBox(props: Props) {
       }}
     />
   );
-}
+});
