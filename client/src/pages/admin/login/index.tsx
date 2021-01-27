@@ -1,8 +1,11 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect, useState, FormEvent } from 'react';
 import styled from 'styled-components';
+import bcrypt from 'bcryptjs';
 
+import { useApollo } from '../../../apolloClient';
 import { InputBox } from 'src/components';
 import { theme } from 'src/styles';
+import { GET_USER, User } from 'src/query/user';
 
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';
@@ -72,16 +75,47 @@ const MessageBox = styled.div({
   marginTop: '16px'
 });
 
-interface Props {}
+interface Props {
+  setLogin: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
 export default function Login(props: Props) {
   const emailInputRef = useRef<HTMLInputElement>();
   const passwordInputRef = useRef<HTMLInputElement>();
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  const [userData, setUserData] = useState<User>({});
+  const apolloClient = useApollo();
+
+  useEffect(() => {
+    (async () => {
+      const { data, error } = await apolloClient.query({ query: GET_USER });
+      if (error) throw error;
+      setUserData(data.user[data.user.length - 1]);
+    })();
+  }, []);
+
+  console.log(userData);
 
   return (
     <Container>
-      <LogInForm>
+      <LogInForm
+        onSubmit={(event: FormEvent) => {
+          event.preventDefault();
+          if (emailInputRef.current?.value === userData.emailId) {
+            if (passwordInputRef.current?.value) {
+              bcrypt.compare(passwordInputRef.current.value, userData.password).then((result) => {
+                if (result) {
+                  props.setLogin(true);
+                } else {
+                  alert('fail to login');
+                }
+              });
+            }
+          } else {
+            alert('fail to login');
+          }
+        }}
+      >
         <InputWrapper>
           <Label isBold={true}>Email ID</Label>
           <InputBox
