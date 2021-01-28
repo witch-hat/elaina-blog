@@ -5,7 +5,7 @@ import { useMutation, gql } from '@apollo/client';
 import { RoundImage, InputBox, Loading, GET_PROFILE, ProfileType, UPDATE_PROFILE } from 'src/components';
 import { ProfileImageCropper } from './ProfileImageCropper';
 import { theme } from 'src/styles';
-import { useApollo } from '../../../apolloClient';
+import { useApollo } from '../../../apollo/apolloClient';
 
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';
