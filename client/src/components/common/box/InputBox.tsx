@@ -1,3 +1,4 @@
+import React from 'react';
 import styled from 'styled-components';
 
 import { theme } from 'src/styles';
@@ -61,7 +62,7 @@ interface Props {
   styles?: Styles;
 }
 
-export function InputBox(props: Props) {
+export const InputBox = React.forwardRef<HTMLInputElement, Props>((props, forwardedRef) => {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   return (
@@ -89,4 +90,4 @@ export function InputBox(props: Props) {
       formNoValidate
     />
   );
-}
+});
