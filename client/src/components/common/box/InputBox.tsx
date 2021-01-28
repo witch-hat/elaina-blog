@@ -53,9 +53,10 @@ interface Props {
   type: string;
   minLength: number;
   maxLength: number;
-  ref?: (instance: HTMLInputElement) => void;
+  inputRef?: ((instance: HTMLInputElement | null) => void) | React.RefObject<HTMLInputElement> | null | undefined;
   onFocus?: Function;
   onBlur?: Function;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLDivElement>) => void;
   placeholder?: string;
   styles?: Styles;
 }
@@ -65,7 +66,7 @@ export function InputBox(props: Props) {
 
   return (
     <Input
-      ref={props.ref}
+      ref={props.inputRef}
       id={props.id}
       placeholder={props.placeholder}
       type={props.type}
@@ -84,6 +85,8 @@ export function InputBox(props: Props) {
           props.onBlur();
         }
       }}
+      onKeyDown={props.onKeyDown}
+      formNoValidate
     />
   );
 }

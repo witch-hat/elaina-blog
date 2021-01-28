@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
 import { InputBox } from 'src/components';
@@ -75,9 +75,23 @@ const MessageBox = styled.div({
 interface Props {}
 
 export default function Login(props: Props) {
-  const emailInputRef = useRef<HTMLInputElement>();
-  const passwordInputRef = useRef<HTMLInputElement>();
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const emailInputRef = useRef<HTMLInputElement>(null);
+  const passwordInputRef = useRef<HTMLInputElement>(null);
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+
+  function controlEnterKey(e: React.KeyboardEvent<HTMLDivElement>, myInputRef: HTMLInputElement, otherInputRef: HTMLInputElement) {
+    e.preventDefault();
+
+    const myValueLength: number = myInputRef.value.length;
+    const otherValueLength: number = otherInputRef.value.length;
+
+    if (myValueLength !== 0 && otherValueLength === 0) {
+      otherInputRef.focus();
+    } else if (myValueLength !== 0 && otherValueLength !== 0) {
+      buttonRef.current?.click();
+    }
+  }
 
   return (
     <Container>
@@ -85,35 +99,45 @@ export default function Login(props: Props) {
         <InputWrapper>
           <Label isBold={true}>Email ID</Label>
           <InputBox
-            ref={(input: HTMLInputElement) => {
-              emailInputRef.current = input;
-            }}
+            inputRef={emailInputRef}
             id='admin-id'
             type='email'
             minLength={4}
             maxLength={100}
             placeholder='Email ID'
             styles={{ margin: '8px 0 0 0', width: '100%' }}
+            onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => {
+              if (e.nativeEvent.key === 'Enter') {
+                if (emailInputRef.current && passwordInputRef.current) {
+                  controlEnterKey(e, emailInputRef.current, passwordInputRef.current);
+                }
+              }
+            }}
           />
         </InputWrapper>
         <InputWrapper>
           <Label isBold={true}>암호</Label>
           <InputBox
-            ref={(input: HTMLInputElement) => {
-              passwordInputRef.current = input;
-            }}
+            inputRef={passwordInputRef}
             id='admin-pw'
             type='password'
-            minLength={4}
+            minLength={0}
             maxLength={16}
             placeholder='암호'
             styles={{ margin: '8px 0 0 0', width: '100%' }}
+            onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => {
+              if (e.nativeEvent.key === 'Enter') {
+                if (emailInputRef.current && passwordInputRef.current) {
+                  controlEnterKey(e, passwordInputRef.current, emailInputRef.current);
+                }
+              }
+            }}
           />
         </InputWrapper>
         <MessageBox>
           <Label>입력한 Email ID 또는 암호가 정확하지 않습니다.</Label>
         </MessageBox>
-        <LogInButton type='submit' themeMode={themeMode}>
+        <LogInButton ref={buttonRef} type='submit' themeMode={themeMode}>
           <LogInText>로그인</LogInText>
         </LogInButton>
         <HelpWrapper></HelpWrapper>
