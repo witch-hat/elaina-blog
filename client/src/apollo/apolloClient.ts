@@ -11,7 +11,8 @@ function createApolloClient() {
       uri: 'http://localhost:4000',
       credentials: 'same-origin'
     }),
-    cache: new InMemoryCache()
+    cache: new InMemoryCache(),
+    assumeImmutableResults: true
   });
 }
 

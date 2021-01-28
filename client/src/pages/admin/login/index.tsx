@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState, FormEvent } from 'react';
 import styled from 'styled-components';
 import bcrypt from 'bcryptjs';
 
-import { useApollo } from '../../../apolloClient';
+import { useApollo } from '../../../apollo/apolloClient';
 import { InputBox } from 'src/components';
 import { theme } from 'src/styles';
 import { GET_USER, User } from 'src/query/user';
