@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState, FormEvent } from 'react';
 import styled from 'styled-components';
 import bcrypt from 'bcryptjs';
 
-import { useApollo } from '../../../apolloClient';
+import { useApollo } from '../../../apollo/apolloClient';
 import { InputBox } from 'src/components';
 import { theme } from 'src/styles';
 import { GET_USER, User } from 'src/query/user';
@@ -45,11 +45,12 @@ const HelpWrapper = styled.div({
   margin: '10px 0'
 });
 
-const Label = styled.label<{ isBold?: boolean }>((props) => {
+const Label = styled.label<{ color?: string; isBold?: boolean }>((props) => {
   return {
     display: 'inline-block',
     textAlign: 'left',
-    fontWeight: props.isBold ? 'bold' : 'normal'
+    fontWeight: props.isBold ? 'bold' : 'normal',
+    color: props.color ? props.color : ''
   };
 });
 
@@ -80,10 +81,11 @@ interface Props {
 }
 
 export default function Login(props: Props) {
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const emailInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  const [errorMessage, setErrorMessage] = useState<string>('');
   const [userData, setUserData] = useState<User>({});
   const apolloClient = useApollo();
 
@@ -110,6 +112,15 @@ export default function Login(props: Props) {
     }
   }
 
+  function error(message: string) {
+    if (passwordInputRef.current) {
+      passwordInputRef.current.value = '';
+    }
+    emailInputRef.current?.blur();
+    passwordInputRef.current?.blur();
+    setErrorMessage(message);
+  }
+
   return (
     <Container>
       <LogInForm
@@ -121,12 +132,12 @@ export default function Login(props: Props) {
                 if (result) {
                   props.setLogin(true);
                 } else {
-                  alert('fail to login');
+                  error('입력한 Email ID 또는 암호가 정확하지 않습니다.');
                 }
               });
             }
           } else {
-            alert('fail to login');
+            error('입력한 Email ID 또는 암호가 정확하지 않습니다.');
           }
         }}
       >
@@ -169,7 +180,7 @@ export default function Login(props: Props) {
           />
         </InputWrapper>
         <MessageBox>
-          <Label>입력한 Email ID 또는 암호가 정확하지 않습니다.</Label>
+          <Label color={'red'}>{errorMessage}</Label>
         </MessageBox>
         <LogInButton ref={buttonRef} type='submit' themeMode={themeMode}>
           <LogInText>로그인</LogInText>
