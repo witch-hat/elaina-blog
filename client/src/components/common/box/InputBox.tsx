@@ -19,8 +19,9 @@ interface Styles {
 }
 
 interface InputProps {
-  styles?: Styles;
   themeMode: ThemeMode;
+  isValid?: boolean;
+  styles?: Styles;
 }
 
 const Input = styled.input<InputProps>((props) => {
@@ -37,7 +38,7 @@ const Input = styled.input<InputProps>((props) => {
       outline: 'none',
       padding: '1px',
       borderWidth: '2px',
-      borderColor: theme[props.themeMode].focusBorder
+      borderColor: props.isValid ? theme[props.themeMode].focusBorder : theme[props.themeMode].invalidBorder
     },
     '&::placeholder': {
       color: theme[props.themeMode].placeholderText
@@ -60,6 +61,7 @@ interface Props {
   onKeyDown?: (e: React.KeyboardEvent<HTMLDivElement>) => void;
   placeholder?: string;
   styles?: Styles;
+  isValid?: boolean;
 }
 
 export const InputBox = React.forwardRef<HTMLInputElement, Props>((props, forwardedRef) => {
@@ -87,7 +89,12 @@ export const InputBox = React.forwardRef<HTMLInputElement, Props>((props, forwar
         }
       }}
       onKeyDown={props.onKeyDown}
+      isValid={props.isValid}
       formNoValidate
     />
   );
 });
+
+InputBox.defaultProps = {
+  isValid: true
+};

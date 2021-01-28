@@ -116,8 +116,7 @@ export default function Login(props: Props) {
     if (passwordInputRef.current) {
       passwordInputRef.current.value = '';
     }
-    emailInputRef.current?.blur();
-    passwordInputRef.current?.blur();
+    passwordInputRef.current?.focus();
     setErrorMessage(message);
   }
 
@@ -132,24 +131,24 @@ export default function Login(props: Props) {
                 if (result) {
                   props.setLogin(true);
                 } else {
-                  error('입력한 Email ID 또는 암호가 정확하지 않습니다.');
+                  error('Email 또는 암호가 정확하지 않습니다.');
                 }
               });
             }
           } else {
-            error('입력한 Email ID 또는 암호가 정확하지 않습니다.');
+            error('Email 또는 암호가 정확하지 않습니다.');
           }
         }}
       >
         <InputWrapper>
-          <Label isBold={true}>Email ID</Label>
+          <Label isBold={true}>Email</Label>
           <InputBox
             inputRef={emailInputRef}
             id='admin-id'
             type='email'
             minLength={4}
             maxLength={100}
-            placeholder='Email ID'
+            placeholder='Email'
             styles={{ margin: '8px 0 0 0', width: '100%' }}
             onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => {
               if (e.nativeEvent.key === 'Enter') {
@@ -177,6 +176,7 @@ export default function Login(props: Props) {
                 }
               }
             }}
+            isValid={errorMessage.length === 0}
           />
         </InputWrapper>
         <MessageBox>
