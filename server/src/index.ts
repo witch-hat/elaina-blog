@@ -1,6 +1,7 @@
-import { gql, ApolloServer, ApolloError } from 'apollo-server';
+import { gql, ApolloServer, AuthenticationError, ForbiddenError } from 'apollo-server';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+
 import { schema } from './graphql';
 
 dotenv.config();
@@ -21,7 +22,9 @@ mongoose
 
 const db = mongoose.connection;
 
-const server = new ApolloServer({ schema });
+const server = new ApolloServer({
+  schema
+});
 
 server.listen().then(({ url }) => {
   console.log(`Server Ready at ${url}`);

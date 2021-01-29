@@ -36,7 +36,7 @@ const Query = gql`
 
   type Query {
     profile: Profile
-    user: [User]
+    me: User
     category: [Category]
   }
 
@@ -53,6 +53,8 @@ const Query = gql`
     ): Profile
 
     updatePassword(emailId: String, password: String): User
+
+    login(emailId: String!, password: String!): User
   }
 `;
 

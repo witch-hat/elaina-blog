@@ -1,5 +1,6 @@
-import { gql } from 'apollo-server';
+import { gql, AuthenticationError } from 'apollo-server';
 import { User, UserModel } from '../model/user';
+import { comparePassword, getToken } from '../util/auth';
 
 export const userTypeDef = gql`
   type User {
@@ -10,10 +11,10 @@ export const userTypeDef = gql`
 
 export const userResolver = {
   Query: {
-    async user() {
+    async me() {
       try {
         const user = await User.find();
-        return user;
+        return user[user.length - 1];
       } catch (err) {
         console.log(err);
         throw err;
@@ -28,6 +29,30 @@ export const userResolver = {
           password: args.password
         });
         return result;
+      } catch (err) {
+        throw err;
+      }
+    },
+
+    async login(_: any, args: any) {
+      try {
+        const user = await User.find();
+        const me: UserModel = user[user.length - 1];
+
+        if (args.emailId === me.emailId) {
+          const isMatch = await comparePassword(args.password, me.password);
+
+          if (isMatch) {
+            const token = getToken(me);
+            return { ...me, token };
+          } else {
+            throw new AuthenticationError('wrong password!');
+          }
+        } else {
+          throw new AuthenticationError('wrong emailId!');
+        }
+
+        return me;
       } catch (err) {
         throw err;
       }
