@@ -6,6 +6,7 @@ export const userTypeDef = gql`
   type User {
     emailId: String
     password: String
+    token: String
   }
 `;
 
@@ -44,15 +45,14 @@ export const userResolver = {
 
           if (isMatch) {
             const token = getToken(me);
-            return { ...me, token };
+            me.token = token;
+            return me;
           } else {
             throw new AuthenticationError('wrong password!');
           }
         } else {
           throw new AuthenticationError('wrong emailId!');
         }
-
-        return me;
       } catch (err) {
         throw err;
       }

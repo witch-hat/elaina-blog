@@ -37,7 +37,7 @@ export function comparePassword(password: string, hash: string) {
 
 export function getToken(payload: UserModel) {
   const token = jwt.sign(payload.toJSON(), config.secret, {
-    expiresIn: 3600
+    expiresIn: '1h'
   });
   console.log(token);
   return token;
