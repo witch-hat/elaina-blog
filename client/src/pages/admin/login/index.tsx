@@ -93,7 +93,7 @@ export default function Login(props: Props) {
     (async () => {
       const { data, error } = await apolloClient.query({ query: GET_USER });
       if (error) throw error;
-      setUserData(data.user[data.user.length - 1]);
+      setUserData(data.me);
     })();
   }, []);
 
