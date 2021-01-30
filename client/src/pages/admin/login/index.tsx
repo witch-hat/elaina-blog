@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState, FormEvent } from 'react';
 import styled from 'styled-components';
 import bcrypt from 'bcryptjs';
 import { useMutation } from '@apollo/client';
+import { useRouter } from 'next/router';
 
 import { useApollo } from '../../../apollo/apolloClient';
 import { InputBox } from 'src/components';
@@ -90,10 +91,16 @@ export default function Login(props: Props) {
   const [userData, setUserData] = useState<User>({});
   const apolloClient = useApollo();
   const [login] = useMutation(LOGIN);
+  const router = useRouter();
+
+  // redirect page to login, if login, redirect to admin
+  useEffect(() => {
+    router.push('/admin/login');
+  }, []);
 
   useEffect(() => {
     (async () => {
-      const { data, error } = await apolloClient.query({ query: GET_USER });
+      const { data, error } = await apolloClient.query({ query: GET_USER, fetchPolicy: 'network-only' });
       if (error) throw error;
       setUserData(data.me);
     })();
