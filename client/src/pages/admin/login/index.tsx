@@ -1,11 +1,12 @@
 import React, { useRef, useEffect, useState, FormEvent } from 'react';
 import styled from 'styled-components';
 import bcrypt from 'bcryptjs';
+import { useMutation } from '@apollo/client';
 
 import { useApollo } from '../../../apollo/apolloClient';
 import { InputBox } from 'src/components';
 import { theme } from 'src/styles';
-import { GET_USER, User } from 'src/query/user';
+import { GET_USER, User, LOGIN } from 'src/query/user';
 
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';
@@ -88,6 +89,7 @@ export default function Login(props: Props) {
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [userData, setUserData] = useState<User>({});
   const apolloClient = useApollo();
+  const [login] = useMutation(LOGIN);
 
   useEffect(() => {
     (async () => {
@@ -96,8 +98,6 @@ export default function Login(props: Props) {
       setUserData(data.me);
     })();
   }, []);
-
-  console.log(userData);
 
   function controlEnterKey(e: React.KeyboardEvent<HTMLDivElement>, myInputRef: HTMLInputElement, otherInputRef: HTMLInputElement) {
     e.preventDefault();
@@ -120,26 +120,23 @@ export default function Login(props: Props) {
     setErrorMessage(message);
   }
 
+  function handleSubmit(event: FormEvent) {
+    event.preventDefault();
+    if (emailInputRef.current && passwordInputRef.current) {
+      login({
+        variables: {
+          emailId: emailInputRef.current.value,
+          password: passwordInputRef.current.value
+        }
+      });
+    } else {
+      error('Email 또는 Password를 입력해주세요.');
+    }
+  }
+
   return (
     <Container>
-      <LogInForm
-        onSubmit={(event: FormEvent) => {
-          event.preventDefault();
-          if (emailInputRef.current?.value === userData.emailId) {
-            if (passwordInputRef.current?.value) {
-              bcrypt.compare(passwordInputRef.current.value, userData.password).then((result) => {
-                if (result) {
-                  props.setLogin(true);
-                } else {
-                  error('Email 또는 암호가 정확하지 않습니다.');
-                }
-              });
-            }
-          } else {
-            error('Email 또는 암호가 정확하지 않습니다.');
-          }
-        }}
-      >
+      <LogInForm onSubmit={(event: FormEvent) => handleSubmit(event)}>
         <InputWrapper>
           <Label isBold={true}>Email</Label>
           <InputBox
