@@ -48,10 +48,10 @@ export const userResolver = {
             me.token = token;
             return me;
           } else {
-            throw new AuthenticationError('wrong password!');
+            throw new AuthenticationError('이메일 또는 비밀번호가 맞지 않습니다.');
           }
         } else {
-          throw new AuthenticationError('wrong emailId!');
+          throw new AuthenticationError('이메일 또는 비밀번호가 맞지 않습니다.');
         }
       } catch (err) {
         throw err;

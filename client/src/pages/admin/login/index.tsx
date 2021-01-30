@@ -128,7 +128,7 @@ export default function Login(props: Props) {
           emailId: emailInputRef.current.value,
           password: passwordInputRef.current.value
         }
-      });
+      }).catch((err: Error) => error(err.message));
     } else {
       error('Email 또는 Password를 입력해주세요.');
     }
