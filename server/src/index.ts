@@ -1,12 +1,15 @@
-import { gql, ApolloServer, AuthenticationError, ForbiddenError } from 'apollo-server';
+// import { gql, ApolloServer, AuthenticationError, ForbiddenError } from 'apollo-server';
+import { ApolloServer } from 'apollo-server-express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import express from 'express';
+import cors from 'cors';
 
 import { schema } from './graphql';
 
 dotenv.config();
 
-const MONGO_URL = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@elainatest.c88ha.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
+const MONGO_URL = `mongodb+srv://Elaina:AnSung99@elainatest.c88ha.mongodb.net/Test?retryWrites=true&w=majority`;
 mongoose
   .connect(MONGO_URL, {
     useNewUrlParser: true,
@@ -22,11 +25,25 @@ mongoose
 
 const db = mongoose.connection;
 
+const app = express();
+
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  credentials: true
+};
+
+app.use(cors(corsOptions));
+
 const server = new ApolloServer({
   schema,
   context: ({ req }) => ({ ...req })
 });
 
-server.listen().then(({ url }) => {
-  console.log(`Server Ready at ${url}`);
+server.applyMiddleware({ app, path: '/graphql', cors: false });
+app.listen({ port: 4000 }, () => {
+  console.log(`http://localhost:4000`);
 });
+
+// server.listen({ port: 4000 }).then(({ url }) => {
+//   console.log(`Server Ready at ${url}`);
+// });
