@@ -1,6 +1,7 @@
 import { gql, AuthenticationError } from 'apollo-server';
 import { User, UserModel } from '../model/user';
 import { comparePassword, getToken } from '../util/auth';
+import Cookies from 'js-cookie';
 
 export const userTypeDef = gql`
   type User {
@@ -35,7 +36,7 @@ export const userResolver = {
       }
     },
 
-    async login(_: any, args: any, ctx: any) {
+    async login(_: any, args: any, { res }: any) {
       try {
         const user = await User.find();
         const me: UserModel = user[user.length - 1];
@@ -47,8 +48,9 @@ export const userResolver = {
             const token = getToken(me);
             me.token = token;
 
-            ctx.res.cookie('token', token, {
-              httpOnly: true
+            res.cookie('token', token, {
+              httpOnly: true,
+              maxAge: 1000 * 60 * 60 // 1h
             });
 
             return me;

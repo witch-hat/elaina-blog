@@ -23,8 +23,6 @@ mongoose
     console.log(err);
   });
 
-const db = mongoose.connection;
-
 const app = express();
 
 const corsOptions = {
@@ -43,7 +41,3 @@ server.applyMiddleware({ app, path: '/graphql', cors: false });
 app.listen({ port: 4000 }, () => {
   console.log(`http://localhost:4000`);
 });
-
-// server.listen({ port: 4000 }).then(({ url }) => {
-//   console.log(`Server Ready at ${url}`);
-// });

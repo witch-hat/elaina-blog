@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import bcrypt from 'bcryptjs';
 import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
+import Cookies from 'js-cookie';
 
 import { useApollo } from '../../../apollo/apolloClient';
 import { InputBox } from 'src/components';
