@@ -6,16 +6,9 @@ import Cookie from 'cookie';
 import LogIn from './login';
 import { AdminPageLayout } from './component/AdminPageLayout';
 
-interface Props {
-  cookie?: string;
-}
+interface Props {}
 
 export default function Admin(props: Props) {
-  const router = useRouter();
-
-  if (props.cookie === null) {
-    router.push('admin/login');
-  }
   return (
     <AdminPageLayout>
       <div>Admin Page</div>
@@ -23,7 +16,15 @@ export default function Admin(props: Props) {
   );
 }
 
-export async function getServerSideProps(ctx: NextPageContext) {
-  const cookie = Cookie.parse(ctx.req?.headers.cookie || '').token || null;
+export async function getServerSideProps({ res, req }: NextPageContext) {
+  const cookie = Cookie.parse(req?.headers.cookie || '').token || null;
+  if (cookie === null) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/admin/login'
+      }
+    };
+  }
   return { props: { cookie } };
 }

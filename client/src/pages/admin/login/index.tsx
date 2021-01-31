@@ -93,10 +93,6 @@ export default function Login(props: Props) {
   const [login] = useMutation(LOGIN);
   const router = useRouter();
 
-  if (props.cookie) {
-    router.push('/admin');
-  }
-
   function controlEnterKey(e: React.KeyboardEvent<HTMLDivElement>, myInputRef: HTMLInputElement, otherInputRef: HTMLInputElement) {
     e.preventDefault();
 
@@ -186,7 +182,15 @@ export default function Login(props: Props) {
   );
 }
 
-export function getServerSideProps({ req }: NextPageContext) {
+export function getServerSideProps({ req, res }: NextPageContext) {
   const cookie = Cookie.parse(req?.headers.cookie || '').token || null;
+  if (cookie) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/admin'
+      }
+    };
+  }
   return { props: { cookie } };
 }
