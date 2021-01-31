@@ -1,7 +1,6 @@
-import { gql, AuthenticationError } from 'apollo-server';
+import { gql, AuthenticationError, Request } from 'apollo-server';
 import { User, UserModel } from '../model/user';
 import { comparePassword, getToken } from '../util/auth';
-import Cookies from 'js-cookie';
 
 export const userTypeDef = gql`
   type User {

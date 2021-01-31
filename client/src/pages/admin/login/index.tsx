@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import bcrypt from 'bcryptjs';
 import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
-import Cookies from 'js-cookie';
+import { NextPageContext } from 'next';
+import Cookie from 'cookie';
 
 import { useApollo } from '../../../apollo/apolloClient';
 import { InputBox } from 'src/components';
@@ -80,7 +81,7 @@ const MessageBox = styled.div({
 });
 
 interface Props {
-  setLogin: React.Dispatch<React.SetStateAction<boolean>>;
+  cookie?: string;
 }
 
 export default function Login(props: Props) {
@@ -89,23 +90,12 @@ export default function Login(props: Props) {
   const emailInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const [userData, setUserData] = useState<User>({});
-  const apolloClient = useApollo();
   const [login] = useMutation(LOGIN);
   const router = useRouter();
 
-  // redirect page to login, if login, redirect to admin
-  useEffect(() => {
-    router.push('/admin/login');
-  }, []);
-
-  useEffect(() => {
-    (async () => {
-      const { data, error } = await apolloClient.query({ query: GET_USER, fetchPolicy: 'network-only' });
-      if (error) throw error;
-      setUserData(data.me);
-    })();
-  }, []);
+  if (props.cookie) {
+    router.push('/admin');
+  }
 
   function controlEnterKey(e: React.KeyboardEvent<HTMLDivElement>, myInputRef: HTMLInputElement, otherInputRef: HTMLInputElement) {
     e.preventDefault();
@@ -136,7 +126,9 @@ export default function Login(props: Props) {
           emailId: emailInputRef.current.value,
           password: passwordInputRef.current.value
         }
-      }).catch((err: Error) => handleError(err.message));
+      })
+        .then(() => router.replace(router.asPath))
+        .catch((err: Error) => handleError(err.message));
     }
   }
 
@@ -192,4 +184,9 @@ export default function Login(props: Props) {
       </LogInForm>
     </Container>
   );
+}
+
+export function getServerSideProps({ req }: NextPageContext) {
+  const cookie = Cookie.parse(req?.headers.cookie || '').token || null;
+  return { props: { cookie } };
 }
