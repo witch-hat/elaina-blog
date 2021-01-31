@@ -119,7 +119,7 @@ export default function Login(props: Props) {
     }
   }
 
-  function error(message: string) {
+  function handleError(message: string) {
     if (passwordInputRef.current) {
       passwordInputRef.current.value = '';
     }
@@ -135,9 +135,7 @@ export default function Login(props: Props) {
           emailId: emailInputRef.current.value,
           password: passwordInputRef.current.value
         }
-      }).catch((err: Error) => error(err.message));
-    } else {
-      error('Email 또는 Password를 입력해주세요.');
+      }).catch((err: Error) => handleError(err.message));
     }
   }
 
@@ -169,7 +167,7 @@ export default function Login(props: Props) {
             inputRef={passwordInputRef}
             id='admin-pw'
             type='password'
-            minLength={0}
+            minLength={4}
             maxLength={16}
             placeholder='암호'
             styles={{ margin: '8px 0 0 0', width: '100%' }}
