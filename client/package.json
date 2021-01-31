@@ -73,5 +73,5 @@
     "url": "https://github.com/lumyjuwon/elaina-blog.git"
   },
   "license": "MIT",
-  "proxy": "http://localhost:8080"
+  "proxy": "http://localhost:4000"
 }
