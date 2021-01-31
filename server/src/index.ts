@@ -23,7 +23,8 @@ mongoose
 const db = mongoose.connection;
 
 const server = new ApolloServer({
-  schema
+  schema,
+  context: ({ req }) => ({ ...req })
 });
 
 server.listen().then(({ url }) => {

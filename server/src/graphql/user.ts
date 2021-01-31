@@ -35,7 +35,7 @@ export const userResolver = {
       }
     },
 
-    async login(_: any, args: any) {
+    async login(_: any, args: any, ctx: any) {
       try {
         const user = await User.find();
         const me: UserModel = user[user.length - 1];
@@ -46,6 +46,11 @@ export const userResolver = {
           if (isMatch) {
             const token = getToken(me);
             me.token = token;
+
+            ctx.res.cookie('token', token, {
+              httpOnly: true
+            });
+
             return me;
           } else {
             throw new AuthenticationError('이메일 또는 비밀번호가 맞지 않습니다.');
