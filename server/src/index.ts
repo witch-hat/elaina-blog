@@ -1,4 +1,3 @@
-// import { gql, ApolloServer, AuthenticationError, ForbiddenError } from 'apollo-server';
 import { ApolloServer } from 'apollo-server-express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
