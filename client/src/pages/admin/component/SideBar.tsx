@@ -1,6 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
+import Cookie from 'cookie';
+import { useRouter } from 'next/router';
+import { NextPageContext } from 'next';
 
 import Profile from 'src/pages/main/component/Profile';
 
@@ -53,7 +56,14 @@ const Button = styled.button({
   marginBottom: '1rem'
 });
 
-export function SideBar() {
+interface Props {
+  cookie?: any;
+}
+
+export function SideBar(props: Props) {
+  console.log(props);
+  const router = useRouter();
+
   return (
     <Container>
       <Link href='/admin/writer'>
@@ -83,6 +93,27 @@ export function SideBar() {
       <ListContainer>
         <List>조회수</List>
       </ListContainer>
+      <TitleWrapper>
+        <Icon>
+          <i className='fas fa-user-cog'></i>
+        </Icon>
+        <Title>설정</Title>
+      </TitleWrapper>
+      <ListContainer>
+        <List>이름 변경</List>
+        <List
+          onClick={() => {
+            router.push('admin/login');
+          }}
+        >
+          로그아웃
+        </List>
+      </ListContainer>
     </Container>
   );
 }
+
+SideBar.getInitialProps = ({ req, res }: NextPageContext) => {
+  const cookie = Cookie.parse(req?.headers.cookie || '').token || null;
+  return { cookie };
+};
