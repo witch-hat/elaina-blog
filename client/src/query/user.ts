@@ -17,6 +17,14 @@ export const LOGIN = gql`
   }
 `;
 
+export const LOGOUT = gql`
+  mutation Logout($emailId: String) {
+    logout(emailId: $emailId) {
+      emailId
+    }
+  }
+`;
+
 export interface User {
   emailId?: string;
   password?: string;

@@ -1,11 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
-import Cookie from 'cookie';
 import { useRouter } from 'next/router';
-import { NextPageContext } from 'next';
+import { useMutation } from '@apollo/client';
 
-import Profile from 'src/pages/main/component/Profile';
+import { LOGOUT } from '../../../query/user';
 
 interface Props {}
 
@@ -63,6 +62,7 @@ interface Props {
 export function SideBar(props: Props) {
   console.log(props);
   const router = useRouter();
+  const [logout] = useMutation(LOGOUT);
 
   return (
     <Container>
@@ -103,6 +103,11 @@ export function SideBar(props: Props) {
         <List>이름 변경</List>
         <List
           onClick={() => {
+            logout({
+              variables: {
+                emailId: ''
+              }
+            });
             router.push('admin/login');
           }}
         >
@@ -112,8 +117,3 @@ export function SideBar(props: Props) {
     </Container>
   );
 }
-
-SideBar.getInitialProps = ({ req, res }: NextPageContext) => {
-  const cookie = Cookie.parse(req?.headers.cookie || '').token || null;
-  return { cookie };
-};
