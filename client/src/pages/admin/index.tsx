@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
-import { useRouter } from 'next/router';
+import React from 'react';
 import { NextPageContext } from 'next';
 import Cookie from 'cookie';
 
-import LogIn from './login';
 import { AdminPageLayout } from './component/AdminPageLayout';
 
 interface Props {}
