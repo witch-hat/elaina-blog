@@ -166,9 +166,16 @@ const Icon = styled.i({
   justifyContent: 'flex-start'
 });
 
+const Form = styled.form({
+  '& > *': {
+    margin: '.25rem 0'
+  }
+});
+
 const Editor = styled.textarea<{ themeMode: ThemeMode }>((props) => ({
   display: 'block',
   width: '100%',
+  height: '5rem',
   padding: '.2rem',
   outline: 'none',
   border: `1px solid ${theme[props.themeMode].inputBorder}`,
@@ -177,6 +184,7 @@ const Editor = styled.textarea<{ themeMode: ThemeMode }>((props) => ({
   backgroundColor: theme[props.themeMode].inputBackground,
   whiteSpace: 'pre-wrap',
   wordBreak: 'break-word',
+  resize: 'none',
   '&:empty::before': {
     content: "'Add introduce'",
     color: '#888'
@@ -270,9 +278,9 @@ export default function Profile(props: any) {
           </>
         )}
       </div>
-      {isEditMode || <Name>{profile.name}</Name>}
+      <Name>{profile.name}</Name>
       {isEditMode ? (
-        <form
+        <Form
           id='profile-form'
           onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
             event.preventDefault();
@@ -280,15 +288,8 @@ export default function Profile(props: any) {
             setIsEditMode(false);
           }}
         >
-          <Input
-            themeMode={themeMode}
-            type='text'
-            defaultValue={profile.name}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setMutateProfile({ ...mutateProfile, name: event.target.value });
-            }}
-          />
           <Editor
+            placeholder='Introduce'
             themeMode={themeMode}
             role='textbox'
             defaultValue={profile.introduce}
@@ -297,6 +298,7 @@ export default function Profile(props: any) {
             }}
           />
           <Input
+            placeholder='Link'
             themeMode={themeMode}
             type='text'
             defaultValue={profile.link}
@@ -305,6 +307,7 @@ export default function Profile(props: any) {
             }}
           />
           <Input
+            placeholder='Company'
             themeMode={themeMode}
             type='text'
             defaultValue={profile.company}
@@ -313,6 +316,7 @@ export default function Profile(props: any) {
             }}
           />
           <Input
+            placeholder='Region'
             themeMode={themeMode}
             type='text'
             defaultValue={profile.location}
@@ -321,6 +325,7 @@ export default function Profile(props: any) {
             }}
           />
           <Input
+            placeholder='Email'
             themeMode={themeMode}
             type='text'
             defaultValue={profile.email}
@@ -328,7 +333,7 @@ export default function Profile(props: any) {
               setMutateProfile({ ...mutateProfile, email: event.target.value });
             }}
           />
-        </form>
+        </Form>
       ) : (
         <ListWrapper>
           <Description>
