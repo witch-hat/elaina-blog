@@ -55,6 +55,8 @@ const Query = gql`
     updatePassword(emailId: String, password: String): User
 
     login(emailId: String!, password: String!): User
+
+    logout(emailId: String): User
   }
 `;
 

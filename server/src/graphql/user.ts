@@ -62,6 +62,14 @@ export const userResolver = {
       } catch (err) {
         throw err;
       }
+    },
+
+    logout(_: any, args: any, { res }: any) {
+      try {
+        return res.clearCookie('token');
+      } catch (err) {
+        throw err;
+      }
     }
   }
 };
