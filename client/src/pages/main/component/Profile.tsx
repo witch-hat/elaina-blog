@@ -218,7 +218,6 @@ export default function Profile(props: any) {
     variables: {
       id: profile._id,
       image: mutateProfile.image,
-      name: mutateProfile.name,
       introduce: mutateProfile.introduce,
       link: mutateProfile.link,
       company: mutateProfile.company,

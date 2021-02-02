@@ -36,7 +36,6 @@ export const profileResolver = {
         console.log(args);
         const result = await Profile.findByIdAndUpdate(args.id, {
           image: args.image,
-          name: args.name,
           introduce: args.introduce,
           link: args.link,
           company: args.company,
