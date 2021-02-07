@@ -2,10 +2,11 @@ import React, { useState, useRef, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { useMutation, gql } from '@apollo/client';
 
-import { RoundImage, InputBox, Loading, GET_PROFILE, ProfileType, UPDATE_PROFILE } from 'src/components';
+import { RoundImage, InputBox, Loading } from 'src/components';
 import { ProfileImageCropper } from './ProfileImageCropper';
 import { theme } from 'src/styles';
-import { useApollo } from '../../../apollo/apolloClient';
+import { useApollo } from 'src/apollo/apolloClient';
+import { GET_PROFILE, ProfileType, UPDATE_PROFILE } from 'src/query';
 
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';
