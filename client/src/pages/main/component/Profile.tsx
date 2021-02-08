@@ -123,7 +123,6 @@ const CancelButton = styled.div({
 
 const Input = styled.input<{ themeMode: ThemeMode }>((props) => ({
   display: 'inline-block',
-  flexShrink: 0,
   width: '100%',
   height: '2rem',
   fontSize: '1.1rem',
@@ -168,9 +167,8 @@ const Icon = styled.i({
 });
 
 const Form = styled.form({
-  '& > *': {
-    margin: '.25rem 0'
-  }
+  width: '100%',
+  fontSize: '1.1rem'
 });
 
 const Editor = styled.textarea<{ themeMode: ThemeMode }>((props) => ({
@@ -194,6 +192,13 @@ const Editor = styled.textarea<{ themeMode: ThemeMode }>((props) => ({
     content: "''"
   }
 }));
+
+const InputContainer = styled.div({
+  display: 'flex',
+  width: '100%',
+  alignItems: 'center',
+  margin: '.71rem 0'
+});
 
 interface Props {}
 
@@ -297,42 +302,54 @@ export default function Profile(props: any) {
               setMutateProfile({ ...mutateProfile, introduce: event.target.value });
             }}
           />
-          <Input
-            placeholder='Link'
-            themeMode={themeMode}
-            type='text'
-            defaultValue={profile.link}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setMutateProfile({ ...mutateProfile, link: event.target.value });
-            }}
-          />
-          <Input
-            placeholder='Company'
-            themeMode={themeMode}
-            type='text'
-            defaultValue={profile.company}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setMutateProfile({ ...mutateProfile, company: event.target.value });
-            }}
-          />
-          <Input
-            placeholder='Region'
-            themeMode={themeMode}
-            type='text'
-            defaultValue={profile.location}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setMutateProfile({ ...mutateProfile, location: event.target.value });
-            }}
-          />
-          <Input
-            placeholder='Email'
-            themeMode={themeMode}
-            type='text'
-            defaultValue={profile.email}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setMutateProfile({ ...mutateProfile, email: event.target.value });
-            }}
-          />
+          <InputContainer>
+            <Icon className='fas fa-link'></Icon>&nbsp;
+            <Input
+              placeholder='Link'
+              themeMode={themeMode}
+              type='text'
+              defaultValue={profile.link}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                setMutateProfile({ ...mutateProfile, link: event.target.value });
+              }}
+            />
+          </InputContainer>
+          <InputContainer>
+            <Icon className='far fa-building'></Icon>&nbsp;
+            <Input
+              placeholder='Company'
+              themeMode={themeMode}
+              type='text'
+              defaultValue={profile.company}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                setMutateProfile({ ...mutateProfile, company: event.target.value });
+              }}
+            />
+          </InputContainer>
+          <InputContainer>
+            <Icon className='fas fa-map-marker-alt'></Icon>&nbsp;
+            <Input
+              placeholder='Region'
+              themeMode={themeMode}
+              type='text'
+              defaultValue={profile.location}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                setMutateProfile({ ...mutateProfile, location: event.target.value });
+              }}
+            />
+          </InputContainer>
+          <InputContainer>
+            <Icon className='far fa-envelope'></Icon>&nbsp;
+            <Input
+              placeholder='Email'
+              themeMode={themeMode}
+              type='text'
+              defaultValue={profile.email}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                setMutateProfile({ ...mutateProfile, email: event.target.value });
+              }}
+            />
+          </InputContainer>
         </Form>
       ) : (
         <ListWrapper>
