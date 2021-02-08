@@ -211,16 +211,7 @@ export default function Profile(props: any) {
   const apolloClient = useApollo();
   const [profile, setProfile] = useState<ProfileType>({});
   const [mutateProfile, setMutateProfile] = useState<ProfileType>({});
-  const [updateProfile] = useMutation<{ updateProfile: ProfileType }, { data: ProfileType }>(UPDATE_PROFILE, {
-    // update(cache, { data: { updateProfile } }) {
-    //   const { profile } = cache.readQuery({ query: GET_PROFILE });
-    //   cache.writeQuery({
-    //     query: GET_PROFILE,
-    //     data: { ...profile, ...updateProfile }
-    //   });
-    //   console.log(profile);
-    //   console.log(updateProfile);
-    // }
+  const [updateProfile] = useMutation<{ updateProfile: ProfileType }>(UPDATE_PROFILE, {
     variables: {
       id: profile._id,
       image: mutateProfile.image,
