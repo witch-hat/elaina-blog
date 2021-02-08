@@ -1,48 +1,10 @@
 import { Schema, model, Document, SchemaType } from 'mongoose';
 
-interface Reply {
-  username: string;
-  password: string;
-  createAt: Date;
-  comment: string;
-}
-
-interface Comment {
-  username: string;
-  password: string;
-  createAt: Date;
-  comment: string;
-  replies?: [Reply];
-}
-
-interface Post {
-  author: string;
-  postUrl: string;
-  title: string;
-  createAt: Date;
-  article: string;
-  comments?: [Comment];
-}
-
 interface CategoryModel extends Document {
   title: string;
   description: string;
   previewImage: string;
-  posts?: [Post];
 }
-
-function PostType(this: SchemaType, key: any, options: any): void {
-  SchemaType.call(this, key, options, 'PostType');
-}
-Object.setPrototypeOf(PostType.prototype, SchemaType.prototype);
-
-PostType.prototype.cast = function (value: Post): Post {
-  return value;
-};
-
-// @ts-ignore
-// need to fix
-Schema.Types.PostType = PostType;
 
 export const categorySchema = new Schema<CategoryModel>(
   {
@@ -55,13 +17,10 @@ export const categorySchema = new Schema<CategoryModel>(
     },
     previewImage: {
       type: String
-    },
-    posts: {
-      type: [PostType]
     }
   },
   {
-    collection: 'category'
+    collection: 'categories'
   }
 );
 
