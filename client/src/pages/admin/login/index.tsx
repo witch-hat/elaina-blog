@@ -182,7 +182,7 @@ export default function Login(props: Props) {
   );
 }
 
-export function getServerSideProps({ req, res }: NextPageContext) {
+export async function getServerSideProps({ req, res }: NextPageContext) {
   const cookie = Cookie.parse(req?.headers.cookie || '').token || null;
   if (cookie) {
     return {
