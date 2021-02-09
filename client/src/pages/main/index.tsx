@@ -1,4 +1,5 @@
 import React from 'react';
+import { NextPageContext } from 'next';
 
 import { ContentCategory } from 'src/pages/main/component/ContentCategory';
 import { MainPageLayout, Loading } from 'src/components';
@@ -13,4 +14,13 @@ export default function Main({ profile }: Props) {
       <ContentCategory />
     </MainPageLayout>
   );
+}
+
+export function getServerSideProps({ req, res }: NextPageContext) {
+  return {
+    redirect: {
+      permanent: false,
+      destination: '/'
+    }
+  };
 }
