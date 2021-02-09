@@ -200,20 +200,22 @@ const InputContainer = styled.div({
   margin: '.71rem 0'
 });
 
-interface Props {}
+interface Props {
+  profile: ProfileType;
+}
 
-export default function Profile(props: any) {
+export default function Profile(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const [isEditMode, setIsEditMode] = useState(false);
   const [isSelectImage, setIsSelecImage] = useState(false);
   const [selectedImagePath, setSelectedImagePath] = useState('');
   const selectedImageRef = useRef<HTMLInputElement>(null);
   const apolloClient = useApollo();
-  const [profile, setProfile] = useState<ProfileType>({});
+  // const [profile, setProfile] = useState<ProfileType>({});
   const [mutateProfile, setMutateProfile] = useState<ProfileType>({});
   const [updateProfile] = useMutation<{ updateProfile: ProfileType }>(UPDATE_PROFILE, {
     variables: {
-      id: profile._id,
+      id: props.profile._id,
       image: mutateProfile.image,
       introduce: mutateProfile.introduce,
       link: mutateProfile.link,
@@ -222,17 +224,10 @@ export default function Profile(props: any) {
       email: mutateProfile.email
     },
     onCompleted: () => window.location.reload()
-    // refetchQueries: [{ query: GET_PROFILE }]
   });
 
   useEffect(() => {
-    (async () => {
-      const { loading, data, error } = await apolloClient.query({ query: GET_PROFILE });
-      if (loading) return <Loading />;
-      if (error) throw error;
-      setProfile(data.profile);
-      setMutateProfile(data.profile);
-    })();
+    setMutateProfile({ ...props.profile });
   }, []);
 
   // initialize input value to trigger onChange event when select the same image
@@ -246,7 +241,7 @@ export default function Profile(props: any) {
     <Container>
       <div style={{ position: 'relative' }}>
         <RoundImage
-          src={profile.image || ''}
+          src={props.profile.image || ''}
           styles={{
             borderRadius: '50%',
             width: '280px',
@@ -274,7 +269,7 @@ export default function Profile(props: any) {
           </>
         )}
       </div>
-      <Name>{profile.name}</Name>
+      <Name>{props.profile.name}</Name>
       {isEditMode ? (
         <Form
           id='profile-form'
@@ -288,7 +283,7 @@ export default function Profile(props: any) {
             placeholder='Introduce'
             themeMode={themeMode}
             role='textbox'
-            defaultValue={profile.introduce}
+            defaultValue={props.profile.introduce}
             onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
               setMutateProfile({ ...mutateProfile, introduce: event.target.value });
             }}
@@ -299,7 +294,7 @@ export default function Profile(props: any) {
               placeholder='Link'
               themeMode={themeMode}
               type='text'
-              defaultValue={profile.link}
+              defaultValue={props.profile.link}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setMutateProfile({ ...mutateProfile, link: event.target.value });
               }}
@@ -311,7 +306,7 @@ export default function Profile(props: any) {
               placeholder='Company'
               themeMode={themeMode}
               type='text'
-              defaultValue={profile.company}
+              defaultValue={props.profile.company}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setMutateProfile({ ...mutateProfile, company: event.target.value });
               }}
@@ -323,7 +318,7 @@ export default function Profile(props: any) {
               placeholder='Region'
               themeMode={themeMode}
               type='text'
-              defaultValue={profile.location}
+              defaultValue={props.profile.location}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setMutateProfile({ ...mutateProfile, location: event.target.value });
               }}
@@ -335,7 +330,7 @@ export default function Profile(props: any) {
               placeholder='Email'
               themeMode={themeMode}
               type='text'
-              defaultValue={profile.email}
+              defaultValue={props.profile.email}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setMutateProfile({ ...mutateProfile, email: event.target.value });
               }}
@@ -345,26 +340,26 @@ export default function Profile(props: any) {
       ) : (
         <ListWrapper>
           <Description>
-            <span>{profile.introduce}</span>
+            <span>{props.profile.introduce}</span>
           </Description>
           <Description>
             <Icon className='fas fa-link'></Icon>&nbsp;
-            <a href={profile.link} target='_blank' rel='noopener noreferer nofollow'>
-              <span>{profile.link}</span>
+            <a href={props.profile.link} target='_blank' rel='noopener noreferer nofollow'>
+              <span>{props.profile.link}</span>
             </a>
           </Description>
           <Description>
             <Icon className='far fa-building'></Icon>&nbsp;
-            <span>{profile.company}</span>
+            <span>{props.profile.company}</span>
           </Description>
           <Description>
             <Icon className='fas fa-map-marker-alt'></Icon>&nbsp;
-            <span>{profile.location}</span>
+            <span>{props.profile.location}</span>
           </Description>
           <Description>
             <Icon className='far fa-envelope'></Icon>&nbsp;
             <a href='mailto:'>
-              <span>{profile.email}</span>
+              <span>{props.profile.email}</span>
             </a>
           </Description>
         </ListWrapper>
@@ -377,7 +372,7 @@ export default function Profile(props: any) {
             </SaveButton>
             <CancelButton
               onClick={() => {
-                setMutateProfile({ ...profile });
+                setMutateProfile({ ...props.profile });
                 setIsEditMode(false);
               }}
             >

@@ -33,12 +33,13 @@ const Wrapper = styled.div({
 
 interface Props {
   children: JSX.Element;
+  profile: never;
 }
 
 export function MainPageLayout(props: Props) {
   return (
     <Container>
-      <Profile />
+      <Profile profile={props.profile} />
       <Wrapper>
         <CategoryNavigation />
         {props.children}
