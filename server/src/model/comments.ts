@@ -8,6 +8,7 @@ interface Reply {
 }
 
 interface CommentModel extends Document {
+  postId: number;
   username: string;
   password: string;
   createdAt: Date;
@@ -29,6 +30,10 @@ ReplyType.prototype.cast = function (value: Reply): Reply {
 Schema.Types.ReplyType = ReplyType;
 
 export const commentSchema = new Schema<CommentModel>({
+  postId: {
+    type: Number,
+    required: true
+  },
   username: {
     type: String,
     required: true
@@ -49,3 +54,5 @@ export const commentSchema = new Schema<CommentModel>({
     type: [ReplyType]
   }
 });
+
+export const Comment = model<CommentModel>('Comment', commentSchema);
