@@ -5,6 +5,8 @@ import { makeExecutableSchema, gql } from 'apollo-server';
 import { profileTypeDef, profileResolver } from './profile';
 import { userTypeDef, userResolver } from './user';
 import { categoryTypeDef, categoryResolver } from './category';
+import { postTypeDef, postResolver } from './post';
+import { commentTypeDef, commentResolver } from './comment';
 
 function serialize(value: Date) {
   return value.toString();
@@ -38,6 +40,8 @@ const Query = gql`
     profile: Profile
     me: User
     category: [Category]
+    post: [Post]
+    comment: [Comment]
   }
 
   type Mutation {
@@ -65,6 +69,6 @@ const resolvers = {
 };
 
 export const schema = makeExecutableSchema({
-  typeDefs: [Query, profileTypeDef, userTypeDef, categoryTypeDef],
-  resolvers: merge(resolvers, profileResolver, userResolver, categoryResolver)
+  typeDefs: [Query, profileTypeDef, userTypeDef, categoryTypeDef, postTypeDef, commentTypeDef],
+  resolvers: merge(resolvers, profileResolver, userResolver, categoryResolver, postResolver, commentResolver)
 });
