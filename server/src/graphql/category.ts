@@ -12,10 +12,10 @@ export const categoryTypeDef = gql`
 
 export const categoryResolver = {
   Query: {
-    async category() {
+    async categories() {
       try {
-        const categories = await Category.find();
-        return categories;
+        const categoryList = await Category.find();
+        return categoryList;
       } catch (err) {
         throw err;
       }

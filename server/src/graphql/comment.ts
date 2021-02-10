@@ -20,10 +20,10 @@ export const commentTypeDef = gql`
 
 export const commentResolver = {
   Query: {
-    async comment() {
+    async comments() {
       try {
-        const comment = await Comment.find();
-        return comment;
+        const commentList = await Comment.find();
+        return commentList;
       } catch (err) {
         throw err;
       }

@@ -15,10 +15,10 @@ export const postTypeDef = gql`
 
 export const postResolver = {
   Query: {
-    async post() {
+    async posts() {
       try {
-        const posts = await Post.find();
-        return posts;
+        const postList = await Post.find();
+        return postList;
       } catch (err) {
         throw err;
       }

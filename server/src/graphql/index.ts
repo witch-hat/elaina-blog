@@ -39,9 +39,9 @@ const Query = gql`
   type Query {
     profile: Profile
     me: User
-    category: [Category]
-    post: [Post]
-    comment: [Comment]
+    categories: [Category]
+    posts: [Post]
+    comments: [Comment]
   }
 
   type Mutation {
