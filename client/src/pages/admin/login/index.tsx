@@ -93,7 +93,11 @@ export default function Login(props: Props) {
   const router = useRouter();
   const [login] = useMutation(LOGIN, {
     onCompleted: (data: any) => {
-      router.back();
+      if (document.referrer === '') {
+        router.push('/');
+      } else {
+        router.back();
+      }
     },
     onError: (err: Error) => {
       handleError(err.message);
