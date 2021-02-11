@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
+import { useSelector } from 'react-redux';
 import styled, { keyframes, css } from 'styled-components';
+import Link from 'next/link';
 
 import { theme } from 'src/styles';
 import { InputBox, FocusWrapper, useWidth } from 'src/components';
-import { ModeSwitch } from './ModeSwitch';
-import AdminMenuButton from './AdminMenuButton';
-
-import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
+import { ModeSwitch } from './ModeSwitch';
+import AdminMenuButton from './AdminMenuButton';
 
 const StyledHeader = styled.header<{ themeMode: ThemeMode }>((props) => {
   return {
@@ -130,6 +129,7 @@ const ResponsiveMenuBox = styled.div<{ themeMode: ThemeMode }>(
 );
 
 interface Props {
+  isLogin: boolean;
   name: string;
 }
 
@@ -180,7 +180,7 @@ export function Header(props: Props) {
               )}
             </>
           </FocusWrapper>
-          <AdminMenuButton />
+          <AdminMenuButton isLogin={props.isLogin} />
           <MobileMenuButton onClick={() => onMobileMenuButtonClick()}>
             <i className='fas fa-bars'></i>
           </MobileMenuButton>

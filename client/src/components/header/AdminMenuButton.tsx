@@ -1,13 +1,15 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import Link from 'next/link';
+import { useMutation } from '@apollo/client';
+import { useRouter } from 'next/router';
 
 import { theme } from 'src/styles';
 import { FocusWrapper } from 'src/components';
-
-import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
+import { LOGOUT } from 'src/query/user';
 
 const Container = styled.div({
   position: 'relative'
@@ -55,11 +57,15 @@ const List = styled.div({
   }
 });
 
-interface Props {}
+interface Props {
+  isLogin: boolean;
+}
 
 export default function AdminMenuButton(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [logout] = useMutation(LOGOUT);
 
   return (
     <Container>
@@ -73,18 +79,25 @@ export default function AdminMenuButton(props: Props) {
             <Link href='/admin'>
               <List onClick={() => setIsMenuOpen(false)}>Admin</List>
             </Link>
-            <Link href='/admin'>
-              <List onClick={() => setIsMenuOpen(false)}>Admin</List>
-            </Link>
-            <Link href='/admin'>
-              <List onClick={() => setIsMenuOpen(false)}>Admin</List>
-            </Link>
-            <Link href='/admin'>
-              <List onClick={() => setIsMenuOpen(false)}>Admin</List>
-            </Link>
-            <Link href='/admin'>
-              <List onClick={() => setIsMenuOpen(false)}>Admin</List>
-            </Link>
+            {props.isLogin ? (
+              <List
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  logout({
+                    variables: {
+                      emailId: ''
+                    }
+                  });
+                  router.push('/');
+                }}
+              >
+                Logout
+              </List>
+            ) : (
+              <Link href='/admin/login'>
+                <List onClick={() => setIsMenuOpen(false)}>Login</List>
+              </Link>
+            )}
           </ListContainer>
         </FocusWrapper>
       )}

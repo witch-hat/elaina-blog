@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { mockUpData } from 'src/resources';
+import { AppCommonProps } from 'src/pages/_app';
 
 const Container = styled.div({
   display: 'flex',
@@ -21,7 +22,7 @@ const Container = styled.div({
   }
 });
 
-interface Props {
+interface Props extends AppCommonProps {
   children: JSX.Element | JSX.Element[];
 }
 
@@ -32,7 +33,7 @@ export default function Layout(props: Props) {
     <>
       <GlobalStyles themeMode={theme} />
       <div>
-        <Header name={mockUpData.blogName} />
+        <Header name={mockUpData.blogName} isLogin={props.app.cookie !== null} />
         <Container>{props.children}</Container>
         <Footer />
       </div>

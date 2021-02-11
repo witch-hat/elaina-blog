@@ -24,5 +24,5 @@ export async function getServerSideProps({ res, req }: NextPageContext) {
       }
     };
   }
-  return { props: { cookie } };
+  return { props: {} };
 }

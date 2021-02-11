@@ -1,17 +1,21 @@
 import React from 'react';
-import styled from 'styled-components';
-import type { AppProps } from 'next/app';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import type { AppContext, AppProps } from 'next/app';
 import Head from 'next/head';
-import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
-import { useApollo } from '../apollo/apolloClient';
+import Cookie from 'cookie';
+import { ApolloProvider } from '@apollo/client';
 
 import Layout from 'src/components/Layout';
+import { useApollo } from 'src/apollo/apolloClient';
 
-import { Provider, useSelector } from 'react-redux';
 import { store, persistor } from 'src/redux';
-import { PersistGate } from 'redux-persist/integration/react';
-import { RootState } from 'src/redux/rootReducer';
-import { ThemeMode } from 'src/redux/common/type';
+
+export interface AppCommonProps {
+  app: {
+    cookie: string | null;
+  };
+}
 
 export default function ElainaBlog({ Component, pageProps }: AppProps) {
   const client = useApollo(pageProps.initialApolloState);
@@ -38,7 +42,7 @@ export default function ElainaBlog({ Component, pageProps }: AppProps) {
             />
             <title>Elaina Blog</title>
           </Head>
-          <Layout>
+          <Layout {...pageProps}>
             <Component {...pageProps} />
           </Layout>
         </PersistGate>
@@ -46,3 +50,21 @@ export default function ElainaBlog({ Component, pageProps }: AppProps) {
     </Provider>
   );
 }
+
+ElainaBlog.getInitialProps = async (context: AppContext) => {
+  const { ctx, Component } = context;
+
+  const cookie = Cookie.parse(ctx.req?.headers.cookie || '').token || null;
+
+  let pageProps: AppCommonProps = {
+    app: {
+      cookie
+    }
+  };
+
+  if (Component.getInitialProps) {
+    Object.assign(pageProps, await Component.getInitialProps(ctx));
+  }
+
+  return { pageProps };
+};

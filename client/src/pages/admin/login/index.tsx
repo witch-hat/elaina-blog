@@ -192,5 +192,5 @@ export async function getServerSideProps({ req, res }: NextPageContext) {
       }
     };
   }
-  return { props: { cookie } };
+  return { props: {} };
 }
