@@ -202,6 +202,7 @@ const InputContainer = styled.div({
 
 interface Props {
   profile: ProfileType;
+  isLogin: boolean;
 }
 
 export default function Profile(props: Props) {
@@ -380,7 +381,7 @@ export default function Profile(props: Props) {
             </CancelButton>
           </>
         ) : (
-          <EditButton onClick={() => setIsEditMode(true)}>Edit Profile</EditButton>
+          props.isLogin && <EditButton onClick={() => setIsEditMode(true)}>Edit Profile</EditButton>
         )}
       </ButtonContainer>
       <ProfileImageCropper visible={isSelectImage} path={selectedImagePath} offVisible={() => setIsSelecImage(false)} />

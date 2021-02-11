@@ -34,12 +34,13 @@ const Wrapper = styled.div({
 interface Props {
   children: JSX.Element;
   profile: never;
+  isLogin: boolean;
 }
 
 export function MainPageLayout(props: Props) {
   return (
     <Container>
-      <Profile profile={props.profile} />
+      <Profile profile={props.profile} isLogin={props.isLogin} />
       <Wrapper>
         <CategoryNavigation />
         {props.children}

@@ -4,9 +4,14 @@ import { NextPageContext, InferGetStaticPropsType } from 'next';
 import { initializeApollo } from 'src/apollo/apolloClient';
 
 import Main from './main';
+import { AppCommonProps } from './_app';
 
-export default function Index({ profile }: InferGetStaticPropsType<typeof getStaticProps>) {
-  return <Main profile={profile}></Main>;
+interface Props extends AppCommonProps {
+  profile: InferGetStaticPropsType<typeof getStaticProps>;
+}
+
+export default function Index(props: Props) {
+  return <Main {...props}></Main>;
 }
 
 export async function getStaticProps(context: NextPageContext) {
