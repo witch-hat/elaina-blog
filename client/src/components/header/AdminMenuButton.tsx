@@ -65,7 +65,12 @@ export default function AdminMenuButton(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [logout] = useMutation(LOGOUT);
+  const [logout] = useMutation(LOGOUT, {
+    onCompleted: (data: any) => {
+      setIsMenuOpen(false);
+      router.reload();
+    }
+  });
 
   return (
     <Container>
@@ -82,13 +87,11 @@ export default function AdminMenuButton(props: Props) {
             {props.isLogin ? (
               <List
                 onClick={() => {
-                  setIsMenuOpen(false);
                   logout({
                     variables: {
                       emailId: ''
                     }
                   });
-                  router.push('/');
                 }}
               >
                 Logout

@@ -90,8 +90,15 @@ export default function Login(props: Props) {
   const emailInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const [login] = useMutation(LOGIN);
   const router = useRouter();
+  const [login] = useMutation(LOGIN, {
+    onCompleted: (data: any) => {
+      router.back();
+    },
+    onError: (err: Error) => {
+      handleError(err.message);
+    }
+  });
 
   function controlEnterKey(e: React.KeyboardEvent<HTMLDivElement>, myInputRef: HTMLInputElement, otherInputRef: HTMLInputElement) {
     e.preventDefault();
@@ -122,9 +129,7 @@ export default function Login(props: Props) {
           emailId: emailInputRef.current.value,
           password: passwordInputRef.current.value
         }
-      })
-        .then(() => router.replace(router.asPath))
-        .catch((err: Error) => handleError(err.message));
+      });
     }
   }
 
