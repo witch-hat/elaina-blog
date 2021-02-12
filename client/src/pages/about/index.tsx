@@ -8,14 +8,17 @@ import { MainPageLayout } from 'src/components';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
+import { AppCommonProps } from '../_app';
 
-const Container = styled.section({});
+interface Props extends AppCommonProps {
+  profile: InferGetStaticPropsType<typeof getStaticProps>;
+}
 
-export default function About({ profile }: InferGetStaticPropsType<typeof getStaticProps>) {
+export default function About(props: Props) {
   const theme: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   return (
-    <MainPageLayout profile={profile}>
+    <MainPageLayout profile={props.profile} isLogin={props.app.cookie !== null}>
       <div>About</div>
     </MainPageLayout>
   );
