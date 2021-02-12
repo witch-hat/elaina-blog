@@ -1,12 +1,15 @@
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import NavigationButton from './NavigationButton';
 
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
+import { faBook, faStream, faUser } from '@fortawesome/free-solid-svg-icons';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 const Container = styled.nav({
   width: '100%',
@@ -18,6 +21,14 @@ const NavName = styled.span({
   fontWeight: 'bold'
 });
 
+interface IconProps {
+  icon: IconProp;
+}
+
+function NavigationIcon(props: IconProps) {
+  return <FontAwesomeIcon icon={props.icon} style={{ marginRight: '8px' }} />;
+}
+
 interface Props {}
 
 export default function CategoryNavigation(props: Props) {
@@ -27,19 +38,19 @@ export default function CategoryNavigation(props: Props) {
     <Container>
       <NavigationButton href='/'>
         <>
-          <i className='fas fa-book'></i>&nbsp;
+          <NavigationIcon icon={faBook} />
           <NavName>게시글</NavName>
         </>
       </NavigationButton>
       <NavigationButton href='/timeline'>
         <>
-          <i className='fas fa-stream'></i>&nbsp;
+          <NavigationIcon icon={faStream} />
           <NavName>TimeLine</NavName>
         </>
       </NavigationButton>
       <NavigationButton href='/about'>
         <>
-          <i className='fas fa-user'></i>&nbsp;
+          <NavigationIcon icon={faUser} />
           <NavName>About</NavName>
         </>
       </NavigationButton>
