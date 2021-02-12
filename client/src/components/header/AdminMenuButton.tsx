@@ -68,7 +68,7 @@ export default function AdminMenuButton(props: Props) {
   const [logout] = useMutation(LOGOUT, {
     onCompleted: (data: any) => {
       setIsMenuOpen(false);
-      router.reload();
+      window.location.reload();
     }
   });
 
