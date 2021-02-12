@@ -211,12 +211,12 @@ export default function Profile(props: Props) {
   const [isSelectImage, setIsSelecImage] = useState(false);
   const [selectedImagePath, setSelectedImagePath] = useState('');
   const selectedImageRef = useRef<HTMLInputElement>(null);
-  const apolloClient = useApollo();
   // const [profile, setProfile] = useState<ProfileType>({});
-  const [mutateProfile, setMutateProfile] = useState<ProfileType>({});
+  const [mutateProfile, setMutateProfile] = useState<ProfileType>(props.profile);
+  const [savedProfile, setSavedProfile] = useState<ProfileType>(props.profile);
   const [updateProfile] = useMutation<{ updateProfile: ProfileType }>(UPDATE_PROFILE, {
     variables: {
-      id: props.profile._id,
+      id: mutateProfile._id,
       image: mutateProfile.image,
       introduce: mutateProfile.introduce,
       link: mutateProfile.link,
@@ -224,12 +224,11 @@ export default function Profile(props: Props) {
       location: mutateProfile.location,
       email: mutateProfile.email
     },
-    onCompleted: () => window.location.reload()
+    onCompleted: () => {
+      setIsEditMode(false);
+      setSavedProfile(mutateProfile);
+    }
   });
-
-  useEffect(() => {
-    setMutateProfile({ ...props.profile });
-  }, []);
 
   // initialize input value to trigger onChange event when select the same image
   useEffect(() => {
@@ -242,7 +241,7 @@ export default function Profile(props: Props) {
     <Container>
       <div style={{ position: 'relative' }}>
         <RoundImage
-          src={props.profile.image || ''}
+          src={mutateProfile.image || ''}
           styles={{
             borderRadius: '50%',
             width: '280px',
@@ -270,21 +269,24 @@ export default function Profile(props: Props) {
           </>
         )}
       </div>
-      <Name>{props.profile.name}</Name>
+      <Name>{mutateProfile.name}</Name>
       {isEditMode ? (
         <Form
           id='profile-form'
           onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
             event.preventDefault();
-            updateProfile();
-            setIsEditMode(false);
+            if (savedProfile !== mutateProfile) {
+              updateProfile();
+            } else {
+              setIsEditMode(false);
+            }
           }}
         >
           <Editor
             placeholder='Introduce'
             themeMode={themeMode}
             role='textbox'
-            defaultValue={props.profile.introduce}
+            defaultValue={mutateProfile.introduce}
             onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
               setMutateProfile({ ...mutateProfile, introduce: event.target.value });
             }}
@@ -295,7 +297,7 @@ export default function Profile(props: Props) {
               placeholder='Link'
               themeMode={themeMode}
               type='text'
-              defaultValue={props.profile.link}
+              defaultValue={mutateProfile.link}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setMutateProfile({ ...mutateProfile, link: event.target.value });
               }}
@@ -307,7 +309,7 @@ export default function Profile(props: Props) {
               placeholder='Company'
               themeMode={themeMode}
               type='text'
-              defaultValue={props.profile.company}
+              defaultValue={mutateProfile.company}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setMutateProfile({ ...mutateProfile, company: event.target.value });
               }}
@@ -319,7 +321,7 @@ export default function Profile(props: Props) {
               placeholder='Region'
               themeMode={themeMode}
               type='text'
-              defaultValue={props.profile.location}
+              defaultValue={mutateProfile.location}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setMutateProfile({ ...mutateProfile, location: event.target.value });
               }}
@@ -331,7 +333,7 @@ export default function Profile(props: Props) {
               placeholder='Email'
               themeMode={themeMode}
               type='text'
-              defaultValue={props.profile.email}
+              defaultValue={mutateProfile.email}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setMutateProfile({ ...mutateProfile, email: event.target.value });
               }}
@@ -341,26 +343,26 @@ export default function Profile(props: Props) {
       ) : (
         <ListWrapper>
           <Description>
-            <span>{props.profile.introduce}</span>
+            <span>{mutateProfile.introduce}</span>
           </Description>
           <Description>
             <Icon className='fas fa-link'></Icon>&nbsp;
-            <a href={props.profile.link} target='_blank' rel='noopener noreferer nofollow'>
-              <span>{props.profile.link}</span>
+            <a href={mutateProfile.link} target='_blank' rel='noopener noreferer nofollow'>
+              <span>{mutateProfile.link}</span>
             </a>
           </Description>
           <Description>
             <Icon className='far fa-building'></Icon>&nbsp;
-            <span>{props.profile.company}</span>
+            <span>{mutateProfile.company}</span>
           </Description>
           <Description>
             <Icon className='fas fa-map-marker-alt'></Icon>&nbsp;
-            <span>{props.profile.location}</span>
+            <span>{mutateProfile.location}</span>
           </Description>
           <Description>
             <Icon className='far fa-envelope'></Icon>&nbsp;
             <a href='mailto:'>
-              <span>{props.profile.email}</span>
+              <span>{mutateProfile.email}</span>
             </a>
           </Description>
         </ListWrapper>
@@ -373,7 +375,7 @@ export default function Profile(props: Props) {
             </SaveButton>
             <CancelButton
               onClick={() => {
-                setMutateProfile({ ...props.profile });
+                setMutateProfile({ ...savedProfile });
                 setIsEditMode(false);
               }}
             >
