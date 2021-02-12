@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import styled, { css } from 'styled-components';
-import { useMutation, gql } from '@apollo/client';
+import styled from 'styled-components';
+import { useMutation } from '@apollo/client';
 
 import { RoundImage, InputBox, Loading } from 'src/components';
 import { ProfileImageCropper } from './ProfileImageCropper';
@@ -11,6 +11,9 @@ import { GET_PROFILE, ProfileType, UPDATE_PROFILE } from 'src/query';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBuilding, faEnvelope, faLink, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 const Container = styled.aside({
   display: 'flex',
@@ -200,6 +203,14 @@ const InputContainer = styled.div({
   margin: '.71rem 0'
 });
 
+interface ProfileIconProps {
+  icon: IconProp;
+}
+
+function ProfileIcon(props: ProfileIconProps) {
+  return <FontAwesomeIcon icon={props.icon} style={{ marginRight: '8px' }} />;
+}
+
 interface Props {
   profile: ProfileType;
   isLogin: boolean;
@@ -213,7 +224,6 @@ export default function Profile(props: Props) {
   const selectedImageRef = useRef<HTMLInputElement>(null);
   // const [profile, setProfile] = useState<ProfileType>({});
   const [mutateProfile, setMutateProfile] = useState<ProfileType>(props.profile);
-  const [savedProfile, setSavedProfile] = useState<ProfileType>(props.profile);
   const [updateProfile] = useMutation<{ updateProfile: ProfileType }>(UPDATE_PROFILE, {
     variables: {
       id: mutateProfile._id,
@@ -226,7 +236,6 @@ export default function Profile(props: Props) {
     },
     onCompleted: () => {
       setIsEditMode(false);
-      setSavedProfile(mutateProfile);
     }
   });
 
@@ -261,21 +270,23 @@ export default function Profile(props: Props) {
               ref={selectedImageRef}
               accept='image/x-png,image/gif,image/jpeg'
               onChange={() => {
-                // @ts-ignore
-                setSelectedImagePath(URL.createObjectURL(selectedImageRef.current.files[0]) || '');
-                setIsSelecImage(true);
+                if (selectedImageRef.current?.files !== null) {
+                  console.log(URL.createObjectURL(selectedImageRef.current?.files[0]));
+                  setSelectedImagePath(URL.createObjectURL(selectedImageRef.current?.files[0]));
+                  setIsSelecImage(true);
+                }
               }}
             />
           </>
         )}
       </div>
-      <Name>{mutateProfile.name}</Name>
+      <Name>{props.profile.name}</Name>
       {isEditMode ? (
         <Form
           id='profile-form'
           onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
             event.preventDefault();
-            if (savedProfile !== mutateProfile) {
+            if (props.profile !== mutateProfile) {
               updateProfile();
             } else {
               setIsEditMode(false);
@@ -286,54 +297,54 @@ export default function Profile(props: Props) {
             placeholder='Introduce'
             themeMode={themeMode}
             role='textbox'
-            defaultValue={mutateProfile.introduce}
+            defaultValue={props.profile.introduce}
             onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
               setMutateProfile({ ...mutateProfile, introduce: event.target.value });
             }}
           />
           <InputContainer>
-            <Icon className='fas fa-link'></Icon>&nbsp;
+            <ProfileIcon icon={faLink} />
             <Input
               placeholder='Link'
               themeMode={themeMode}
               type='text'
-              defaultValue={mutateProfile.link}
+              defaultValue={props.profile.link}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setMutateProfile({ ...mutateProfile, link: event.target.value });
               }}
             />
           </InputContainer>
           <InputContainer>
-            <Icon className='far fa-building'></Icon>&nbsp;
+            <ProfileIcon icon={faBuilding} />
             <Input
               placeholder='Company'
               themeMode={themeMode}
               type='text'
-              defaultValue={mutateProfile.company}
+              defaultValue={props.profile.company}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setMutateProfile({ ...mutateProfile, company: event.target.value });
               }}
             />
           </InputContainer>
           <InputContainer>
-            <Icon className='fas fa-map-marker-alt'></Icon>&nbsp;
+            <ProfileIcon icon={faMapMarkerAlt} />
             <Input
               placeholder='Region'
               themeMode={themeMode}
               type='text'
-              defaultValue={mutateProfile.location}
+              defaultValue={props.profile.location}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setMutateProfile({ ...mutateProfile, location: event.target.value });
               }}
             />
           </InputContainer>
           <InputContainer>
-            <Icon className='far fa-envelope'></Icon>&nbsp;
+            <ProfileIcon icon={faEnvelope} />
             <Input
               placeholder='Email'
               themeMode={themeMode}
               type='text'
-              defaultValue={mutateProfile.email}
+              defaultValue={props.profile.email}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setMutateProfile({ ...mutateProfile, email: event.target.value });
               }}
@@ -343,26 +354,26 @@ export default function Profile(props: Props) {
       ) : (
         <ListWrapper>
           <Description>
-            <span>{mutateProfile.introduce}</span>
+            <span>{props.profile.introduce}</span>
           </Description>
           <Description>
-            <Icon className='fas fa-link'></Icon>&nbsp;
-            <a href={mutateProfile.link} target='_blank' rel='noopener noreferer nofollow'>
-              <span>{mutateProfile.link}</span>
+            <ProfileIcon icon={faLink} />
+            <a href={props.profile.link} target='_blank' rel='noopener noreferer nofollow'>
+              <span>{props.profile.link}</span>
             </a>
           </Description>
           <Description>
-            <Icon className='far fa-building'></Icon>&nbsp;
-            <span>{mutateProfile.company}</span>
+            <ProfileIcon icon={faBuilding} />
+            <span>{props.profile.company}</span>
           </Description>
           <Description>
-            <Icon className='fas fa-map-marker-alt'></Icon>&nbsp;
-            <span>{mutateProfile.location}</span>
+            <ProfileIcon icon={faMapMarkerAlt} />
+            <span>{props.profile.location}</span>
           </Description>
           <Description>
-            <Icon className='far fa-envelope'></Icon>&nbsp;
+            <ProfileIcon icon={faEnvelope} />
             <a href='mailto:'>
-              <span>{mutateProfile.email}</span>
+              <span>{props.profile.email}</span>
             </a>
           </Description>
         </ListWrapper>
@@ -375,7 +386,7 @@ export default function Profile(props: Props) {
             </SaveButton>
             <CancelButton
               onClick={() => {
-                setMutateProfile({ ...savedProfile });
+                setMutateProfile({ ...props.profile });
                 setIsEditMode(false);
               }}
             >

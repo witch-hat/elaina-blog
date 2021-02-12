@@ -5,11 +5,15 @@ import type { AppContext, AppProps } from 'next/app';
 import Head from 'next/head';
 import Cookie from 'cookie';
 import { ApolloProvider } from '@apollo/client';
+import { config } from '@fortawesome/fontawesome-svg-core';
+import '@fortawesome/fontawesome-svg-core/styles.css';
 
 import Layout from 'src/components/Layout';
 import { useApollo } from 'src/apollo/apolloClient';
-
 import { store, persistor } from 'src/redux';
+
+// Skip Adding FontAwesome CSS
+config.autoAddCss = false;
 
 export interface AppCommonProps {
   app: {
@@ -65,6 +69,8 @@ ElainaBlog.getInitialProps = async (context: AppContext) => {
   if (Component.getInitialProps) {
     Object.assign(pageProps, await Component.getInitialProps(ctx));
   }
+
+  console.log('pageProps', pageProps);
 
   return { pageProps };
 };
