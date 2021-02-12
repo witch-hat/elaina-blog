@@ -10,6 +10,8 @@ import { ThemeMode } from 'src/redux/common/type';
 import { ModeSwitch } from './ModeSwitch';
 import AdminMenuButton from './AdminMenuButton';
 import { ProgressBar } from './ProgressBar';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch, faBars } from '@fortawesome/free-solid-svg-icons';
 
 const StyledHeader = styled.header<{ themeMode: ThemeMode }>((props) => {
   return {
@@ -175,7 +177,7 @@ export function Header(props: Props) {
                       styles={{ width: '180px', small: { width: '120px', height: '32px' } }}
                     />
                     <SearchButton type='submit' themeMode={themeMode}>
-                      <i className='fas fa-search'></i>
+                      <FontAwesomeIcon icon={faSearch} />
                     </SearchButton>
                   </SearchForm>
                 </ResponsiveMenuBox>
@@ -184,7 +186,7 @@ export function Header(props: Props) {
           </FocusWrapper>
           <AdminMenuButton isLogin={props.isLogin} />
           <MobileMenuButton onClick={() => onMobileMenuButtonClick()}>
-            <i className='fas fa-bars'></i>
+            <FontAwesomeIcon icon={faBars} />
           </MobileMenuButton>
         </Flex>
       </Container>
