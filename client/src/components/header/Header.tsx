@@ -1,10 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-import LoadingBar from 'react-top-loading-bar';
 import styled, { keyframes, css } from 'styled-components';
 import Link from 'next/link';
-import Router, { useRouter } from 'next/router';
 
 import { theme } from 'src/styles';
 import { InputBox, FocusWrapper, useWidth } from 'src/components';
@@ -12,6 +9,7 @@ import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { ModeSwitch } from './ModeSwitch';
 import AdminMenuButton from './AdminMenuButton';
+import { ProgressBar } from './ProgressBar';
 
 const StyledHeader = styled.header<{ themeMode: ThemeMode }>((props) => {
   return {
@@ -139,41 +137,19 @@ interface Props {
 export function Header(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const width = useWidth();
-  const router = useRouter();
-  const [progress, setProgress] = useState<number>(0);
   const [isMenuVisible, setIsMenuVisible] = useState<boolean>(width > 767);
-
-  useEffect(() => {
-    const setProgressStart = () => {
-      setProgress(20);
-    };
-
-    const setProgressEnd = () => {
-      setProgress(100);
-    };
-
-    router.events.on('routeChangeStart', setProgressStart);
-    router.events.on('routeChangeComplete', setProgressEnd);
-    router.events.on('routeChangeError', setProgressEnd);
-
-    return () => {
-      router.events.off('routeChangeStart', setProgressStart);
-      router.events.off('routeChangeComplete', setProgressEnd);
-      router.events.off('routeChangeError', setProgressEnd);
-    };
-  }, []);
-
-  useEffect(() => {
-    setIsMenuVisible(width > 767);
-  }, [width]);
 
   function onMobileMenuButtonClick() {
     setIsMenuVisible(!isMenuVisible);
   }
 
+  useEffect(() => {
+    setIsMenuVisible(width > 767);
+  }, [width]);
+
   return (
     <StyledHeader themeMode={themeMode}>
-      <LoadingBar color={theme[themeMode].themeColor} progress={progress} waitingTime={300} transitionTime={150} shadow={false} />
+      <ProgressBar color={theme[themeMode].themeColor} />
       <Container>
         <Link href='/' passHref>
           <BlogName themeMode={themeMode}>{props.name}</BlogName>
