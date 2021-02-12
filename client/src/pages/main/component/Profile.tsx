@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBuilding, faEnvelope, faLink, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
+import { faBuilding, faCamera, faEnvelope, faLink, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 const Container = styled.aside({
@@ -163,12 +163,6 @@ const FileSelector = styled.input({
   border: 'none'
 });
 
-const Icon = styled.i({
-  display: 'inline-flex',
-  width: '1.2rem',
-  justifyContent: 'flex-start'
-});
-
 const Form = styled.form({
   width: '100%',
   fontSize: '1.1rem'
@@ -250,7 +244,7 @@ export default function Profile(props: Props) {
     <Container>
       <div style={{ position: 'relative' }}>
         <RoundImage
-          src={mutateProfile.image || ''}
+          src={props.profile.image || ''}
           styles={{
             borderRadius: '50%',
             width: '280px',
@@ -262,7 +256,7 @@ export default function Profile(props: Props) {
         {isEditMode && (
           <>
             <ChangeImageButton htmlFor='profile-select' themeMode={themeMode}>
-              <i className='fas fa-camera'></i>&nbsp;Edit
+              <ProfileIcon icon={faCamera} /> Edit
             </ChangeImageButton>
             <FileSelector
               type='file'
