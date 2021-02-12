@@ -2,6 +2,7 @@ import { DefaultTheme } from 'styled-components';
 
 export const theme: DefaultTheme = {
   dark: {
+    themeColor: '#2a9df4',
     // Background Color
     mainBackground: '#1a1a1a',
     inputBackground: '#555',
@@ -33,6 +34,7 @@ export const theme: DefaultTheme = {
     shadowColor: 'rgba(0, 0, 0, 0.9)'
   },
   light: {
+    themeColor: '#2a9df4',
     // Background Color
     mainBackground: '#fff',
     inputBackground: '#fff',
