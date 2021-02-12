@@ -5,6 +5,9 @@ import styled from 'styled-components';
 import { ThemeMode } from 'src/redux/common/type';
 import { commonDispatch } from 'src/redux/common/dispatch';
 import { RootState } from 'src/redux/rootReducer';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 const Container = styled.div({
   display: 'flex',
@@ -41,6 +44,19 @@ const Switch = styled.div<{ isChecked: boolean }>`
   }
 `;
 
+interface SwitchIconProps {
+  icon: IconProp;
+  left?: boolean;
+}
+
+function ModeSwitchIcon(props: SwitchIconProps) {
+  return props.left ? (
+    <FontAwesomeIcon icon={props.icon} style={{ marginRight: '8px', fontSize: '1.25rem' }} />
+  ) : (
+    <FontAwesomeIcon icon={props.icon} style={{ marginLeft: '8px', fontSize: '1.25rem' }} />
+  );
+}
+
 export function ModeSwitch() {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const [isChecked, setIsChecked] = useState(themeMode === ThemeMode.light ? false : true);
@@ -55,9 +71,9 @@ export function ModeSwitch() {
 
   return (
     <Container>
-      <Icon left>{!isChecked && <i className='fas fa-sun'></i>}</Icon>
+      {!isChecked && <ModeSwitchIcon left icon={faSun} />}
       <Switch isChecked={isChecked} onClick={() => setIsChecked(!isChecked)}></Switch>
-      <Icon>{isChecked && <i className='fas fa-moon'></i>}</Icon>
+      {isChecked && <ModeSwitchIcon icon={faMoon} />}
     </Container>
   );
 }
