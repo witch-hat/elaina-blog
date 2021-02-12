@@ -10,6 +10,8 @@ import { FocusWrapper } from 'src/components';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { LOGOUT } from 'src/query/user';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 
 const Container = styled.div({
   position: 'relative'
@@ -27,7 +29,7 @@ const Button = styled.div<{ themeMode: string }>((props) => ({
   }
 }));
 
-const RotateIcon = styled.i<{ isOpen: boolean }>((props) => {
+const RotateIcon = styled.span<{ isOpen: boolean }>((props) => {
   return {
     display: 'inline-block',
     transition: '.3s all',
@@ -76,7 +78,9 @@ export default function AdminMenuButton(props: Props) {
     <Container>
       <Button onClick={() => setIsMenuOpen(!isMenuOpen)} themeMode={themeMode}>
         Menu&nbsp;
-        <RotateIcon className='fas fa-caret-down' isOpen={isMenuOpen} />
+        <RotateIcon isOpen={isMenuOpen}>
+          <FontAwesomeIcon icon={faCaretDown} />
+        </RotateIcon>
       </Button>
       {isMenuOpen && (
         <FocusWrapper visible={isMenuOpen} onClickOutside={() => setIsMenuOpen(false)}>

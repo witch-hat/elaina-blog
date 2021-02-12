@@ -1,16 +1,24 @@
 import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faClock, faBook } from '@fortawesome/free-solid-svg-icons';
 
 const Container = styled.div({
   marginTop: '.4rem',
   color: '#666',
-  fontSize: '.8rem'
+  fontSize: '.8rem',
+  display: 'flex'
 });
 
 const LatestTime = styled.span({
-  marginRight: '.8rem'
+  display: 'flex',
+  marginRight: '.8rem',
+  alignItems: 'center'
 });
 
-const PostCount = styled.span({});
+const PostCount = styled.span({
+  display: 'flex',
+  alignItems: 'center'
+});
 
 interface Props {
   time: string;
@@ -24,11 +32,12 @@ export default function ContentCategoryDetails(props: Props) {
   return (
     <Container>
       <LatestTime>
-        <i className='far fa-clock'></i>&nbsp;
-        {`${now.getFullYear()}.${month}.${now.getDate()}`}
+        <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
+        <p>{`${now.getFullYear()}.${month}.${now.getDate()}`}</p>
       </LatestTime>
       <PostCount>
-        <i className='fas fa-book'></i>&nbsp;{props.count}
+        <FontAwesomeIcon icon={faBook} style={{ marginRight: '5px' }} />
+        <p>{props.count}</p>
       </PostCount>
     </Container>
   );
