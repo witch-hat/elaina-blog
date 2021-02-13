@@ -38,8 +38,7 @@ const server = new ApolloServer({
   context: ({ req, res }) => {
     const cookies = new Cookies(req, res);
     const token = cookies.get('admin');
-    // if success, user에는 payloud(프로필), else null
-    // 나중에 resolver에서 context.user 값으로 인증 가능
+    // 나중에 resolver에서 context.user 값으로 인증 가능ㄴ
     const user = verifyToken(token);
 
     return { cookies, user, req };

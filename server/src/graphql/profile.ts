@@ -34,7 +34,7 @@ export const profileResolver = {
   Mutation: {
     async updateProfile(_: any, args: any, context: ContextType) {
       // user verify
-      if (context.user === null) {
+      if (!context.user.login) {
         return null;
       }
 

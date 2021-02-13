@@ -44,10 +44,11 @@ export function getToken(payload: UserModel) {
 }
 
 export function verifyToken(token?: string) {
-  if (!token) return null;
+  if (!token) return { login: false };
   try {
-    return jwt.verify(token, config.secret);
+    const payload = jwt.verify(token, config.secret);
+    return { login: true, payload };
   } catch (err) {
-    return null;
+    return { login: false };
   }
 }
