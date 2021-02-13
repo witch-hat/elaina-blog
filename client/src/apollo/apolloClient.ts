@@ -1,16 +1,23 @@
-import { fromPromise } from '@apollo/client';
 import { useMemo } from 'react';
-import { ApolloClient, HttpLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client';
+import { ApolloClient, ApolloLink, HttpLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client';
+import { createUploadLink } from 'apollo-upload-client';
+import { onError } from 'apollo-link-error';
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
+
+const uploadLink = createUploadLink({
+  uri: 'http://localhost:4000/graphql',
+  credentials: 'include'
+});
+
+const errorLink = onError(({ graphQLErrors }) => {
+  if (graphQLErrors) graphQLErrors.map(({ message }) => console.log(message));
+});
 
 function createApolloClient() {
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
-    link: new HttpLink({
-      uri: 'http://localhost:4000/graphql',
-      credentials: 'include'
-    }),
+    link: ApolloLink.from([errorLink, uploadLink]),
     cache: new InMemoryCache(),
     assumeImmutableResults: true
   });
