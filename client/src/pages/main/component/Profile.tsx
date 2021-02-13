@@ -1,6 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { useMutation } from '@apollo/client';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBuilding, faCamera, faEnvelope, faLink, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 import { RoundImage, InputBox, Loading } from 'src/components';
 import { ProfileImageCropper } from './ProfileImageCropper';
@@ -8,12 +12,8 @@ import { theme } from 'src/styles';
 import { useApollo } from 'src/apollo/apolloClient';
 import { GET_PROFILE, ProfileType, UPDATE_PROFILE } from 'src/query';
 
-import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBuilding, faCamera, faEnvelope, faLink, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 const Container = styled.aside({
   display: 'flex',
@@ -216,8 +216,8 @@ export default function Profile(props: Props) {
   const [isSelectImage, setIsSelecImage] = useState(false);
   const [selectedImagePath, setSelectedImagePath] = useState('');
   const selectedImageRef = useRef<HTMLInputElement>(null);
-  // const [profile, setProfile] = useState<ProfileType>({});
   const [mutateProfile, setMutateProfile] = useState<ProfileType>(props.profile);
+  const [completedProfile, setCompletedProfile] = useState<ProfileType>(props.profile);
   const [updateProfile] = useMutation<{ updateProfile: ProfileType }>(UPDATE_PROFILE, {
     variables: {
       id: mutateProfile._id,
@@ -229,6 +229,7 @@ export default function Profile(props: Props) {
       email: mutateProfile.email
     },
     onCompleted: () => {
+      setCompletedProfile(mutateProfile);
       setIsEditMode(false);
     }
   });
@@ -244,7 +245,7 @@ export default function Profile(props: Props) {
     <Container>
       <div style={{ position: 'relative' }}>
         <RoundImage
-          src={props.profile.image || ''}
+          src={mutateProfile.image || ''}
           styles={{
             borderRadius: '50%',
             width: '280px',
@@ -274,13 +275,13 @@ export default function Profile(props: Props) {
           </>
         )}
       </div>
-      <Name>{props.profile.name}</Name>
+      <Name>{mutateProfile.name}</Name>
       {isEditMode ? (
         <Form
           id='profile-form'
           onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
             event.preventDefault();
-            if (props.profile !== mutateProfile) {
+            if (completedProfile !== mutateProfile) {
               updateProfile();
             } else {
               setIsEditMode(false);
@@ -291,7 +292,7 @@ export default function Profile(props: Props) {
             placeholder='Introduce'
             themeMode={themeMode}
             role='textbox'
-            defaultValue={props.profile.introduce}
+            defaultValue={mutateProfile.introduce}
             onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
               setMutateProfile({ ...mutateProfile, introduce: event.target.value });
             }}
@@ -302,7 +303,7 @@ export default function Profile(props: Props) {
               placeholder='Link'
               themeMode={themeMode}
               type='text'
-              defaultValue={props.profile.link}
+              defaultValue={mutateProfile.link}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setMutateProfile({ ...mutateProfile, link: event.target.value });
               }}
@@ -314,7 +315,7 @@ export default function Profile(props: Props) {
               placeholder='Company'
               themeMode={themeMode}
               type='text'
-              defaultValue={props.profile.company}
+              defaultValue={mutateProfile.company}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setMutateProfile({ ...mutateProfile, company: event.target.value });
               }}
@@ -326,7 +327,7 @@ export default function Profile(props: Props) {
               placeholder='Region'
               themeMode={themeMode}
               type='text'
-              defaultValue={props.profile.location}
+              defaultValue={mutateProfile.location}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setMutateProfile({ ...mutateProfile, location: event.target.value });
               }}
@@ -338,7 +339,7 @@ export default function Profile(props: Props) {
               placeholder='Email'
               themeMode={themeMode}
               type='text'
-              defaultValue={props.profile.email}
+              defaultValue={mutateProfile.email}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setMutateProfile({ ...mutateProfile, email: event.target.value });
               }}
@@ -348,26 +349,26 @@ export default function Profile(props: Props) {
       ) : (
         <ListWrapper>
           <Description>
-            <span>{props.profile.introduce}</span>
+            <span>{completedProfile.introduce}</span>
           </Description>
           <Description>
             <ProfileIcon icon={faLink} />
-            <a href={props.profile.link} target='_blank' rel='noopener noreferer nofollow'>
-              <span>{props.profile.link}</span>
+            <a href={completedProfile.link} target='_blank' rel='noopener noreferer nofollow'>
+              <span>{completedProfile.link}</span>
             </a>
           </Description>
           <Description>
             <ProfileIcon icon={faBuilding} />
-            <span>{props.profile.company}</span>
+            <span>{completedProfile.company}</span>
           </Description>
           <Description>
             <ProfileIcon icon={faMapMarkerAlt} />
-            <span>{props.profile.location}</span>
+            <span>{completedProfile.location}</span>
           </Description>
           <Description>
             <ProfileIcon icon={faEnvelope} />
             <a href='mailto:'>
-              <span>{props.profile.email}</span>
+              <span>{completedProfile.email}</span>
             </a>
           </Description>
         </ListWrapper>
@@ -380,7 +381,7 @@ export default function Profile(props: Props) {
             </SaveButton>
             <CancelButton
               onClick={() => {
-                setMutateProfile({ ...props.profile });
+                setMutateProfile({ ...completedProfile });
                 setIsEditMode(false);
               }}
             >
