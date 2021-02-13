@@ -8,6 +8,10 @@ export const categoryTypeDef = gql`
     description: String!
     previewImage: String!
   }
+
+  extend type Query {
+    categories: [Category]
+  }
 `;
 
 export const categoryResolver = {

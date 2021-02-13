@@ -10,6 +10,18 @@ export const userTypeDef = gql`
     password: String
     token: String
   }
+
+  extend type Query {
+    me: User
+  }
+
+  extend type Mutation {
+    updatePassword(emailId: String, password: String): User
+
+    login(emailId: String!, password: String!): User
+
+    logout(emailId: String): User
+  }
 `;
 
 export const userResolver = {

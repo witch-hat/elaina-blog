@@ -16,6 +16,10 @@ export const commentTypeDef = gql`
     comment: String!
     replies: [Reply]
   }
+
+  extend type Query {
+    comments: [Comment]
+  }
 `;
 
 export const commentResolver = {

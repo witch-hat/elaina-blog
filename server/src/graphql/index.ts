@@ -7,6 +7,7 @@ import { userTypeDef, userResolver } from './user';
 import { categoryTypeDef, categoryResolver } from './category';
 import { postTypeDef, postResolver } from './post';
 import { commentTypeDef, commentResolver } from './comment';
+import { fileResolver, fileTypeDef } from './file';
 
 function serialize(value: Date) {
   return value.toString();
@@ -33,34 +34,15 @@ const dateScalar = new GraphQLScalarType({
   parseLiteral
 });
 
-const Query = gql`
+const rootTypeDef = gql`
   scalar DateTime
 
   type Query {
-    profile: Profile
-    me: User
-    categories: [Category]
-    posts: [Post]
-    comments: [Comment]
+    _empty: String
   }
 
   type Mutation {
-    updateProfile(
-      id: String
-      image: String
-      name: String
-      introduce: String
-      link: String
-      company: String
-      location: String
-      email: String
-    ): Profile
-
-    updatePassword(emailId: String, password: String): User
-
-    login(emailId: String!, password: String!): User
-
-    logout(emailId: String): User
+    _empty: String
   }
 `;
 
@@ -69,6 +51,6 @@ const resolvers = {
 };
 
 export const schema = makeExecutableSchema({
-  typeDefs: [Query, profileTypeDef, userTypeDef, categoryTypeDef, postTypeDef, commentTypeDef],
-  resolvers: merge(resolvers, profileResolver, userResolver, categoryResolver, postResolver, commentResolver)
+  typeDefs: [rootTypeDef, profileTypeDef, userTypeDef, categoryTypeDef, postTypeDef, commentTypeDef, fileTypeDef],
+  resolvers: merge(resolvers, profileResolver, userResolver, categoryResolver, postResolver, commentResolver, fileResolver)
 });

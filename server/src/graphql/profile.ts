@@ -17,6 +17,23 @@ export const profileTypeDef = gql`
     location: String!
     email: String!
   }
+
+  extend type Query {
+    profile: Profile
+  }
+
+  extend type Mutation {
+    updateProfile(
+      id: String
+      image: String
+      name: String
+      introduce: String
+      link: String
+      company: String
+      location: String
+      email: String
+    ): Profile
+  }
 `;
 
 export const profileResolver = {

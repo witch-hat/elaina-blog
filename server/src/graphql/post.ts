@@ -11,6 +11,10 @@ export const postTypeDef = gql`
     article: String!
     category: String!
   }
+
+  extend type Query {
+    posts: [Post]
+  }
 `;
 
 export const postResolver = {
