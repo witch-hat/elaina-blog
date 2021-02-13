@@ -3,6 +3,9 @@ import styled from 'styled-components';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useMutation } from '@apollo/client';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChartBar, faUsersCog, faBookmark } from '@fortawesome/free-solid-svg-icons';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 import { LOGOUT } from '../../../query/user';
 
@@ -55,6 +58,14 @@ const Button = styled.button({
   marginBottom: '1rem'
 });
 
+interface SideBarIconProps {
+  icon: IconProp;
+}
+
+function SideBarIcon(props: SideBarIconProps) {
+  return <FontAwesomeIcon icon={props.icon} style={{ marginRight: '8px' }} />;
+}
+
 interface Props {
   cookie?: any;
 }
@@ -70,9 +81,7 @@ export function SideBar(props: Props) {
         <Button>글쓰기</Button>
       </Link>
       <TitleWrapper>
-        <Icon>
-          <i className='fas fa-pager'></i>
-        </Icon>
+        <SideBarIcon icon={faBookmark} />
         <Title>컨텐츠</Title>
       </TitleWrapper>
       <ListContainer>
@@ -85,18 +94,14 @@ export function SideBar(props: Props) {
         <List>댓글 관리</List>
       </ListContainer>
       <TitleWrapper>
-        <Icon>
-          <i className='fas fa-chart-line'></i>
-        </Icon>
+        <SideBarIcon icon={faChartBar} />
         <Title>통계</Title>
       </TitleWrapper>
       <ListContainer>
         <List>조회수</List>
       </ListContainer>
       <TitleWrapper>
-        <Icon>
-          <i className='fas fa-user-cog'></i>
-        </Icon>
+        <SideBarIcon icon={faUsersCog} />
         <Title>설정</Title>
       </TitleWrapper>
       <ListContainer>
