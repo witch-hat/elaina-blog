@@ -58,12 +58,18 @@ export const userResolver = {
           const isMatch = await comparePassword(args.password, me.password);
 
           if (isMatch) {
-            const token = getToken(me);
-            me.token = token;
+            const tokens = getToken(me);
+            const acessToken = tokens.accessToken;
+            const refreshToken = tokens.refreshToken;
 
-            context.cookies.set('admin', token, {
-              httpOnly: true
+            console.log(refreshToken);
+
+            context.cookies.set('admin', acessToken, {
+              httpOnly: true,
+              maxAge: 3600 * 1000 // 1 hour
             });
+
+            context.req.headers.authorization = refreshToken;
 
             return me;
           } else {

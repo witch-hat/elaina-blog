@@ -36,17 +36,30 @@ export function comparePassword(password: string, hash: string) {
 }
 
 export function getToken(payload: UserModel) {
-  const token = jwt.sign(payload.toJSON(), config.secret, {
-    expiresIn: '1h'
+  const accessToken = jwt.sign(payload.toJSON(), config.secret, {
+    expiresIn: 60 * 60 // 1hour
   });
-  console.log(token);
-  return token;
+
+  const refreshToken = jwt.sign({ emailId: payload.emailId }, config.secret, {
+    expiresIn: 60 * 60 * 24 * 7 // 7days
+  });
+
+  return { accessToken, refreshToken };
 }
 
 export function verifyToken(token?: string) {
   if (!token) return { login: false };
   try {
+    const decodedToken: any = jwt.decode(token);
+
+    console.log(decodedToken.exp * 1000, new Date().getTime());
+
+    if (decodedToken.exp * 1000 < new Date().getTime()) {
+      return { login: false };
+    }
+
     const payload = jwt.verify(token, config.secret);
+
     return { login: true, payload };
   } catch (err) {
     return { login: false };
