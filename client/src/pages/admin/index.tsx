@@ -15,7 +15,7 @@ export default function Admin(props: Props) {
 }
 
 export async function getServerSideProps({ res, req }: NextPageContext) {
-  const cookie = Cookie.parse(req?.headers.cookie || '').token || null;
+  const cookie = Cookie.parse(req?.headers.cookie || '')['admin'] || null;
   if (cookie === null) {
     return {
       redirect: {

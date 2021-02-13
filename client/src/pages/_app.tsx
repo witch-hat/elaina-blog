@@ -52,7 +52,7 @@ export default function ElainaBlog({ Component, pageProps }: AppProps) {
 ElainaBlog.getInitialProps = async (context: AppContext) => {
   const { ctx, Component } = context;
 
-  const cookie = Cookie.parse(ctx.req?.headers.cookie || '').token || null;
+  const cookie = Cookie.parse(ctx.req?.headers.cookie || '')['admin'] || null;
 
   let pageProps: AppCommonProps = {
     app: {
