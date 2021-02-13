@@ -3,8 +3,10 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
+import Cookies from 'cookies';
 
 import { schema } from './graphql';
+import { verifyToken } from './util/auth';
 
 dotenv.config();
 
@@ -33,7 +35,15 @@ app.use(cors(corsOptions));
 
 const server = new ApolloServer({
   schema,
-  context: ({ req }) => ({ ...req })
+  context: ({ req, res }) => {
+    const cookies = new Cookies(req, res);
+    const token = cookies.get('admin');
+    // if success, user에는 payloud(프로필), else null
+    // 나중에 resolver에서 context.user 값으로 인증 가능
+    const user = verifyToken(token);
+
+    return { cookies, user, req };
+  }
 });
 
 server.applyMiddleware({ app, path: '/graphql', cors: false });

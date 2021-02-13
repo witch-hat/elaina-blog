@@ -1,5 +1,6 @@
 import { gql } from 'apollo-server';
 import { Profile } from '../model/profile';
+import { ContextType } from '../types/context';
 
 // type Query {
 //   profile: Profile!
@@ -31,9 +32,13 @@ export const profileResolver = {
     }
   },
   Mutation: {
-    async updateProfile(_: any, args: any) {
+    async updateProfile(_: any, args: any, context: ContextType) {
+      // user verify
+      if (context.user === null) {
+        return null;
+      }
+
       try {
-        console.log(args);
         const result = await Profile.findByIdAndUpdate(args.id, {
           image: args.image,
           introduce: args.introduce,
@@ -42,6 +47,7 @@ export const profileResolver = {
           location: args.location,
           email: args.email
         });
+        console.log('profile update success!');
         return result;
       } catch (err) {
         throw err;
