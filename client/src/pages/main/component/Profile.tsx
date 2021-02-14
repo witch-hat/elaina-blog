@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { useMutation } from '@apollo/client';
@@ -6,14 +6,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBuilding, faCamera, faEnvelope, faLink, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
-import { RoundImage, InputBox, Loading } from 'src/components';
+import { RoundImage } from 'src/components';
 import { ProfileImageCropper } from './ProfileImageCropper';
 import { theme } from 'src/styles';
-import { useApollo } from 'src/apollo/apolloClient';
-import { GET_PROFILE, ProfileType, UPDATE_PROFILE } from 'src/query';
+import { ProfileType, UPDATE_PROFILE } from 'src/query';
 
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
+import { Crop } from 'react-image-crop';
+import { FileType, UPLOAD_FILE } from 'src/query/file';
 
 const Container = styled.aside({
   display: 'flex',
@@ -217,27 +218,42 @@ export default function Profile(props: Props) {
   const [selectedImageFile, setSelectedImageFile] = useState<File>();
   const [mutateProfile, setMutateProfile] = useState<ProfileType>(props.profile);
   const [completedProfile, setCompletedProfile] = useState<ProfileType>(props.profile);
-  const [updateProfile] = useMutation<{ updateProfile: ProfileType }>(UPDATE_PROFILE, {
-    variables: {
-      id: mutateProfile._id,
-      image: mutateProfile.image,
-      introduce: mutateProfile.introduce,
-      link: mutateProfile.link,
-      company: mutateProfile.company,
-      location: mutateProfile.location,
-      email: mutateProfile.email
-    },
-    onCompleted: () => {
-      setCompletedProfile(mutateProfile);
-      setIsEditMode(false);
+  const [uploadFile] = useMutation<{ uploadFile: FileType }>(UPLOAD_FILE);
+  const [updateProfile] = useMutation<{ updateProfile: ProfileType }>(UPDATE_PROFILE);
+
+  async function changeProfile() {
+    let uploadedImagePath: string | undefined;
+    if (mutateProfile.image !== completedProfile.image) {
+      const response = await uploadFile({
+        variables: {
+          file: selectedImageFile
+        }
+      });
+
+      uploadedImagePath = response.data?.uploadFile.path;
     }
-  });
+
+    await updateProfile({
+      variables: {
+        id: mutateProfile._id,
+        image: uploadedImagePath ? uploadedImagePath : completedProfile.image,
+        introduce: mutateProfile.introduce,
+        link: mutateProfile.link,
+        company: mutateProfile.company,
+        location: mutateProfile.location,
+        email: mutateProfile.email
+      }
+    });
+
+    setCompletedProfile({ ...mutateProfile, image: uploadedImagePath ? uploadedImagePath : completedProfile.image });
+    setIsEditMode(false);
+  }
 
   return (
     <Container>
       <div style={{ position: 'relative' }}>
         <RoundImage
-          src={completedProfile.image}
+          src={isEditMode ? mutateProfile.image : completedProfile.image}
           styles={{
             borderRadius: '50%',
             width: '280px',
@@ -257,6 +273,7 @@ export default function Profile(props: Props) {
               accept='image/x-png,image/jpeg'
               onChange={(e) => {
                 if (e.target.files) {
+                  console.log(URL.createObjectURL(e.target.files[0]));
                   setSelectedImageFile(e.target.files[0]);
                   setIsSelectImage(true);
                 }
@@ -269,10 +286,10 @@ export default function Profile(props: Props) {
       {isEditMode ? (
         <Form
           id='profile-form'
-          onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
+          onSubmit={async (event: React.FormEvent<HTMLFormElement>) => {
             event.preventDefault();
             if (completedProfile !== mutateProfile) {
-              updateProfile();
+              await changeProfile();
             } else {
               setIsEditMode(false);
             }
@@ -383,12 +400,10 @@ export default function Profile(props: Props) {
         )}
       </ButtonContainer>
       <ProfileImageCropper
-        profileId={props.profile._id}
         visible={isSelectImage}
         file={selectedImageFile}
-        onSave={(imagePath: string) => {
-          console.log(imagePath);
-          setCompletedProfile({ ...mutateProfile, image: imagePath });
+        onSave={(crop: Crop) => {
+          setMutateProfile({ ...mutateProfile, image: URL.createObjectURL(selectedImageFile) });
           setIsSelectImage(false);
         }}
         onCancel={() => {

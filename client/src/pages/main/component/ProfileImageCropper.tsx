@@ -38,18 +38,15 @@ const Button = styled.div({
 });
 
 interface Props {
-  profileId: string;
-  visible: boolean;
   file: File | undefined;
-  onSave: (imagePath: string) => void;
+  onSave: (crop: Crop) => void;
   onCancel: Function;
+  visible: boolean;
 }
 
 export function ProfileImageCropper(props: Props) {
   const [crop, setCrop] = useState<Crop>({ aspect: 1 / 1 });
   const [profileImage, setProfileImage] = useState<string>('');
-  const [uploadFile] = useMutation<{ uploadFile: FileType }>(UPLOAD_FILE, {});
-  const [updateProfile] = useMutation<{ updateProfile: ProfileType }>(UPDATE_PROFILE, {});
 
   useEffect(() => {
     if (props.file) {
@@ -57,27 +54,6 @@ export function ProfileImageCropper(props: Props) {
       setCrop({ aspect: 1 / 1 });
     }
   }, [props.file]);
-
-  async function changeProfileImage() {
-    const response = await uploadFile({
-      variables: {
-        file: props.file
-      }
-    });
-
-    if (response.data?.uploadFile.path) {
-      const profileResponse = await updateProfile({
-        variables: {
-          id: props.profileId,
-          image: response.data.uploadFile.path
-        }
-      });
-
-      if (profileResponse.data?.updateProfile?.image) {
-        props.onSave(profileResponse.data.updateProfile.image);
-      }
-    }
-  }
 
   if (props.visible) {
     return (
@@ -94,8 +70,7 @@ export function ProfileImageCropper(props: Props) {
           <ButtonContainer>
             <Button
               onClick={async () => {
-                console.log('Crop', crop);
-                await changeProfileImage();
+                props.onSave(crop);
               }}
             >
               Save
