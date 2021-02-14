@@ -1,6 +1,8 @@
 import merge from 'lodash/merge';
+import { gql } from 'apollo-server';
 import { GraphQLScalarType, Kind, ValueNode } from 'graphql';
-import { makeExecutableSchema, gql } from 'apollo-server';
+import { makeExecutableSchema } from 'graphql-tools';
+import { GraphQLUpload } from 'graphql-upload';
 
 import { profileTypeDef, profileResolver } from './profile';
 import { userTypeDef, userResolver } from './user';
@@ -36,6 +38,7 @@ const dateScalar = new GraphQLScalarType({
 
 const rootTypeDef = gql`
   scalar DateTime
+  scalar Upload
 
   type Query {
     _empty: String
@@ -47,7 +50,8 @@ const rootTypeDef = gql`
 `;
 
 const resolvers = {
-  DateTime: dateScalar
+  DateTime: dateScalar,
+  Upload: GraphQLUpload
 };
 
 export const schema = makeExecutableSchema({

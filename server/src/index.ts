@@ -7,6 +7,7 @@ import Cookies from 'cookies';
 
 import { schema } from './graphql';
 import { verifyToken } from './util/auth';
+import { graphqlUploadExpress } from 'graphql-upload';
 
 dotenv.config();
 
@@ -32,6 +33,8 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+app.use(express.static('public'));
+app.use(graphqlUploadExpress({ maxFileSize: 33554432, maxFiles: 10 }));
 
 const server = new ApolloServer({
   schema,
@@ -42,7 +45,8 @@ const server = new ApolloServer({
     const user = verifyToken(token);
 
     return { cookies, user, req };
-  }
+  },
+  uploads: false
 });
 
 server.applyMiddleware({ app, path: '/graphql', cors: false });
