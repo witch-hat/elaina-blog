@@ -57,12 +57,7 @@ export const profileResolver = {
 
       try {
         const result = await Profile.findByIdAndUpdate(args.id, {
-          image: args.image,
-          introduce: args.introduce,
-          link: args.link,
-          company: args.company,
-          location: args.location,
-          email: args.email
+          ...args
         });
         console.log('profile update success!');
         return result;
