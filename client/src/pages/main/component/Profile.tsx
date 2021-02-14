@@ -213,9 +213,8 @@ interface Props {
 export default function Profile(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [isSelectImage, setIsSelecImage] = useState(false);
-  const [selectedImagePath, setSelectedImagePath] = useState('');
-  const selectedImageRef = useRef<HTMLInputElement>(null);
+  const [isSelectImage, setIsSelectImage] = useState(false);
+  const [selectedImageFile, setSelectedImageFile] = useState<File>();
   const [mutateProfile, setMutateProfile] = useState<ProfileType>(props.profile);
   const [completedProfile, setCompletedProfile] = useState<ProfileType>(props.profile);
   const [updateProfile] = useMutation<{ updateProfile: ProfileType }>(UPDATE_PROFILE, {
@@ -234,18 +233,11 @@ export default function Profile(props: Props) {
     }
   });
 
-  // initialize input value to trigger onChange event when select the same image
-  useEffect(() => {
-    if (selectedImagePath && selectedImageRef.current) {
-      selectedImageRef.current.value = '';
-    }
-  }, [selectedImagePath]);
-
   return (
     <Container>
       <div style={{ position: 'relative' }}>
         <RoundImage
-          src={mutateProfile.image || ''}
+          src={completedProfile.image}
           styles={{
             borderRadius: '50%',
             width: '280px',
@@ -262,13 +254,11 @@ export default function Profile(props: Props) {
             <FileSelector
               type='file'
               id='profile-select'
-              ref={selectedImageRef}
-              accept='image/x-png,image/gif,image/jpeg'
-              onChange={() => {
-                if (selectedImageRef.current?.files !== null) {
-                  console.log(URL.createObjectURL(selectedImageRef.current?.files[0]));
-                  setSelectedImagePath(URL.createObjectURL(selectedImageRef.current?.files[0]));
-                  setIsSelecImage(true);
+              accept='image/x-png,image/jpeg'
+              onChange={(e) => {
+                if (e.target.files) {
+                  setSelectedImageFile(e.target.files[0]);
+                  setIsSelectImage(true);
                 }
               }}
             />
@@ -392,7 +382,19 @@ export default function Profile(props: Props) {
           props.isLogin && <EditButton onClick={() => setIsEditMode(true)}>Edit Profile</EditButton>
         )}
       </ButtonContainer>
-      <ProfileImageCropper visible={isSelectImage} path={selectedImagePath} offVisible={() => setIsSelecImage(false)} />
+      <ProfileImageCropper
+        profileId={props.profile._id}
+        visible={isSelectImage}
+        file={selectedImageFile}
+        onSave={(imagePath: string) => {
+          console.log(imagePath);
+          setCompletedProfile({ ...mutateProfile, image: imagePath });
+          setIsSelectImage(false);
+        }}
+        onCancel={() => {
+          setIsSelectImage(false);
+        }}
+      />
     </Container>
   );
 }

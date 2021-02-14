@@ -41,10 +41,14 @@ const Image = styled.img<Style>((props: Style) => {
 });
 
 interface Props {
-  src: string;
+  src: string | undefined;
   styles?: Style;
 }
 
 export function RoundImage(props: Props) {
-  return <Image {...props.styles} src={props.src} />;
+  if (props.src) {
+    return <Image {...props.styles} src={props.src} />;
+  } else {
+    return null;
+  }
 }

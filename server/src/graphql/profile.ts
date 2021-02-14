@@ -56,10 +56,13 @@ export const profileResolver = {
       }
 
       try {
-        const result = await Profile.findByIdAndUpdate(args.id, {
-          ...args
-        });
-        console.log('profile update success!');
+        const result = await Profile.findByIdAndUpdate(
+          args.id,
+          {
+            ...args
+          },
+          { new: true }
+        );
         return result;
       } catch (err) {
         throw err;
