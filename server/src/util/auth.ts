@@ -50,18 +50,10 @@ export function getToken(payload: UserModel) {
 export function verifyToken(token?: string) {
   if (!token) return { login: false };
   try {
-    const decodedToken: any = jwt.decode(token);
-
-    console.log(decodedToken.exp * 1000, new Date().getTime());
-
-    if (decodedToken.exp * 1000 < new Date().getTime()) {
-      return { login: false };
-    }
-
     const payload = jwt.verify(token, config.secret);
 
     return { login: true, payload };
   } catch (err) {
-    return { login: false };
+    return { login: false, err };
   }
 }

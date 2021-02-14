@@ -52,7 +52,7 @@ export const profileResolver = {
     async updateProfile(_: any, args: any, context: ContextType) {
       // user verify
       if (!context.user.login) {
-        return null;
+        throw new Error(context.user.err);
       }
 
       try {
