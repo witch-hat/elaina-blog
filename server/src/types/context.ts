@@ -11,4 +11,5 @@ export interface ContextType {
   cookies: Cookies;
   user: VerifyReturnType;
   req: express.Request;
+  res: express.Response;
 }
