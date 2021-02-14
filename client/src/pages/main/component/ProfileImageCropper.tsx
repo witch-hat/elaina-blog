@@ -3,12 +3,8 @@ import 'react-image-crop/dist/ReactCrop.css';
 import React, { useEffect, useState } from 'react';
 import ReactCrop, { Crop } from 'react-image-crop';
 import styled from 'styled-components';
-import { useMutation } from '@apollo/client';
 
 import { ModalWrapper } from 'src/components';
-import { FileType, UPLOAD_FILE } from 'src/query/file';
-import { ProfileType, UPDATE_PROFILE } from 'src/query';
-import { useApollo } from 'src/apollo/apolloClient';
 
 const Container = styled.div({
   width: '500px',
@@ -37,23 +33,49 @@ const Button = styled.div({
   borderRadius: '12px'
 });
 
+async function getCropImage(image: HTMLImageElement, imageName: string, imageType: string, crop: Crop): Promise<Blob> {
+  const canvas = document.createElement('canvas');
+  canvas.width = crop.width!;
+  canvas.height = crop.height!;
+  const scaleX = image.naturalWidth / image.width;
+  const scaleY = image.naturalHeight / image.height;
+  const ctx = canvas.getContext('2d');
+
+  ctx?.drawImage(image, crop.x! * scaleX, crop.y! * scaleY, crop.width! * scaleX, crop.height! * scaleY, 0, 0, crop.width!, crop.height!);
+
+  return new Promise((resolve, reject) => {
+    canvas.toBlob(
+      (blob: Blob | null) => {
+        if (blob !== null) {
+          //@ts-ignore
+          blob.name = imageName;
+          resolve(blob);
+        }
+      },
+      imageType,
+      1
+    );
+  });
+}
+
 interface Props {
-  file: File | undefined;
-  onSave: (crop: Crop) => void;
+  imageFile: File;
+  onSave: (blob: Blob) => void;
   onCancel: Function;
   visible: boolean;
 }
 
 export function ProfileImageCropper(props: Props) {
   const [crop, setCrop] = useState<Crop>({ aspect: 1 / 1 });
-  const [profileImage, setProfileImage] = useState<string>('');
+  const [profileImage, setProfileImage] = useState<string>(props.imageFile ? URL.createObjectURL(props.imageFile) : '');
+  const [profileHtmlImageElement, setProfileHtmlImageElement] = useState<HTMLImageElement>();
 
   useEffect(() => {
-    if (props.file) {
-      setProfileImage(URL.createObjectURL(props.file));
+    if (props.imageFile) {
+      setProfileImage(URL.createObjectURL(props.imageFile));
       setCrop({ aspect: 1 / 1 });
     }
-  }, [props.file]);
+  }, [props.imageFile]);
 
   if (props.visible) {
     return (
@@ -63,6 +85,9 @@ export function ProfileImageCropper(props: Props) {
           <ReactCrop
             src={profileImage}
             crop={crop}
+            onImageLoaded={(img) => {
+              setProfileHtmlImageElement(img);
+            }}
             onChange={(newCrop) => setCrop(newCrop)}
             imageAlt='edit-profile-image'
             circularCrop={true}
@@ -70,7 +95,8 @@ export function ProfileImageCropper(props: Props) {
           <ButtonContainer>
             <Button
               onClick={async () => {
-                props.onSave(crop);
+                const croppedImage = await getCropImage(profileHtmlImageElement!, props.imageFile.name, props.imageFile.type, crop);
+                props.onSave(croppedImage);
               }}
             >
               Save

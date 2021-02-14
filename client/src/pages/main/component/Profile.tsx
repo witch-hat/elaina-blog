@@ -216,6 +216,7 @@ export default function Profile(props: Props) {
   const [isEditMode, setIsEditMode] = useState(false);
   const [isSelectImage, setIsSelectImage] = useState(false);
   const [selectedImageFile, setSelectedImageFile] = useState<File>();
+  const [croppedImageFile, setCroppedImageFile] = useState<Blob>();
   const [mutateProfile, setMutateProfile] = useState<ProfileType>(props.profile);
   const [completedProfile, setCompletedProfile] = useState<ProfileType>(props.profile);
   const [uploadFile] = useMutation<{ uploadFile: FileType }>(UPLOAD_FILE);
@@ -226,7 +227,7 @@ export default function Profile(props: Props) {
     if (mutateProfile.image !== completedProfile.image) {
       const response = await uploadFile({
         variables: {
-          file: selectedImageFile
+          file: croppedImageFile
         }
       });
 
@@ -273,9 +274,11 @@ export default function Profile(props: Props) {
               accept='image/x-png,image/jpeg'
               onChange={(e) => {
                 if (e.target.files) {
-                  console.log(URL.createObjectURL(e.target.files[0]));
-                  setSelectedImageFile(e.target.files[0]);
-                  setIsSelectImage(true);
+                  const file = e.target.files[0];
+                  if (file) {
+                    setSelectedImageFile(file);
+                    setIsSelectImage(true);
+                  }
                 }
               }}
             />
@@ -401,9 +404,10 @@ export default function Profile(props: Props) {
       </ButtonContainer>
       <ProfileImageCropper
         visible={isSelectImage}
-        file={selectedImageFile}
-        onSave={(crop: Crop) => {
-          setMutateProfile({ ...mutateProfile, image: URL.createObjectURL(selectedImageFile) });
+        imageFile={selectedImageFile}
+        onSave={(croppedImage: Blob) => {
+          setCroppedImageFile(croppedImage);
+          setMutateProfile({ ...mutateProfile, image: URL.createObjectURL(croppedImage) });
           setIsSelectImage(false);
         }}
         onCancel={() => {
