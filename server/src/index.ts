@@ -40,11 +40,10 @@ const server = new ApolloServer({
   schema,
   context: ({ req, res }) => {
     const cookies = new Cookies(req, res);
-    const token = cookies.get('admin_r');
-    // 나중에 resolver에서 context.user 값으로 인증 가능ㄴ
-    const user = verifyToken(token);
+    const accessToken = req.headers.authorization?.substr(7);
 
-    if (user.login) res.setHeader('Authorization', `Bearer {token}`);
+    // 나중에 resolver에서 context.user 값으로 인증 가능ㄴ
+    const user = verifyToken(accessToken);
 
     return { cookies, user, req, res };
   },

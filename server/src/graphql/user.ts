@@ -12,6 +12,11 @@ export const userTypeDef = gql`
     password: String
   }
 
+  type AuthPayload {
+    token: String!
+    userId: ID!
+  }
+
   extend type Query {
     me: User
     findMeById: User
@@ -23,8 +28,13 @@ export const userTypeDef = gql`
     login(emailId: String!, password: String!): User
 
     logout(emailId: String): User
+
+    refreshUserToken(userId: ID!): AuthPayload
   }
 `;
+
+const HOUR = 60 * 60;
+const MONTH = 1000 * 60 * 60 * 24 * 30;
 
 export const userResolver = {
   Query: {
@@ -74,8 +84,6 @@ export const userResolver = {
           };
 
           if (isMatch) {
-            const HOUR = 60 * 60;
-            const MONTH = 1000 * 60 * 60 * 24 * 30;
             const accessToken = getToken(payload, HOUR);
             const refreshToken = uuidv4();
             const salt = await bcrypt.genSalt(10);
@@ -107,6 +115,46 @@ export const userResolver = {
       } catch (err) {
         throw err;
       }
+    },
+
+    async refreshUserToken(_: any, args: any, context: ContextType) {
+      const refreshToken = context.cookies.get('admin_r');
+      if (!refreshToken) throw new Error('No refresh token in DB');
+
+      const me = User.findOne({}, {}, { sort: { _id: -1 } });
+
+      let isRefreshTokenValid = false;
+
+      const isMatch = bcrypt.compareSync(refreshToken, me.refreshToken.hash);
+      const isValid = me.refrehsToke.expire > Date.now();
+
+      if (isMatch && isValid) isRefreshTokenValid = true;
+
+      if (!isRefreshTokenValid) throw new Error('Invalid refresh token');
+
+      // issue new refresh token
+      const newRefreshToken = uuidv4();
+      const newRefreshTokenExpire = new Date(Date.now() + MONTH);
+
+      context.cookies.set('admin_r', newRefreshToken, { httpOnly: true });
+
+      const salt = await bcrypt.genSalt(10);
+      const newRefreshTokenHash = await bcrypt.hash(newRefreshToken, salt);
+
+      me.refreshToken = {
+        hash: newRefreshTokenHash,
+        expire: newRefreshTokenExpire
+      };
+
+      me.save();
+
+      const payload = {
+        userId: me._id
+      };
+
+      const accessToken = getToken(payload, HOUR);
+
+      return { userId: me._id, accessToken };
     },
 
     logout(_: any, args: any, context: ContextType) {
