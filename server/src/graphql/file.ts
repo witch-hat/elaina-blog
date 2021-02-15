@@ -22,9 +22,9 @@ export const fileResolver = {
   Mutation: {
     async uploadFile(_: any, args: any, context: ContextType) {
       // user verify
-      if (!context.user.login) {
-        throw new Error(context.user.err);
-      }
+      // if (!context.user.login) {
+      //   throw new Error(context.user.err);
+      // }
 
       const { filename, mimetype, encoding, createReadStream } = await args.file;
       try {
