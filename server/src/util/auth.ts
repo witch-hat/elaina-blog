@@ -35,16 +35,16 @@ export function comparePassword(password: string, hash: string) {
   });
 }
 
-export function getToken(payload: UserModel) {
-  const accessToken = jwt.sign(payload.toJSON(), config.secret, {
-    expiresIn: 60 * 60 // 1hour
+interface Payload {
+  userId: string;
+}
+
+export function getToken(payload: Payload, expire: number) {
+  const refreshToken = jwt.sign(payload, config.secret, {
+    expiresIn: expire // 7days
   });
 
-  const refreshToken = jwt.sign({ emailId: payload.emailId }, config.secret, {
-    expiresIn: 60 * 60 * 24 * 7 // 7days
-  });
-
-  return { accessToken, refreshToken };
+  return refreshToken;
 }
 
 export function verifyToken(token?: string) {
