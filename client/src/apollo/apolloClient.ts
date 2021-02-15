@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { ApolloClient, ApolloLink, HttpLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client';
+import { ApolloClient, ApolloLink, HttpLink, InMemoryCache, NormalizedCacheObject, createHttpLink } from '@apollo/client';
 import { createUploadLink } from 'apollo-upload-client';
 import { onError } from 'apollo-link-error';
 
@@ -7,20 +7,27 @@ let apolloClient: ApolloClient<NormalizedCacheObject>;
 
 const uploadLink = createUploadLink({
   uri: 'http://localhost:4000/graphql',
-  credentials: 'include',
-  headers: {
-    Authorization: `Bearer {token}`
-  }
+  credentials: 'include'
 });
 
 const errorLink = onError(({ graphQLErrors }) => {
   if (graphQLErrors) graphQLErrors.map(({ message }) => console.log(message));
 });
 
+const authLink = new ApolloLink((operation, forward) => {
+  operation.setContext({
+    headers: {
+      authorization: `Bearer token`
+    }
+  });
+
+  return forward(operation);
+});
+
 function createApolloClient() {
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
-    link: ApolloLink.from([errorLink, uploadLink]),
+    link: ApolloLink.from([errorLink, authLink, uploadLink]),
     cache: new InMemoryCache(),
     assumeImmutableResults: true
   });
