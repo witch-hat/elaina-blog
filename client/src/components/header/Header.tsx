@@ -24,7 +24,7 @@ const StyledHeader = styled.header<{ themeMode: ThemeMode }>((props) => {
     position: 'fixed',
     top: '0',
     zIndex: 9999,
-    height: '5rem',
+    height: '4rem',
     backgroundColor: theme[props.themeMode].headerBackground
   };
 });
