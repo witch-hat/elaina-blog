@@ -33,7 +33,7 @@ export default function Layout(props: Props) {
     <>
       <GlobalStyles themeMode={theme} />
       <div>
-        <Header name={mockUpData.blogName} isLogin={props.app.cookie !== null} />
+        <Header name={mockUpData.blogName} isLogin={props.app.isLogin} />
         <Container>{props.children}</Container>
         <Footer />
       </div>

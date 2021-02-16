@@ -11,11 +11,11 @@ interface Props extends AppCommonProps {
 }
 
 export default function Index(props: Props) {
-  return <Main {...props}></Main>;
+  return <Main {...props} />;
 }
 
 export async function getStaticProps(context: NextPageContext) {
-  const apolloClient = initializeApollo(null);
+  const apolloClient = initializeApollo({});
   const { data } = await apolloClient.query({ query: GET_PROFILE });
   const profile = data.profile;
 

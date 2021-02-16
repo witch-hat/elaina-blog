@@ -5,10 +5,7 @@ const saltRounds = 10;
 export interface UserModel extends Document {
   emailId: string;
   password: string;
-  refreshToken: {
-    hash: string;
-    expire: number;
-  };
+  tokenVersion: number;
 }
 
 export const userSchema = new Schema<UserModel>(
@@ -21,13 +18,8 @@ export const userSchema = new Schema<UserModel>(
       type: String,
       required: true
     },
-    refreshToken: {
-      hash: {
-        type: String
-      },
-      expire: {
-        type: Number
-      }
+    tokenVersion: {
+      type: Number
     }
   },
   {

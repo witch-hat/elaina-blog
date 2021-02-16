@@ -1,19 +1,18 @@
 import React, { useRef, useEffect, useState, FormEvent } from 'react';
 import styled from 'styled-components';
-import bcrypt from 'bcryptjs';
 import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { NextPageContext } from 'next';
 import Cookie from 'cookie';
 
-import { useApollo } from '../../../apollo/apolloClient';
 import { InputBox } from 'src/components';
 import { theme } from 'src/styles';
-import { GET_USER, User, LOGIN } from 'src/query/user';
+import { LOGIN } from 'src/query/user';
 
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
+import { setAccessToken } from 'src/apollo/token';
 
 const Container = styled.div({
   display: 'flex',
@@ -125,15 +124,20 @@ export default function Login(props: Props) {
     setErrorMessage(message);
   }
 
-  function handleSubmit(event: FormEvent) {
+  async function handleSubmit(event: FormEvent) {
     event.preventDefault();
     if (emailInputRef.current && passwordInputRef.current) {
-      login({
+      const response = await login({
         variables: {
           emailId: emailInputRef.current.value,
           password: passwordInputRef.current.value
         }
       });
+
+      if (response && response.data) {
+        console.log(response.data.login.accessToken);
+        setAccessToken(response.data.login.accessToken);
+      }
     }
   }
 
@@ -192,6 +196,7 @@ export default function Login(props: Props) {
 }
 
 export async function getServerSideProps({ req, res }: NextPageContext) {
+  console.log(res);
   const cookie = Cookie.parse(req?.headers.cookie || '')['admin_r'] || null;
   if (cookie) {
     return {

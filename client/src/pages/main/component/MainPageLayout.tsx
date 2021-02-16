@@ -33,7 +33,7 @@ const Wrapper = styled.div({
 
 interface Props {
   children: JSX.Element;
-  profile: never;
+  profile: any;
   isLogin: boolean;
 }
 

@@ -41,7 +41,7 @@ interface Payload {
 
 export function getToken(payload: Payload, expire: number) {
   const refreshToken = jwt.sign(payload, config.secret, {
-    expiresIn: expire // 7days
+    expiresIn: expire
   });
 
   return refreshToken;

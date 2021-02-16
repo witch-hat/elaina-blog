@@ -12,15 +12,18 @@ export const GET_USER = gql`
 export const LOGIN = gql`
   mutation Login($emailId: String!, $password: String!) {
     login(emailId: $emailId, password: $password) {
-      emailId
+      accessToken
+      user {
+        _id
+      }
     }
   }
 `;
 
 export const LOGOUT = gql`
-  mutation Logout($emailId: String) {
+  mutation Logout($emailId: String!) {
     logout(emailId: $emailId) {
-      emailId
+      logout
     }
   }
 `;

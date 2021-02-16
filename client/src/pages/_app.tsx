@@ -8,17 +8,18 @@ import { ApolloProvider } from '@apollo/client';
 import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css';
 
+import { getAccessToken } from '../apollo/token';
+import jwt from 'jsonwebtoken';
 import Layout from 'src/components/Layout';
 import { useApollo } from 'src/apollo/apolloClient';
 import { store, persistor } from 'src/redux';
-import { AuthProvider } from './api/AuthProfvider';
 
 // Skip Adding FontAwesome CSS
 config.autoAddCss = false;
 
 export interface AppCommonProps {
   app: {
-    cookie: string | null;
+    isLogin: boolean;
   };
 }
 
@@ -26,7 +27,6 @@ export default function ElainaBlog({ Component, pageProps }: AppProps) {
   const client = useApollo(pageProps.initialApolloState);
 
   return (
-    // <AuthProvider>
     <Provider store={store}>
       <ApolloProvider client={client}>
         <PersistGate loading={null} persistor={persistor}>
@@ -48,18 +48,24 @@ export default function ElainaBlog({ Component, pageProps }: AppProps) {
         </PersistGate>
       </ApolloProvider>
     </Provider>
-    // </AuthProvider>
   );
 }
 
 ElainaBlog.getInitialProps = async (context: AppContext) => {
   const { ctx, Component } = context;
 
-  const cookie = Cookie.parse(ctx.req?.headers.cookie || '')['admin_r'] || null;
+  const decodedAccessToken: any = jwt.decode(getAccessToken());
+  let isLogin: boolean;
+  console.log(getAccessToken());
+  if (decodedAccessToken) {
+    isLogin = decodedAccessToken.exp * 1000 > Date.now();
+  } else {
+    isLogin = false;
+  }
 
   let pageProps: AppCommonProps = {
     app: {
-      cookie
+      isLogin: true
     }
   };
 
@@ -71,3 +77,5 @@ ElainaBlog.getInitialProps = async (context: AppContext) => {
 
   return { pageProps };
 };
+
+// export default withApollo(ElainaBlog);
