@@ -6,13 +6,6 @@ import { GraphQLUpload } from 'graphql-upload';
 import { loadFilesSync } from '@graphql-tools/load-files';
 import { mergeTypeDefs, mergeResolvers } from '@graphql-tools/merge';
 
-// import { profileTypeDef, profileResolver } from './profile';
-// import { userTypeDef, userResolver } from './user';
-// import { categoryTypeDef, categoryResolver } from './category';
-// import { postTypeDef, postResolver } from './post';
-// import { commentTypeDef, commentResolver } from './comment';
-// import { fileResolver, fileTypeDef } from './file';
-
 function serialize(value: Date) {
   return value.toString();
 }
@@ -56,7 +49,6 @@ const resolvers = {
   Upload: GraphQLUpload
 };
 
-// const { mergedTypeDefs, mergedResolvers } = loadAllFiles();
 const { mergedTypeDefs, mergedResolvers } = loadAllFiles();
 
 export const schema = makeExecutableSchema({
@@ -66,15 +58,12 @@ export const schema = makeExecutableSchema({
 
 function loadAllFiles() {
   const schemas = loadFilesSync(__dirname, { extensions: ['ts'], ignoreIndex: true });
-  // console.log(schemas);
 
   const typeDefs: any = schemas.map((schema) => Object.values(schema)[0]);
   const resolvers: any = schemas.map((schema) => Object.values(schema)[1]);
 
   const mergedTypeDefs = mergeTypeDefs(typeDefs);
   const mergedResolvers = mergeResolvers(resolvers);
-
-  console.log(mergedResolvers);
 
   return { mergedTypeDefs, mergedResolvers };
 }
