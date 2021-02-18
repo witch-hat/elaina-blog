@@ -21,6 +21,7 @@ function createApolloClient(initialState: NormalizedCacheObject = {}, accessToke
 
   const authLink = new ApolloLink((operation, forward) => {
     const token = isServer() ? accessToken : getAccessToken();
+
     operation.setContext({
       headers: {
         authorization: `Bearer ${token}`
@@ -58,6 +59,7 @@ function createApolloClient(initialState: NormalizedCacheObject = {}, accessToke
     },
 
     handleFetch: (newToken: any) => {
+      console.log('new Token: ', newToken);
       setAccessToken(newToken);
     },
 
@@ -75,7 +77,7 @@ function createApolloClient(initialState: NormalizedCacheObject = {}, accessToke
   });
 }
 
-export function initializeApollo(initialState: any, accessToken: string = '') {
+export function initializeApollo(initialState: any, accessToken?: string) {
   const _apolloClient: ApolloClient<NormalizedCacheObject> = apolloClient ?? createApolloClient(initialState);
 
   if (initialState) {

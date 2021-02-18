@@ -1,3 +1,5 @@
+import { access } from 'fs';
+
 let accessToken = '';
 
 export const setAccessToken = (token: string) => {
@@ -5,5 +7,6 @@ export const setAccessToken = (token: string) => {
 };
 
 export const getAccessToken = () => {
+  console.log('getAccessToken function called ', accessToken);
   return accessToken;
 };

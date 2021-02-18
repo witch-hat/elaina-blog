@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createContext, useContext } from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import type { AppContext, AppProps } from 'next/app';
@@ -25,7 +25,6 @@ export interface AppCommonProps {
 
 export default function ElainaBlog({ Component, pageProps }: AppProps) {
   const client = useApollo(pageProps.initialApolloState);
-
   return (
     <Provider store={store}>
       <ApolloProvider client={client}>
@@ -54,9 +53,10 @@ export default function ElainaBlog({ Component, pageProps }: AppProps) {
 ElainaBlog.getInitialProps = async (context: AppContext) => {
   const { ctx, Component } = context;
 
-  const decodedAccessToken: any = jwt.decode(getAccessToken());
   let isLogin: boolean;
-  console.log(getAccessToken());
+  const decodedAccessToken: any = jwt.decode(Cookie.parse(ctx.req?.headers.cookie || '')['a_access']);
+  console.log(decodedAccessToken);
+
   if (decodedAccessToken) {
     isLogin = decodedAccessToken.exp * 1000 > Date.now();
   } else {
@@ -65,7 +65,7 @@ ElainaBlog.getInitialProps = async (context: AppContext) => {
 
   let pageProps: AppCommonProps = {
     app: {
-      isLogin: true
+      isLogin
     }
   };
 

@@ -40,7 +40,8 @@ app.use(express.static('public'));
 app.use(graphqlUploadExpress({ maxFileSize: 33554432, maxFiles: 10 }));
 
 app.post('/refresh_token', async (req, res) => {
-  const token = req.cookies['admin_r'];
+  if (!req.cookies) return res.send({ ok: false, accessToken: '' });
+  const token = req.cookies['a_refresh'];
 
   if (!token) {
     return res.send({ ok: false, accessToken: '' });
@@ -60,23 +61,34 @@ app.post('/refresh_token', async (req, res) => {
     return res.send({ ok: false, accessToken: '' });
   }
 
-  res.cookie('admin_r', token, {
-    httpOnly: true
+  res.cookie('a_refresh', token, {
+    httpOnly: true,
+    maxAge: 1000 * 60 * 60 * 24 * 14
   });
 
-  return res.send({ ok: true, accessToken: getToken({ userId: me.emailId }, 60 * 60 * 24 * 14) });
+  const accessToken = getToken({ userId: me.emailId }, 60 * 5);
+
+  res.cookie('a_access', accessToken, {
+    maxAge: 1000 * 60 * 5
+  });
+
+  // 5 min access token
+  return res.send({ ok: true, accessToken });
 });
 
 const server = new ApolloServer({
   schema,
   context: ({ req, res }) => {
     const cookies = new Cookies(req, res);
-    const accessToken = req.headers.authorization?.substr(7);
-    const userId = req.headers.userid;
 
-    console.log('token', accessToken);
+    const accessTokenHeader = req.headers.authorization?.substr(7);
+    const accessTokenCookie = cookies.get('a_access');
+
     // 나중에 resolver에서 context.user 값으로 인증 가능ㄴ
-    const user = verifyToken(accessToken);
+    console.log('accessTokenCookie', accessTokenCookie);
+    console.log('accessTokenHeader', accessTokenHeader);
+    const user = verifyToken(accessTokenCookie);
+    console.log('user', user);
 
     return { cookies, user, req, res };
   },

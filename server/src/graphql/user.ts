@@ -41,7 +41,7 @@ export const userTypeDef = gql`
   }
 `;
 
-const HALF = 60 * 30;
+const FIVE_MINUTE = 60 * 5;
 const MONTH = 1000 * 60 * 60 * 24 * 30;
 
 export const userResolver = {
@@ -92,10 +92,19 @@ export const userResolver = {
           };
 
           if (isMatch) {
-            const accessToken = getToken(payload, HALF);
+            const accessToken = getToken(payload, FIVE_MINUTE);
             const refreshToken = getToken(payload, MONTH);
 
-            context.cookies.set('a-refresh', refreshToken);
+            context.cookies.set('a_refresh', refreshToken, {
+              httpOnly: true,
+              maxAge: 1000 * 60 * 60 * 24 * 14,
+              sameSite: true
+            });
+            context.cookies.set('a_access', accessToken, {
+              httpOnly: true,
+              maxAge: 1000 * 60 * 5,
+              sameSite: true
+            });
 
             return { accessToken, me };
           } else {
@@ -117,7 +126,10 @@ export const userResolver = {
 
     logout(_: any, args: any, context: ContextType) {
       try {
-        context.cookies.set('a-refresh', '', {
+        context.cookies.set('a_refresh', '', {
+          expires: new Date(0)
+        });
+        context.cookies.set('a_access', '', {
           expires: new Date(0)
         });
       } catch (err) {

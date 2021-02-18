@@ -12,7 +12,7 @@ import { LOGIN } from 'src/query/user';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
-import { setAccessToken } from 'src/apollo/token';
+import { getAccessToken, setAccessToken } from 'src/apollo/token';
 
 const Container = styled.div({
   display: 'flex',
@@ -135,8 +135,9 @@ export default function Login(props: Props) {
       });
 
       if (response && response.data) {
-        console.log(response.data.login.accessToken);
+        console.log('login Access Token: ', response.data.login.accessToken);
         setAccessToken(response.data.login.accessToken);
+        console.log(getAccessToken());
       }
     }
   }
@@ -196,9 +197,9 @@ export default function Login(props: Props) {
 }
 
 export async function getServerSideProps({ req, res }: NextPageContext) {
-  console.log(res);
-  const cookie = Cookie.parse(req?.headers.cookie || '')['admin_r'] || null;
-  if (cookie) {
+  const isLogin = Cookie.parse(req?.headers.cookie || '')['a_access'] || null;
+
+  if (isLogin) {
     return {
       redirect: {
         permanent: false,

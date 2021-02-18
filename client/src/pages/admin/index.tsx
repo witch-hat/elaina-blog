@@ -1,6 +1,6 @@
 import React from 'react';
 import { NextPageContext } from 'next';
-import { getAccessToken } from '../../apollo/token';
+import Cookies from 'cookie';
 
 import { AdminPageLayout } from './component/AdminPageLayout';
 
@@ -15,11 +15,9 @@ export default function Admin(props: Props) {
 }
 
 export async function getServerSideProps({ res, req }: NextPageContext) {
-  // const token = getAccessToken();
+  let isLogin = Cookies.parse(req?.headers.cookie || '')['a_access'] || null;
 
-  let token = true;
-
-  if (!token) {
+  if (!isLogin) {
     return {
       redirect: {
         permanent: false,
