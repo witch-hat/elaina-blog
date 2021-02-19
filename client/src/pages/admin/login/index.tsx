@@ -197,7 +197,10 @@ export default function Login(props: Props) {
 }
 
 export async function getServerSideProps({ req, res }: NextPageContext) {
+  const accessToken = Cookie.parse(req?.headers.cookie || '')['a_access'];
   const isLogin = Cookie.parse(req?.headers.cookie || '')['a_access'] || null;
+
+  setAccessToken(accessToken);
 
   if (isLogin) {
     return {

@@ -80,7 +80,6 @@ export const userResolver = {
 
     async login(_: any, args: any, context: ContextType) {
       try {
-        // get lastest one
         const me = await User.findOne({}, {}, { sort: { _id: -1 } });
         console.log('me', me);
 
@@ -97,13 +96,13 @@ export const userResolver = {
 
             context.cookies.set('a_refresh', refreshToken, {
               httpOnly: true,
-              maxAge: 1000 * 60 * 60 * 24 * 14,
-              sameSite: true
+              // 14 days
+              maxAge: 1000 * 60 * 60 * 24 * 14
             });
             context.cookies.set('a_access', accessToken, {
               httpOnly: true,
-              maxAge: 1000 * 60 * 5,
-              sameSite: true
+              // 5 minutes
+              maxAge: 1000 * 60 * 5
             });
 
             return { accessToken, me };
