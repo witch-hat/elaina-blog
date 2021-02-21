@@ -9,20 +9,29 @@ export const GET_USER = gql`
   }
 `;
 
+export const IS_AUTH = gql`
+  query IsAuth {
+    isAuth {
+      isAuth
+    }
+  }
+`;
+
 export const LOGIN = gql`
   mutation Login($emailId: String!, $password: String!) {
     login(emailId: $emailId, password: $password) {
-      accessToken
-      user {
-        _id
+      auth {
+        refreshToken
+        deviceList
+        id
       }
     }
   }
 `;
 
 export const LOGOUT = gql`
-  mutation Logout($emailId: String!) {
-    logout(emailId: $emailId) {
+  mutation Logout {
+    logout {
       logout
     }
   }

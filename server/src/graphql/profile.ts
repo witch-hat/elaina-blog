@@ -50,11 +50,6 @@ export const profileResolver = {
   },
   Mutation: {
     async updateProfile(_: any, args: any, context: ContextType) {
-      // user verify
-      if (!context.user.login) {
-        throw new Error(context.user.err);
-      }
-
       try {
         const result = await Profile.findByIdAndUpdate(
           args.id,

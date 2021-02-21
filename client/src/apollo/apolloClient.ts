@@ -1,84 +1,36 @@
 import { useMemo } from 'react';
-import { ApolloClient, ApolloLink, HttpLink, InMemoryCache, NormalizedCacheObject, createHttpLink } from '@apollo/client';
+import { ApolloClient, ApolloLink, createHttpLink, HttpLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client';
 import { createUploadLink } from 'apollo-upload-client';
 import { onError } from 'apollo-link-error';
-import { getAccessToken, setAccessToken } from './token';
-import { TokenRefreshLink } from 'apollo-link-token-refresh';
-import jwt from 'jsonwebtoken';
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
-const isServer = () => typeof window === 'undefined';
 
-function createApolloClient(initialState: NormalizedCacheObject = {}, accessToken: string = '') {
-  const uploadLink = createUploadLink({
-    uri: 'http://localhost:4000/graphql',
-    credentials: 'include'
-  });
+const link = new HttpLink({
+  uri: 'http://localhost:4000/graphql',
+  credentials: 'include'
+});
 
-  const errorLink = onError(({ graphQLErrors }) => {
-    if (graphQLErrors) graphQLErrors.map(({ message }) => console.log(message));
-  });
+const uploadLink = createUploadLink({
+  uri: 'http://localhost:4000/graphql',
+  credentials: 'include'
+});
 
-  const authLink = new ApolloLink((operation, forward) => {
-    const token = isServer() ? accessToken : getAccessToken();
+const errorLink = onError(({ graphQLErrors }) => {
+  if (graphQLErrors) graphQLErrors.map(({ message }) => console.log(message));
+});
 
-    operation.setContext({
-      headers: {
-        authorization: `Bearer ${token}`
-      }
-    });
-
-    return forward(operation);
-  });
-
-  const refreshLink = new TokenRefreshLink({
-    accessTokenField: 'accessToken',
-
-    isTokenValidOrUndefined: () => {
-      if (!getAccessToken()) {
-        return true;
-      }
-
-      try {
-        const decodedToken: any = jwt.decode(getAccessToken());
-        if (Date.now() > decodedToken.exp * 1000) {
-          return false;
-        } else {
-          return true;
-        }
-      } catch {
-        return false;
-      }
-    },
-
-    fetchAccessToken: async () => {
-      return fetch('http://localhost:4000/refresh_token', {
-        method: 'POST',
-        credentials: 'include'
-      });
-    },
-
-    handleFetch: (newToken: any) => {
-      console.log('new Token: ', newToken);
-      setAccessToken(newToken);
-    },
-
-    handleError: (error) => {
-      console.error('Cannot refresh access token', error);
-    }
-  });
-
+function createApolloClient() {
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
-    link: ApolloLink.from([refreshLink, errorLink, authLink, uploadLink]),
-    cache: new InMemoryCache().restore(initialState),
+    link: ApolloLink.from([errorLink, uploadLink]),
+    cache: new InMemoryCache(),
     assumeImmutableResults: true,
-    connectToDevTools: true
+    credentials: 'include'
   });
 }
 
-export function initializeApollo(initialState: any, accessToken?: string) {
-  const _apolloClient: ApolloClient<NormalizedCacheObject> = apolloClient ?? createApolloClient(initialState);
+export function initializeApollo(initialState: any = null) {
+  const _apolloClient: ApolloClient<NormalizedCacheObject> = apolloClient ?? createApolloClient();
 
   if (initialState) {
     _apolloClient.cache.restore(initialState);

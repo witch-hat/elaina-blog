@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { useMutation } from '@apollo/client';
@@ -15,6 +15,7 @@ import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { Crop } from 'react-image-crop';
 import { FileType, UPLOAD_FILE } from 'src/query/file';
+import { isAuth } from 'src/pages/api/isAuth';
 
 const Container = styled.aside({
   display: 'flex',
@@ -224,6 +225,14 @@ export default function Profile(props: Props) {
 
   async function changeProfile() {
     let uploadedImagePath: string | undefined;
+    const isAdmin = await isAuth();
+
+    if (!isAdmin) {
+      alert('non-authorized user');
+      setIsEditMode(false);
+      return;
+    }
+
     if (mutateProfile.image !== completedProfile.image) {
       const response = await uploadFile({
         variables: {

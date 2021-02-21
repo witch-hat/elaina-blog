@@ -90,6 +90,7 @@ export default function Login(props: Props) {
   const passwordInputRef = useRef<HTMLInputElement>(null);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const router = useRouter();
+
   const [login] = useMutation(LOGIN, {
     onCompleted: (data: any) => {
       if (document.referrer === '') {
@@ -127,18 +128,12 @@ export default function Login(props: Props) {
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
     if (emailInputRef.current && passwordInputRef.current) {
-      const response = await login({
+      login({
         variables: {
           emailId: emailInputRef.current.value,
           password: passwordInputRef.current.value
         }
       });
-
-      if (response && response.data) {
-        console.log('login Access Token: ', response.data.login.accessToken);
-        setAccessToken(response.data.login.accessToken);
-        console.log(getAccessToken());
-      }
     }
   }
 
@@ -197,18 +192,18 @@ export default function Login(props: Props) {
 }
 
 export async function getServerSideProps({ req, res }: NextPageContext) {
-  const accessToken = Cookie.parse(req?.headers.cookie || '')['a_access'];
-  const isLogin = Cookie.parse(req?.headers.cookie || '')['a_access'] || null;
+  // const accessToken = Cookie.parse(req?.headers.cookie || '')['a_access'];
+  // const isLogin = Cookie.parse(req?.headers.cookie || '')['a_access'] || null;
 
-  setAccessToken(accessToken);
+  // setAccessToken(accessToken);
 
-  if (isLogin) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/admin'
-      }
-    };
-  }
+  // if (isLogin) {
+  //   return {
+  //     redirect: {
+  //       permanent: false,
+  //       destination: '/admin'
+  //     }
+  //   };
+  // }
   return { props: {} };
 }

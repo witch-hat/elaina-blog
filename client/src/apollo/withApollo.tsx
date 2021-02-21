@@ -2,7 +2,6 @@ import React from 'react';
 import Head from 'next/head';
 import { ApolloClient, NormalizedCacheObject, ApolloLink, InMemoryCache } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
-import { getAccessToken, setAccessToken } from './token';
 import { NextPageContext } from 'next';
 import Cookies from 'cookie';
 import jwt from 'jsonwebtoken';
@@ -19,11 +18,7 @@ interface WithApolloArgs {
 }
 
 export function withApollo(PageComponent: any, { ssr = true } = {}) {
-  const WithApollo = ({ apolloClient, serverAccessToken, apolloState, ...pageProps }: WithApolloArgs) => {
-    if (!isServer() && !getAccessToken()) {
-      setAccessToken(serverAccessToken);
-    }
-
+  const WithApollo = ({ apolloClient, apolloState, ...pageProps }: WithApolloArgs) => {
     const client = apolloClient || initApolloClient(apolloState);
     return <PageComponent {...pageProps} apolloClient={client} />;
   };
@@ -32,24 +27,7 @@ export function withApollo(PageComponent: any, { ssr = true } = {}) {
     WithApollo.getInitialProps = async (ctx: NextPageContext) => {
       const { AppTree, req, res } = ctx;
 
-      let serverAccessToken = '';
-
-      if (isServer()) {
-        const cookies = Cookies.parse(`${req?.headers.cookie}`);
-        if (cookies['a_refresh']) {
-          const response = await fetch('http://localhost:4000/refresh_token', {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-              cookie: 'a_refresh' + cookies['a_refresh']
-            }
-          });
-
-          const data = await response.json();
-          serverAccessToken = data.accessToken;
-        }
-      }
-      const apolloClient = initApolloClient({}, serverAccessToken);
+      const apolloClient = initApolloClient({});
       const pageProps = PageComponent.getInitialProps ? await PageComponent.getInitialProps(ctx) : {};
 
       if (typeof window === 'undefined') {
@@ -70,8 +48,7 @@ export function withApollo(PageComponent: any, { ssr = true } = {}) {
 
       return {
         ...pageProps,
-        apolloState,
-        serverAccessToken
+        apolloState
       };
     };
   }
@@ -81,9 +58,9 @@ export function withApollo(PageComponent: any, { ssr = true } = {}) {
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | null = null;
 
-export function initApolloClient(initialState: NormalizedCacheObject, serverAccessToken?: string) {
+export function initApolloClient(initialState: NormalizedCacheObject) {
   if (isServer()) {
-    return createApolloClient(initialState, serverAccessToken || '');
+    return createApolloClient(initialState);
   }
 
   if (!apolloClient) {
@@ -93,70 +70,73 @@ export function initApolloClient(initialState: NormalizedCacheObject, serverAcce
   return apolloClient;
 }
 
-function createApolloClient(initialState: NormalizedCacheObject = {}, serverAccessToken?: string) {
+function createApolloClient(initialState: NormalizedCacheObject = {}) {
   const uploadLink = createUploadLink({
     uri: 'http://localhost:4000/graphql',
-    credentials: 'include'
+    credentials: 'include',
+    fetchOptions: {
+      credentials: 'include'
+    }
   });
 
   const errorLink = onError(({ graphQLErrors }) => {
     if (graphQLErrors) graphQLErrors.map(({ message }) => console.log(message));
   });
 
-  const authLink = setContext((_request, { headers }) => {
-    const token = isServer() ? serverAccessToken : getAccessToken();
-    return {
-      headers: {
-        ...headers,
-        authorization: token ? `Bearer ${token}` : ''
-      }
-    };
-  });
+  // const authLink = setContext((_request, { headers }) => {
+  //   console.log('auth link', headers);
+  //   return {
+  //     headers: {
+  //       ...headers,
+  //       authorization: token ? `Bearer ${token}` : ''
+  //     }
+  //   };
+  // });
 
-  const refreshLink = new TokenRefreshLink({
-    accessTokenField: 'accessToken',
+  // const refreshLink = new TokenRefreshLink({
+  //   accessTokenField: 'accessToken',
 
-    isTokenValidOrUndefined: () => {
-      console.log('isTokenValidOrUndefined');
-      const token = getAccessToken();
+  //   isTokenValidOrUndefined: () => {
+  //     const token = getAccessToken();
+  //     console.log('isTokenValidOrUndefined', token);
 
-      if (!token) {
-        return true;
-      }
+  //     if (!token) {
+  //       return true;
+  //     }
 
-      try {
-        const decodedToken: any = jwt.decode(getAccessToken());
-        if (Date.now() > decodedToken.exp * 1000) {
-          return false;
-        } else {
-          return true;
-        }
-      } catch {
-        return false;
-      }
-    },
+  //     try {
+  //       const decodedToken: any = jwt.decode(getAccessToken());
+  //       if (Date.now() > decodedToken.exp * 1000) {
+  //         return false;
+  //       } else {
+  //         return true;
+  //       }
+  //     } catch {
+  //       return false;
+  //     }
+  //   },
 
-    fetchAccessToken: async () => {
-      console.log('fetching');
-      return fetch('http://localhost:4000/refresh_token', {
-        method: 'POST',
-        credentials: 'include'
-      });
-    },
+  //   fetchAccessToken: async () => {
+  //     console.log('fetching');
+  //     return fetch('http://localhost:4000/refresh_token', {
+  //       method: 'POST',
+  //       credentials: 'include'
+  //     });
+  //   },
 
-    handleFetch: (newToken: any) => {
-      console.log('new', newToken);
-      setAccessToken(newToken);
-    },
+  //   handleFetch: (newToken: any) => {
+  //     console.log('new', newToken);
+  //     setAccessToken(newToken);
+  //   },
 
-    handleError: (error) => {
-      console.error('Cannot refresh access token', error);
-    }
-  });
+  //   handleError: (error) => {
+  //     console.error('Cannot refresh access token', error);
+  //   }
+  // });
 
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
-    link: ApolloLink.from([refreshLink, errorLink, authLink, uploadLink]),
+    link: ApolloLink.from([errorLink, uploadLink]),
     cache: new InMemoryCache().restore(initialState),
     connectToDevTools: true
   });

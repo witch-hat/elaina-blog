@@ -1,13 +1,16 @@
 import { gql, AuthenticationError, Request } from 'apollo-server';
 import express from 'express';
 import { User, UserModel } from '../model/user';
-import { comparePassword, getToken } from '../util/auth';
+import { comparePassword, getToken, verifyToken } from '../util/auth';
 import { ContextType } from '../types/context';
-import jwt from 'jsonwebtoken';
+import jwt, { TokenExpiredError } from 'jsonwebtoken';
 import { config } from '../util/config';
 import { getConnection } from 'typeorm';
 import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
+import Cookies from 'cookies';
+
+const saltRounds = 10;
 
 export const userTypeDef = gql`
   type User {
@@ -16,9 +19,18 @@ export const userTypeDef = gql`
     password: String
   }
 
+  type AuthResponse {
+    isAuth: Boolean
+  }
+
+  type Auth {
+    deviceList: [String]
+    refreshToken: String
+    id: String
+  }
+
   type LoginResponse {
-    accessToken: String
-    user: User
+    auth: Auth
   }
 
   type LogoutResponse {
@@ -28,6 +40,7 @@ export const userTypeDef = gql`
   extend type Query {
     me: User
     findMeById: User
+    isAuth: AuthResponse
   }
 
   extend type Mutation {
@@ -35,13 +48,13 @@ export const userTypeDef = gql`
 
     login(emailId: String!, password: String!): LoginResponse
 
-    logout(emailId: String!): LogoutResponse
+    logout: LogoutResponse
 
     refreshUserToken(userId: ID!): User
   }
 `;
 
-const FIVE_MINUTE = 60 * 5;
+const FIVE_MINUTE = 10;
 const MONTH = 1000 * 60 * 60 * 24 * 30;
 
 export const userResolver = {
@@ -63,6 +76,74 @@ export const userResolver = {
       } catch (err) {
         throw err;
       }
+    },
+
+    async isAuth(_: any, args: any, context: ContextType) {
+      const me = await User.findOne({}, {}, { sort: { _id: -1 } });
+      const cookies = new Cookies(context.req, context.res);
+      const accessToken = cookies.get('a_access');
+      const refreshToken = cookies.get('a_refresh');
+      console.log('a ', accessToken);
+      console.log('r ', refreshToken);
+
+      if (!accessToken || !refreshToken) {
+        console.log('need to re login: no tokens');
+      } else {
+        console.log('has tokens');
+
+        let payload: any = null;
+
+        try {
+          jwt.verify(accessToken, config.secret);
+          return { isAuth: true };
+        } catch (err) {
+          // refresh tokens
+          if (err instanceof TokenExpiredError) {
+            try {
+              const isMatch = await bcrypt.compare(me.auth.refreshToken, refreshToken);
+              if (isMatch) {
+                console.log('refresh');
+                // re-generate access, refresh token
+                const id = uuidv4();
+                me.auth.id = id;
+
+                const payload = {
+                  refreshTokenId: id
+                };
+
+                const accessToken = getToken(payload, FIVE_MINUTE);
+                const refreshToken = getToken(payload, MONTH);
+
+                await bcrypt.hash(refreshToken, saltRounds).then((hashedRefreshToken) => {
+                  cookies.set('a_refresh', hashedRefreshToken, {
+                    httpOnly: true,
+                    secure: false
+                  });
+                });
+
+                cookies.set('a_access', accessToken, {
+                  httpOnly: true,
+                  secure: false
+                });
+
+                me.auth.refreshToken = refreshToken;
+                me.save();
+
+                return { isAuth: true };
+              } else {
+                console.log('refresh token malformed');
+              }
+            } catch (err) {
+              console.log('refresh error', err);
+            }
+          } else {
+            // malformed error is prior than expired error
+            console.log('access malformed');
+          }
+        }
+      }
+
+      return { isAuth: false };
     }
   },
   Mutation: {
@@ -79,6 +160,8 @@ export const userResolver = {
     },
 
     async login(_: any, args: any, context: ContextType) {
+      console.log(context.req.headers.cookie, context.req.cookies);
+      const cookies = new Cookies(context.req, context.res);
       try {
         const me = await User.findOne({}, {}, { sort: { _id: -1 } });
         console.log('me', me);
@@ -86,24 +169,34 @@ export const userResolver = {
         if (args.emailId === me.emailId) {
           const isMatch = await comparePassword(args.password, me.password);
 
-          const payload = {
-            userId: me._id
-          };
-
           if (isMatch) {
+            const id = uuidv4();
+            me.auth.id = id;
+
+            const payload = {
+              refreshTokenId: id
+            };
+
             const accessToken = getToken(payload, FIVE_MINUTE);
             const refreshToken = getToken(payload, MONTH);
 
-            context.cookies.set('a_refresh', refreshToken, {
-              httpOnly: true,
-              // 14 days
-              maxAge: 1000 * 60 * 60 * 24 * 14
+            await bcrypt.hash(refreshToken, saltRounds).then((hashedRefreshToken) => {
+              cookies.set('a_refresh', hashedRefreshToken, {
+                httpOnly: true,
+                secure: false
+              });
             });
-            context.cookies.set('a_access', accessToken, {
+
+            cookies.set('a_access', accessToken, {
               httpOnly: true,
-              // 5 minutes
-              maxAge: 1000 * 60 * 5
+              secure: false
             });
+
+            me.auth.refreshToken = refreshToken;
+            me.save();
+
+            console.log('login', cookies.get('a_refresh'));
+            console.log('login', cookies.get('a_access'));
 
             return { accessToken, me };
           } else {
@@ -124,11 +217,14 @@ export const userResolver = {
     },
 
     logout(_: any, args: any, context: ContextType) {
+      const cookies = new Cookies(context.req, context.res);
+      console.log('a ', cookies.get('a_access'));
+      console.log('r ', cookies.get('a_refresh'));
       try {
-        context.cookies.set('a_refresh', '', {
+        cookies.set('a_refresh', '', {
           expires: new Date(0)
         });
-        context.cookies.set('a_access', '', {
+        cookies.set('a_access', '', {
           expires: new Date(0)
         });
       } catch (err) {

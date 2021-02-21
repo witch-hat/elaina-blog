@@ -35,11 +35,7 @@ export function comparePassword(password: string, hash: string) {
   });
 }
 
-interface Payload {
-  userId: string;
-}
-
-export function getToken(payload: Payload, expire: number) {
+export function getToken(payload: any, expire: number) {
   const refreshToken = jwt.sign(payload, config.secret, {
     expiresIn: expire
   });
@@ -54,6 +50,8 @@ export function verifyToken(token?: string) {
 
     return { login: true, payload };
   } catch (err) {
-    return { login: false, err };
+    console.log(err);
+    throw err;
+    // return { login: false, err };
   }
 }
