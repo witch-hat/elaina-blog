@@ -5,7 +5,6 @@ import express from 'express';
 import cors from 'cors';
 import Cookies from 'cookies';
 import jwt, { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
-const httpHeaderPlugin = require('apollo-server-plugin-http-headers');
 
 import { schema } from './graphql';
 import { verifyToken, getToken } from './util/auth';
