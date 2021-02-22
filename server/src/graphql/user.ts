@@ -131,12 +131,30 @@ export const userResolver = {
 
                 return { isAuth: true };
               } else {
+                cookies.set('a_refresh', '', {
+                  maxAge: 0
+                });
+                cookies.set('a_access', '', {
+                  maxAge: 0
+                });
                 console.log('refresh token malformed');
               }
             } catch (err) {
+              cookies.set('a_refresh', '', {
+                maxAge: 0
+              });
+              cookies.set('a_access', '', {
+                maxAge: 0
+              });
               console.log('refresh error', err);
             }
           } else {
+            cookies.set('a_refresh', '', {
+              maxAge: 0
+            });
+            cookies.set('a_access', '', {
+              maxAge: 0
+            });
             // malformed error is prior than expired error
             console.log('access malformed');
           }

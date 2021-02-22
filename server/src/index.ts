@@ -41,9 +41,7 @@ app.use(graphqlUploadExpress({ maxFileSize: 33554432, maxFiles: 10 }));
 
 const server = new ApolloServer({
   schema,
-  context: ({ req, res }) => {
-    return { req, res };
-  },
+  context: ({ req, res }) => ({ req, res }),
   uploads: false
 });
 
