@@ -3,14 +3,11 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
-import Cookies from 'cookies';
-import jwt, { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
 
 import { schema } from './graphql';
 import { verifyToken, getToken } from './util/auth';
 import { graphqlUploadExpress } from 'graphql-upload';
-
-import { User } from './model/user';
+import { isAuth } from './util/isAuth';
 
 dotenv.config();
 
@@ -38,6 +35,10 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.static('public'));
 app.use(graphqlUploadExpress({ maxFileSize: 33554432, maxFiles: 10 }));
+
+app.post('/is_auth', async (req, res) => {
+  await isAuth(req, res);
+});
 
 const server = new ApolloServer({
   schema,

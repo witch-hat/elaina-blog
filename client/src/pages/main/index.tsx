@@ -16,7 +16,7 @@ export default function Main(props: Props) {
   );
 }
 
-export async function getStaticProps({ req, res }: NextPageContext) {
+export async function getServerSideProps({ req, res }: NextPageContext) {
   return {
     redirect: {
       permanent: false,

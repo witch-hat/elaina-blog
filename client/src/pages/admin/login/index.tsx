@@ -1,18 +1,17 @@
-import React, { useRef, useEffect, useState, FormEvent } from 'react';
+import React, { useRef, useState, FormEvent } from 'react';
 import styled from 'styled-components';
 import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { NextPageContext } from 'next';
-import Cookie from 'cookie';
 
 import { InputBox } from 'src/components';
 import { theme } from 'src/styles';
 import { LOGIN } from 'src/query/user';
+import { isAuth } from 'src/pages/api/isAuth';
 
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
-import { getAccessToken, setAccessToken } from 'src/apollo/token';
 
 const Container = styled.div({
   display: 'flex',
@@ -191,19 +190,19 @@ export default function Login(props: Props) {
   );
 }
 
-export async function getServerSideProps({ req, res }: NextPageContext) {
-  // const accessToken = Cookie.parse(req?.headers.cookie || '')['a_access'];
-  // const isLogin = Cookie.parse(req?.headers.cookie || '')['a_access'] || null;
+export async function getServerSideProps(context: NextPageContext) {
+  const { isAdmin } = await isAuth(context);
 
-  // setAccessToken(accessToken);
+  if (isAdmin) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/'
+      }
+    };
+  }
 
-  // if (isLogin) {
-  //   return {
-  //     redirect: {
-  //       permanent: false,
-  //       destination: '/admin'
-  //     }
-  //   };
-  // }
-  return { props: {} };
+  return {
+    props: {}
+  };
 }

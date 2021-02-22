@@ -40,7 +40,6 @@ export const userSchema = new Schema<UserModel>(
 );
 
 userSchema.pre('save', function (next) {
-  console.log('update!');
   if (this.isModified('password')) {
     bcrypt.genSalt(saltRounds, (err: Error, salt: string) => {
       if (err) return next(err);

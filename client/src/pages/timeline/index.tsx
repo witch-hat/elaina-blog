@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { NextPageContext, InferGetStaticPropsType } from 'next';
+import { NextPageContext } from 'next';
 
 import { GET_PROFILE } from 'src/query';
-import { initializeApollo } from 'src/apollo/apolloClient';
+import { initApolloClient } from 'src/apollo/withApollo';
 import { MainPageLayout } from 'src/components';
 import { TimeLineEditor } from './component/TimeLineEditor';
 import { AppCommonProps } from '../_app';
@@ -18,7 +18,7 @@ interface Props extends AppCommonProps {
 
 export default function TimeLine(props: Props) {
   return (
-    <MainPageLayout profile={props.profile} isLogin={props.app.cookie !== null}>
+    <MainPageLayout profile={props.profile} isLogin={props.app.isLogin}>
       <Container>
         <TimeLineEditor />
       </Container>
@@ -26,8 +26,8 @@ export default function TimeLine(props: Props) {
   );
 }
 
-export async function getStaticProps(context: NextPageContext) {
-  const apolloClient = initializeApollo(null);
+export async function getServerSideProps(context: NextPageContext) {
+  const apolloClient = initApolloClient({}, context);
   const { data } = await apolloClient.query({ query: GET_PROFILE });
   const profile = data.profile;
 

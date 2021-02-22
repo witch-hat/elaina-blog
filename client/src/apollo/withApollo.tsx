@@ -1,50 +1,72 @@
 import React from 'react';
 import Head from 'next/head';
-import { ApolloClient, NormalizedCacheObject, ApolloLink, InMemoryCache } from '@apollo/client';
-import { setContext } from '@apollo/client/link/context';
+import { ApolloClient, NormalizedCacheObject, InMemoryCache, ApolloLink } from '@apollo/client';
 import { NextPageContext } from 'next';
-import Cookies from 'cookie';
-import jwt from 'jsonwebtoken';
-import { onError } from 'apollo-link-error';
 import { createUploadLink } from 'apollo-upload-client';
-import { TokenRefreshLink } from 'apollo-link-token-refresh';
+import { onError } from 'apollo-link-error';
 
-const isServer = () => typeof window === 'undefined';
-
-interface WithApolloArgs {
-  apolloClient: ApolloClient<NormalizedCacheObject>;
-  serverAccessToken: string;
-  apolloState: NormalizedCacheObject;
-}
+let apolloClient: ApolloClient<NormalizedCacheObject> | null = null;
 
 export function withApollo(PageComponent: any, { ssr = true } = {}) {
-  const WithApollo = ({ apolloClient, apolloState, ...pageProps }: WithApolloArgs) => {
+  const WithApollo = ({
+    apolloClient,
+    apolloState,
+    ...pageProps
+  }: {
+    apolloClient: ApolloClient<NormalizedCacheObject>;
+    apolloState: NormalizedCacheObject;
+  }) => {
     const client = apolloClient || initApolloClient(apolloState);
-    return <PageComponent {...pageProps} apolloClient={client} />;
+    return <PageComponent {...pageProps} apolloClient={client}></PageComponent>;
   };
 
   if (ssr || PageComponent.getInitialProps) {
-    WithApollo.getInitialProps = async (ctx: NextPageContext) => {
-      const { AppTree, req, res } = ctx;
+    WithApollo.getInitialProps = async (context: any) => {
+      const { AppTree, ctx } = context;
+      const apolloClient = (context.apolloClient = initApolloClient({}, ctx.req?.headers.cookie));
 
-      const apolloClient = initApolloClient({});
-      const pageProps = PageComponent.getInitialProps ? await PageComponent.getInitialProps(ctx) : {};
+      let pageProps = {};
+      if (PageComponent.getInitialProps) {
+        pageProps = await PageComponent.getInitialProps(context);
+      }
 
+      // Only on the server:
       if (typeof window === 'undefined') {
-        if (res && res.finished) {
-          return {};
+        // When redirecting, the response is finished.
+        // No point in continuing to render
+        if (ctx.res && ctx.res.finished) {
+          return pageProps;
         }
+
+        // Only if ssr is enabled
         if (ssr) {
           try {
+            // Run all GraphQL queries
             const { getDataFromTree } = await import('@apollo/react-ssr');
-            await getDataFromTree(<AppTree pageProps={{ ...pageProps, apolloClient }} />);
-          } catch (err) {
-            console.error('Error from getDataFromTree', err);
+            await getDataFromTree(
+              <AppTree
+                pageProps={{
+                  ...pageProps,
+                  apolloClient
+                }}
+              />
+            );
+          } catch (error) {
+            // Prevent Apollo Client GraphQL errors from crashing SSR.
+            // Handle them in components via the data.error prop:
+            // https://www.apollographql.com/docs/react/api/react-apollo.html#graphql-query-data-error
+            console.error('Error while running `getDataFromTree`', error);
           }
+
+          // getDataFromTree does not call componentWillUnmount
+          // head side effect therefore need to be cleared manually
+          Head.rewind();
         }
-        Head.rewind();
       }
-      const apolloState = apolloClient?.cache.extract();
+
+      // Extract query data from the Apollo store
+      // @ts-ignore
+      const apolloState = apolloClient.cache.extract();
 
       return {
         ...pageProps,
@@ -56,11 +78,9 @@ export function withApollo(PageComponent: any, { ssr = true } = {}) {
   return WithApollo;
 }
 
-let apolloClient: ApolloClient<NormalizedCacheObject> | null = null;
-
-export function initApolloClient(initialState: NormalizedCacheObject) {
-  if (isServer()) {
-    return createApolloClient(initialState);
+export function initApolloClient(initialState: NormalizedCacheObject = {}, ctx: NextPageContext | null = null) {
+  if (typeof window === 'undefined') {
+    return createApolloClient(initialState, ctx);
   }
 
   if (!apolloClient) {
@@ -70,12 +90,28 @@ export function initApolloClient(initialState: NormalizedCacheObject) {
   return apolloClient;
 }
 
-function createApolloClient(initialState: NormalizedCacheObject = {}) {
+function createApolloClient(
+  initialState: NormalizedCacheObject = {},
+  ctx: NextPageContext | null = null
+): ApolloClient<NormalizedCacheObject> {
+  const enhancedFetch = (url: string, init: any) => {
+    return fetch(url, {
+      ...init,
+      headers: {
+        ...init.headers,
+        cookie: ctx?.req?.headers.cookie || ''
+      }
+    }).then((response) => {
+      return response;
+    });
+  };
+
   const uploadLink = createUploadLink({
     uri: 'http://localhost:4000/graphql',
     credentials: 'include',
+    fetch: enhancedFetch,
     fetchOptions: {
-      credentials: 'include'
+      credentials: 'same-origin'
     }
   });
 
@@ -83,61 +119,12 @@ function createApolloClient(initialState: NormalizedCacheObject = {}) {
     if (graphQLErrors) graphQLErrors.map(({ message }) => console.log(message));
   });
 
-  // const authLink = setContext((_request, { headers }) => {
-  //   console.log('auth link', headers);
-  //   return {
-  //     headers: {
-  //       ...headers,
-  //       authorization: token ? `Bearer ${token}` : ''
-  //     }
-  //   };
-  // });
-
-  // const refreshLink = new TokenRefreshLink({
-  //   accessTokenField: 'accessToken',
-
-  //   isTokenValidOrUndefined: () => {
-  //     const token = getAccessToken();
-  //     console.log('isTokenValidOrUndefined', token);
-
-  //     if (!token) {
-  //       return true;
-  //     }
-
-  //     try {
-  //       const decodedToken: any = jwt.decode(getAccessToken());
-  //       if (Date.now() > decodedToken.exp * 1000) {
-  //         return false;
-  //       } else {
-  //         return true;
-  //       }
-  //     } catch {
-  //       return false;
-  //     }
-  //   },
-
-  //   fetchAccessToken: async () => {
-  //     console.log('fetching');
-  //     return fetch('http://localhost:4000/refresh_token', {
-  //       method: 'POST',
-  //       credentials: 'include'
-  //     });
-  //   },
-
-  //   handleFetch: (newToken: any) => {
-  //     console.log('new', newToken);
-  //     setAccessToken(newToken);
-  //   },
-
-  //   handleError: (error) => {
-  //     console.error('Cannot refresh access token', error);
-  //   }
-  // });
-
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
+    // @ts-ignore
     link: ApolloLink.from([errorLink, uploadLink]),
     cache: new InMemoryCache().restore(initialState),
-    connectToDevTools: true
+    assumeImmutableResults: true,
+    credentials: 'include'
   });
 }

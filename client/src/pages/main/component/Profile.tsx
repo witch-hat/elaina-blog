@@ -16,6 +16,8 @@ import { ThemeMode } from 'src/redux/common/type';
 import { Crop } from 'react-image-crop';
 import { FileType, UPLOAD_FILE } from 'src/query/file';
 import { isAuth } from 'src/pages/api/isAuth';
+import { useApollo } from 'src/apollo/apolloClient';
+import { IS_AUTH } from 'src/query/user';
 
 const Container = styled.aside({
   display: 'flex',
@@ -222,13 +224,15 @@ export default function Profile(props: Props) {
   const [completedProfile, setCompletedProfile] = useState<ProfileType>(props.profile);
   const [uploadFile] = useMutation<{ uploadFile: FileType }>(UPLOAD_FILE);
   const [updateProfile] = useMutation<{ updateProfile: ProfileType }>(UPDATE_PROFILE);
+  const client = useApollo();
 
   async function changeProfile() {
     let uploadedImagePath: string | undefined;
-    const isAdmin = await isAuth();
+    const { data } = await client.query({ query: IS_AUTH });
+
+    const isAdmin = data.isAuth.isAuth;
 
     if (!isAdmin) {
-      alert('non-authorized user');
       setIsEditMode(false);
       return;
     }

@@ -3,20 +3,17 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import type { AppContext, AppProps } from 'next/app';
 import Head from 'next/head';
-import Cookie from 'cookie';
 import { ApolloProvider } from '@apollo/client';
 import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css';
 
-import { getAccessToken, setAccessToken } from '../apollo/token';
-import jwt from 'jsonwebtoken';
 import Layout from 'src/components/Layout';
-import { initializeApollo, useApollo } from 'src/apollo/apolloClient';
-import { withApollo } from '../apollo/withApollo';
+import { withApollo, initApolloClient } from '../apollo/withApollo';
 import { store, persistor } from 'src/redux';
 // import { withApollo } from '../apollo/withApollo';
 import { isAuth } from './api/isAuth';
 import { IS_AUTH } from 'src/query/user';
+import setCookie from 'set-cookie-parser';
 
 // Skip Adding FontAwesome CSS
 config.autoAddCss = false;
@@ -27,11 +24,17 @@ export interface AppCommonProps {
   };
 }
 
-export default function ElainaBlog({ Component, pageProps }: AppProps) {
-  const apolloClient = initializeApollo({});
+function ElainaBlog({ Component, pageProps, apolloClient, cookies }: any) {
+  if (typeof window !== 'undefined') {
+    if (cookies[0] && cookies[1]) {
+      document.cookie = cookies[0];
+      document.cookie = cookies[1];
+    }
+  }
+
   return (
-    <Provider store={store}>
-      <ApolloProvider client={apolloClient}>
+    <ApolloProvider client={apolloClient}>
+      <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <Head>
             <meta charSet='utf-8' />
@@ -49,17 +52,25 @@ export default function ElainaBlog({ Component, pageProps }: AppProps) {
             <Component {...pageProps} />
           </Layout>
         </PersistGate>
-      </ApolloProvider>
-    </Provider>
+      </Provider>
+    </ApolloProvider>
   );
 }
 
 ElainaBlog.getInitialProps = async (context: AppContext) => {
   const { ctx, Component } = context;
+  // const client = initApolloClient({}, ctx);
+  // const { data } = await client.query({ query: IS_AUTH });
+  // const isLogin = data.isAuth.isAuth;
+
+  const { isAdmin, response } = await isAuth(ctx);
+
+  const combinedCookieHeader = response.headers.get('Set-Cookie');
+  const cookies = setCookie.splitCookiesString(combinedCookieHeader || '');
 
   let pageProps: AppCommonProps = {
     app: {
-      isLogin: true
+      isLogin: isAdmin
     }
   };
 
@@ -69,5 +80,7 @@ ElainaBlog.getInitialProps = async (context: AppContext) => {
 
   // console.log('pageProps', pageProps);
 
-  return { pageProps };
+  return { pageProps, cookies };
 };
+
+export default withApollo(ElainaBlog);
