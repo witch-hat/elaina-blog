@@ -1,5 +1,5 @@
 import { gql } from 'apollo-server';
-import { Post } from '../model/post';
+import { PostModel } from '../model/post';
 
 export const postTypeDef = gql`
   type Post {
@@ -21,7 +21,7 @@ export const postResolver = {
   Query: {
     async posts() {
       try {
-        const postList = await Post.find();
+        const postList = await PostModel.find();
         return postList;
       } catch (err) {
         throw err;

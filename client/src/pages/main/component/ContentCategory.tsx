@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { BorderBox } from 'src/components';
 import ContentCategoryDetails from './ContentCategoryDetails';
 import { mockUpData } from 'src/resources';
-import { Category } from 'src/query/category';
+import { CategoryDetails } from 'src/query/category';
 
 const Container = styled.div({
   display: 'flex',
@@ -83,7 +83,7 @@ const PreviewContent = styled.span({
 });
 
 interface Props {
-  categories: Category[];
+  categories: CategoryDetails[];
 }
 
 export function ContentCategory(props: Props) {
@@ -95,7 +95,7 @@ export function ContentCategory(props: Props) {
       <Container>
         {props.categories.map((category) => {
           return (
-            // Need to connect with post db and change href
+            // need to change href to recent post
             <Link key={category.title} href='/' passHref>
               <a style={{ width: '100%' }}>
                 <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
@@ -103,8 +103,7 @@ export function ContentCategory(props: Props) {
                     <PreviewTextWrapper>
                       <PreviewTitle>{category.title}</PreviewTitle>
                       <PreviewContent>{category.description}</PreviewContent>
-                      {/* need to connect with post db */}
-                      {/* <ContentCategoryDetails time='' count={category.posts.length} /> */}
+                      <ContentCategoryDetails time={`${category.recentCreatedAt}`} count={category.postCount} />
                     </PreviewTextWrapper>
                     <PreviewImage src='/images/FakeProfile.png' alt='preview image' />
                   </Content>

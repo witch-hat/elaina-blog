@@ -1,9 +1,11 @@
 import { gql } from '@apollo/client';
 
-export interface Category {
+export interface CategoryDetails {
   title: string;
   description: string;
   previewImage: string;
+  recentCreatedAt: Date;
+  postCount: number;
 }
 
 export const GET_CATEGORY = gql`
@@ -12,6 +14,18 @@ export const GET_CATEGORY = gql`
       title
       description
       previewImage
+    }
+  }
+`;
+
+export const GET_CATEGORIES_WITH_DETAILS = gql`
+  query {
+    categoriesWithDetails {
+      title
+      description
+      previewImage
+      postCount
+      recentCreatedAt
     }
   }
 `;

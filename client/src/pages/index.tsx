@@ -2,7 +2,7 @@ import React from 'react';
 import { GET_PROFILE } from 'src/query';
 import { NextPageContext, InferGetServerSidePropsType } from 'next';
 import { initApolloClient } from 'src/apollo/withApollo';
-import { GET_CATEGORY } from 'src/query/category';
+import { GET_CATEGORIES_WITH_DETAILS } from 'src/query/category';
 
 import Main from './main';
 import { AppCommonProps } from './_app';
@@ -19,15 +19,15 @@ export default function Index(props: Props) {
 export async function getServerSideProps(context: NextPageContext) {
   const apolloClient = initApolloClient({}, context);
   const profileQueryResult = await apolloClient.query({ query: GET_PROFILE });
-  const categoryQueryResult = await apolloClient.query({ query: GET_CATEGORY });
+  const categoryQueryResult = await apolloClient.query({ query: GET_CATEGORIES_WITH_DETAILS });
 
   const profile = profileQueryResult.data.profile;
-  const categories = categoryQueryResult.data.categories;
+  const categoryInfo = categoryQueryResult.data.categoriesWithDetails;
 
   return {
     props: {
       profile,
-      categories
+      categories: categoryInfo
     }
   };
 }

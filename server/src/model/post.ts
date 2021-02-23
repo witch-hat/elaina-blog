@@ -1,14 +1,16 @@
 import { Schema, model, Document, SchemaType } from 'mongoose';
 
-interface PostModel extends Document {
+export interface Post extends Document {
   author: string;
   postUrl: string;
   title: string;
   createdAt: Date;
   article: string;
+  commentId: number;
+  categoryId: number;
 }
 
-export const postSchema = new Schema<PostModel>(
+export const postSchema = new Schema<Post>(
   {
     author: {
       type: String,
@@ -29,9 +31,17 @@ export const postSchema = new Schema<PostModel>(
     article: {
       type: Date,
       required: true
+    },
+    categoryId: {
+      type: Number,
+      required: true
+    },
+    commentId: {
+      type: Number,
+      required: true
     }
   },
   { collection: 'posts' }
 );
 
-export const Post = model<PostModel>('Post', postSchema);
+export const PostModel = model<Post>('Post', postSchema);
