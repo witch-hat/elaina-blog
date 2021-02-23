@@ -90,8 +90,6 @@ export function ContentCategory(props: Props) {
   const router = useRouter();
   const { postId } = router.query;
 
-  console.log(props.categories);
-
   return (
     <section style={{ width: '100%' }}>
       <Container>

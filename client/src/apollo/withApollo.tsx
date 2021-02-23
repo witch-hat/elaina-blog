@@ -123,7 +123,7 @@ function createApolloClient(
     ssrMode: typeof window === 'undefined',
     // @ts-ignore
     link: ApolloLink.from([errorLink, uploadLink]),
-    cache: new InMemoryCache().restore(initialState),
+    cache: new InMemoryCache({ addTypename: false }).restore(initialState),
     assumeImmutableResults: true,
     credentials: 'include'
   });

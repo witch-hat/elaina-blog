@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { ApolloClient, ApolloLink, createHttpLink, HttpLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client';
+import { ApolloClient, ApolloLink, HttpLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client';
 import { createUploadLink } from 'apollo-upload-client';
 import { onError } from 'apollo-link-error';
 
@@ -22,8 +22,9 @@ const errorLink = onError(({ graphQLErrors }) => {
 function createApolloClient() {
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
+    // @ts-ignore
     link: ApolloLink.from([errorLink, uploadLink]),
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache({ addTypename: false }),
     assumeImmutableResults: true,
     credentials: 'include'
   });
