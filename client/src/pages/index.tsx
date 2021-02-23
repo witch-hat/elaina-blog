@@ -1,15 +1,15 @@
 import React from 'react';
-import { useQuery } from '@apollo/client';
-import { GET_PROFILE, ProfileType, UPDATE_PROFILE } from 'src/query';
-import { NextPageContext, InferGetStaticPropsType, InferGetServerSidePropsType } from 'next';
+import { GET_PROFILE } from 'src/query';
+import { NextPageContext, InferGetServerSidePropsType } from 'next';
 import { initApolloClient } from 'src/apollo/withApollo';
-// import { initializeApollo } from 'src/apollo/apolloClient';
+import { GET_CATEGORY } from 'src/query/category';
 
 import Main from './main';
 import { AppCommonProps } from './_app';
 
 interface Props extends AppCommonProps {
   profile: InferGetServerSidePropsType<typeof getServerSideProps>;
+  categories: InferGetServerSidePropsType<typeof getServerSideProps>;
 }
 
 export default function Index(props: Props) {
@@ -18,12 +18,16 @@ export default function Index(props: Props) {
 
 export async function getServerSideProps(context: NextPageContext) {
   const apolloClient = initApolloClient({}, context);
-  const { data } = await apolloClient.query({ query: GET_PROFILE });
-  const profile = data.profile;
+  const profileQueryResult = await apolloClient.query({ query: GET_PROFILE });
+  const categoryQueryResult = await apolloClient.query({ query: GET_CATEGORY });
+
+  const profile = profileQueryResult.data.profile;
+  const categories = categoryQueryResult.data.categories;
 
   return {
     props: {
-      profile
+      profile,
+      categories
     }
   };
 }

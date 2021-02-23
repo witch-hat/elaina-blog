@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-interface Category {
+export interface Category {
   title: string;
   description: string;
   previewImage: string;

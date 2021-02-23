@@ -6,17 +6,18 @@ import { AppCommonProps } from '../_app';
 
 interface Props extends AppCommonProps {
   profile: any;
+  categories: any;
 }
 
 export default function Main(props: Props) {
   return (
     <MainPageLayout profile={props.profile} isLogin={props.app.isLogin}>
-      <ContentCategory />
+      <ContentCategory categories={props.categories} />
     </MainPageLayout>
   );
 }
 
-export async function getServerSideProps({ req, res }: NextPageContext) {
+export async function getServerSideProps(context: NextPageContext) {
   return {
     redirect: {
       permanent: false,

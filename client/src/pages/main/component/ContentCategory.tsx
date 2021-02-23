@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { BorderBox } from 'src/components';
 import ContentCategoryDetails from './ContentCategoryDetails';
 import { mockUpData } from 'src/resources';
+import { Category } from 'src/query/category';
 
 const Container = styled.div({
   display: 'flex',
@@ -81,25 +82,31 @@ const PreviewContent = styled.span({
   WebkitBoxOrient: 'vertical'
 });
 
-interface Props {}
+interface Props {
+  categories: Category[];
+}
 
 export function ContentCategory(props: Props) {
   const router = useRouter();
   const { postId } = router.query;
 
+  console.log(props.categories);
+
   return (
     <section style={{ width: '100%' }}>
       <Container>
-        {mockUpData.category.map((category) => {
+        {props.categories.map((category) => {
           return (
-            <Link key={category.name} href={`post/${category.posts[category.posts.length - 1].url}`} passHref>
+            // Need to connect with post db and change href
+            <Link key={category.title} href='/' passHref>
               <a style={{ width: '100%' }}>
                 <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
                   <Content>
                     <PreviewTextWrapper>
-                      <PreviewTitle>{category.name}</PreviewTitle>
+                      <PreviewTitle>{category.title}</PreviewTitle>
                       <PreviewContent>{category.description}</PreviewContent>
-                      <ContentCategoryDetails time='' count={category.posts.length} />
+                      {/* need to connect with post db */}
+                      {/* <ContentCategoryDetails time='' count={category.posts.length} /> */}
                     </PreviewTextWrapper>
                     <PreviewImage src='/images/FakeProfile.png' alt='preview image' />
                   </Content>
