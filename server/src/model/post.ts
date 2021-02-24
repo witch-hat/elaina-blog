@@ -1,6 +1,7 @@
 import { Schema, model, Document, SchemaType } from 'mongoose';
 
 export interface Post extends Document {
+  _id: number;
   author: string;
   postUrl: string;
   title: string;
@@ -12,6 +13,10 @@ export interface Post extends Document {
 
 export const postSchema = new Schema<Post>(
   {
+    _id: {
+      type: Number,
+      required: true
+    },
     author: {
       type: String,
       required: true
@@ -29,7 +34,7 @@ export const postSchema = new Schema<Post>(
       required: true
     },
     article: {
-      type: Date,
+      type: String,
       required: true
     },
     categoryId: {
