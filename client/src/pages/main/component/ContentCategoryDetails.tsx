@@ -26,14 +26,13 @@ interface Props {
 }
 
 export default function ContentCategoryDetails(props: Props) {
-  const now = new Date();
-  const month = now.getMonth() < 12 ? now.getMonth() + 1 : 1;
+  const timer = new Date(props.time);
 
   return (
     <Container>
       <LatestTime>
         <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
-        <p>{`${now.getFullYear()}.${month}.${now.getDate()}`}</p>
+        <p>{`${timer.getFullYear()}.${timer.getMonth() + 1}.${timer.getDate()} ${timer.getHours()}:${timer.getMinutes()}`}</p>
       </LatestTime>
       <PostCount>
         <FontAwesomeIcon icon={faBook} style={{ marginRight: '5px' }} />
