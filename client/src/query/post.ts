@@ -59,8 +59,13 @@ export const FIND_POST_BY_URL = gql`
 export const FIND_SAME_CATEGORY_POSTS = gql`
   query($categoryId: Int!) {
     findSameCategoryPosts(categoryId: $categoryId) {
-      title
-      postUrl
+      post {
+        title
+        postUrl
+      }
+      category {
+        title
+      }
     }
   }
 `;

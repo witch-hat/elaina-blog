@@ -89,6 +89,7 @@ const Title = styled.span({
 
 interface Props {
   titles: [{ title: string; postUrl: string }];
+  category: { title: string };
 }
 
 export default function PostCategory(props: Props) {
@@ -96,7 +97,7 @@ export default function PostCategory(props: Props) {
 
   return (
     <Container themeMode={themeMode}>
-      <CategoryName>React</CategoryName>
+      <CategoryName>{props.category.title}</CategoryName>
       <TitleContainer>
         {props.titles.map(({ title, postUrl }) => {
           return (

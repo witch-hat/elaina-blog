@@ -99,12 +99,14 @@ interface Props {
   post: InferGetServerSidePropsType<typeof getServerSideProps>;
   comment: InferGetServerSidePropsType<typeof getServerSideProps>;
   sameCategoryTitles: InferGetServerSidePropsType<typeof getServerSideProps>;
+  category: InferGetServerSidePropsType<typeof getServerSideProps>;
 }
 
 export default function PostId(props: Props) {
   const post: Post = props.post;
   const comment: Comments = props.comment;
   const titles: [{ title: string; postUrl: string }] = props.sameCategoryTitles;
+  const category: { title: string } = props.category;
   const router = useRouter();
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const width = useWidth();
@@ -149,10 +151,10 @@ export default function PostId(props: Props) {
       onTouchEnd={(event: React.TouchEvent) => handleTouchEnd(event)}
     >
       {width > 767 ? (
-        <PostCategory titles={titles} />
+        <PostCategory category={category} titles={titles} />
       ) : (
         <FocusWrapper visible={showPostCategory} onClickOutside={() => setShowPostCategory(false)}>
-          <PostCategory titles={titles} />
+          <PostCategory category={category} titles={titles} />
         </FocusWrapper>
       )}
       <ContentContainer themeMode={themeMode}>
@@ -191,7 +193,8 @@ export async function getServerSideProps(context: NextPageContext) {
       props: {
         post: findedPost,
         comment: findedComment,
-        sameCategoryTitles: sameCategoryPostTitles
+        sameCategoryTitles: sameCategoryPostTitles.post,
+        category: sameCategoryPostTitles.category
       }
     };
   } catch (err) {

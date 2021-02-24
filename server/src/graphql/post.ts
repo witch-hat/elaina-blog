@@ -1,6 +1,7 @@
 import { gql } from 'apollo-server';
 import { PostModel } from '../model/post';
 import { ContextType } from '../types/context';
+import { CategoryModel, Category } from '../model/category';
 
 export const postTypeDef = gql`
   type Post {
@@ -15,11 +16,16 @@ export const postTypeDef = gql`
     categoryId: String
   }
 
+  type PostCategory {
+    post: [Post]
+    category: Category
+  }
+
   extend type Query {
     posts: [Post]
     lastPost: Post!
     findPostByUrl(requestUrl: String!): Post!
-    findSameCategoryPosts(categoryId: Int!): [Post]
+    findSameCategoryPosts(categoryId: Int!): PostCategory
   }
 `;
 
@@ -55,7 +61,12 @@ export const postResolver = {
     async findSameCategoryPosts(_: any, args: { categoryId: number }, context: ContextType) {
       try {
         const sameCategoryPosts = PostModel.find({ categoryId: args.categoryId });
-        return sameCategoryPosts;
+        const categoryFindResult = CategoryModel.findById(args.categoryId);
+
+        return {
+          post: sameCategoryPosts,
+          category: categoryFindResult
+        };
       } catch (err) {
         throw err;
       }
