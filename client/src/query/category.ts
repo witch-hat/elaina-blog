@@ -29,3 +29,11 @@ export const GET_CATEGORIES_WITH_DETAILS = gql`
     }
   }
 `;
+
+export const GET_LASTEST_POSTS = gql`
+  query {
+    getLatestPosts {
+      postUrl
+    }
+  }
+`;

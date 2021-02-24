@@ -151,10 +151,10 @@ export default function PostId(props: Props) {
       onTouchEnd={(event: React.TouchEvent) => handleTouchEnd(event)}
     >
       {width > 767 ? (
-        <PostCategory category={category} titles={titles} />
+        <PostCategory category={category} titles={titles} currentPostTitle={post.title} />
       ) : (
         <FocusWrapper visible={showPostCategory} onClickOutside={() => setShowPostCategory(false)}>
-          <PostCategory category={category} titles={titles} />
+          <PostCategory category={category} titles={titles} currentPostTitle={post.title} />
         </FocusWrapper>
       )}
       <ContentContainer themeMode={themeMode}>

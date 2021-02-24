@@ -75,20 +75,22 @@ const TitleList = styled.li({
   margin: '.4rem 0',
   cursor: 'pointer',
   '&:hover': {
-    fontWeight: 'bold',
+    fontWeight: 'bolder',
     textDecoration: 'underline'
   }
 });
 
-const Title = styled.span({
+const Title = styled.span<{ bold: boolean }>((props) => ({
   overflow: 'hidden',
   display: '-webkit-box',
   WebkitLineClamp: 1,
-  WebkitBoxOrient: 'vertical'
-});
+  WebkitBoxOrient: 'vertical',
+  fontWeight: props.bold ? 'bold' : 'normal'
+}));
 
 interface Props {
   titles: [{ title: string; postUrl: string }];
+  currentPostTitle: string;
   category: { title: string };
 }
 
@@ -103,7 +105,7 @@ export default function PostCategory(props: Props) {
           return (
             <TitleList key={title}>
               <Link href={`/post/${postUrl}`}>
-                <Title>{title}</Title>
+                <Title bold={props.currentPostTitle === title}>{title}</Title>
               </Link>
             </TitleList>
           );

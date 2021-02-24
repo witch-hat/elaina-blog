@@ -84,19 +84,20 @@ const PreviewContent = styled.span({
 
 interface Props {
   categories: CategoryDetails[];
+  latestPosts: [{ postUrl: string }];
 }
 
 export function ContentCategory(props: Props) {
   const router = useRouter();
-  const { postId } = router.query;
+  console.log(props.latestPosts);
 
   return (
     <section style={{ width: '100%' }}>
       <Container>
-        {props.categories.map((category) => {
+        {props.categories.map((category, index) => {
           return (
             // need to change href to recent post
-            <Link key={category.title} href='/' passHref>
+            <Link key={category.title} href={`/post/${props.latestPosts[index].postUrl}`} passHref>
               <a style={{ width: '100%' }}>
                 <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
                   <Content>
@@ -105,7 +106,7 @@ export function ContentCategory(props: Props) {
                       <PreviewContent>{category.description}</PreviewContent>
                       <ContentCategoryDetails time={`${category.recentCreatedAt}`} count={category.postCount} />
                     </PreviewTextWrapper>
-                    <PreviewImage src='/images/FakeProfile.png' alt='preview image' />
+                    <PreviewImage src={category.previewImage} alt={`${category.title} preview image`} />
                   </Content>
                 </BorderBox>
               </a>
