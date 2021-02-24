@@ -7,6 +7,8 @@ interface Post {
   title: string;
   createdAt: Date;
   article: string;
+  commentId: number;
+  categoryId: number;
 }
 
 export const GET_POSTS = gql`
@@ -18,6 +20,23 @@ export const GET_POSTS = gql`
       title
       createdAt
       article
+      commentId
+      categoryId
+    }
+  }
+`;
+
+export const GET_LAST_POST = gql`
+  query {
+    lastPost {
+      _id
+      author
+      postUrl
+      title
+      createdAt
+      article
+      commentId
+      categoryId
     }
   }
 `;

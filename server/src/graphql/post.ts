@@ -10,10 +10,13 @@ export const postTypeDef = gql`
     createdAt: DateTime
     article: String!
     category: String!
+    commentId: String
+    categoryId: String
   }
 
   extend type Query {
     posts: [Post]
+    lastPost: Post!
   }
 `;
 
@@ -23,6 +26,15 @@ export const postResolver = {
       try {
         const postList = await PostModel.find();
         return postList;
+      } catch (err) {
+        throw err;
+      }
+    },
+
+    async lastPost() {
+      try {
+        const lastPost = await PostModel.findOne({}, {}, { sort: { _id: -1 } });
+        return lastPost;
       } catch (err) {
         throw err;
       }
