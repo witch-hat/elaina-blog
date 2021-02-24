@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, { keyframes, css } from 'styled-components';
+import Link from 'next/link';
 
 import { theme } from 'src/styles';
 import { BorderBox } from 'src/components';
@@ -86,7 +87,9 @@ const Title = styled.span({
   WebkitBoxOrient: 'vertical'
 });
 
-interface Props {}
+interface Props {
+  titles: [{ title: string; postUrl: string }];
+}
 
 export default function PostCategory(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
@@ -95,51 +98,15 @@ export default function PostCategory(props: Props) {
     <Container themeMode={themeMode}>
       <CategoryName>React</CategoryName>
       <TitleContainer>
-        <TitleList>
-          <Title>Post1</Title>
-        </TitleList>
-        <TitleList>
-          <Title>Post TitleList is very long long longlonglong long long long long long long long long long long long long long </Title>
-        </TitleList>
-        <TitleList>
-          <Title>Post 3</Title>
-        </TitleList>
-        <TitleList>
-          <Title>Post 4</Title>
-        </TitleList>
-        <TitleList>
-          <Title>Post 5</Title>
-        </TitleList>
-        <TitleList>
-          <Title>Post 6</Title>
-        </TitleList>
-        <TitleList>
-          <Title>Post 7</Title>
-        </TitleList>
-        <TitleList>
-          <Title>Post 8</Title>
-        </TitleList>
-        <TitleList>
-          <Title>Post 9</Title>
-        </TitleList>
-        <TitleList>
-          <Title>Post 10</Title>
-        </TitleList>
-        <TitleList>
-          <Title>Post 11</Title>
-        </TitleList>
-        <TitleList>
-          <Title>Post 12</Title>
-        </TitleList>
-        <TitleList>
-          <Title>Post 13</Title>
-        </TitleList>
-        <TitleList>
-          <Title>Post 14</Title>
-        </TitleList>
-        <TitleList>
-          <Title>Post 15</Title>
-        </TitleList>
+        {props.titles.map(({ title, postUrl }) => {
+          return (
+            <TitleList key={title}>
+              <Link href={`/post/${postUrl}`}>
+                <Title>{title}</Title>
+              </Link>
+            </TitleList>
+          );
+        })}
       </TitleContainer>
     </Container>
   );

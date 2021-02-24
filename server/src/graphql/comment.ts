@@ -1,33 +1,39 @@
 import { gql } from 'apollo-server';
 import { Comment } from '../model/comment';
+import { ContextType } from '../types/context';
 
 export const commentTypeDef = gql`
   type Reply {
-    username: String!
-    password: String!
+    username: String
+    password: String
     createdAt: DateTime
+    comment: String
   }
 
   type Comment {
-    postId: Int!
-    username: String!
-    password: String!
+    username: String
+    password: String
     createdAt: DateTime
-    comment: String!
+    comment: String
     replies: [Reply]
   }
 
-  extend type Query {
+  type Comment {
+    _id: Int!
     comments: [Comment]
+  }
+
+  extend type Query {
+    comments(_id: Int!): Comment
   }
 `;
 
 export const commentResolver = {
   Query: {
-    async comments() {
+    async comments(_: any, args: { _id: number }, context: ContextType) {
       try {
-        const commentList = await Comment.find();
-        return commentList;
+        const comment = await Comment.findById(args._id);
+        return comment;
       } catch (err) {
         throw err;
       }

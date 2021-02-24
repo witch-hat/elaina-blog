@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser, faClock, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 
 import { BorderBox } from 'src/components';
 import CommentEditor from './CommentEditor';
+import { Reply, Comment } from 'src/query/comment';
 
 const CommentContainer = styled.div({
   width: '98%',
@@ -40,6 +43,11 @@ const Author = styled.div({
   '@media screen and (max-width: 767px)': {
     margin: '0 0 .2rem'
   }
+});
+
+const Time = styled.span({
+  display: 'flex',
+  alignItems: 'center'
 });
 
 const MenuButton = styled.div({
@@ -85,11 +93,14 @@ const ReplyContainer = styled.div({
   backgroundColor: 'rgba(0,0,0,.01)'
 });
 
-interface Props {}
+interface Props {
+  comment: Comment;
+}
 
-export default function Comment(props: Props) {
+export default function CommentElement(props: Props) {
   const [isShowingReply, setIsShowingReply] = useState(false);
   const [isAddReply, setIsAddReply] = useState(false);
+  const createdTime = new Date(props.comment.createdAt);
 
   return (
     <div>
@@ -98,40 +109,55 @@ export default function Comment(props: Props) {
           <DetailsContainer>
             <InformationContainer>
               <Author>
-                <i className='fas fa-user'></i>&nbsp;Hoit
+                <FontAwesomeIcon icon={faUser} style={{ marginRight: '.5rem' }} />
+                <p>{props.comment.username}</p>
               </Author>
-              <span>
-                <i className='far fa-clock'></i>&nbsp;2020.12.14 15:50
-              </span>
+              <Time>
+                <FontAwesomeIcon icon={faClock} style={{ marginRight: '.5rem' }} />
+                <p>
+                  {`${createdTime.getFullYear()}.${
+                    createdTime.getMonth() + 1
+                  }.${createdTime.getDate()} ${createdTime.getHours()}:${createdTime.getMinutes()}`}
+                </p>
+              </Time>
             </InformationContainer>
             <MenuButton>
-              <i className='fas fa-ellipsis-v'></i>
+              <FontAwesomeIcon icon={faEllipsisV} />
             </MenuButton>
           </DetailsContainer>
-          <CommentContent>으으...</CommentContent>
+          <CommentContent>{props.comment.comment}</CommentContent>
           <ReplyButtonContainer>
             <ReplyButton onClick={() => setIsShowingReply(!isShowingReply)}>{`${isShowingReply ? 'Hide' : 'Show'} Reply`}</ReplyButton>
             <ReplyButton onClick={() => setIsAddReply(!isAddReply)}>{isAddReply ? 'Cancel' : `Add Reply`}</ReplyButton>
           </ReplyButtonContainer>
           {isAddReply ? <CommentEditor /> : null}
-          {isShowingReply ? (
-            <ReplyContainer>
-              <DetailsContainer>
-                <InformationContainer>
-                  <Author>
-                    <i className='fas fa-user'></i>&nbsp;Hoit
-                  </Author>
-                  <span>
-                    <i className='far fa-clock'></i>&nbsp;2020.12.14 15:50
-                  </span>
-                </InformationContainer>
-                <MenuButton>
-                  <i className='fas fa-ellipsis-v'></i>
-                </MenuButton>
-              </DetailsContainer>
-              <CommentContent>Hello</CommentContent>
-            </ReplyContainer>
-          ) : null}
+          {isShowingReply
+            ? props.comment.replies.map((reply: Reply) => {
+                const replyCreatedTime = new Date(reply.createdAt);
+                return (
+                  <ReplyContainer key={`${reply.createdAt}`}>
+                    <DetailsContainer>
+                      <InformationContainer>
+                        <Author>
+                          <FontAwesomeIcon icon={faUser} style={{ marginRight: '.5rem' }} />
+                          <p>{reply.username}</p>
+                        </Author>
+                        <Time>
+                          <FontAwesomeIcon icon={faClock} style={{ marginRight: '.5rem' }} />
+                          <p>{`${replyCreatedTime.getFullYear()}.${
+                            replyCreatedTime.getMonth() + 1
+                          }.${replyCreatedTime.getDate()} ${replyCreatedTime.getHours()}:${replyCreatedTime.getMinutes()}`}</p>
+                        </Time>
+                      </InformationContainer>
+                      <MenuButton>
+                        <FontAwesomeIcon icon={faEllipsisV} />
+                      </MenuButton>
+                    </DetailsContainer>
+                    <CommentContent>{reply.comment}</CommentContent>
+                  </ReplyContainer>
+                );
+              })
+            : null}
         </CommentContainer>
       </BorderBox>
     </div>

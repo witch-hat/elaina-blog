@@ -1,3 +1,4 @@
+import { values } from 'lodash';
 import { Schema, model, Document, SchemaType } from 'mongoose';
 
 interface Reply {
@@ -7,51 +8,26 @@ interface Reply {
   comment: string;
 }
 
-interface CommentModel extends Document {
-  postId: number;
+interface Comment {
   username: string;
   password: string;
   createdAt: Date;
   comment: string;
-  replies?: [Reply];
+  replies: Reply[];
 }
 
-function ReplyType(this: SchemaType, key: any, options: any) {
-  SchemaType.call(this, key, options, 'ReplyType');
+interface CommentModel extends Document {
+  _id: number;
+  comments: Comment[];
 }
-
-Object.setPrototypeOf(ReplyType.prototype, SchemaType.prototype);
-
-ReplyType.prototype.cast = function (value: Reply): Reply {
-  return value;
-};
-
-// @ts-ignore
-Schema.Types.ReplyType = ReplyType;
 
 export const commentSchema = new Schema<CommentModel>({
-  postId: {
+  _id: {
     type: Number,
-    required: true
+    require: true
   },
-  username: {
-    type: String,
-    required: true
-  },
-  password: {
-    type: String,
-    required: true
-  },
-  creaetdAt: {
-    type: String,
-    required: true
-  },
-  comment: {
-    type: String,
-    required: true
-  },
-  replies: {
-    type: [ReplyType]
+  comments: {
+    type: Array
   }
 });
 

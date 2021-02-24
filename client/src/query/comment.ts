@@ -1,28 +1,41 @@
 import { gql } from '@apollo/client';
 
-interface Reply {
+export interface Reply {
   username: string;
   password: string;
   createdAt: Date;
   comment: string;
 }
 
-interface Comment {
+export interface Comment {
   username: string;
   password: string;
   createdAt: Date;
   comment: string;
-  replies?: [Reply];
+  replies: Reply[];
+}
+
+export interface Comments {
+  _id: number;
+  comments: Comment[];
 }
 
 export const GET_COMMENTS = gql`
-  query comments {
-    comments {
-      postId
-      username
-      password
-      createdAt
-      comment
+  query($_id: Int!) {
+    comments(_id: $_id) {
+      _id
+      comments {
+        username
+        password
+        createdAt
+        comment
+        replies {
+          username
+          password
+          comment
+          createdAt
+        }
+      }
     }
   }
 `;

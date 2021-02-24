@@ -1,11 +1,11 @@
 import { gql } from '@apollo/client';
 
-interface Post {
+export interface Post {
   _id: number;
   author: string;
   postUrl: string;
   title: string;
-  createdAt: Date;
+  createdAt: string;
   article: string;
   commentId: number;
   categoryId: number;
@@ -37,6 +37,30 @@ export const GET_LAST_POST = gql`
       article
       commentId
       categoryId
+    }
+  }
+`;
+
+export const FIND_POST_BY_URL = gql`
+  query($requestUrl: String!) {
+    findPostByUrl(requestUrl: $requestUrl) {
+      _id
+      author
+      postUrl
+      title
+      createdAt
+      article
+      commentId
+      categoryId
+    }
+  }
+`;
+
+export const FIND_SAME_CATEGORY_POSTS = gql`
+  query($categoryId: Int!) {
+    findSameCategoryPosts(categoryId: $categoryId) {
+      title
+      postUrl
     }
   }
 `;

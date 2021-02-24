@@ -9,6 +9,10 @@ import { theme } from 'src/styles';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
+import { InferGetServerSidePropsType, NextPageContext } from 'next';
+import { initApolloClient } from 'src/apollo/withApollo';
+import { FIND_POST_BY_URL, FIND_SAME_CATEGORY_POSTS, Post } from 'src/query/post';
+import { GET_COMMENTS, Comments } from 'src/query/comment';
 
 // interface ContentContainerProps {
 //   isOpenList: boolean;
@@ -91,7 +95,16 @@ const Alert = styled.div(
   `
 );
 
-export default function PostId() {
+interface Props {
+  post: InferGetServerSidePropsType<typeof getServerSideProps>;
+  comment: InferGetServerSidePropsType<typeof getServerSideProps>;
+  sameCategoryTitles: InferGetServerSidePropsType<typeof getServerSideProps>;
+}
+
+export default function PostId(props: Props) {
+  const post: Post = props.post;
+  const comment: Comments = props.comment;
+  const titles: [{ title: string; postUrl: string }] = props.sameCategoryTitles;
   const router = useRouter();
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const width = useWidth();
@@ -136,15 +149,15 @@ export default function PostId() {
       onTouchEnd={(event: React.TouchEvent) => handleTouchEnd(event)}
     >
       {width > 767 ? (
-        <PostCategory />
+        <PostCategory titles={titles} />
       ) : (
         <FocusWrapper visible={showPostCategory} onClickOutside={() => setShowPostCategory(false)}>
-          <PostCategory />
+          <PostCategory titles={titles} />
         </FocusWrapper>
       )}
       <ContentContainer themeMode={themeMode}>
-        <Content url={router.query.post} />
-        <CommentContainer url={router.query.post} />
+        <Content title={post.title} author={post.author} createdAt={post.createdAt} article={post.article} />
+        <CommentContainer comment={comment} />
       </ContentContainer>
       <ContentNavigation />
       {/* TODO: Alert shows only first... */}
@@ -155,4 +168,38 @@ export default function PostId() {
       )}
     </Container>
   );
+}
+
+export async function getServerSideProps(context: NextPageContext) {
+  const requestUrl = context.query['post-id'];
+  try {
+    const client = initApolloClient({}, context);
+
+    const postQueryResult = await client.query({ query: FIND_POST_BY_URL, variables: { requestUrl } });
+    const findedPost = postQueryResult.data.findPostByUrl;
+
+    const commentQueryResult = await client.query({ query: GET_COMMENTS, variables: { _id: +findedPost.commentId } });
+    const findedComment = commentQueryResult.data.comments;
+
+    const sameCategoryQueryResult = await client.query({
+      query: FIND_SAME_CATEGORY_POSTS,
+      variables: { categoryId: +findedPost.categoryId }
+    });
+    const sameCategoryPostTitles = sameCategoryQueryResult.data.findSameCategoryPosts;
+
+    return {
+      props: {
+        post: findedPost,
+        comment: findedComment,
+        sameCategoryTitles: sameCategoryPostTitles
+      }
+    };
+  } catch (err) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/'
+      }
+    };
+  }
 }

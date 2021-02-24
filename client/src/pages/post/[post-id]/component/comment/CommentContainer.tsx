@@ -2,9 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { BorderBox, InputBox } from 'src/components';
-import Comment from './Comment';
+import CommentElement from './CommentElement';
 import CommentEditor from './CommentEditor';
 import { ThemeMode } from 'src/redux/common/type';
+import { Comments, Comment } from 'src/query/comment';
 
 const Container = styled.section({
   display: 'flex',
@@ -34,20 +35,20 @@ const Counter = styled.div({
 });
 
 interface Props {
-  url: string | string[];
+  comment: Comments;
 }
 
 export default function CommentContainer(props: Props) {
+  console.log(props.comment);
   return (
     <Container>
       <Title>Comments</Title>
       <CommentEditor />
       <div style={{ width: '100%' }}>
         <Counter>덧글 수: 3개</Counter>
-        {/* db에서 comments 꺼내서 각각 <Comment /> 나열, 임시로 3개만 둬봄 */}
-        <Comment />
-        <Comment />
-        <Comment />
+        {props.comment.comments.map((comment: Comment) => {
+          return <CommentElement key={`${comment.createdAt}`} comment={comment} />;
+        })}
       </div>
     </Container>
   );
