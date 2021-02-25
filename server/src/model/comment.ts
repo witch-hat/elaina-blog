@@ -18,6 +18,7 @@ interface Comment {
 
 interface CommentModel extends Document {
   _id: number;
+  count: number;
   comments: Comment[];
 }
 
@@ -26,8 +27,14 @@ export const commentSchema = new Schema<CommentModel>({
     type: Number,
     require: true
   },
+  count: {
+    type: Number,
+    default: 0,
+    required: true
+  },
   comments: {
-    type: Array
+    type: Array,
+    default: []
   }
 });
 

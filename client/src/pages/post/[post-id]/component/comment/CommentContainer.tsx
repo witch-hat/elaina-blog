@@ -28,7 +28,7 @@ const Title = styled.span({
   fontWeight: 'bold'
 });
 
-const Counter = styled.div({
+const Counter = styled.p({
   width: '100%',
   fontSize: '1.15rem',
   fontWeight: 'bold'
@@ -45,7 +45,7 @@ export default function CommentContainer(props: Props) {
       <Title>Comments</Title>
       <CommentEditor />
       <div style={{ width: '100%' }}>
-        <Counter>덧글 수: 3개</Counter>
+        <Counter>{`덧글 수: ${props.comment.count}개`}</Counter>
         {props.comment.comments.map((comment: Comment) => {
           return <CommentElement key={`${comment.createdAt}`} comment={comment} />;
         })}

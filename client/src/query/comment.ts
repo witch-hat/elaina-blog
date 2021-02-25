@@ -17,6 +17,7 @@ export interface Comment {
 
 export interface Comments {
   _id: number;
+  count: number;
   comments: Comment[];
 }
 
@@ -24,6 +25,7 @@ export const GET_COMMENTS = gql`
   query($_id: Int!) {
     comments(_id: $_id) {
       _id
+      count
       comments {
         username
         password

@@ -27,8 +27,6 @@ export async function getServerSideProps(context: NextPageContext) {
   const categoryInfo = categoryQueryResult.data.categoriesWithDetails;
   const latestPosts = categoryLatestPostQueryResult.data.getLatestPosts;
 
-  console.log(latestPosts);
-
   return {
     props: {
       profile,

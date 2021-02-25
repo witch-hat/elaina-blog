@@ -20,6 +20,7 @@ export const commentTypeDef = gql`
 
   type Comment {
     _id: Int!
+    count: Int!
     comments: [Comment]
   }
 
