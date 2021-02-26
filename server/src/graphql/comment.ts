@@ -18,14 +18,18 @@ export const commentTypeDef = gql`
     replies: [Reply]
   }
 
-  type Comment {
-    _id: Int!
+  type Comments {
+    _id: Int
     count: Int!
     comments: [Comment]
   }
 
   extend type Query {
-    comments(_id: Int!): Comment
+    comments(_id: Int!): Comments
+  }
+
+  extend type Mutation {
+    writeComment(_id: Int!, username: String!, password: String!, comment: String!, createdAt: DateTime!): Comment
   }
 `;
 
@@ -35,6 +39,31 @@ export const commentResolver = {
       try {
         const comment = await CommentModel.findById(args._id);
         return comment;
+      } catch (err) {
+        throw err;
+      }
+    }
+  },
+
+  Mutation: {
+    async writeComment(
+      _: any,
+      args: { _id: number; username: string; password: string; comment: string; createdAt: Date },
+      context: ContextType
+    ) {
+      try {
+        const existComment = await CommentModel.findById(args._id);
+        console.log(existComment);
+        existComment.comments.push({
+          username: args.username,
+          password: args.password,
+          comment: args.comment,
+          createdAt: args.createdAt,
+          replies: []
+        });
+        existComment.count += 1;
+        existComment.save();
+        return existComment;
       } catch (err) {
         throw err;
       }
