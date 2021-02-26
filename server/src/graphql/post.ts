@@ -2,7 +2,7 @@ import { gql } from 'apollo-server';
 import { PostModel, Post } from '../model/post';
 import { ContextType } from '../types/context';
 import { CategoryModel, Category } from '../model/category';
-import { UserModel } from '../model/user';
+import { CommentModel } from '../model/comment';
 import { ProfileModel } from '../model/profile';
 
 export const postTypeDef = gql`
@@ -28,9 +28,9 @@ export const postTypeDef = gql`
     getLatestPostsEachCategory: [Post]
   }
 
-  # extend type Mutation {
-  #   writePost(title: String!, createdAt: DateTime, article: String!, category: String!): Post
-  # }
+  extend type Mutation {
+    writePost(title: String!, createdAt: DateTime, article: String!, category: String!): Post
+  }
 `;
 
 export const postResolver = {
@@ -87,22 +87,25 @@ export const postResolver = {
 
       return posts;
     }
+  },
+
+  Mutation: {
+    async writePost(_: any, args: { title: string; createdAt: Date; article: string; category: string }, context: ContextType) {
+      try {
+        const lastPost = await PostModel.findOne({}, {}, { sort: { _id: -1 } });
+        const _id = lastPost._id + 1;
+
+        const category = await CategoryModel.findOne({ title: args.category });
+        const categoryId = category._id;
+
+        const profile = await ProfileModel.findOne();
+        const author = profile.name;
+
+        CommentModel.create({ _id });
+
+        const result = PostModel.create({ _id, title: args.title, createdAt: args.createdAt, author, categoryId, article: args.article });
+        return result;
+      } catch (err) {}
+    }
   }
-
-  // Mutation: {
-  //   async writePost(_: any, args: { title: string; createdAt: Date; article: string; category: string }, context: ContextType) {
-  //     try {
-  //       const lastPost = await PostModel.findOne({}, {}, { sort: { _id: -1 } });
-  //       const _id = lastPost._id + 1;
-
-  //       const category = await CategoryModel.findOne({ title: args.category });
-  //       const categoryId = category._id;
-
-  //       const profile = await ProfileModel.findOne();
-  //       const author = profile.name;
-
-  //       const result = PostModel.create({ _id, title: args.title, createdAt: args.createdAt, author });
-  //     } catch (err) {}
-  //   }
-  // }
 };
