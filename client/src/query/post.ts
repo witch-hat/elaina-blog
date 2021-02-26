@@ -3,11 +3,9 @@ import { gql } from '@apollo/client';
 export interface Post {
   _id: number;
   author: string;
-  postUrl: string;
   title: string;
   createdAt: string;
   article: string;
-  commentId: number;
   categoryId: number;
 }
 

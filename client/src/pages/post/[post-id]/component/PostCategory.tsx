@@ -89,7 +89,7 @@ const Title = styled.span<{ bold: boolean }>((props) => ({
 }));
 
 interface Props {
-  titles: [{ title: string; postUrl: string }];
+  titles: [{ title: string; _id: number }];
   currentPostTitle: string;
   category: { title: string };
 }
@@ -97,14 +97,15 @@ interface Props {
 export default function PostCategory(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
+  console.log(props.titles);
   return (
     <Container themeMode={themeMode}>
       <CategoryName>{props.category.title}</CategoryName>
       <TitleContainer>
-        {props.titles.map(({ title, postUrl }) => {
+        {props.titles.map(({ title, _id }) => {
           return (
             <TitleList key={title}>
-              <Link href={`/post/${postUrl}`}>
+              <Link href={`/post/${_id}`} passHref>
                 <Title bold={props.currentPostTitle === title}>{title}</Title>
               </Link>
             </TitleList>

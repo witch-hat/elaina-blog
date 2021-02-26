@@ -105,7 +105,7 @@ interface Props {
 export default function PostId(props: Props) {
   const post: Post = props.post;
   const comment: Comments = props.comment;
-  const titles: [{ title: string; postUrl: string }] = props.sameCategoryTitles;
+  const titles: [{ title: string; _id: number }] = props.sameCategoryTitles;
   const category: { title: string } = props.category;
   const router = useRouter();
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
@@ -174,13 +174,14 @@ export default function PostId(props: Props) {
 
 export async function getServerSideProps(context: NextPageContext) {
   const requestUrl = context.query['post-id'];
+  console.log(requestUrl, context.query);
   try {
     const client = initApolloClient({}, context);
 
     const postQueryResult = await client.query({ query: FIND_POST_BY_URL, variables: { requestUrl } });
     const findedPost = postQueryResult.data.findPostByUrl;
 
-    const commentQueryResult = await client.query({ query: GET_COMMENTS, variables: { _id: +findedPost._id } });
+    const commentQueryResult = await client.query({ query: GET_COMMENTS, variables: { _id: findedPost._id } });
     const findedComment = commentQueryResult.data.comments;
 
     const sameCategoryQueryResult = await client.query({
