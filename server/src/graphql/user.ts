@@ -1,6 +1,6 @@
 import { gql, AuthenticationError, Request } from 'apollo-server';
 import express from 'express';
-import { User, UserModel } from '../model/user';
+import { UserModel, User } from '../model/user';
 import { comparePassword, getToken, verifyToken } from '../util/auth';
 import { ContextType } from '../types/context';
 import jwt, { TokenExpiredError } from 'jsonwebtoken';
@@ -61,7 +61,7 @@ export const userResolver = {
   Query: {
     async me() {
       try {
-        const user = await User.find();
+        const user = await UserModel.find();
         return user[user.length - 1];
       } catch (err) {
         console.log(err);
@@ -71,7 +71,7 @@ export const userResolver = {
 
     async findMeById(id: string) {
       try {
-        const user = await User.findById(id);
+        const user = await UserModel.findById(id);
         return user;
       } catch (err) {
         throw err;
@@ -79,7 +79,7 @@ export const userResolver = {
     },
 
     async isAuth(_: any, args: any, context: ContextType) {
-      const me = await User.findOne({}, {}, { sort: { _id: -1 } });
+      const me = await UserModel.findOne({}, {}, { sort: { _id: -1 } });
       const cookies = new Cookies(context.req, context.res);
       const accessToken = cookies.get('a_access');
       const refreshToken = cookies.get('a_refresh');
@@ -143,7 +143,7 @@ export const userResolver = {
   Mutation: {
     async updatePassword(_: any, args: any) {
       try {
-        const result = await User.create({
+        const result = await UserModel.create({
           emailId: args.emailId,
           password: args.password
         });
@@ -156,7 +156,7 @@ export const userResolver = {
     async login(_: any, args: any, context: ContextType) {
       const cookies = new Cookies(context.req, context.res);
       try {
-        const me = await User.findOne({}, {}, { sort: { _id: -1 } });
+        const me = await UserModel.findOne({}, {}, { sort: { _id: -1 } });
 
         if (args.emailId === me.emailId) {
           const isMatch = await comparePassword(args.password, me.password);
@@ -200,7 +200,7 @@ export const userResolver = {
     },
 
     async refreshUserToken(_: any, args: any, context: ContextType) {
-      await getConnection().getRepository(User).increment({ _id: args.userId }, 'tokenVersion', 1);
+      await getConnection().getRepository(UserModel).increment({ _id: args.userId }, 'tokenVersion', 1);
 
       return true;
     },

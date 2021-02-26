@@ -16,7 +16,7 @@ export async function getServerSideProps(context: NextPageContext) {
   return {
     redirect: {
       permanent: false,
-      destination: `/post/${data.lastPost.postUrl}`
+      destination: `/post/${data.lastPost._id}`
     }
   };
 }

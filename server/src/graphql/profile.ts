@@ -1,5 +1,5 @@
 import { gql } from 'apollo-server';
-import { Profile } from '../model/profile';
+import { ProfileModel } from '../model/profile';
 import { ContextType } from '../types/context';
 
 // type Query {
@@ -40,7 +40,7 @@ export const profileResolver = {
   Query: {
     async profile() {
       try {
-        const profile = await Profile.findOne();
+        const profile = await ProfileModel.findOne();
         return profile;
       } catch (err) {
         console.log(err);
@@ -51,7 +51,7 @@ export const profileResolver = {
   Mutation: {
     async updateProfile(_: any, args: any, context: ContextType) {
       try {
-        const result = await Profile.findByIdAndUpdate(
+        const result = await ProfileModel.findByIdAndUpdate(
           args.id,
           {
             ...args

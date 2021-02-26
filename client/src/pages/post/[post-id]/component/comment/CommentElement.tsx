@@ -127,7 +127,9 @@ export default function CommentElement(props: Props) {
           </DetailsContainer>
           <CommentContent>{props.comment.comment}</CommentContent>
           <ReplyButtonContainer>
-            <ReplyButton onClick={() => setIsShowingReply(!isShowingReply)}>{`${isShowingReply ? 'Hide' : 'Show'} Reply`}</ReplyButton>
+            <ReplyButton onClick={() => setIsShowingReply(!isShowingReply)}>{`${
+              isShowingReply ? 'Hide' : `Show ${props.comment.replies.length}`
+            } Reply `}</ReplyButton>
             <ReplyButton onClick={() => setIsAddReply(!isAddReply)}>{isAddReply ? 'Cancel' : `Add Reply`}</ReplyButton>
           </ReplyButtonContainer>
           {isAddReply ? <CommentEditor /> : null}

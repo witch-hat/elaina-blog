@@ -5,7 +5,7 @@ import express from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import { getToken } from './auth';
 import { config } from '../util/config';
-import { User } from '../model/user';
+import { UserModel } from '../model/user';
 
 export async function isAuth(req: express.Request, res: express.Response) {
   const cookies = new Cookies(req, res);
@@ -18,7 +18,7 @@ export async function isAuth(req: express.Request, res: express.Response) {
   if (!accessToken || !refreshToken) {
     return res.send({ isAuth: false });
   } else {
-    const me = await User.findOne({}, {}, { sort: { _id: -1 } });
+    const me = await UserModel.findOne({}, {}, { sort: { _id: -1 } });
 
     try {
       jwt.verify(accessToken, config.secret);

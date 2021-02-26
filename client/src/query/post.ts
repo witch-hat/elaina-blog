@@ -16,11 +16,9 @@ export const GET_POSTS = gql`
     posts {
       _id
       author
-      postUrl
       title
       createdAt
       article
-      commentId
       categoryId
     }
   }
@@ -31,12 +29,10 @@ export const GET_LAST_POST = gql`
     lastPost {
       _id
       author
-      postUrl
       title
       createdAt
       article
       commentId
-      categoryId
     }
   }
 `;
@@ -46,11 +42,9 @@ export const FIND_POST_BY_URL = gql`
     findPostByUrl(requestUrl: $requestUrl) {
       _id
       author
-      postUrl
       title
       createdAt
       article
-      commentId
       categoryId
     }
   }
@@ -60,12 +54,20 @@ export const FIND_SAME_CATEGORY_POSTS = gql`
   query($categoryId: Int!) {
     findSameCategoryPosts(categoryId: $categoryId) {
       post {
+        _id
         title
-        postUrl
       }
       category {
         title
       }
+    }
+  }
+`;
+
+export const GET_LASTEST_POSTS = gql`
+  query {
+    getLatestPostsEachCategory {
+      _id
     }
   }
 `;

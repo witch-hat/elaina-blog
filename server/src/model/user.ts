@@ -2,7 +2,7 @@ import { Schema, model, Document, Model } from 'mongoose';
 import bcrypt from 'bcrypt';
 const saltRounds = 10;
 
-export interface UserModel extends Document {
+export interface User extends Document {
   emailId: string;
   password: string;
   auth: {
@@ -12,7 +12,7 @@ export interface UserModel extends Document {
   };
 }
 
-export const userSchema = new Schema<UserModel>(
+export const userSchema = new Schema<User>(
   {
     emailId: {
       type: String,
@@ -55,4 +55,4 @@ userSchema.pre('save', function (next) {
   }
 });
 
-export const User: Model<UserModel> = model('User', userSchema);
+export const UserModel: Model<User> = model('User', userSchema);

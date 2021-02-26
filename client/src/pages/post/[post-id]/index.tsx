@@ -180,12 +180,12 @@ export async function getServerSideProps(context: NextPageContext) {
     const postQueryResult = await client.query({ query: FIND_POST_BY_URL, variables: { requestUrl } });
     const findedPost = postQueryResult.data.findPostByUrl;
 
-    const commentQueryResult = await client.query({ query: GET_COMMENTS, variables: { _id: +findedPost.commentId } });
+    const commentQueryResult = await client.query({ query: GET_COMMENTS, variables: { _id: +findedPost._id } });
     const findedComment = commentQueryResult.data.comments;
 
     const sameCategoryQueryResult = await client.query({
       query: FIND_SAME_CATEGORY_POSTS,
-      variables: { categoryId: +findedPost.categoryId }
+      variables: { categoryId: findedPost.categoryId }
     });
     const sameCategoryPostTitles = sameCategoryQueryResult.data.findSameCategoryPosts;
 
@@ -198,6 +198,7 @@ export async function getServerSideProps(context: NextPageContext) {
       }
     };
   } catch (err) {
+    console.log(err);
     return {
       redirect: {
         permanent: false,

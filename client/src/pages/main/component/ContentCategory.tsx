@@ -84,7 +84,7 @@ const PreviewContent = styled.span({
 
 interface Props {
   categories: CategoryDetails[];
-  latestPosts: [{ postUrl: string }];
+  latestPosts: [{ _id: number }];
 }
 
 export function ContentCategory(props: Props) {
@@ -97,7 +97,7 @@ export function ContentCategory(props: Props) {
         {props.categories.map((category, index) => {
           return (
             // need to change href to recent post
-            <Link key={category.title} href={`/post/${props.latestPosts[index].postUrl}`} passHref>
+            <Link key={category.title} href={`/post/${props.latestPosts[index]._id}`} passHref>
               <a style={{ width: '100%' }}>
                 <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
                   <Content>

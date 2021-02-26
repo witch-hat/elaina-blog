@@ -22,7 +22,6 @@ export const categoryTypeDef = gql`
   extend type Query {
     categories: [Category]
     categoriesWithDetails: [CategoryWithDetails]
-    getLatestPosts: [Post]
   }
 `;
 
@@ -78,17 +77,6 @@ export const categoryResolver = {
       } catch (err) {
         throw err;
       }
-    },
-
-    async getLatestPosts() {
-      const categories = await CategoryModel.find();
-
-      const posts: Post[] = categories.map(async (category: Category) => {
-        const post: Post = await PostModel.findOne({ categoryId: category._id }, {}, { sort: { _id: -1 } });
-        return post;
-      });
-
-      return posts;
     }
   }
 };

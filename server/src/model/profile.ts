@@ -46,4 +46,4 @@ interface Profile extends Document {
   email: string;
 }
 
-export const Profile = model<Profile>('Profile', profileSchema);
+export const ProfileModel = model<Profile>('Profile', profileSchema);

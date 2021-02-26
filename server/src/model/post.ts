@@ -3,11 +3,9 @@ import { Schema, model, Document, SchemaType } from 'mongoose';
 export interface Post extends Document {
   _id: number;
   author: string;
-  postUrl: string;
   title: string;
   createdAt: Date;
   article: string;
-  commentId: number;
   categoryId: number;
 }
 
@@ -18,10 +16,6 @@ export const postSchema = new Schema<Post>(
       required: true
     },
     author: {
-      type: String,
-      required: true
-    },
-    postUrl: {
       type: String,
       required: true
     },
@@ -38,10 +32,6 @@ export const postSchema = new Schema<Post>(
       required: true
     },
     categoryId: {
-      type: Number,
-      required: true
-    },
-    commentId: {
       type: Number,
       required: true
     }
