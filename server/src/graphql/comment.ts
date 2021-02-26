@@ -1,5 +1,5 @@
 import { gql } from 'apollo-server';
-import { Comment } from '../model/comment';
+import { CommentModel } from '../model/comment';
 import { ContextType } from '../types/context';
 
 export const commentTypeDef = gql`
@@ -33,7 +33,7 @@ export const commentResolver = {
   Query: {
     async comments(_: any, args: { _id: number }, context: ContextType) {
       try {
-        const comment = await Comment.findById(args._id);
+        const comment = await CommentModel.findById(args._id);
         return comment;
       } catch (err) {
         throw err;
