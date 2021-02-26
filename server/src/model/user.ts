@@ -35,7 +35,8 @@ export const userSchema = new Schema<User>(
     }
   },
   {
-    collection: 'user'
+    collection: 'user',
+    versionKey: false
   }
 );
 

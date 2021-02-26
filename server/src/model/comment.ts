@@ -16,26 +16,32 @@ interface Comment {
   replies: Reply[];
 }
 
-interface CommentModel extends Document {
+interface Comments extends Document {
   _id: number;
   count: number;
   comments: Comment[];
 }
 
-export const commentSchema = new Schema<CommentModel>({
-  _id: {
-    type: Number,
-    require: true
+export const commentSchema = new Schema<Comments>(
+  {
+    _id: {
+      type: Number,
+      require: true
+    },
+    count: {
+      type: Number,
+      default: 0,
+      required: true
+    },
+    comments: {
+      type: Array,
+      default: []
+    }
   },
-  count: {
-    type: Number,
-    default: 0,
-    required: true
-  },
-  comments: {
-    type: Array,
-    default: []
+  {
+    collection: 'comments',
+    versionKey: false
   }
-});
+);
 
-export const Comment = model<CommentModel>('Comment', commentSchema);
+export const CommentModel = model<Comments>('Comment', commentSchema);

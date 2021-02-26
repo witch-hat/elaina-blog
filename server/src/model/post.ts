@@ -36,7 +36,10 @@ export const postSchema = new Schema<Post>(
       required: true
     }
   },
-  { collection: 'posts' }
+  {
+    collection: 'posts',
+    versionKey: false
+  }
 );
 
 export const PostModel = model<Post>('Post', postSchema);

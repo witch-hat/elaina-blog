@@ -25,7 +25,8 @@ export const categorySchema = new Schema<Category>(
     }
   },
   {
-    collection: 'categories'
+    collection: 'categories',
+    versionKey: false
   }
 );
 

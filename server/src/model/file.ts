@@ -20,7 +20,8 @@ export const fileSchema = new Schema(
     }
   },
   {
-    collection: 'file'
+    collection: 'file',
+    versionKey: false
   }
 );
 
