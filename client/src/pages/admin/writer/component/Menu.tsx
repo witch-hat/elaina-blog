@@ -20,7 +20,7 @@ const Container = styled.div({
 });
 
 interface Props {
-  setText: React.Dispatch<React.SetStateAction<string>>;
+  setArticle: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const Menu = React.forwardRef((props: Props, ref: React.RefObject<HTMLDivElement>) => {
@@ -76,7 +76,7 @@ export const Menu = React.forwardRef((props: Props, ref: React.RefObject<HTMLDiv
       selection.focusNode.textContent = newFocusText;
       ref.current?.focus();
     }
-    props.setText(ref.current?.textContent);
+    props.setArticle(ref.current?.textContent);
   }
 
   function insertMarkdownLineStart(markdown: string) {
@@ -96,7 +96,7 @@ export const Menu = React.forwardRef((props: Props, ref: React.RefObject<HTMLDiv
       if (insertFlag) child[NODE].textContent = markdown + child[NODE].textContent;
     }
     ref.current?.focus();
-    props.setText(ref.current?.textContent);
+    props.setArticle(ref.current?.textContent);
   }
 
   return (

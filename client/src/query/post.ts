@@ -69,3 +69,11 @@ export const GET_LASTEST_POSTS = gql`
     }
   }
 `;
+
+export const WRITE_POST = gql`
+  mutation($title: String!, $createdAt: DateTime, $article: String!, $category: String!) {
+    writePost(title: $title, createdAt: $createdAt, article: $article, category: $category) {
+      _id
+    }
+  }
+`;

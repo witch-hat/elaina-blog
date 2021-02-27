@@ -1,22 +1,56 @@
 import React, { createElement, useEffect, useRef } from 'react';
 import { useState } from 'react';
+import { useMutation } from '@apollo/client';
 import ReactMarkdown from 'react-markdown';
 import styled from 'styled-components';
 import styles from 'src/styles/MarkdownStyles.module.css';
 import gfm from 'remark-gfm';
+import { useRouter } from 'next/router';
 
 import { Menu } from './Menu';
-import { useWidth } from 'src/components';
+import { InputBox, useWidth } from 'src/components';
 import { theme } from 'src/styles';
 
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
+import { CategoryDetails } from 'src/query/category';
+import { FocusWrapper } from 'src/components';
+import { WRITE_POST } from 'src/query/post';
+import { useApollo } from 'src/apollo/apolloClient';
+import { IS_AUTH } from 'src/query/user';
 
 const Container = styled.div<{ themeMode: ThemeMode }>((props) => ({
   display: 'flex',
   width: '100%'
 }));
+
+const CategoryContainer = styled.div({
+  position: 'relative',
+  cursor: 'pointer',
+  padding: '.5rem 0',
+  border: '1px solid #1f1f1f',
+  borderRadius: '.5rem'
+});
+
+const CategoryList = styled.div({
+  position: 'absolute',
+  top: '.5rem',
+  left: '-1px',
+  border: '1px solid #1f1f1f',
+  backgroundColor: '#f1f2f3',
+  zIndex: 1,
+  borderRadius: '.5rem'
+});
+
+const CategoryTitle = styled.div({
+  padding: '.5rem .2rem'
+});
+
+const Title = styled.div({
+  width: '100%',
+  margin: '1rem 0'
+});
 
 const EditorContainer = styled.div({
   display: 'flex',
@@ -60,7 +94,7 @@ const Paragraph = styled.p({
   whiteSpace: 'pre-wrap'
 });
 
-const Button = styled.button({
+const MoblieModeButton = styled.button({
   borderRadius: '8px',
   padding: '.3rem',
   display: 'none',
@@ -68,6 +102,19 @@ const Button = styled.button({
     display: 'block'
   }
 });
+
+const ButtonContainer = styled.div({
+  display: 'flex',
+  alignItems: 'center',
+  margin: '.5rem 0'
+});
+
+const WriteButton = styled.button<{ themeMode: ThemeMode }>((props) => ({
+  padding: '.5rem',
+  borderRadius: '.5rem',
+  backgroundColor: theme[props.themeMode].submitButtonColor,
+  color: '#f1f2f3'
+}));
 
 function Text(props: { children?: string }) {
   return <Paragraph>{props.children !== undefined ? props.children : <br></br>}</Paragraph>;
@@ -78,14 +125,26 @@ enum Mode {
   preview = 'Preview'
 }
 
-interface Props {}
+const DEFAULT_CATEGORY = '카테고리를 선택해 주세요';
+
+interface Props {
+  author: string;
+  categories: CategoryDetails[];
+}
 
 export function Writer(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const editor = useRef<HTMLDivElement>(null);
-  const [text, setText] = useState<string>('');
+  const titleRef = useRef<HTMLInputElement>(null);
+  const [selectedCategory, setSelectedCategory] = useState(DEFAULT_CATEGORY);
+  const [title, setTitle] = useState('');
+  const [article, setArticle] = useState<string>('');
+  const [isListOpen, setIsListOpen] = useState(false);
   const width = useWidth();
   const [mode, setMode] = useState(Mode.write);
+  const [writePost] = useMutation(WRITE_POST);
+  const router = useRouter();
+  const client = useApollo();
 
   useEffect(() => {
     if (mode == Mode.write) {
@@ -95,7 +154,7 @@ export function Writer(props: Props) {
 
   function parseTextContent() {
     if (editor.current !== null) {
-      setText(editor.current.innerText.replaceAll('\n\n', '  \n').replaceAll('\n  \n', '\n&#8203;  \n').replaceAll('\n\n', '\n'));
+      setArticle(editor.current.innerText.replaceAll('\n\n', '  \n').replaceAll('\n  \n', '\n&#8203;  \n').replaceAll('\n\n', '\n'));
     }
   }
 
@@ -121,15 +180,72 @@ export function Writer(props: Props) {
       setMode(Mode.write);
     }
   }
-  console.log(editor.current?.childNodes);
+
+  async function handleSubmit() {
+    if (selectedCategory === DEFAULT_CATEGORY) {
+      window.scrollTo(0, 0);
+      return alert('카테고리를 선택해 주세요');
+    }
+
+    const { data } = await client.query({ query: IS_AUTH });
+    const isAdmin = data.isAuth.isAuth;
+
+    if (!isAdmin) {
+      alert('로그인에러. 다시 로그인해주세요.');
+      return router.push('/admin/login');
+    }
+
+    const mutateData = await writePost({
+      variables: {
+        title: titleRef.current?.value || '',
+        createdAt: new Date().toISOString(),
+        article,
+        category: selectedCategory
+      }
+    });
+
+    return router.push(`/post/${mutateData.data.writePost._id}`);
+  }
 
   return (
     <Container themeMode={themeMode}>
       <EditorContainer>
-        <Button onClick={() => handleButtonClick()}>{mode === Mode.write ? Mode.preview : Mode.write}</Button>
+        <MoblieModeButton onClick={() => handleButtonClick()}>{mode === Mode.write ? Mode.preview : Mode.write}</MoblieModeButton>
         {((width <= 767 && mode === Mode.write) || width > 767) && (
           <>
-            <Menu ref={editor} setText={setText} />
+            <CategoryContainer>
+              <div onClick={() => setIsListOpen(!isListOpen)}>
+                <p style={{ padding: '.2rem' }}>{selectedCategory}</p>
+              </div>
+              <FocusWrapper visible={isListOpen} onClickOutside={() => setIsListOpen(false)}>
+                <CategoryList>
+                  {props.categories.map((category) => {
+                    return (
+                      <CategoryTitle
+                        onClick={() => {
+                          setSelectedCategory(category.title);
+                          setIsListOpen(false);
+                        }}
+                      >
+                        <p>{category.title}</p>
+                      </CategoryTitle>
+                    );
+                  })}
+                </CategoryList>
+              </FocusWrapper>
+            </CategoryContainer>
+            <Title>
+              <InputBox
+                inputRef={titleRef}
+                id='post-title'
+                type='text'
+                minLength={2}
+                maxLength={999}
+                placeholder='제목'
+                styles={{ width: '100%' }}
+              />
+            </Title>
+            <Menu ref={editor} setArticle={setArticle} />
             <Editor
               ref={editor}
               contentEditable={true}
@@ -141,14 +257,19 @@ export function Writer(props: Props) {
             >
               <Text></Text>
             </Editor>
+            <ButtonContainer>
+              <WriteButton themeMode={themeMode} onClick={() => handleSubmit()}>
+                글쓰기
+              </WriteButton>
+            </ButtonContainer>
           </>
         )}
         {width <= 767 && mode === Mode.preview && (
-          <ReactMarkdown plugins={[gfm]} className={styles['markdown-body']} children={text}></ReactMarkdown>
+          <ReactMarkdown plugins={[gfm]} className={styles['markdown-body']} children={article}></ReactMarkdown>
         )}
       </EditorContainer>
       <PreviewContainer>
-        <ReactMarkdown plugins={[gfm]} className={styles['markdown-body']} children={text}></ReactMarkdown>
+        <ReactMarkdown plugins={[gfm]} className={styles['markdown-body']} children={article}></ReactMarkdown>
       </PreviewContainer>
     </Container>
   );

@@ -3,8 +3,9 @@ import { NextPageContext } from 'next';
 
 import { AdminPageLayout } from './component/AdminPageLayout';
 import { isAuth } from 'src/pages/api/isAuth';
+import { AppCommonProps } from '../_app';
 
-interface Props {}
+interface Props extends AppCommonProps {}
 
 export default function Admin(props: Props) {
   return (

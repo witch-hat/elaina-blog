@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { isAuth } from 'src/pages/api/isAuth';
+import { AppCommonProps } from 'src/pages/_app';
 
 const Container = styled.div<{ themeMode: ThemeMode }>((props) => ({
   display: 'flex',
@@ -18,13 +19,15 @@ const Container = styled.div<{ themeMode: ThemeMode }>((props) => ({
   padding: '.5rem'
 }));
 
-export default function Admin() {
+interface Props extends AppCommonProps {}
+
+export default function Admin(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   return (
     <Container themeMode={themeMode}>
       {/* <MenuButton isActive={true} desc={'D'}></MenuButton> */}
-      <Writer />
+      <Writer author={props.app.profile.name} categories={props.app.categoryInfo} />
     </Container>
   );
 }

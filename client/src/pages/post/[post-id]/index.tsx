@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import styled, { keyframes, css } from 'styled-components';
-import { useRouter } from 'next/router';
+import { InferGetServerSidePropsType, NextPageContext } from 'next';
 
 import { Content, ContentNavigation, PostCategory, CommentContainer } from './component';
 import { useWidth, FocusWrapper } from 'src/components';
@@ -9,7 +9,6 @@ import { theme } from 'src/styles';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
-import { InferGetServerSidePropsType, NextPageContext } from 'next';
 import { initApolloClient } from 'src/apollo/withApollo';
 import { FIND_POST_BY_URL, FIND_SAME_CATEGORY_POSTS, Post } from 'src/query/post';
 import { GET_COMMENTS, Comments } from 'src/query/comment';
@@ -107,7 +106,6 @@ export default function PostId(props: Props) {
   const comment: Comments = props.comment;
   const titles: [{ title: string; _id: number }] = props.sameCategoryTitles;
   const category: { title: string } = props.category;
-  const router = useRouter();
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const width = useWidth();
   const [showPostCategory, setShowPostCategory] = useState(false);
@@ -151,10 +149,10 @@ export default function PostId(props: Props) {
       onTouchEnd={(event: React.TouchEvent) => handleTouchEnd(event)}
     >
       {width > 767 ? (
-        <PostCategory category={category} titles={titles} currentPostTitle={post.title} />
+        <PostCategory category={category} titles={titles} currentPostId={post._id} />
       ) : (
         <FocusWrapper visible={showPostCategory} onClickOutside={() => setShowPostCategory(false)}>
-          <PostCategory category={category} titles={titles} currentPostTitle={post.title} />
+          <PostCategory category={category} titles={titles} currentPostId={post._id} />
         </FocusWrapper>
       )}
       <ContentContainer themeMode={themeMode}>
