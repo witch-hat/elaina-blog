@@ -1,16 +1,44 @@
 import Document, { Html, Head, Main, NextScript, DocumentContext } from 'next/document';
+import { ServerStyleSheet } from 'styled-components';
+import { GlobalStyles } from 'src/styles/GlobalStyles';
+import { ThemeMode } from 'src/redux/common/type';
 
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
-    const initialProps = await Document.getInitialProps(ctx);
+    // styled-components SSR
+    const sheet = new ServerStyleSheet();
+    const originalRenderPage = ctx.renderPage;
 
-    return initialProps;
+    try {
+      ctx.renderPage = () =>
+        originalRenderPage({
+          enhanceApp: (App) => (props) => sheet.collectStyles(<App {...props} />)
+        });
+
+      const initialProps = await Document.getInitialProps(ctx);
+
+      return {
+        ...initialProps,
+        styles: (
+          <>
+            {initialProps.styles}
+            {sheet.getStyleElement()}
+          </>
+        )
+      };
+    } finally {
+      sheet.seal();
+    }
   }
 
   render() {
     return (
       <Html lang='ko'>
-        <Head />
+        <Head>
+          {/* preload font files */}
+          <link rel='preload' href='/fonts/Nanum Gothic.woff2' as='font' type='font/woff2' crossOrigin='true' />
+          <link rel='preload' href='/fonts/Nanum Gothic Bold.woff2' as='font' type='font/woff2' crossOrigin='true' />
+        </Head>
         <body>
           <Main />
           <NextScript />

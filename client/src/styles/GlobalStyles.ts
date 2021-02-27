@@ -5,9 +5,9 @@ import { theme } from 'src/styles/theme';
 import { ThemeMode } from 'src/redux/common/type';
 
 export const GlobalStyles = createGlobalStyle<{ themeMode: ThemeMode }>`
-* {
-	box-sizing: border-box;
-}
+	* {
+		box-sizing: border-box;
+	}
 	a {
 		text-decoration: none;
 		color: inherit;
@@ -39,7 +39,7 @@ export const GlobalStyles = createGlobalStyle<{ themeMode: ThemeMode }>`
 	}
 	html {
 		font-size: 16px;
-		font-family: 'Nanum Gothic', sans-serif;
+		font-family: "Nanum Gothic", sans-serif;
 		vertical-align: baseline;
 		@media screen and (max-width: 1380px) {
 			font-size: 15px;
