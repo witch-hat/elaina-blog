@@ -5,15 +5,13 @@ import { MainPageLayout, Loading } from 'src/components';
 import { AppCommonProps } from '../_app';
 
 interface Props extends AppCommonProps {
-  profile: any;
-  categories: any;
   latestPosts: any;
 }
 
 export default function Main(props: Props) {
   return (
-    <MainPageLayout profile={props.profile} isLogin={props.app.isLogin}>
-      <ContentCategory categories={props.categories} latestPosts={props.latestPosts} />
+    <MainPageLayout profile={props.app.profile} isLogin={props.app.isLogin}>
+      <ContentCategory categories={props.app.categoryInfo} latestPosts={props.latestPosts} />
     </MainPageLayout>
   );
 }

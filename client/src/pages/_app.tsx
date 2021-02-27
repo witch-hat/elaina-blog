@@ -1,7 +1,7 @@
-import React, { createContext, useContext } from 'react';
+import React from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import type { AppContext, AppProps } from 'next/app';
+import type { AppContext } from 'next/app';
 import Head from 'next/head';
 import { ApolloProvider } from '@apollo/client';
 import { config } from '@fortawesome/fontawesome-svg-core';
@@ -12,8 +12,9 @@ import { withApollo, initApolloClient } from '../apollo/withApollo';
 import { store, persistor } from 'src/redux';
 // import { withApollo } from '../apollo/withApollo';
 import { isAuth } from './api/isAuth';
-import { IS_AUTH } from 'src/query/user';
 import setCookie from 'set-cookie-parser';
+import { GET_PROFILE, ProfileType } from 'src/query/profile';
+import { CategoryDetails, GET_CATEGORIES_WITH_DETAILS } from 'src/query/category';
 
 // Skip Adding FontAwesome CSS
 config.autoAddCss = false;
@@ -21,6 +22,8 @@ config.autoAddCss = false;
 export interface AppCommonProps {
   app: {
     isLogin: boolean;
+    profile: ProfileType;
+    categoryInfo: CategoryDetails[];
   };
 }
 
@@ -59,9 +62,13 @@ function ElainaBlog({ Component, pageProps, apolloClient, cookies }: any) {
 
 ElainaBlog.getInitialProps = async (context: AppContext) => {
   const { ctx, Component } = context;
-  // const client = initApolloClient({}, ctx);
-  // const { data } = await client.query({ query: IS_AUTH });
-  // const isLogin = data.isAuth.isAuth;
+  const apolloClient = initApolloClient({}, ctx);
+
+  const profileQueryResult = await apolloClient.query({ query: GET_PROFILE });
+  const categoryQueryResult = await apolloClient.query({ query: GET_CATEGORIES_WITH_DETAILS });
+
+  const profile: ProfileType = profileQueryResult.data.profile;
+  const categoryInfo: CategoryDetails[] = categoryQueryResult.data.categoriesWithDetails;
 
   const { isAdmin, response } = await isAuth(ctx);
 
@@ -70,15 +77,15 @@ ElainaBlog.getInitialProps = async (context: AppContext) => {
 
   let pageProps: AppCommonProps = {
     app: {
-      isLogin: isAdmin
+      isLogin: isAdmin,
+      profile,
+      categoryInfo
     }
   };
 
   if (Component.getInitialProps) {
     Object.assign(pageProps, await Component.getInitialProps(ctx));
   }
-
-  // console.log('pageProps', pageProps);
 
   return { pageProps, cookies };
 };
