@@ -187,6 +187,12 @@ export function Writer(props: Props) {
       return alert('카테고리를 선택해 주세요');
     }
 
+    if (!titleRef.current?.value) {
+      window.scrollTo(0, 0);
+      titleRef.current?.focus();
+      return alert('제목을 입력해주세요');
+    }
+
     const { data } = await client.query({ query: IS_AUTH });
     const isAdmin = data.isAuth.isAuth;
 
@@ -197,7 +203,7 @@ export function Writer(props: Props) {
 
     const mutateData = await writePost({
       variables: {
-        title: titleRef.current?.value || '',
+        title: titleRef.current?.value,
         createdAt: new Date().toISOString(),
         article,
         category: selectedCategory
