@@ -52,18 +52,21 @@ export const commentResolver = {
       context: ContextType
     ) {
       try {
-        const existComment = await CommentModel.findById(args._id);
-        console.log(existComment);
-        existComment.comments.push({
+        const existComments = await CommentModel.findById(args._id);
+        const newComment = {
           username: args.username,
           password: args.password,
           comment: args.comment,
           createdAt: args.createdAt,
           replies: []
-        });
-        existComment.count += 1;
-        existComment.save();
-        return existComment;
+        };
+
+        existComments.comments.push(newComment);
+        existComments.count += 1;
+
+        existComments.save();
+
+        return existComments;
       } catch (err) {
         throw err;
       }
