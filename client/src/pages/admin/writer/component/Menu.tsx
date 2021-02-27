@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBold, faItalic, faFont, faCode, faListUl, faQuoteLeft, faImages } from '@fortawesome/free-solid-svg-icons';
 
 import { MenuButton } from './MenuButton';
 import { FormatBoldBlack } from 'src/resources/svg/FormatBoldBlack';
@@ -101,25 +103,25 @@ export const Menu = React.forwardRef((props: Props, ref: React.RefObject<HTMLDiv
     <Container contentEditable={false}>
       <MenuButton isActive desc='Bold' onClick={() => insertMarkdownStartAndEnd('**')}>
         {/* <FormatBoldBlack /> */}
-        <i className='fas fa-bold'></i>
+        <FontAwesomeIcon icon={faBold} />
       </MenuButton>
       <MenuButton isActive desc='Italic' onClick={() => insertMarkdownStartAndEnd('*')}>
-        <i className='fas fa-italic'></i>
+        <FontAwesomeIcon icon={faItalic} />
       </MenuButton>
       <MenuButton isActive desc='Color' onClick={() => insertMarkdownStartAndEnd("<span style='color:#ccc'>", '</span>')}>
-        <i className='fas fa-font'></i>
+        <FontAwesomeIcon icon={faFont} />
       </MenuButton>
       <MenuButton isActive desc='Code Block' onClick={() => insertMarkdownStartAndEnd('\n```\n')}>
-        <i className='fas fa-code'></i>
+        <FontAwesomeIcon icon={faCode} />
       </MenuButton>
       <MenuButton isActive desc='List' onClick={() => insertMarkdownLineStart('* ')}>
-        <i className='fas fa-list-ul'></i>
+        <FontAwesomeIcon icon={faListUl} />
       </MenuButton>
       <MenuButton isActive desc='Quote' onClick={() => insertMarkdownLineStart('> ')}>
-        <i className='fas fa-quote-left'></i>
+        <FontAwesomeIcon icon={faQuoteLeft} />
       </MenuButton>
       <MenuButton isActive desc='Upload Image' onClick={() => {}}>
-        <i className='far fa-images'></i>
+        <FontAwesomeIcon icon={faImages} />
       </MenuButton>
     </Container>
   );
