@@ -22,8 +22,6 @@ config.autoAddCss = false;
 export interface AppCommonProps {
   app: {
     isLogin: boolean;
-    profile: ProfileType;
-    categoryInfo: CategoryDetails[];
   };
 }
 
@@ -62,13 +60,6 @@ function ElainaBlog({ Component, pageProps, apolloClient, cookies }: any) {
 
 ElainaBlog.getInitialProps = async (context: AppContext) => {
   const { ctx, Component } = context;
-  const apolloClient = initApolloClient({}, ctx);
-
-  const profileQueryResult = await apolloClient.query({ query: GET_PROFILE });
-  const categoryQueryResult = await apolloClient.query({ query: GET_CATEGORIES_WITH_DETAILS });
-
-  const profile: ProfileType = profileQueryResult.data.profile;
-  const categoryInfo: CategoryDetails[] = categoryQueryResult.data.categoriesWithDetails;
 
   const { isAdmin, response } = await isAuth(ctx);
 
@@ -77,9 +68,7 @@ ElainaBlog.getInitialProps = async (context: AppContext) => {
 
   let pageProps: AppCommonProps = {
     app: {
-      isLogin: isAdmin,
-      profile,
-      categoryInfo
+      isLogin: isAdmin
     }
   };
 
