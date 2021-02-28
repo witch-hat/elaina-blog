@@ -3,9 +3,10 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
+import macaddress from 'macaddress';
+import UAParser from 'ua-parser-js';
 
 import { schema } from './graphql';
-import { verifyToken, getToken } from './util/auth';
 import { graphqlUploadExpress } from 'graphql-upload';
 import { isAuth } from './util/isAuth';
 
@@ -42,7 +43,14 @@ app.post('/is_auth', async (req, res) => {
 
 const server = new ApolloServer({
   schema,
-  context: ({ req, res }) => ({ req, res }),
+  context: ({ req, res }) => {
+    const ua = new UAParser(req.headers['user-agent']);
+    console.log(ua.getBrowser());
+    macaddress.all(function (err, all) {
+      console.log(all);
+    });
+    return { req, res };
+  },
   uploads: false
 });
 

@@ -11,6 +11,7 @@
     "@types/jsonwebtoken": "^8.5.0",
     "@types/lodash": "^4.14.167",
     "@types/mongoose": "^5.10.3",
+    "@types/ua-parser-js": "^0.7.35",
     "apollo-server": "^2.19.1",
     "apollo-server-express": "^2.19.2",
     "bcrypt": "^5.0.0",
@@ -22,6 +23,7 @@
     "graphql-upload": "^11.0.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.20",
+    "macaddress": "^0.5.1",
     "mongoose": "^5.11.11",
     "nodemon": "^2.0.7",
     "os": "^0.1.1",
@@ -29,6 +31,7 @@
     "ts-node": "^9.1.1",
     "typeorm": "^0.2.31",
     "typescript": "4.0.3",
+    "ua-parser-js": "^0.7.24",
     "uuid": "^8.3.2"
   },
   "scripts": {
