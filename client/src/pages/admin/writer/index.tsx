@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { isAuth } from 'src/pages/api/isAuth';
-import { AppCommonProps } from 'src/pages/_app';
+import { AppCommonProps, appCommponProps } from 'src/pages/_app';
 import { initApolloClient } from 'src/apollo/withApollo';
 import { GET_PROFILE, ProfileType } from 'src/query';
 import { GET_CATEGORY } from 'src/query/category';
@@ -40,9 +40,7 @@ export default function Admin(props: Props) {
 }
 
 export async function getServerSideProps(context: NextPageContext) {
-  const { isAdmin } = await isAuth(context);
-
-  if (!isAdmin) {
+  if (!appCommponProps.app.isLogin) {
     return {
       redirect: {
         permanent: false,

@@ -16,12 +16,6 @@ import setCookie from 'set-cookie-parser';
 // Skip Adding FontAwesome CSS
 config.autoAddCss = false;
 
-export interface AppCommonProps {
-  app: {
-    isLogin: boolean;
-  };
-}
-
 const FONT = `
   @font-face {
     font-family: "Nanum Gothic";
@@ -69,12 +63,22 @@ function ElainaBlog({ Component, pageProps, apolloClient, cookies }: any) {
   );
 }
 
+export interface AppCommonProps {
+  app: {
+    isLogin: boolean;
+  };
+}
+
+export const appCommponProps: AppCommonProps = {
+  app: {
+    isLogin: false
+  }
+};
+
 ElainaBlog.getInitialProps = async (context: AppContext) => {
   const { ctx, Component } = context;
 
   const { isAdmin, response } = await isAuth(ctx);
-
-  console.log('app');
 
   const combinedCookieHeader = response.headers.get('Set-Cookie');
   const cookies = setCookie.splitCookiesString(combinedCookieHeader || '');
@@ -88,6 +92,8 @@ ElainaBlog.getInitialProps = async (context: AppContext) => {
   if (Component.getInitialProps) {
     Object.assign(pageProps, await Component.getInitialProps(ctx));
   }
+
+  Object.assign(appCommponProps, pageProps);
 
   return { pageProps, cookies };
 };

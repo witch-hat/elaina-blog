@@ -3,7 +3,7 @@ import { NextPageContext } from 'next';
 
 import { AdminPageLayout } from './component/AdminPageLayout';
 import { isAuth } from 'src/pages/api/isAuth';
-import { AppCommonProps } from '../_app';
+import { AppCommonProps, appCommponProps } from '../_app';
 
 interface Props extends AppCommonProps {}
 
@@ -16,9 +16,7 @@ export default function Admin(props: Props) {
 }
 
 export async function getServerSideProps(context: NextPageContext) {
-  const { isAdmin } = await isAuth(context);
-
-  if (!isAdmin) {
+  if (!appCommponProps.app.isLogin) {
     return {
       redirect: {
         permanent: false,

@@ -12,6 +12,7 @@ import { isAuth } from 'src/pages/api/isAuth';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
+import { appCommponProps } from 'src/pages/_app';
 
 const Container = styled.div({
   display: 'flex',
@@ -191,9 +192,7 @@ export default function Login(props: Props) {
 }
 
 export async function getServerSideProps(context: NextPageContext) {
-  const { isAdmin } = await isAuth(context);
-
-  if (isAdmin) {
+  if (appCommponProps.app.isLogin) {
     return {
       redirect: {
         permanent: false,
