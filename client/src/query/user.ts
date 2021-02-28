@@ -13,6 +13,7 @@ export const IS_AUTH = gql`
   query IsAuth {
     isAuth {
       isAuth
+      cookie
     }
   }
 `;

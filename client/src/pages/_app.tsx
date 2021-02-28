@@ -12,6 +12,7 @@ import { withApollo, initApolloClient } from '../apollo/withApollo';
 import { store, persistor } from 'src/redux';
 import { isAuth } from './api/isAuth';
 import setCookie from 'set-cookie-parser';
+import { IS_AUTH } from 'src/query/user';
 
 // Skip Adding FontAwesome CSS
 config.autoAddCss = false;
@@ -77,15 +78,16 @@ export const appCommponProps: AppCommonProps = {
 
 ElainaBlog.getInitialProps = async (context: AppContext) => {
   const { ctx, Component } = context;
+  const client = initApolloClient({}, ctx);
+  const { data } = await client.query({ query: IS_AUTH });
 
-  const { isAdmin, response } = await isAuth(ctx);
-
-  const combinedCookieHeader = response.headers.get('Set-Cookie');
+  const combinedCookieHeader = data.isAuth.cookie;
   const cookies = setCookie.splitCookiesString(combinedCookieHeader || '');
+  const isLogin = data.isAuth.isAuth;
 
   let pageProps: AppCommonProps = {
     app: {
-      isLogin: isAdmin
+      isLogin
     }
   };
 

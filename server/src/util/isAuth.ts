@@ -3,6 +3,7 @@ import jwt, { TokenExpiredError } from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import express from 'express';
 import { v4 as uuidv4 } from 'uuid';
+
 import { getToken } from './auth';
 import { config } from '../util/config';
 import { UserModel } from '../model/user';

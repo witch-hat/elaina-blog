@@ -2,15 +2,29 @@ import { Schema, model, Document, Model } from 'mongoose';
 import bcrypt from 'bcrypt';
 const saltRounds = 10;
 
+export interface Auth {
+  userUniqueId: string;
+  refreshToken: string;
+  id: number;
+}
+
 export interface User extends Document {
   emailId: string;
   password: string;
-  auth: {
-    deviceList: string[];
-    refreshToken: string;
-    id: number;
-  };
+  auth: Auth;
 }
+
+const authSchema = new Schema({
+  userUniqueId: {
+    type: String
+  },
+  refreshToken: {
+    type: String
+  },
+  id: {
+    type: String
+  }
+});
 
 export const userSchema = new Schema<User>(
   {
@@ -23,15 +37,8 @@ export const userSchema = new Schema<User>(
       required: true
     },
     auth: {
-      deviceList: {
-        type: [String]
-      },
-      refreshToken: {
-        type: String
-      },
-      id: {
-        type: String
-      }
+      type: [authSchema],
+      default: []
     }
   },
   {
