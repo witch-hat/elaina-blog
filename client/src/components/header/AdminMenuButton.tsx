@@ -17,7 +17,7 @@ const Container = styled.div({
   position: 'relative'
 });
 
-const Button = styled.div<{ themeMode: string }>((props) => ({
+const Button = styled.div<{ themeMode: ThemeMode }>((props) => ({
   flexShrink: 0,
   cursor: 'pointer',
   padding: '.5rem',
@@ -44,19 +44,19 @@ const ListContainer = styled.div<{ themeMode: ThemeMode }>((props) => ({
   display: 'flex',
   width: '10rem',
   flexDirection: 'column',
-  borderRadius: '12px',
   backgroundColor: theme[props.themeMode].secondaryContentBackground,
   zIndex: 1
 }));
 
-const List = styled.div({
-  padding: '.75rem',
-  textAlign: 'center',
-  borderRadius: '12px',
-  cursor: 'pointer',
-  '&:hover': {
-    backgroundColor: '#888'
-  }
+const List = styled.div<{ themeMode: ThemeMode }>((props) => {
+  return {
+    padding: '.5rem',
+    textAlign: 'center',
+    cursor: 'pointer',
+    '&:hover': {
+      backgroundColor: theme[props.themeMode].hoverBackground
+    }
+  };
 });
 
 interface Props {
@@ -86,10 +86,13 @@ export default function AdminMenuButton(props: Props) {
         <FocusWrapper visible={isMenuOpen} onClickOutside={() => setIsMenuOpen(false)}>
           <ListContainer themeMode={themeMode}>
             <Link href='/admin'>
-              <List onClick={() => setIsMenuOpen(false)}>Admin</List>
+              <List themeMode={themeMode} onClick={() => setIsMenuOpen(false)}>
+                Admin
+              </List>
             </Link>
             {props.isLogin ? (
               <List
+                themeMode={themeMode}
                 onClick={() => {
                   logout({
                     variables: {
@@ -102,7 +105,9 @@ export default function AdminMenuButton(props: Props) {
               </List>
             ) : (
               <Link href='/admin/login'>
-                <List onClick={() => setIsMenuOpen(false)}>Login</List>
+                <List themeMode={themeMode} onClick={() => setIsMenuOpen(false)}>
+                  Login
+                </List>
               </Link>
             )}
           </ListContainer>
