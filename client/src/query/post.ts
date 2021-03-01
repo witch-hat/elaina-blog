@@ -2,7 +2,6 @@ import { gql } from '@apollo/client';
 
 export interface Post {
   _id: number;
-  author: string;
   title: string;
   createdAt: string;
   article: string;
@@ -13,7 +12,6 @@ export const GET_POSTS = gql`
   query post {
     posts {
       _id
-      author
       title
       createdAt
       article
@@ -26,7 +24,6 @@ export const GET_LAST_POST = gql`
   query {
     lastPost {
       _id
-      author
       title
       createdAt
       article
@@ -39,7 +36,6 @@ export const FIND_POST_BY_URL = gql`
   query($requestUrl: String!) {
     findPostByUrl(requestUrl: $requestUrl) {
       _id
-      author
       title
       createdAt
       article

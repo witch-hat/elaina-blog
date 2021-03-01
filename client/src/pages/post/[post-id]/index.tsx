@@ -12,6 +12,7 @@ import { ThemeMode } from 'src/redux/common/type';
 import { initApolloClient } from 'src/apollo/withApollo';
 import { FIND_POST_BY_URL, FIND_SAME_CATEGORY_POSTS, Post } from 'src/query/post';
 import { GET_COMMENTS, Comments } from 'src/query/comment';
+import { GET_PROFILE } from 'src/query';
 
 // interface ContentContainerProps {
 //   isOpenList: boolean;
@@ -99,6 +100,7 @@ interface Props {
   comment: InferGetServerSidePropsType<typeof getServerSideProps>;
   sameCategoryTitles: InferGetServerSidePropsType<typeof getServerSideProps>;
   category: InferGetServerSidePropsType<typeof getServerSideProps>;
+  author: InferGetServerSidePropsType<typeof getServerSideProps>;
 }
 
 export default function PostId(props: Props) {
@@ -106,6 +108,7 @@ export default function PostId(props: Props) {
   const comment: Comments = props.comment;
   const titles: [{ title: string; _id: number }] = props.sameCategoryTitles;
   const category: { title: string } = props.category;
+  const author: string = props.author;
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const width = useWidth();
   const [showPostCategory, setShowPostCategory] = useState(false);
@@ -156,7 +159,7 @@ export default function PostId(props: Props) {
         </FocusWrapper>
       )}
       <ContentContainer themeMode={themeMode}>
-        <Content title={post.title} author={post.author} createdAt={post.createdAt} article={post.article} />
+        <Content title={post.title} author={author} createdAt={post.createdAt} article={post.article} />
         <CommentContainer comment={comment} />
       </ContentContainer>
       <ContentNavigation />
@@ -172,7 +175,6 @@ export default function PostId(props: Props) {
 
 export async function getServerSideProps(context: NextPageContext) {
   const requestUrl = context.query['post-id'];
-  console.log(requestUrl, context.query);
   try {
     const client = initApolloClient({}, context);
 
@@ -181,6 +183,9 @@ export async function getServerSideProps(context: NextPageContext) {
 
     const commentQueryResult = await client.query({ query: GET_COMMENTS, variables: { _id: findedPost._id } });
     const findedComment = commentQueryResult.data.comments;
+
+    const profileQueryResult = await client.query({ query: GET_PROFILE });
+    const profile = profileQueryResult.data.profile;
 
     const sameCategoryQueryResult = await client.query({
       query: FIND_SAME_CATEGORY_POSTS,
@@ -193,7 +198,8 @@ export async function getServerSideProps(context: NextPageContext) {
         post: findedPost,
         comment: findedComment,
         sameCategoryTitles: sameCategoryPostTitles.post,
-        category: sameCategoryPostTitles.category
+        category: sameCategoryPostTitles.category,
+        author: profile.name
       }
     };
   } catch (err) {

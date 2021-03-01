@@ -8,7 +8,6 @@ import { ProfileModel } from '../model/profile';
 export const postTypeDef = gql`
   type Post {
     _id: Int!
-    author: String!
     title: String!
     createdAt: DateTime
     article: String!
@@ -98,12 +97,9 @@ export const postResolver = {
         const category = await CategoryModel.findOne({ title: args.category });
         const categoryId = category._id;
 
-        const profile = await ProfileModel.findOne();
-        const author = profile.name;
-
         CommentModel.create({ _id });
 
-        const result = PostModel.create({ _id, title: args.title, createdAt: args.createdAt, author, categoryId, article: args.article });
+        const result = PostModel.create({ _id, title: args.title, createdAt: args.createdAt, categoryId, article: args.article });
         return result;
       } catch (err) {}
     }
