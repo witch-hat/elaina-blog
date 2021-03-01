@@ -88,9 +88,6 @@ interface Props {
 }
 
 export function ContentCategory(props: Props) {
-  const router = useRouter();
-  console.log(props.latestPosts);
-
   return (
     <section style={{ width: '100%' }}>
       <Container>

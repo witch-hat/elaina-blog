@@ -13,6 +13,7 @@ import { initApolloClient } from 'src/apollo/withApollo';
 import { FIND_POST_BY_URL, FIND_SAME_CATEGORY_POSTS, Post } from 'src/query/post';
 import { GET_COMMENTS, Comments } from 'src/query/comment';
 import { GET_PROFILE } from 'src/query';
+import { AppCommonProps } from 'src/pages/_app';
 
 // interface ContentContainerProps {
 //   isOpenList: boolean;
@@ -95,7 +96,7 @@ const Alert = styled.div(
   `
 );
 
-interface Props {
+interface Props extends AppCommonProps {
   post: InferGetServerSidePropsType<typeof getServerSideProps>;
   comment: InferGetServerSidePropsType<typeof getServerSideProps>;
   sameCategoryTitles: InferGetServerSidePropsType<typeof getServerSideProps>;
@@ -120,7 +121,6 @@ export default function PostId(props: Props) {
 
   function handleTouchStart(event: React.TouchEvent) {
     if (width <= 767) {
-      console.log('here');
       const touch = event.touches[0];
       touchStartX = touch.clientX;
       touchStartY = touch.clientY;
@@ -159,7 +159,7 @@ export default function PostId(props: Props) {
         </FocusWrapper>
       )}
       <ContentContainer themeMode={themeMode}>
-        <Content title={post.title} author={author} createdAt={post.createdAt} article={post.article} />
+        <Content title={post.title} author={author} createdAt={post.createdAt} article={post.article} isLogin={props.app.isLogin} />
         <CommentContainer comment={comment} />
       </ContentContainer>
       <ContentNavigation />

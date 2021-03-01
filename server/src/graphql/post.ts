@@ -19,6 +19,11 @@ export const postTypeDef = gql`
     category: Category
   }
 
+  type DeleteResponse {
+    isDeleted: Boolean
+    categoryId: Int
+  }
+
   extend type Query {
     posts: [Post]
     lastPost: Post!
@@ -29,6 +34,7 @@ export const postTypeDef = gql`
 
   extend type Mutation {
     writePost(title: String!, createdAt: DateTime, article: String!, category: String!): Post
+    deletePost(id: Int!): DeleteResponse
   }
 `;
 
@@ -102,6 +108,16 @@ export const postResolver = {
         const result = PostModel.create({ _id, title: args.title, createdAt: args.createdAt, categoryId, article: args.article });
         return result;
       } catch (err) {}
+    },
+
+    async deletePost(_: any, args: { id: number }, context: ContextType) {
+      try {
+        const deletedPost = await PostModel.findByIdAndDelete(args.id);
+        await CommentModel.findByIdAndDelete(args.id);
+        return { isDeleted: true, categoryId: deletedPost.categoryId };
+      } catch (err) {
+        return { isDeleted: false };
+      }
     }
   }
 };

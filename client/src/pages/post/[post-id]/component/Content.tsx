@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-
+import { useMutation } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faClock, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
+import { useRouter } from 'next/router';
+
+import { FocusWrapper } from 'src/components';
+import { DELETE_POST, FIND_SAME_CATEGORY_POSTS, GET_LASTEST_POSTS, GET_LAST_POST } from 'src/query/post';
+import { useApollo } from 'src/apollo/apolloClient';
 
 const Container = styled.section({
   width: '800px',
@@ -59,7 +64,34 @@ const Time = styled.span({
   alignItems: 'center'
 });
 
-const MenuButton = styled.div({
+const MenuContainer = styled.div({
+  position: 'relative'
+});
+
+const MenuListWrapper = styled.div({
+  position: 'absolute',
+  top: '32.6px',
+  right: 0,
+  zIndex: 1
+});
+
+const MenuList = styled.div({
+  backgroundColor: '#eee',
+  borderRadius: '.3rem'
+});
+
+const MenuButton = styled.p<{ danger?: boolean }>((props) => ({
+  display: 'block',
+  padding: '.5rem',
+  textAlign: 'center',
+  cursor: 'pointer',
+  color: props.danger ? 'red' : 'inherit',
+  '&:hover': {
+    backgroundColor: '#ddd'
+  }
+}));
+
+const MenuIconButton = styled.div({
   padding: '.5rem .8rem',
   cursor: 'pointer',
   borderRadius: '4px',
@@ -73,10 +105,43 @@ interface Props {
   author: string;
   createdAt: string;
   article: string;
+  isLogin: boolean;
 }
 
 export default function Content(props: Props) {
   const time = new Date(props.createdAt);
+  const [isOpenMenu, setIsOpenMenu] = useState(false);
+  const [deletePost] = useMutation(DELETE_POST);
+  const router = useRouter();
+  const client = useApollo();
+  // const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const id = router.query['post-id'];
+
+  async function handleDeleteButtonClick() {
+    const deleteResponse = await deletePost({
+      variables: {
+        id: +id
+      }
+    });
+
+    const deleted = deleteResponse.data.deletePost.isDeleted;
+    const categoryId = deleteResponse.data.deletePost.categoryId;
+
+    if (deleted) {
+      const { data } = await client.query({ query: FIND_SAME_CATEGORY_POSTS, variables: { categoryId } });
+      if (data.findSameCategoryPosts.post.length === 0) {
+        router.push('/');
+      } else {
+        const lastPostId = data.findSameCategoryPosts.post[data.findSameCategoryPosts.post.length - 1]._id;
+        router.push(`/post/${lastPostId}`);
+      }
+    } else {
+      alert('지우는 중 에러 발생. 다시 시도해 주세요');
+      router.push('/');
+    }
+  }
+
   return (
     <Container>
       <Title>{props.title}</Title>
@@ -91,9 +156,23 @@ export default function Content(props: Props) {
             {`${time.getFullYear()}.${time.getMonth() + 1}.${time.getDate()} ${time.getHours()}:${time.getMinutes()}`}
           </Time>
         </ContentInfoWrapper>
-        <MenuButton>
-          <FontAwesomeIcon icon={faEllipsisV} />
-        </MenuButton>
+        {props.isLogin && (
+          <MenuContainer>
+            <MenuIconButton onClick={() => setIsOpenMenu(!isOpenMenu)}>
+              <FontAwesomeIcon icon={faEllipsisV} />
+            </MenuIconButton>
+            <MenuListWrapper>
+              <FocusWrapper visible={isOpenMenu} onClickOutside={() => setIsOpenMenu(false)}>
+                <MenuList>
+                  <MenuButton>Edit</MenuButton>
+                  <MenuButton danger onClick={() => handleDeleteButtonClick()}>
+                    Delete
+                  </MenuButton>
+                </MenuList>
+              </FocusWrapper>
+            </MenuListWrapper>
+          </MenuContainer>
+        )}
       </Menu>
       <Article>{props.article}</Article>
     </Container>
