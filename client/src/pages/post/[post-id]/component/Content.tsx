@@ -6,7 +6,8 @@ import { faUser, faClock, faEllipsisV } from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'next/router';
 
 import { FocusWrapper } from 'src/components';
-import { DELETE_POST, FIND_SAME_CATEGORY_POSTS, GET_LASTEST_POSTS, GET_LAST_POST } from 'src/query/post';
+import { DELETE_POST, FIND_SAME_CATEGORY_POSTS } from 'src/query/post';
+import { IS_AUTH } from 'src/query/user';
 import { useApollo } from 'src/apollo/apolloClient';
 
 const Container = styled.section({
@@ -119,26 +120,34 @@ export default function Content(props: Props) {
   const id = router.query['post-id'];
 
   async function handleDeleteButtonClick() {
-    const deleteResponse = await deletePost({
-      variables: {
-        id: +id
-      }
-    });
+    const authResponse = await client.query({ query: IS_AUTH });
 
-    const deleted = deleteResponse.data.deletePost.isDeleted;
-    const categoryId = deleteResponse.data.deletePost.categoryId;
+    const isAdmin = authResponse.data.isAuth.isAuth;
 
-    if (deleted) {
-      const { data } = await client.query({ query: FIND_SAME_CATEGORY_POSTS, variables: { categoryId } });
-      if (data.findSameCategoryPosts.post.length === 0) {
-        router.push('/');
+    if (isAdmin) {
+      const deleteResponse = await deletePost({
+        variables: {
+          id: +id
+        }
+      });
+
+      const deleted = deleteResponse.data.deletePost.isDeleted;
+      const categoryId = deleteResponse.data.deletePost.categoryId;
+
+      if (deleted) {
+        const { data } = await client.query({ query: FIND_SAME_CATEGORY_POSTS, variables: { categoryId } });
+        if (data.findSameCategoryPosts.post.length === 0) {
+          router.push('/');
+        } else {
+          const lastPostId = data.findSameCategoryPosts.post[data.findSameCategoryPosts.post.length - 1]._id;
+          router.push(`/post/${lastPostId}`);
+        }
       } else {
-        const lastPostId = data.findSameCategoryPosts.post[data.findSameCategoryPosts.post.length - 1]._id;
-        router.push(`/post/${lastPostId}`);
+        alert('지우는 중 에러 발생. 다시 시도해 주세요');
+        router.push('/');
       }
     } else {
-      alert('지우는 중 에러 발생. 다시 시도해 주세요');
-      router.push('/');
+      return alert('Invalid User');
     }
   }
 
