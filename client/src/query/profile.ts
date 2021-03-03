@@ -19,20 +19,24 @@ export const UPDATE_PROFILE = gql`
   mutation UpdateProfile(
     $id: String
     $image: String
+    $name: String
     $introduce: String
     $link: String
     $company: String
     $location: String
     $email: String
   ) {
-    updateProfile(id: $id, image: $image, introduce: $introduce, link: $link, company: $company, location: $location, email: $email) {
-      _id
-      image
-      introduce
-      link
-      company
-      location
-      email
+    updateProfile(
+      id: $id
+      image: $image
+      name: $name
+      introduce: $introduce
+      link: $link
+      company: $company
+      location: $location
+      email: $email
+    ) {
+      isUpdated
     }
   }
 `;

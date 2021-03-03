@@ -18,6 +18,10 @@ export const profileTypeDef = gql`
     email: String!
   }
 
+  type UpdateProfile {
+    isUpdated: Boolean
+  }
+
   extend type Query {
     profile: Profile
   }
@@ -32,7 +36,7 @@ export const profileTypeDef = gql`
       company: String
       location: String
       email: String
-    ): Profile
+    ): UpdateProfile
   }
 `;
 
@@ -58,9 +62,9 @@ export const profileResolver = {
           },
           { new: true }
         );
-        return result;
+        return { isUpdated: true };
       } catch (err) {
-        throw err;
+        return { isUpdated: false };
       }
     }
   }

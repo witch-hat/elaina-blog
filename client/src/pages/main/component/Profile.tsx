@@ -247,10 +247,11 @@ export default function Profile(props: Props) {
       uploadedImagePath = response.data?.uploadFile.path;
     }
 
-    await updateProfile({
+    const updateResponse = await updateProfile({
       variables: {
         id: mutateProfile._id,
         image: uploadedImagePath ? uploadedImagePath : completedProfile.image,
+        name: mutateProfile.name,
         introduce: mutateProfile.introduce,
         link: mutateProfile.link,
         company: mutateProfile.company,
@@ -258,6 +259,13 @@ export default function Profile(props: Props) {
         email: mutateProfile.email
       }
     });
+
+    const updateState = updateResponse.data.updateProfile.isUpdated;
+    if (updateState) {
+      alert('Profile Update Success!');
+    } else {
+      alert('Error: cannot update profile');
+    }
 
     setCompletedProfile({ ...mutateProfile, image: uploadedImagePath ? uploadedImagePath : completedProfile.image });
     setIsEditMode(false);
@@ -298,7 +306,7 @@ export default function Profile(props: Props) {
           </>
         )}
       </div>
-      <Name>{mutateProfile.name}</Name>
+      {!isEditMode && <Name>{mutateProfile.name}</Name>}
       {isEditMode ? (
         <Form
           id='profile-form'
@@ -311,6 +319,17 @@ export default function Profile(props: Props) {
             }
           }}
         >
+          <InputContainer>
+            <Input
+              placeholder='Username'
+              themeMode={themeMode}
+              type='text'
+              defaultValue={mutateProfile.name}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                setMutateProfile({ ...mutateProfile, name: event.target.value });
+              }}
+            />
+          </InputContainer>
           <Editor
             placeholder='Introduce'
             themeMode={themeMode}
