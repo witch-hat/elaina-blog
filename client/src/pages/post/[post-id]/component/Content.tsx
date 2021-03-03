@@ -4,11 +4,15 @@ import { useMutation } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faClock, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/router';
+import { useSelector } from 'react-redux';
 
-import { FocusWrapper } from 'src/components';
+import { FocusWrapper, ModalWrapper } from 'src/components';
 import { DELETE_POST, FIND_SAME_CATEGORY_POSTS } from 'src/query/post';
 import { IS_AUTH } from 'src/query/user';
 import { useApollo } from 'src/apollo/apolloClient';
+import { ThemeMode } from 'src/redux/common/type';
+import { theme } from 'src/styles';
+import { RootState } from 'src/redux/rootReducer';
 
 const Container = styled.section({
   width: '800px',
@@ -45,6 +49,7 @@ const Menu = styled.div({
 });
 
 const Article = styled.article({
+  width: '100%',
   marginTop: '2rem',
   fontSize: '1.1rem',
   wordBreak: 'keep-all'
@@ -86,7 +91,7 @@ const MenuButton = styled.p<{ danger?: boolean }>((props) => ({
   padding: '.5rem',
   textAlign: 'center',
   cursor: 'pointer',
-  color: props.danger ? 'red' : 'inherit',
+  color: props.danger ? '#dd0000' : 'inherit',
   '&:hover': {
     backgroundColor: '#ddd'
   }
@@ -101,6 +106,32 @@ const MenuIconButton = styled.div({
   }
 });
 
+const ModalContainer = styled.div({
+  width: '20rem',
+  padding: '.5rem'
+});
+
+const ModalParagraph = styled.p({
+  width: '100%'
+});
+
+const ModalButtonContainer = styled.div({
+  display: 'flex',
+  width: '100%',
+  marginTop: '1rem',
+  alignItems: 'center',
+  justifyContent: 'flex-end'
+});
+
+const ModalButton = styled.button<{ themeMode?: ThemeMode }>((props) => ({
+  width: '4.5rem',
+  padding: '.5rem',
+  borderRadius: '.5rem',
+  marginLeft: '.5rem',
+  backgroundColor: props.themeMode ? theme[props.themeMode].dangerButtonColor : 'inherit',
+  color: props.themeMode ? theme[props.themeMode].dangerContentText : 'inherit'
+}));
+
 interface Props {
   title: string;
   author: string;
@@ -110,12 +141,13 @@ interface Props {
 }
 
 export default function Content(props: Props) {
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const time = new Date(props.createdAt);
   const [isOpenMenu, setIsOpenMenu] = useState(false);
   const [deletePost] = useMutation(DELETE_POST);
   const router = useRouter();
   const client = useApollo();
-  // const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const id = router.query['post-id'];
 
@@ -174,7 +206,7 @@ export default function Content(props: Props) {
               <FocusWrapper visible={isOpenMenu} onClickOutside={() => setIsOpenMenu(false)}>
                 <MenuList>
                   <MenuButton>Edit</MenuButton>
-                  <MenuButton danger onClick={() => handleDeleteButtonClick()}>
+                  <MenuButton danger onClick={() => setIsModalOpen(true)}>
                     Delete
                   </MenuButton>
                 </MenuList>
@@ -183,7 +215,23 @@ export default function Content(props: Props) {
           </MenuContainer>
         )}
       </Menu>
-      <Article>{props.article}</Article>
+      <ModalWrapper visible={isModalOpen}>
+        <ModalContainer>
+          <ModalParagraph>정말 삭제하시겠습니까?</ModalParagraph>
+          <ModalButtonContainer>
+            <ModalButton
+              onClick={() => {
+                setIsModalOpen(false);
+                handleDeleteButtonClick();
+              }}
+              themeMode={themeMode}
+            >
+              예
+            </ModalButton>
+            <ModalButton onClick={() => setIsModalOpen(false)}>아니요</ModalButton>
+          </ModalButtonContainer>
+        </ModalContainer>
+      </ModalWrapper>
     </Container>
   );
 }
