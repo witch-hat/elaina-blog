@@ -1,1 +1,1 @@
-export type { formatDate } from './formatDate';
+export { FormatUnifier } from './formatDate';

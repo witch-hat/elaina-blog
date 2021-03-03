@@ -13,6 +13,7 @@ import { useApollo } from 'src/apollo/apolloClient';
 import { ThemeMode } from 'src/redux/common/type';
 import { theme } from 'src/styles';
 import { RootState } from 'src/redux/rootReducer';
+import { FormatUnifier } from 'src/utils';
 
 const Container = styled.section({
   width: '800px',
@@ -151,6 +152,8 @@ export default function Content(props: Props) {
 
   const id = router.query['post-id'];
 
+  const dateFormatHelper = new FormatUnifier.FormatDate();
+
   async function handleDeleteButtonClick() {
     const authResponse = await client.query({ query: IS_AUTH });
 
@@ -194,7 +197,7 @@ export default function Content(props: Props) {
           </Author>
           <Time>
             <FontAwesomeIcon icon={faClock} style={{ marginRight: '0.5rem' }} />
-            {`${time.getFullYear()}.${time.getMonth() + 1}.${time.getDate()} ${time.getHours()}:${time.getMinutes()}`}
+            {dateFormatHelper.getFullFormatDate(time)}
           </Time>
         </ContentInfoWrapper>
         {props.isLogin && (

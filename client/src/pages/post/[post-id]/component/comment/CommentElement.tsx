@@ -6,6 +6,7 @@ import { faUser, faClock, faEllipsisV } from '@fortawesome/free-solid-svg-icons'
 import { BorderBox } from 'src/components';
 import CommentEditor from './CommentEditor';
 import { Reply, Comment } from 'src/query/comment';
+import { FormatUnifier } from 'src/utils';
 
 const CommentContainer = styled.div({
   width: '98%',
@@ -101,6 +102,7 @@ export default function CommentElement(props: Props) {
   const [isShowingReply, setIsShowingReply] = useState(false);
   const [isAddReply, setIsAddReply] = useState(false);
   const createdTime = new Date(props.comment.createdAt);
+  const dateFormatHelper = new FormatUnifier.FormatDate();
 
   return (
     <div>
@@ -114,11 +116,7 @@ export default function CommentElement(props: Props) {
               </Author>
               <Time>
                 <FontAwesomeIcon icon={faClock} style={{ marginRight: '.5rem' }} />
-                <p>
-                  {`${createdTime.getFullYear()}.${
-                    createdTime.getMonth() + 1
-                  }.${createdTime.getDate()} ${createdTime.getHours()}:${createdTime.getMinutes()}`}
-                </p>
+                <p>{dateFormatHelper.getFullFormatDate(createdTime)}</p>
               </Time>
             </InformationContainer>
             <MenuButton>

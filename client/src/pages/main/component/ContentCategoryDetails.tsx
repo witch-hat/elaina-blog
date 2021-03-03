@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock, faBook } from '@fortawesome/free-solid-svg-icons';
+import { FormatUnifier } from 'src/utils';
 
 const Container = styled.div({
   marginTop: '.4rem',
@@ -26,13 +27,14 @@ interface Props {
 }
 
 export default function ContentCategoryDetails(props: Props) {
-  const timer = new Date(props.time);
+  const latestCreatedTime = new Date(props.time);
+  const dateFormatHelper = new FormatUnifier.FormatDate();
 
   return (
     <Container>
       <LatestTime>
         <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
-        <p>{`${timer.getFullYear()}.${timer.getMonth() + 1}.${timer.getDate()} ${timer.getHours()}:${timer.getMinutes()}`}</p>
+        <p>{dateFormatHelper.getFullFormatDate(latestCreatedTime)}</p>
       </LatestTime>
       <PostCount>
         <FontAwesomeIcon icon={faBook} style={{ marginRight: '5px' }} />
