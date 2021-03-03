@@ -215,6 +215,7 @@ export default function Content(props: Props) {
           </MenuContainer>
         )}
       </Menu>
+      <Article>{props.article}</Article>
       <ModalWrapper visible={isModalOpen}>
         <ModalContainer>
           <ModalParagraph>정말 삭제하시겠습니까?</ModalParagraph>
