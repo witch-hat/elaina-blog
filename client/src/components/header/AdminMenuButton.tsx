@@ -44,8 +44,10 @@ const ListContainer = styled.div<{ themeMode: ThemeMode }>((props) => ({
   display: 'flex',
   width: '10rem',
   flexDirection: 'column',
+  borderRadius: '10px',
   backgroundColor: theme[props.themeMode].secondaryContentBackground,
-  zIndex: 1
+  zIndex: 1,
+  boxShadow: '0 6px 3px -3px rgba(38,38,38,.2)'
 }));
 
 const List = styled.div<{ themeMode: ThemeMode }>((props) => {
