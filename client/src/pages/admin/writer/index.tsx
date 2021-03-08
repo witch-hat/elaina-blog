@@ -2,8 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { InferGetServerSidePropsType, NextPageContext } from 'next';
 
-import { MenuButton } from './component/MenuButton';
-import { Writer } from './component/Writer';
+import { Writer } from 'src/components/writer/Writer';
 import { theme } from 'src/styles';
 
 import { useSelector } from 'react-redux';
@@ -33,7 +32,6 @@ export default function Admin(props: Props) {
 
   return (
     <Container themeMode={themeMode}>
-      {/* <MenuButton isActive={true} desc={'D'}></MenuButton> */}
       <Writer author={profile.name || ''} categories={props.categories} />
     </Container>
   );
