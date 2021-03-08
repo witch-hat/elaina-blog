@@ -1,6 +1,7 @@
 import { gql } from 'apollo-server';
 import { CategoryModel, Category } from '../model/category';
 import { Post, PostModel } from '../model/post';
+import { ContextType } from '../types/context';
 
 export const categoryTypeDef = gql`
   type Category {
@@ -22,6 +23,7 @@ export const categoryTypeDef = gql`
   extend type Query {
     categories: [Category]
     categoriesWithDetails: [CategoryWithDetails]
+    findCategoryById(id: Int!): Category
   }
 `;
 
@@ -74,6 +76,15 @@ export const categoryResolver = {
         });
 
         return result;
+      } catch (err) {
+        throw err;
+      }
+    },
+
+    async findCategoryById(_: any, args: { id: number }, context: ContextType) {
+      try {
+        const category = CategoryModel.findById(args.id);
+        return category;
       } catch (err) {
         throw err;
       }

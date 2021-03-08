@@ -29,3 +29,13 @@ export const GET_CATEGORIES_WITH_DETAILS = gql`
     }
   }
 `;
+
+export const FIND_CATEGORY_BY_ID = gql`
+  query($id: Int!) {
+    findCategoryById(id: $id) {
+      title
+      description
+      previewImage
+    }
+  }
+`;
