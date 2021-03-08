@@ -24,6 +24,10 @@ export const postTypeDef = gql`
     categoryId: Int
   }
 
+  type EditResponse {
+    isEdited: Boolean
+  }
+
   extend type Query {
     posts: [Post]
     lastPost: Post!
@@ -35,6 +39,7 @@ export const postTypeDef = gql`
   extend type Mutation {
     writePost(title: String!, createdAt: DateTime, article: String!, category: String!): Post
     deletePost(id: Int!): DeleteResponse
+    editPost(id: Int!, title: String!, article: String!, category: String!): EditResponse
   }
 `;
 
@@ -97,7 +102,7 @@ export const postResolver = {
   Mutation: {
     async writePost(_: any, args: { title: string; createdAt: Date; article: string; category: string }, context: ContextType) {
       try {
-        const lastPost = await PostModel.findOne({}, {}, { sort: { _id: -1 } });
+        const lastPost: Post = await PostModel.findOne({}, {}, { sort: { _id: -1 } });
         const _id = lastPost._id + 1;
 
         const category = await CategoryModel.findOne({ title: args.category });
@@ -117,6 +122,25 @@ export const postResolver = {
         return { isDeleted: true, categoryId: deletedPost.categoryId };
       } catch (err) {
         return { isDeleted: false };
+      }
+    },
+
+    async editPost(_: any, args: { id: number; title: string; article: string; category: string }, context: ContextType) {
+      try {
+        const editPost: Post = await PostModel.findById(args.id);
+        editPost.title = args.title;
+        editPost.article = args.article;
+
+        const category = await CategoryModel.findOne({ title: args.category });
+        const categoryId = category._id;
+
+        editPost.categoryId = categoryId;
+
+        editPost.save();
+
+        return { isEdited: true };
+      } catch {
+        return { isEdited: false };
       }
     }
   }
