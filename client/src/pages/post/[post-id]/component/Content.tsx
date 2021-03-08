@@ -4,6 +4,7 @@ import { useMutation } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faClock, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
@@ -210,7 +211,9 @@ export default function Content(props: Props) {
             <MenuListWrapper>
               <FocusWrapper visible={isOpenMenu} onClickOutside={() => setIsOpenMenu(false)}>
                 <MenuList>
-                  <MenuButton>Edit</MenuButton>
+                  <MenuButton>
+                    <Link href={`/post/${id}/edit`}>Edit</Link>
+                  </MenuButton>
                   <MenuButton danger onClick={() => setIsModalOpen(true)}>
                     Delete
                   </MenuButton>
