@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faClock, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
+import ReactMarkdown from 'react-markdown';
+import gfm from 'remark-gfm';
 
 import { FocusWrapper, ModalWrapper } from 'src/components';
 import { DELETE_POST, FIND_SAME_CATEGORY_POSTS } from 'src/query/post';
@@ -218,7 +220,9 @@ export default function Content(props: Props) {
           </MenuContainer>
         )}
       </Menu>
-      <Article>{props.article}</Article>
+      <Article>
+        <ReactMarkdown plugins={[gfm]}>{props.article}</ReactMarkdown>
+      </Article>
       <ModalWrapper visible={isModalOpen}>
         <ModalContainer>
           <ModalParagraph>정말 삭제하시겠습니까?</ModalParagraph>
