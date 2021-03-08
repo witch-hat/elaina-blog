@@ -58,10 +58,11 @@ interface Props {
   inputRef?: ((instance: HTMLInputElement | null) => void) | React.RefObject<HTMLInputElement> | null | undefined;
   onFocus?: Function;
   onBlur?: Function;
-  onKeyDown?: (e: React.KeyboardEvent<HTMLDivElement>) => void;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   placeholder?: string;
   styles?: Styles;
   isValid?: boolean;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export const InputBox = React.forwardRef<HTMLInputElement, Props>((props, forwardedRef) => {
@@ -89,6 +90,7 @@ export const InputBox = React.forwardRef<HTMLInputElement, Props>((props, forwar
         }
       }}
       onKeyDown={props.onKeyDown}
+      onChange={props.onChange}
       isValid={props.isValid}
       formNoValidate
     />
