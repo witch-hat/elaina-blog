@@ -201,8 +201,8 @@ export const userResolver = {
 
       const cookies = new Cookies(context.req, context.res);
       try {
-        const me = await UserModel.findOne({}, {}, { sort: { _id: -1 } });
-        const authList: Array<Auth> = me.auth;
+        const me: User = await UserModel.findOne({}, {}, { sort: { _id: -1 } });
+        const authList = me.auth;
 
         if (args.emailId === me.emailId) {
           const isMatch = await comparePassword(args.password, me.password);
@@ -253,9 +253,24 @@ export const userResolver = {
       }
     },
 
-    logout(_: any, args: any, context: ContextType) {
+    async logout(_: any, args: any, context: ContextType) {
+      const macList: MACList = await macaddress.all();
+      const mac = Object.values(macList)[0];
+      const ua = new UAParser(context.req.headers['user-agent']);
+      const browserName = ua.getBrowser().name;
+      const userUniqueId = mac.mac + mac.ipv4 + browserName;
+
       const cookies = new Cookies(context.req, context.res);
+
       try {
+        const me: User = await UserModel.findOne({}, {}, { sort: { _id: -1 } });
+        const deleteResultAuth = me.auth.filter((authInfo) => {
+          return authInfo.userUniqueId !== userUniqueId;
+        });
+
+        me.auth = deleteResultAuth;
+        me.save();
+
         cookies.set('a_refresh', '', {
           expires: new Date(0)
         });

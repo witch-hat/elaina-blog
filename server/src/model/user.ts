@@ -5,13 +5,13 @@ const saltRounds = 10;
 export interface Auth {
   userUniqueId: string;
   refreshToken: string;
-  id: number;
+  id: string;
 }
 
 export interface User extends Document {
   emailId: string;
   password: string;
-  auth: Auth;
+  auth: Auth[];
 }
 
 const authSchema = new Schema({
