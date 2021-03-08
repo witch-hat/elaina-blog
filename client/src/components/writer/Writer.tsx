@@ -1,4 +1,4 @@
-import React, { createElement, useEffect, useRef } from 'react';
+import React, { ChangeEvent, createElement, useEffect, useRef } from 'react';
 import { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import ReactMarkdown from 'react-markdown';
@@ -16,7 +16,7 @@ import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { CategoryDetails } from 'src/query/category';
 import { FocusWrapper } from 'src/components';
-import { WRITE_POST } from 'src/query/post';
+import { EDIT_POST, WRITE_POST } from 'src/query/post';
 import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';
 
@@ -130,6 +130,10 @@ const DEFAULT_CATEGORY = '카테고리를 선택해 주세요';
 interface Props {
   author: string;
   categories: CategoryDetails[];
+  category?: string;
+  title?: string;
+  article?: string;
+  isEdit?: boolean;
 }
 
 export function Writer(props: Props) {
@@ -143,6 +147,7 @@ export function Writer(props: Props) {
   const width = useWidth();
   const [mode, setMode] = useState(Mode.write);
   const [writePost] = useMutation(WRITE_POST);
+  const [editPost] = useMutation(EDIT_POST);
   const router = useRouter();
   const client = useApollo();
 
@@ -151,6 +156,22 @@ export function Writer(props: Props) {
       editor.current?.focus();
     }
   }, [mode]);
+
+  useEffect(() => {
+    if (props.title && titleRef.current) {
+      setTitle(props.title);
+      titleRef.current.value = props.title;
+    }
+
+    if (props.article && editor.current) {
+      setArticle(props.article);
+      editor.current.textContent = props.article;
+    }
+
+    if (props.category) {
+      setSelectedCategory(props.category);
+    }
+  }, []);
 
   function parseTextContent() {
     if (editor.current !== null) {
@@ -181,13 +202,13 @@ export function Writer(props: Props) {
     }
   }
 
-  async function handleSubmit() {
+  async function handleCreatePost() {
     if (selectedCategory === DEFAULT_CATEGORY) {
       window.scrollTo(0, 0);
       return alert('카테고리를 선택해 주세요');
     }
 
-    if (!titleRef.current?.value) {
+    if (!title) {
       window.scrollTo(0, 0);
       titleRef.current?.focus();
       return alert('제목을 입력해주세요');
@@ -203,7 +224,7 @@ export function Writer(props: Props) {
 
     const mutateData = await writePost({
       variables: {
-        title: titleRef.current?.value,
+        title,
         createdAt: new Date().toISOString(),
         article,
         category: selectedCategory
@@ -211,6 +232,39 @@ export function Writer(props: Props) {
     });
 
     return router.push(`/post/${mutateData.data.writePost._id}`);
+  }
+
+  async function handleEditPost() {
+    if (!title) {
+      window.scrollTo(0, 0);
+      titleRef.current?.focus();
+      return alert('제목을 입력해주세요');
+    }
+
+    const { data } = await client.query({ query: IS_AUTH });
+    const isAdmin = data.isAuth.isAuth;
+
+    if (!isAdmin) {
+      alert('로그인에러. 다시 로그인해주세요.');
+      return router.push('/admin/login');
+    }
+
+    const id = +router.query['post-id'];
+
+    const editResult = await editPost({
+      variables: {
+        id,
+        title,
+        article,
+        category: selectedCategory
+      }
+    });
+
+    if (editResult.data.editPost.isEdited) {
+      return router.push(`/post/${id}`);
+    } else {
+      return alert('수정 중 에러 발생');
+    }
   }
 
   return (
@@ -228,6 +282,7 @@ export function Writer(props: Props) {
                   {props.categories.map((category) => {
                     return (
                       <CategoryTitle
+                        key={category.title}
                         onClick={() => {
                           setSelectedCategory(category.title);
                           setIsListOpen(false);
@@ -249,6 +304,10 @@ export function Writer(props: Props) {
                 maxLength={999}
                 placeholder='제목'
                 styles={{ width: '100%' }}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                  console.log(e.currentTarget.value);
+                  setTitle(e.currentTarget.value);
+                }}
               />
             </Title>
             <Menu ref={editor} setArticle={setArticle} />
@@ -264,8 +323,8 @@ export function Writer(props: Props) {
               <Text></Text>
             </Editor>
             <ButtonContainer>
-              <WriteButton themeMode={themeMode} onClick={() => handleSubmit()}>
-                글쓰기
+              <WriteButton themeMode={themeMode} onClick={props.isEdit ? () => handleEditPost() : () => handleCreatePost()}>
+                {props.isEdit ? '수정' : '글쓰기'}
               </WriteButton>
             </ButtonContainer>
           </>
