@@ -101,7 +101,7 @@ export const postResolver = {
 
     async search(_: any, args: { keyword: string }, context: ContextType) {
       try {
-        if (args.keyword.length < 2) {
+        if (args.keyword.length < 2 || args.keyword.length > 10) {
           throw new Error('부적절한 글자 수');
         }
 
