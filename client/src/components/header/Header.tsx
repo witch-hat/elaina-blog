@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import styled, { keyframes, css } from 'styled-components';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 import { theme } from 'src/styles';
 import { InputBox, FocusWrapper, useWidth } from 'src/components';
@@ -140,14 +141,26 @@ export function Header(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const width = useWidth();
   const [isMenuVisible, setIsMenuVisible] = useState<boolean>(width > 767);
+  const [searchKeyword, setSearchKeyWord] = useState('');
+  const router = useRouter();
+
+  useEffect(() => {
+    setIsMenuVisible(width > 767);
+  }, [width]);
 
   function onMobileMenuButtonClick() {
     setIsMenuVisible(!isMenuVisible);
   }
 
-  useEffect(() => {
-    setIsMenuVisible(width > 767);
-  }, [width]);
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    if (searchKeyword.length < 2) {
+      alert('2글자 이상 입력해주세요');
+      return;
+    }
+    router.push(`/search/${searchKeyword}`);
+  }
 
   return (
     <StyledHeader themeMode={themeMode}>
@@ -167,7 +180,7 @@ export function Header(props: Props) {
               {isMenuVisible && (
                 <ResponsiveMenuBox themeMode={themeMode}>
                   <ModeSwitch />
-                  <SearchForm method='GET' action='/search'>
+                  <SearchForm onSubmit={(e: React.FormEvent<HTMLFormElement>) => handleSubmit(e)}>
                     <InputBox
                       type='text'
                       placeholder='Search'
@@ -175,6 +188,7 @@ export function Header(props: Props) {
                       minLength={2}
                       maxLength={10}
                       styles={{ width: '180px', small: { width: '120px', height: '32px' } }}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchKeyWord(e.currentTarget.value)}
                     />
                     <SearchButton type='submit' themeMode={themeMode}>
                       <FontAwesomeIcon icon={faSearch} />

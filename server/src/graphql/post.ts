@@ -101,6 +101,10 @@ export const postResolver = {
 
     async search(_: any, args: { keyword: string }, context: ContextType) {
       try {
+        if (args.keyword.length < 2) {
+          throw new Error('부적절한 글자 수');
+        }
+
         const posts: Post[] = await PostModel.find();
         const searchedPosts = posts.filter((post) => {
           const ignoreCaseRegex = RegExp(args.keyword, 'i');
