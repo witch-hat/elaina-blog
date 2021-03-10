@@ -90,3 +90,15 @@ export const EDIT_POST = gql`
     }
   }
 `;
+
+export const SEARCH = gql`
+  query($keyword: String!) {
+    search(keyword: $keyword) {
+      _id
+      title
+      createdAt
+      article
+      categoryId
+    }
+  }
+`;

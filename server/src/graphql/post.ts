@@ -34,6 +34,7 @@ export const postTypeDef = gql`
     findPostByUrl(requestUrl: String!): Post!
     findSameCategoryPosts(categoryId: Int!): PostCategory
     getLatestPostsEachCategory: [Post]
+    search(keyword: String!): [Post]
   }
 
   extend type Mutation {
@@ -96,6 +97,20 @@ export const postResolver = {
       });
 
       return posts;
+    },
+
+    async search(_: any, args: { keyword: string }, context: ContextType) {
+      try {
+        const posts: Post[] = await PostModel.find();
+        const searchedPosts = posts.filter((post) => {
+          const ignoreCaseRegex = RegExp(args.keyword, 'i');
+          if (post.title.match(ignoreCaseRegex) || post.article.match(ignoreCaseRegex)) return post;
+        });
+
+        return searchedPosts;
+      } catch (err) {
+        throw err;
+      }
     }
   },
 
