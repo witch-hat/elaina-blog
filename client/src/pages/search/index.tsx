@@ -4,14 +4,14 @@ import styled from 'styled-components';
 import KeywordFinder from './[keyword]';
 
 export default function Search() {
-  return <div></div>;
+  return <></>;
 }
 
 export function getServerSideProps() {
   return {
-    redirects: {
+    redirect: {
       permanant: false,
-      href: '/'
+      destination: '/'
     }
   };
 }
