@@ -28,13 +28,23 @@ export const postTypeDef = gql`
     isEdited: Boolean
   }
 
+  type ArticleSearchResult {
+    post: Post
+    keywordIncludedPart: String
+  }
+
+  type SearchResponse {
+    titleSearchResult: [Post]
+    articleSearchResult: [Post]
+  }
+
   extend type Query {
     posts: [Post]
     lastPost: Post!
     findPostByUrl(requestUrl: String!): Post!
     findSameCategoryPosts(categoryId: Int!): PostCategory
     getLatestPostsEachCategory: [Post]
-    search(keyword: String!): [Post]
+    search(keyword: String!): SearchResponse
   }
 
   extend type Mutation {
@@ -106,12 +116,24 @@ export const postResolver = {
         }
 
         const posts: Post[] = await PostModel.find();
-        const searchedPosts = posts.filter((post) => {
-          const ignoreCaseRegex = RegExp(args.keyword, 'i');
-          if (post.title.match(ignoreCaseRegex) || post.article.match(ignoreCaseRegex)) return post;
-        });
+        const ignoreCaseRegex = RegExp(args.keyword, 'i');
 
-        return searchedPosts;
+        const titleSearchResult = posts.filter((post) => post.title.match(ignoreCaseRegex));
+
+        // const articleSearchResult = posts.map((post) => {
+        //   if (post.article.match(ignoreCaseRegex)) {
+        //     // TODO...
+        //     const keywordIncludedPart = '';
+
+        //     return {
+        //       post,
+        //       keywordIncludedPart
+        //     };
+        //   }
+        // });
+        const articleSearchResult = posts.filter((post) => post.article.match(ignoreCaseRegex));
+
+        return { titleSearchResult, articleSearchResult };
       } catch (err) {
         throw err;
       }
