@@ -118,7 +118,7 @@ export const postResolver = {
         const posts: Post[] = await PostModel.find();
         const ignoreCaseRegex = RegExp(args.keyword, 'i');
 
-        const titleSearchResult = posts.filter((post) => post.title.match(ignoreCaseRegex));
+        const titleSearchResult = posts.filter((post) => post.title.match(ignoreCaseRegex)).reverse();
 
         // const articleSearchResult = posts.map((post) => {
         //   if (post.article.match(ignoreCaseRegex)) {
@@ -131,7 +131,7 @@ export const postResolver = {
         //     };
         //   }
         // });
-        const articleSearchResult = posts.filter((post) => post.article.match(ignoreCaseRegex));
+        const articleSearchResult = posts.filter((post) => post.article.match(ignoreCaseRegex)).reverse();
 
         return { titleSearchResult, articleSearchResult };
       } catch (err) {

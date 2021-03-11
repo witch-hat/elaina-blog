@@ -98,12 +98,14 @@ export const SEARCH = gql`
         _id
         title
         article
+        createdAt
         categoryId
       }
       articleSearchResult {
         _id
         title
         article
+        createdAt
         categoryId
       }
     }
