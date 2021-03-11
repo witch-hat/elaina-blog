@@ -201,6 +201,10 @@ const InputContainer = styled.div({
   margin: '.71rem 0'
 });
 
+const Paragraph = styled.p({
+  wordBreak: 'break-all'
+});
+
 interface ProfileIconProps {
   icon: IconProp;
 }
@@ -391,26 +395,26 @@ export default function Profile(props: Props) {
       ) : (
         <ListWrapper>
           <Description>
-            <span>{completedProfile.introduce}</span>
+            <Paragraph>{completedProfile.introduce}</Paragraph>
           </Description>
           <Description>
             <ProfileIcon icon={faLink} />
             <a href={completedProfile.link} target='_blank' rel='noopener noreferer nofollow'>
-              <span>{completedProfile.link}</span>
+              <Paragraph>{completedProfile.link}</Paragraph>
             </a>
           </Description>
           <Description>
             <ProfileIcon icon={faBuilding} />
-            <span>{completedProfile.company}</span>
+            <Paragraph>{completedProfile.company}</Paragraph>
           </Description>
           <Description>
             <ProfileIcon icon={faMapMarkerAlt} />
-            <span>{completedProfile.location}</span>
+            <Paragraph>{completedProfile.location}</Paragraph>
           </Description>
           <Description>
             <ProfileIcon icon={faEnvelope} />
             <a href='mailto:'>
-              <span>{completedProfile.email}</span>
+              <Paragraph>{completedProfile.email}</Paragraph>
             </a>
           </Description>
         </ListWrapper>
