@@ -1,26 +1,29 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
+import { InferGetServerSidePropsType, NextPageContext } from 'next';
+import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGripVertical, faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { NextPageContext } from 'next';
+import { useMutation } from '@apollo/client';
+import { useRouter } from 'next/router';
 
 import { BorderBox } from 'src/components';
-import { mockUpData } from 'src/resources';
 import { AdminPageLayout } from '../component/AdminPageLayout';
 import { theme } from 'src/styles';
-import { GET_CATEGORIES_WITH_DETAILS, CategoryDetails } from 'src/query/category';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { CircleRippleWrapper } from 'src/components/common/wrapper/CircleRippleWrapper';
 import { initApolloClient } from 'src/apollo/withApollo';
 import { AppCommonProps } from 'src/pages/_app';
+import { ADD_CATEGORY, CategoryDetails, DELETE_CATEGORY, GET_CATEGORY, GET_CATEGORIES_WITH_DETAILS } from 'src/query/category';
+import { ModalWrapper } from 'src/components';
+import { useApollo } from 'src/apollo/apolloClient';
+import { IS_AUTH } from 'src/query/user';
 
 const Container = styled.div({
   width: '100%',
   display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center'
+  flexDirection: 'column'
 });
 
 const CategoryContainer = styled.div({
@@ -129,6 +132,32 @@ const Input = styled.input<{ themeMode: ThemeMode }>((props) => ({
   backgroundColor: theme[props.themeMode].inputBackground
 }));
 
+const ModalContainer = styled.div({
+  width: '20rem',
+  padding: '.5rem'
+});
+
+const ModalParagraph = styled.p({
+  width: '100%'
+});
+
+const ModalButtonContainer = styled.div({
+  display: 'flex',
+  width: '100%',
+  marginTop: '1rem',
+  alignItems: 'center',
+  justifyContent: 'flex-end'
+});
+
+const ModalButton = styled.button<{ themeMode?: ThemeMode }>((props) => ({
+  width: '4.5rem',
+  padding: '.5rem',
+  borderRadius: '.5rem',
+  marginLeft: '.5rem',
+  backgroundColor: props.themeMode ? theme[props.themeMode].dangerButtonColor : 'inherit',
+  color: props.themeMode ? theme[props.themeMode].dangerContentText : 'inherit'
+}));
+
 interface Props extends AppCommonProps {
   categories: CategoryDetails[];
 }
@@ -136,9 +165,13 @@ interface Props extends AppCommonProps {
 export default function Category(props: Props) {
   const [editingCategoryId, setEditingCategoryId] = useState<number>(-1);
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
-  console.log(props.categories);
-
-  function deleteCategory() {}
+  const categories: CategoryDetails[] = props.categories;
+  const titleRef = useRef<HTMLSpanElement>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const client = useApollo();
+  const [deleteCategory] = useMutation(DELETE_CATEGORY);
+  // const [addCategory] = useMutation(ADD_CATEGORY);
+  const router = useRouter();
 
   function editCategory(index: number) {
     if (editingCategoryId === index) {
@@ -148,105 +181,156 @@ export default function Category(props: Props) {
     }
   }
 
+  async function handleDeleteCategory() {
+    const title = titleRef.current?.textContent;
+    console.log(title);
+
+    const authResponse = await client.query({ query: IS_AUTH });
+
+    if (!authResponse.data.isAuth.isAuth) {
+      alert('auth failed');
+      return router.push('/admin/login');
+    }
+
+    const { data } = await deleteCategory({
+      variables: {
+        title
+      }
+    });
+
+    const isDeleted = data.deleteCategory.isDeleted;
+
+    if (isDeleted) {
+      alert('deleted successfully');
+      return router.reload();
+    } else {
+      alert('cannot delete!');
+      return router.reload();
+    }
+  }
+
   function saveEditing(index: number) {}
 
   function checkEditing() {}
 
   return (
     <AdminPageLayout>
-      <Container>
-        {props.categories.map((category, index) => {
-          if (index === editingCategoryId) {
-            return (
-              <CategoryContainer key={category.title}>
-                <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
-                  <Content>
-                    <PreviewTextWrapper>
-                      <Input type={'text'} themeMode={themeMode} defaultValue={category.title} />
-                      <Input type={'text'} themeMode={themeMode} defaultValue={category.description} />
-                    </PreviewTextWrapper>
-                    <PreviewImage src={category.previewImage} alt='preview image' />
-                  </Content>
-                </BorderBox>
-                <ButtonContainer>
-                  <Button
-                    themeMode={themeMode}
-                    onClick={() => {
-                      editCategory(index);
-                    }}
-                  >
-                    Edit
-                  </Button>
-                  <Button themeMode={themeMode} danger>
-                    Delete
-                  </Button>
-                </ButtonContainer>
-              </CategoryContainer>
-            );
-          } else {
-            return (
-              <CategoryContainer key={category.title}>
-                <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
-                  <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                    <div style={{ flex: 1, display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', padding: '4px 8px 0px 8px' }}>
-                      <CircleRippleWrapper
-                        onClick={() => {
-                          console.log('HERE');
-                        }}
-                      >
-                        <FontAwesomeIcon icon={faPen} style={{ fontSize: '1.25rem' }} />
-                      </CircleRippleWrapper>
-                      <CircleRippleWrapper
-                        onClick={() => {
-                          console.log('HERE');
-                        }}
-                      >
-                        <FontAwesomeIcon icon={faTrash} style={{ fontSize: '1.25rem' }} />
-                      </CircleRippleWrapper>
-                      <CircleRippleWrapper
-                        onClick={() => {
-                          console.log('HERE');
-                        }}
-                      >
-                        <FontAwesomeIcon icon={faGripVertical} style={{ fontSize: '1.25rem' }} />
-                      </CircleRippleWrapper>
-                    </div>
+      <>
+        <Container>
+          {categories.map((category, index) => {
+            if (index === editingCategoryId) {
+              return (
+                <CategoryContainer key={category.title}>
+                  <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
                     <Content>
                       <PreviewTextWrapper>
-                        <PreviewTitle>{category.title}</PreviewTitle>
-                        <PreviewContent>{category.description}</PreviewContent>
+                        <Input type={'text'} themeMode={themeMode} defaultValue={category.title} />
+                        <Input type={'text'} themeMode={themeMode} defaultValue={category.description} />
                       </PreviewTextWrapper>
                       <PreviewImage src={category.previewImage} alt='preview image' />
                     </Content>
-                  </div>
-                </BorderBox>
-                <ButtonContainer>
-                  <Button
-                    themeMode={themeMode}
-                    onClick={() => {
-                      editCategory(index);
-                    }}
-                  >
-                    Edit
-                  </Button>
-                  <Button themeMode={themeMode} danger>
-                    Delete
-                  </Button>
-                </ButtonContainer>
-              </CategoryContainer>
-            );
-          }
-        })}
-      </Container>
+                  </BorderBox>
+                  {/* <ButtonContainer>
+                    <Button
+                      themeMode={themeMode}
+                      onClick={() => {
+                        editCategory(index);
+                      }}
+                    >
+                      Edit
+                    </Button>
+                    <Button themeMode={themeMode} danger onClick={() => setIsModalOpen(true)}>
+                      Delete
+                    </Button>
+                  </ButtonContainer> */}
+                </CategoryContainer>
+              );
+            } else {
+              return (
+                <CategoryContainer key={category.title}>
+                  <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
+                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                      <div
+                        style={{ flex: 1, display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', padding: '4px 8px 0px 8px' }}
+                      >
+                        <CircleRippleWrapper
+                          onClick={() => {
+                            // console.log('HERE');
+                            editCategory(index);
+                          }}
+                        >
+                          <FontAwesomeIcon icon={faPen} style={{ fontSize: '1.25rem' }} />
+                        </CircleRippleWrapper>
+                        <CircleRippleWrapper
+                          onClick={() => {
+                            setIsModalOpen(true);
+                          }}
+                        >
+                          <FontAwesomeIcon icon={faTrash} style={{ fontSize: '1.25rem' }} />
+                        </CircleRippleWrapper>
+                        <CircleRippleWrapper
+                          onClick={() => {
+                            console.log('HERE');
+                          }}
+                        >
+                          <FontAwesomeIcon icon={faGripVertical} style={{ fontSize: '1.25rem' }} />
+                        </CircleRippleWrapper>
+                      </div>
+                      <Content>
+                        <PreviewTextWrapper>
+                          <PreviewTitle ref={titleRef}>{category.title}</PreviewTitle>
+                          <PreviewContent>{category.description}</PreviewContent>
+                        </PreviewTextWrapper>
+                        <PreviewImage src={category.previewImage} alt='preview image' />
+                      </Content>
+                    </div>
+                  </BorderBox>
+                  {/* <ButtonContainer>
+                    <Button
+                      themeMode={themeMode}
+                      onClick={() => {
+                        editCategory(index);
+                      }}
+                    >
+                      Edit
+                    </Button>
+                    <Button themeMode={themeMode} danger onClick={() => setIsModalOpen(true)}>
+                      Delete
+                    </Button>
+                  </ButtonContainer> */}
+                </CategoryContainer>
+              );
+            }
+          })}
+        </Container>
+        <ModalWrapper visible={isModalOpen}>
+          <ModalContainer>
+            <ModalParagraph>{'정말 삭제하시겠습니까?\n모든 글도 같이 삭제됩니다.'}</ModalParagraph>
+            <ModalButtonContainer>
+              <ModalButton
+                onClick={() => {
+                  setIsModalOpen(false);
+                  handleDeleteCategory();
+                }}
+                themeMode={themeMode}
+              >
+                예
+              </ModalButton>
+              <ModalButton onClick={() => setIsModalOpen(false)}>아니요</ModalButton>
+            </ModalButtonContainer>
+          </ModalContainer>
+        </ModalWrapper>
+      </>
     </AdminPageLayout>
   );
 }
 
 export async function getServerSideProps(context: NextPageContext) {
-  const apolloClient = initApolloClient({}, context);
-  const categoryQueryResult = await apolloClient.query({ query: GET_CATEGORIES_WITH_DETAILS });
+  const client = initApolloClient({}, context);
+  const { data } = await client.query({ query: GET_CATEGORY });
 
-  const categories: CategoryDetails[] = categoryQueryResult.data.categoriesWithDetails;
+  const categories = data.categories;
+
   return {
     props: {
       categories

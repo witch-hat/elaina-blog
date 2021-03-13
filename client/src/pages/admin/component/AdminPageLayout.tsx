@@ -6,8 +6,7 @@ import { SideBar } from './SideBar';
 const Container = styled.div({
   width: '100%',
   display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center'
+  justifyContent: 'center'
 });
 
 const Side = styled.aside({

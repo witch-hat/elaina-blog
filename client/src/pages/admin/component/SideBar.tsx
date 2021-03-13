@@ -71,7 +71,6 @@ interface Props {
 }
 
 export function SideBar(props: Props) {
-  console.log(props);
   const router = useRouter();
   const [logout] = useMutation(LOGOUT);
 
