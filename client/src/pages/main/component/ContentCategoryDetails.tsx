@@ -22,7 +22,7 @@ const PostCount = styled.span({
 });
 
 interface Props {
-  time: string;
+  time?: string;
   count: number;
 }
 
@@ -34,7 +34,7 @@ export default function ContentCategoryDetails(props: Props) {
     <Container>
       <LatestTime>
         <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
-        <p>{dateFormatHelper.getFullFormatDate(latestCreatedTime)}</p>
+        <p>{props.time ? dateFormatHelper.getFullFormatDate(latestCreatedTime) : 'None'}</p>
       </LatestTime>
       <PostCount>
         <FontAwesomeIcon icon={faBook} style={{ marginRight: '5px' }} />

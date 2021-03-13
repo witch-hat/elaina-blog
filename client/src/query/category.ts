@@ -5,6 +5,8 @@ export interface CategoryDetails {
   title: string;
   description: string;
   previewImage: string;
+  recentCreatedAt: Date;
+  postCount: number;
 }
 
 export const GET_CATEGORY = gql`

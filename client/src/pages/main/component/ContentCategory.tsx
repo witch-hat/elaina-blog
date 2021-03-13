@@ -92,6 +92,20 @@ export function ContentCategory(props: Props) {
     <section style={{ width: '100%' }}>
       <Container>
         {props.categories.map((category, index) => {
+          if (props.latestPosts[index] === null) {
+            return (
+              <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
+                <Content>
+                  <PreviewTextWrapper>
+                    <PreviewTitle>{category.title}</PreviewTitle>
+                    <PreviewContent>{category.description}</PreviewContent>
+                    <ContentCategoryDetails count={0} />
+                  </PreviewTextWrapper>
+                  <PreviewImage src={category.previewImage} alt={`${category.title} preview image`} />
+                </Content>
+              </BorderBox>
+            );
+          }
           return (
             // need to change href to recent post
             <Link key={category.title} href={`/post/${props.latestPosts[index]._id}`} passHref>
