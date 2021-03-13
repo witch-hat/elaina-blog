@@ -55,7 +55,6 @@ interface Props {
   type: string;
   minLength: number;
   maxLength: number;
-  inputRef?: ((instance: HTMLInputElement | null) => void) | React.RefObject<HTMLInputElement> | null | undefined;
   onFocus?: Function;
   onBlur?: Function;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
@@ -70,7 +69,7 @@ export const InputBox = React.forwardRef<HTMLInputElement, Props>((props, forwar
 
   return (
     <Input
-      ref={props.inputRef}
+      ref={forwardedRef}
       id={props.id}
       placeholder={props.placeholder}
       type={props.type}

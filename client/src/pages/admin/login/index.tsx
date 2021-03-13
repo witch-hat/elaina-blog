@@ -143,7 +143,7 @@ export default function Login(props: Props) {
         <InputWrapper>
           <Label isBold={true}>Email</Label>
           <InputBox
-            inputRef={emailInputRef}
+            ref={emailInputRef}
             id='admin-id'
             type='email'
             minLength={4}
@@ -162,7 +162,7 @@ export default function Login(props: Props) {
         <InputWrapper>
           <Label isBold={true}>암호</Label>
           <InputBox
-            inputRef={passwordInputRef}
+            ref={passwordInputRef}
             id='admin-pw'
             type='password'
             minLength={4}

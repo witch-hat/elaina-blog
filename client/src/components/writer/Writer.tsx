@@ -297,7 +297,7 @@ export function Writer(props: Props) {
             </CategoryContainer>
             <Title>
               <InputBox
-                inputRef={titleRef}
+                ref={titleRef}
                 id='post-title'
                 type='text'
                 minLength={2}
