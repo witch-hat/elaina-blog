@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
+import styles from 'src/styles/MarkdownStyles.module.css';
 
 import { FocusWrapper, ModalWrapper } from 'src/components';
 import { DELETE_POST, FIND_SAME_CATEGORY_POSTS } from 'src/query/post';
@@ -224,7 +225,9 @@ export default function Content(props: Props) {
         )}
       </Menu>
       <Article>
-        <ReactMarkdown plugins={[gfm]}>{props.article}</ReactMarkdown>
+        <ReactMarkdown plugins={[gfm]} className={styles['markdown-body']}>
+          {props.article}
+        </ReactMarkdown>
       </Article>
       <ModalWrapper visible={isModalOpen}>
         <ModalContainer>
