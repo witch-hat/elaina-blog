@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { InferGetServerSidePropsType, NextPageContext } from 'next';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGripVertical, faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faGripVertical, faPen, faTrash, faSave, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
 
@@ -222,13 +222,33 @@ export default function Category(props: Props) {
               return (
                 <CategoryContainer key={category.title}>
                   <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
-                    <Content>
-                      <PreviewTextWrapper>
-                        <Input type={'text'} themeMode={themeMode} defaultValue={category.title} />
-                        <Input type={'text'} themeMode={themeMode} defaultValue={category.description} />
-                      </PreviewTextWrapper>
-                      <PreviewImage src={category.previewImage} alt='preview image' />
-                    </Content>
+                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                      <div
+                        style={{ flex: 1, display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', padding: '4px 8px 0px 8px' }}
+                      >
+                        <CircleRippleWrapper
+                          onClick={() => {
+                            console.log('edit');
+                          }}
+                        >
+                          <FontAwesomeIcon icon={faSave} style={{ fontSize: '1.25rem' }} />
+                        </CircleRippleWrapper>
+                        <CircleRippleWrapper
+                          onClick={() => {
+                            editCategory(index);
+                          }}
+                        >
+                          <FontAwesomeIcon icon={faTimesCircle} style={{ fontSize: '1.25rem' }} />
+                        </CircleRippleWrapper>
+                      </div>
+                      <Content>
+                        <PreviewTextWrapper>
+                          <Input type={'text'} themeMode={themeMode} defaultValue={category.title} />
+                          <Input type={'text'} themeMode={themeMode} defaultValue={category.description} />
+                        </PreviewTextWrapper>
+                        <PreviewImage src={category.previewImage} alt='preview image' />
+                      </Content>
+                    </div>
                   </BorderBox>
                   {/* <ButtonContainer>
                     <Button
