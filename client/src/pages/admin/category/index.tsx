@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { InferGetServerSidePropsType, NextPageContext } from 'next';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGripVertical, faPen, faTrash, faSave, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import { faGripVertical, faPen, faTrash, faSave, faTimesCircle, faCamera } from '@fortawesome/free-solid-svg-icons';
 import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
 
@@ -15,10 +15,11 @@ import { ThemeMode } from 'src/redux/common/type';
 import { CircleRippleWrapper } from 'src/components/common/wrapper/CircleRippleWrapper';
 import { initApolloClient } from 'src/apollo/withApollo';
 import { appCommponProps, AppCommonProps } from 'src/pages/_app';
-import { ADD_CATEGORY, CategoryDetails, DELETE_CATEGORY, GET_CATEGORY, GET_CATEGORIES_WITH_DETAILS } from 'src/query/category';
+import { CategoryDetails, DELETE_CATEGORY, GET_CATEGORY } from 'src/query/category';
 import { ModalWrapper } from 'src/components';
 import { useApollo } from 'src/apollo/apolloClient';
-import { IS_AUTH } from 'src/query/user';
+import { DeleteCategoryModal } from './component/DeleteCategoryModal';
+import { AddCategoryModal } from './component/AddCategoryModal';
 
 const Container = styled.div({
   width: '100%',
@@ -114,10 +115,10 @@ const Input = styled.input<{ themeMode: ThemeMode }>((props) => ({
   backgroundColor: theme[props.themeMode].inputBackground
 }));
 
-const ModalContainer = styled.div({
-  width: '20rem',
+const ModalContainer = styled.div<{ width: string }>((props) => ({
+  width: props.width,
   padding: '.5rem'
-});
+}));
 
 const ModalParagraph = styled.p({
   width: '100%'
@@ -140,6 +141,18 @@ const ModalButton = styled.button<{ themeMode?: ThemeMode }>((props) => ({
   color: props.themeMode ? theme[props.themeMode].dangerContentText : 'inherit'
 }));
 
+const SelectedImage = styled.div({
+  width: '260px',
+  marginLeft: '1rem',
+  height: '8.4rem',
+  objectFit: 'cover',
+  float: 'right',
+  '@media screen and (max-width: 1380px)': {
+    width: '32%',
+    marginLeft: '3%'
+  }
+});
+
 interface Props extends AppCommonProps {
   categories: CategoryDetails[];
 }
@@ -148,11 +161,8 @@ export default function Category(props: Props) {
   const [editingCategoryId, setEditingCategoryId] = useState<number>(-1);
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const categories: CategoryDetails[] = props.categories;
-  const titleRef = useRef<HTMLSpanElement>(null);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deletedCategory, setDeletedCategory] = useState<{ isModalOpen: boolean; index?: number }>({ isModalOpen: false });
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const client = useApollo();
-  const [deleteCategory] = useMutation(DELETE_CATEGORY);
   // const [addCategory] = useMutation(ADD_CATEGORY);
   const router = useRouter();
 
@@ -163,35 +173,6 @@ export default function Category(props: Props) {
       setEditingCategoryId(index);
     }
   }
-
-  async function handleDeleteCategory() {
-    const title = titleRef.current?.textContent;
-    console.log(title);
-
-    const authResponse = await client.query({ query: IS_AUTH });
-
-    if (!authResponse.data.isAuth.isAuth) {
-      alert('auth failed');
-      return router.push('/admin/login');
-    }
-
-    const { data } = await deleteCategory({
-      variables: {
-        title
-      }
-    });
-
-    const isDeleted = data.deleteCategory.isDeleted;
-
-    if (isDeleted) {
-      alert('deleted successfully');
-      return router.reload();
-    } else {
-      alert('cannot delete!');
-      return router.reload();
-    }
-  }
-
   function saveEditing(index: number) {}
 
   function checkEditing() {}
@@ -268,7 +249,7 @@ export default function Category(props: Props) {
                         </CircleRippleWrapper>
                         <CircleRippleWrapper
                           onClick={() => {
-                            setIsDeleteModalOpen(true);
+                            setDeletedCategory({ isModalOpen: true, index });
                           }}
                         >
                           <FontAwesomeIcon icon={faTrash} style={{ fontSize: '1.25rem' }} />
@@ -283,7 +264,7 @@ export default function Category(props: Props) {
                       </div>
                       <Content>
                         <PreviewTextWrapper>
-                          <PreviewTitle ref={titleRef}>{category.title}</PreviewTitle>
+                          <PreviewTitle>{category.title}</PreviewTitle>
                           <PreviewContent>{category.description}</PreviewContent>
                         </PreviewTextWrapper>
                         <PreviewImage src={category.previewImage} alt='preview image' />
@@ -295,43 +276,12 @@ export default function Category(props: Props) {
             }
           })}
         </Container>
-        <ModalWrapper visible={isDeleteModalOpen}>
-          <ModalContainer>
-            <ModalParagraph>{'정말 삭제하시겠습니까?\n모든 글도 같이 삭제됩니다.'}</ModalParagraph>
-            <ModalButtonContainer>
-              <ModalButton
-                onClick={() => {
-                  setIsDeleteModalOpen(false);
-                  handleDeleteCategory();
-                }}
-                themeMode={themeMode}
-              >
-                예
-              </ModalButton>
-              <ModalButton onClick={() => setIsDeleteModalOpen(false)}>아니요</ModalButton>
-            </ModalButtonContainer>
-          </ModalContainer>
-        </ModalWrapper>
-        <ModalWrapper visible={isAddModalOpen}>
-          <ModalContainer>
-            <ModalParagraph>{'새 카테고리를 만듭니다.'}</ModalParagraph>
-            <Input type='text' placeholder='Title' minLength={2} themeMode={themeMode} />
-            <Input type='text' placeholder='Description' minLength={2} themeMode={themeMode} />
-            <Input type='file' minLength={2} themeMode={themeMode} accept='image/x-png,image/jpeg' />
-            <ModalButtonContainer>
-              <ModalButton
-                onClick={() => {
-                  setIsAddModalOpen(false);
-                  addNewCategory();
-                }}
-                themeMode={themeMode}
-              >
-                저장
-              </ModalButton>
-              <ModalButton onClick={() => setIsAddModalOpen(false)}>취소</ModalButton>
-            </ModalButtonContainer>
-          </ModalContainer>
-        </ModalWrapper>
+        <DeleteCategoryModal
+          isDeleteModalOpen={deletedCategory.isModalOpen}
+          setDeletedCategory={setDeletedCategory}
+          index={deletedCategory.index}
+        />
+        <AddCategoryModal isAddModalOpen={isAddModalOpen} setIsAddModalOpen={setIsAddModalOpen} />
       </div>
     </AdminPageLayout>
   );

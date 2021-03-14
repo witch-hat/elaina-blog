@@ -37,7 +37,7 @@ export const categoryTypeDef = gql`
 
   extend type Mutation {
     addCategory(title: String!, description: String!, previewImage: String!): AddResoponse
-    deleteCategory(title: String!): DeleteResponse
+    deleteCategory(index: Int!): DeleteResponse
   }
 `;
 
@@ -45,7 +45,8 @@ export const categoryResolver = {
   Query: {
     async categories() {
       try {
-        const categoryList = await CategoryModel.find();
+        const categoryList = await CategoryModel.find({}, {}, { sort: { _id: -1 } });
+        console.log(categoryList);
         return categoryList;
       } catch (err) {
         throw err;
@@ -54,7 +55,8 @@ export const categoryResolver = {
 
     async categoriesWithDetails() {
       try {
-        const categories = await CategoryModel.find();
+        const categories = await CategoryModel.find({}, {}, { sort: { _id: -1 } });
+        console.log(categories);
         const posts = await PostModel.find();
 
         const countMap: Map<number, number> = new Map<number, number>();
@@ -129,15 +131,23 @@ export const categoryResolver = {
       }
     },
 
-    async deleteCategory(_: any, args: { title: string }, context: ContextType) {
+    async deleteCategory(_: any, args: { index: number }, context: ContextType) {
       try {
-        const deletedCategory: Category = await CategoryModel.findOneAndDelete({ title: args.title });
-        // delete posts & comments
-        const posts: Post[] = await PostModel.find({ categoryId: deletedCategory._id });
-        posts.forEach(async (post) => {
-          await CommentModel.findByIdAndDelete(post._id);
-          await PostModel.findByIdAndDelete(post._id);
-        });
+        if (args.index === undefined) {
+          return { isDeleted: false };
+        }
+
+        const id = CategoryModel.length - args.index;
+        console.log(CategoryModel.length, id);
+
+        // await CategoryModel.findByIdAndDelete(id);
+
+        // move posts & comments to default category
+        // const posts: Post[] = await PostModel.find({ categoryId: deletedCategory._id });
+        // posts.forEach(async (post) => {
+        //   await CommentModel.findByIdAndDelete(post._id);
+        //   await PostModel.findByIdAndDelete(post._id);
+        // });
 
         return { isDeleted: true };
       } catch (err) {
