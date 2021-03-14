@@ -264,8 +264,8 @@ export default function Profile(props: Props) {
       }
     });
 
-    const updateState = updateResponse.data.updateProfile.isUpdated;
-    if (updateState) {
+    const isSuccess = updateResponse.data.updateProfile.isSuccess;
+    if (isSuccess) {
       alert('Profile Update Success!');
     } else {
       alert('Error: cannot update profile');

@@ -107,11 +107,7 @@ export function SideBar(props: Props) {
         <List>이름 변경</List>
         <List
           onClick={() => {
-            logout({
-              variables: {
-                emailId: ''
-              }
-            });
+            logout();
             router.push('admin/login');
           }}
         >

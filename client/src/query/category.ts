@@ -55,7 +55,8 @@ export const FIND_CATEGORY_BY_ID = gql`
 export const ADD_CATEGORY = gql`
   mutation($title: String!, $description: String!, $previewImage: String!) {
     addCategory(title: $title, description: $description, previewImage: $previewImage) {
-      isAdded
+      isSuccess
+      errorMsg
     }
   }
 `;
@@ -63,7 +64,8 @@ export const ADD_CATEGORY = gql`
 export const DELETE_CATEGORY = gql`
   mutation($index: Int!) {
     deleteCategory(index: $index) {
-      isDeleted
+      isSuccess
+      errorMsg
     }
   }
 `;

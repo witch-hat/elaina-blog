@@ -36,7 +36,8 @@ export const UPDATE_PROFILE = gql`
       location: $location
       email: $email
     ) {
-      isUpdated
+      isSuccess
+      errorMsg
     }
   }
 `;

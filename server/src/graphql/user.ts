@@ -45,10 +45,6 @@ export const userTypeDef = gql`
     cookie: String
   }
 
-  type LogoutResponse {
-    logout: Boolean
-  }
-
   extend type Query {
     me: User
     findMeById: User
@@ -57,11 +53,8 @@ export const userTypeDef = gql`
 
   extend type Mutation {
     updatePassword(emailId: String, password: String): User
-
     login(emailId: String!, password: String!): LoginResponse
-
-    logout: LogoutResponse
-
+    logout: MutationResponse
     refreshUserToken(userId: ID!): User
   }
 `;
@@ -277,10 +270,11 @@ export const userResolver = {
         cookies.set('a_access', '', {
           expires: new Date(0)
         });
+
+        return { isSuccess: true };
       } catch (err) {
-        throw err;
+        return { isSuccess: false, errorMsg: '로그아웃 도중 에러발생' };
       }
-      return true;
     }
   }
 };

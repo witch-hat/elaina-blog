@@ -170,10 +170,10 @@ export default function Content(props: Props) {
         }
       });
 
-      const deleted = deleteResponse.data.deletePost.isDeleted;
+      const isSuccess = deleteResponse.data.deletePost.isSuccess;
       const categoryId = deleteResponse.data.deletePost.categoryId;
 
-      if (deleted) {
+      if (isSuccess) {
         const { data } = await client.query({ query: FIND_SAME_CATEGORY_POSTS, variables: { categoryId } });
         if (data.findSameCategoryPosts.post.length === 0) {
           router.push('/');

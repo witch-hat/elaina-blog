@@ -29,7 +29,7 @@ export const commentTypeDef = gql`
   }
 
   extend type Mutation {
-    writeComment(_id: Int!, username: String!, password: String!, comment: String!, createdAt: DateTime!): Comment
+    writeComment(_id: Int!, username: String!, password: String!, comment: String!, createdAt: DateTime!): MutationResponse
   }
 `;
 
@@ -66,9 +66,9 @@ export const commentResolver = {
 
         existComments.save();
 
-        return existComments;
+        return { isSuccess: true };
       } catch (err) {
-        throw err;
+        throw { isSuccess: false, errorMsg: 'Cannor write comment; Server Error' };
       }
     }
   }

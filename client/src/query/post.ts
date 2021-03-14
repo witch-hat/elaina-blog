@@ -86,7 +86,8 @@ export const DELETE_POST = gql`
 export const EDIT_POST = gql`
   mutation($id: Int!, $title: String!, $article: String!, $category: String!) {
     editPost(id: $id, title: $title, article: $article, category: $category) {
-      isEdited
+      isSuccess
+      errorMsg
     }
   }
 `;

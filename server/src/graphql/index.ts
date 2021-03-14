@@ -35,6 +35,11 @@ const rootTypeDef = gql`
   scalar DateTime
   scalar Upload
 
+  type MutationResponse {
+    isSuccess: Boolean!
+    errorMsg: String
+  }
+
   type Query {
     _empty: String
   }

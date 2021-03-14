@@ -22,14 +22,6 @@ export const categoryTypeDef = gql`
     recentCreatedAt: DateTime
   }
 
-  type AddResoponse {
-    isAdded: Boolean
-  }
-
-  type DeleteResponse {
-    isDeleted: Boolean
-  }
-
   extend type Query {
     categories: [Category]
     categoriesWithDetails: [CategoryWithDetails]
@@ -37,8 +29,8 @@ export const categoryTypeDef = gql`
   }
 
   extend type Mutation {
-    addCategory(title: String!, description: String!, previewImage: String!): AddResoponse
-    deleteCategory(index: Int!): DeleteResponse
+    addCategory(title: String!, description: String!, previewImage: String!): MutationResponse
+    deleteCategory(index: Int!): MutationResponse
   }
 `;
 
@@ -112,7 +104,7 @@ export const categoryResolver = {
         const categoryList: Category[] = await CategoryModel.find();
 
         if (categoryList.filter((category) => category.title === args.title).length) {
-          return { isAdded: false };
+          return { isSuccess: false, errorMsg: '이미 존재하는 Title 입니다.' };
         }
 
         const newId = (categoryList[categoryList.length - 1]._id += 1);
@@ -124,22 +116,22 @@ export const categoryResolver = {
           previewImage: args.previewImage
         });
 
-        return { isAdded: true };
+        return { isSuccess: true };
       } catch (err) {
-        return { isAdded: false };
+        return { isSuccess: false, errorMsg: 'Error occured with DB and Server connection' };
       }
     },
 
     async deleteCategory(_: any, args: { index: number }, context: ContextType) {
       try {
         if (args.index === undefined) {
-          return { isDeleted: false };
+          return { isSuccess: false, errorMsg: '잘못된 index값' };
         }
 
         const deletedCategory: Category = await CategoryModel.findOne({ order: args.index });
 
         if (deletedCategory._id === 0) {
-          return { isDeleted: false };
+          return { isSuccess: false, errorMsg: '기본 카테고리는 삭제할 수 없습니다.' };
         }
 
         await CategoryModel.deleteOne({ order: args.index });
@@ -150,9 +142,9 @@ export const categoryResolver = {
           await PostModel.findByIdAndUpdate(post._id, { categoryId: 0 });
         });
 
-        return { isDeleted: true };
+        return { isSuccess: true };
       } catch (err) {
-        return { isDeleted: false };
+        return { isSuccess: false, errorMsg: 'Error occured with DB and Server connection' };
       }
     }
   }

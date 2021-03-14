@@ -74,13 +74,14 @@ export function DeleteCategoryModal(props: Props) {
       }
     });
 
-    const isDeleted = data.deleteCategory.isDeleted;
+    const isSuccess = data.deleteCategory.isSuccess;
 
-    if (isDeleted) {
+    if (isSuccess) {
       alert('deleted successfully');
       return router.reload();
     } else {
-      alert('cannot delete!');
+      const errorMsg = data.deleteCategory.errorMsg;
+      alert(errorMsg);
       return router.reload();
     }
   }

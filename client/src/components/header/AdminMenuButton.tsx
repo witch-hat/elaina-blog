@@ -96,11 +96,7 @@ export default function AdminMenuButton(props: Props) {
               <List
                 themeMode={themeMode}
                 onClick={() => {
-                  logout({
-                    variables: {
-                      emailId: ''
-                    }
-                  });
+                  logout();
                 }}
               >
                 Logout

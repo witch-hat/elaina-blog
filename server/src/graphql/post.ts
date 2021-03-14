@@ -20,12 +20,8 @@ export const postTypeDef = gql`
   }
 
   type DeleteResponse {
-    isDeleted: Boolean
+    isSuccess: Boolean
     categoryId: Int
-  }
-
-  type EditResponse {
-    isEdited: Boolean
   }
 
   type ArticleSearchResult {
@@ -50,7 +46,7 @@ export const postTypeDef = gql`
   extend type Mutation {
     writePost(title: String!, createdAt: DateTime, article: String!, category: String!): Post
     deletePost(id: Int!): DeleteResponse
-    editPost(id: Int!, title: String!, article: String!, category: String!): EditResponse
+    editPost(id: Int!, title: String!, article: String!, category: String!): MutationResponse
   }
 `;
 
@@ -160,9 +156,9 @@ export const postResolver = {
       try {
         const deletedPost = await PostModel.findByIdAndDelete(args.id);
         await CommentModel.findByIdAndDelete(args.id);
-        return { isDeleted: true, categoryId: deletedPost.categoryId };
+        return { isSuccess: true, categoryId: deletedPost.categoryId };
       } catch (err) {
-        return { isDeleted: false };
+        return { isSuccess: false };
       }
     },
 
@@ -179,9 +175,9 @@ export const postResolver = {
 
         editPost.save();
 
-        return { isEdited: true };
+        return { isSuccess: true };
       } catch {
-        return { isEdited: false };
+        return { isEdited: false, errorMsg: 'Cannot edit post: Server Error' };
       }
     }
   }

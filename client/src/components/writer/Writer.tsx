@@ -260,10 +260,13 @@ export function Writer(props: Props) {
       }
     });
 
-    if (editResult.data.editPost.isEdited) {
+    const isSuccess = editResult.data.editPost.isSuccess;
+
+    if (isSuccess) {
       return router.push(`/post/${id}`);
     } else {
-      return alert('수정 중 에러 발생');
+      const errorMsg = editResult.data.editPost.errorMsg;
+      return alert(errorMsg);
     }
   }
 

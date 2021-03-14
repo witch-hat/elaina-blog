@@ -18,10 +18,6 @@ export const profileTypeDef = gql`
     email: String!
   }
 
-  type UpdateProfile {
-    isUpdated: Boolean
-  }
-
   extend type Query {
     profile: Profile
   }
@@ -36,7 +32,7 @@ export const profileTypeDef = gql`
       company: String
       location: String
       email: String
-    ): UpdateProfile
+    ): MutationResponse
   }
 `;
 
@@ -62,9 +58,9 @@ export const profileResolver = {
           },
           { new: true }
         );
-        return { isUpdated: true };
+        return { isSuccess: true };
       } catch (err) {
-        return { isUpdated: false };
+        return { isSuccess: false, errorMsg: 'Cannot update profile: Server Error' };
       }
     }
   }
