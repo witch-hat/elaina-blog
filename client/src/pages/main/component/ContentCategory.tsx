@@ -85,6 +85,7 @@ const PreviewContent = styled.span({
 interface Props {
   categories: CategoryDetails[];
   latestPosts: [{ _id: number }];
+  isLogin: boolean;
 }
 
 export function ContentCategory(props: Props) {
@@ -93,20 +94,38 @@ export function ContentCategory(props: Props) {
     <section style={{ width: '100%' }}>
       <Container>
         {props.categories.map((category, index) => {
-          console.log(category);
           if (props.latestPosts[index] === null) {
-            return (
-              <BorderBox key={index} isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
-                <Content>
-                  <PreviewTextWrapper>
-                    <PreviewTitle>{category.title}</PreviewTitle>
-                    <PreviewContent>{category.description}</PreviewContent>
-                    <ContentCategoryDetails count={0} />
-                  </PreviewTextWrapper>
-                  <PreviewImage src={category.previewImage} alt={`${category.title} preview image`} />
-                </Content>
-              </BorderBox>
-            );
+            if (props.isLogin) {
+              return (
+                <Link key={category.title} href={`/admin/writer`} passHref>
+                  <a style={{ width: '100%' }}>
+                    <BorderBox key={index} isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
+                      <Content>
+                        <PreviewTextWrapper>
+                          <PreviewTitle>{category.title}</PreviewTitle>
+                          <PreviewContent>{category.description}</PreviewContent>
+                          <ContentCategoryDetails count={0} />
+                        </PreviewTextWrapper>
+                        <PreviewImage src={category.previewImage} alt={`${category.title} preview image`} />
+                      </Content>
+                    </BorderBox>
+                  </a>
+                </Link>
+              );
+            } else {
+              return (
+                <BorderBox key={index} isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
+                  <Content>
+                    <PreviewTextWrapper>
+                      <PreviewTitle>{category.title}</PreviewTitle>
+                      <PreviewContent>{category.description}</PreviewContent>
+                      <ContentCategoryDetails count={0} />
+                    </PreviewTextWrapper>
+                    <PreviewImage src={category.previewImage} alt={`${category.title} preview image`} />
+                  </Content>
+                </BorderBox>
+              );
+            }
           }
           return (
             // need to change href to recent post
