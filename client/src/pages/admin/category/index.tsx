@@ -1,11 +1,10 @@
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
-import { InferGetServerSidePropsType, NextPageContext } from 'next';
+import { NextPageContext } from 'next';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGripVertical, faPen, faTrash, faSave, faTimesCircle, faCamera } from '@fortawesome/free-solid-svg-icons';
+import { faGripVertical, faPen, faTrash, faSave, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { useMutation } from '@apollo/client';
-import { useRouter } from 'next/router';
 
 import { BorderBox } from 'src/components';
 import { theme } from 'src/styles';
@@ -14,9 +13,7 @@ import { ThemeMode } from 'src/redux/common/type';
 import { CircleRippleWrapper } from 'src/components/common/wrapper/CircleRippleWrapper';
 import { initApolloClient } from 'src/apollo/withApollo';
 import { appCommponProps, AppCommonProps } from 'src/pages/_app';
-import { CategoryDetails, DELETE_CATEGORY, GET_CATEGORY, UPDATE_CATEGORY } from 'src/query/category';
-import { ModalWrapper } from 'src/components';
-import { useApollo } from 'src/apollo/apolloClient';
+import { CategoryDetails, GET_CATEGORY, UPDATE_CATEGORY } from 'src/query/category';
 import { AdminPageLayout } from '../component/AdminPageLayout';
 import { DeleteCategoryModal } from './component/DeleteCategoryModal';
 import { AddCategoryModal } from './component/AddCategoryModal';
@@ -114,44 +111,6 @@ const Input = styled.input<{ themeMode: ThemeMode }>((props) => ({
   color: theme[props.themeMode].inputText,
   backgroundColor: theme[props.themeMode].inputBackground
 }));
-
-const ModalContainer = styled.div<{ width: string }>((props) => ({
-  width: props.width,
-  padding: '.5rem'
-}));
-
-const ModalParagraph = styled.p({
-  width: '100%'
-});
-
-const ModalButtonContainer = styled.div({
-  display: 'flex',
-  width: '100%',
-  marginTop: '1rem',
-  alignItems: 'center',
-  justifyContent: 'flex-end'
-});
-
-const ModalButton = styled.button<{ themeMode?: ThemeMode }>((props) => ({
-  width: '4.5rem',
-  padding: '.5rem',
-  borderRadius: '.5rem',
-  marginLeft: '.5rem',
-  backgroundColor: props.themeMode ? theme[props.themeMode].dangerButtonColor : 'inherit',
-  color: props.themeMode ? theme[props.themeMode].dangerContentText : 'inherit'
-}));
-
-const SelectedImage = styled.div({
-  width: '260px',
-  marginLeft: '1rem',
-  height: '8.4rem',
-  objectFit: 'cover',
-  float: 'right',
-  '@media screen and (max-width: 1380px)': {
-    width: '32%',
-    marginLeft: '3%'
-  }
-});
 
 interface Props extends AppCommonProps {
   categories: CategoryDetails[];

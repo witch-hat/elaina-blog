@@ -5,7 +5,8 @@ const Wrapper = styled.div({
   display: 'flex',
   alignContent: 'center',
   justifyContent: 'center',
-  padding: '8px'
+  padding: '8px',
+  cursor: 'pointer'
 });
 
 const rippleAnimation = keyframes({
