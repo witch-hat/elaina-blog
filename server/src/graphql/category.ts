@@ -136,7 +136,13 @@ export const categoryResolver = {
           return { isDeleted: false };
         }
 
-        const deletedCategory = await CategoryModel.findOneAndDelete({ order: args.index });
+        const deletedCategory: Category = await CategoryModel.findOne({ order: args.index });
+
+        if (deletedCategory._id === 0) {
+          return { isDeleted: false };
+        }
+
+        await CategoryModel.deleteOne({ order: args.index });
 
         // move posts to default category
         const posts: Post[] = await PostModel.find({ categoryId: deletedCategory._id });
