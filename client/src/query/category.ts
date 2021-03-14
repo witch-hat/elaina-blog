@@ -1,5 +1,13 @@
 import { gql } from '@apollo/client';
 
+export interface Category {
+  _id: number;
+  title: string;
+  description: string;
+  previewImage: string;
+  order: number;
+}
+
 export interface CategoryDetails {
   _id: number;
   title: string;
@@ -12,9 +20,11 @@ export interface CategoryDetails {
 export const GET_CATEGORY = gql`
   query categories {
     categories {
+      _id
       title
       description
       previewImage
+      order
     }
   }
 `;
@@ -22,6 +32,7 @@ export const GET_CATEGORY = gql`
 export const GET_CATEGORIES_WITH_DETAILS = gql`
   query {
     categoriesWithDetails {
+      _id
       title
       description
       previewImage
@@ -50,8 +61,8 @@ export const ADD_CATEGORY = gql`
 `;
 
 export const DELETE_CATEGORY = gql`
-  mutation($title: String!) {
-    deleteCategory(title: $title) {
+  mutation($index: Int!) {
+    deleteCategory(index: $index) {
       isDeleted
     }
   }

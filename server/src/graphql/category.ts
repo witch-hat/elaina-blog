@@ -10,6 +10,7 @@ export const categoryTypeDef = gql`
     title: String!
     description: String!
     previewImage: String!
+    order: Int!
   }
 
   type CategoryWithDetails {
@@ -45,8 +46,7 @@ export const categoryResolver = {
   Query: {
     async categories() {
       try {
-        const categoryList = await CategoryModel.find({}, {}, { sort: { _id: -1 } });
-        console.log(categoryList);
+        const categoryList = await CategoryModel.find({}, {}, { sort: { order: 1 } });
         return categoryList;
       } catch (err) {
         throw err;
@@ -55,8 +55,7 @@ export const categoryResolver = {
 
     async categoriesWithDetails() {
       try {
-        const categories = await CategoryModel.find({}, {}, { sort: { _id: -1 } });
-        console.log(categories);
+        const categories = await CategoryModel.find({}, {}, { sort: { order: 1 } });
         const posts = await PostModel.find();
 
         const countMap: Map<number, number> = new Map<number, number>();
@@ -137,17 +136,13 @@ export const categoryResolver = {
           return { isDeleted: false };
         }
 
-        const id = CategoryModel.length - args.index;
-        console.log(CategoryModel.length, id);
+        const deletedCategory = await CategoryModel.findOneAndDelete({ order: args.index });
 
-        // await CategoryModel.findByIdAndDelete(id);
-
-        // move posts & comments to default category
-        // const posts: Post[] = await PostModel.find({ categoryId: deletedCategory._id });
-        // posts.forEach(async (post) => {
-        //   await CommentModel.findByIdAndDelete(post._id);
-        //   await PostModel.findByIdAndDelete(post._id);
-        // });
+        // move posts to default category
+        const posts: Post[] = await PostModel.find({ categoryId: deletedCategory._id });
+        posts.forEach(async (post) => {
+          await PostModel.findByIdAndUpdate(post._id, { categoryId: 0 });
+        });
 
         return { isDeleted: true };
       } catch (err) {

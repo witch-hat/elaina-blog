@@ -88,13 +88,15 @@ interface Props {
 }
 
 export function ContentCategory(props: Props) {
+  console.log(props.latestPosts);
   return (
     <section style={{ width: '100%' }}>
       <Container>
         {props.categories.map((category, index) => {
+          console.log(category);
           if (props.latestPosts[index] === null) {
             return (
-              <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
+              <BorderBox key={index} isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
                 <Content>
                   <PreviewTextWrapper>
                     <PreviewTitle>{category.title}</PreviewTitle>

@@ -99,7 +99,7 @@ export const postResolver = {
     },
 
     async getLatestPostsEachCategory() {
-      const categories = await CategoryModel.find();
+      const categories = await CategoryModel.find({}, {}, { sort: { order: 1 } });
 
       const posts: Post[] = categories.map(async (category: Category) => {
         const post: Post = await PostModel.findOne({ categoryId: category._id }, {}, { sort: { _id: -1 } });

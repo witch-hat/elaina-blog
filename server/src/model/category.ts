@@ -5,6 +5,7 @@ export interface Category extends Document {
   title: string;
   description: string;
   previewImage: string;
+  order: number;
 }
 
 export const categorySchema = new Schema<Category>(
@@ -22,6 +23,10 @@ export const categorySchema = new Schema<Category>(
     },
     previewImage: {
       type: String
+    },
+    order: {
+      type: Number,
+      required: true
     }
   },
   {

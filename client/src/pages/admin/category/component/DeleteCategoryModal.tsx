@@ -70,7 +70,7 @@ export function DeleteCategoryModal(props: Props) {
 
     const { data } = await deleteCategory({
       variables: {
-        _id: props.index++
+        index: props.index
       }
     });
 

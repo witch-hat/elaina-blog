@@ -27,7 +27,7 @@ interface Props {
 }
 
 export default function ContentCategoryDetails(props: Props) {
-  const latestCreatedTime = new Date(props.time);
+  const latestCreatedTime = new Date(props.time as string);
   const dateFormatHelper = new FormatUnifier.FormatDate();
 
   return (
