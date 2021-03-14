@@ -14,7 +14,7 @@ import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { CircleRippleWrapper } from 'src/components/common/wrapper/CircleRippleWrapper';
 import { initApolloClient } from 'src/apollo/withApollo';
-import { AppCommonProps } from 'src/pages/_app';
+import { appCommponProps, AppCommonProps } from 'src/pages/_app';
 import { ADD_CATEGORY, CategoryDetails, DELETE_CATEGORY, GET_CATEGORY, GET_CATEGORIES_WITH_DETAILS } from 'src/query/category';
 import { ModalWrapper } from 'src/components';
 import { useApollo } from 'src/apollo/apolloClient';
@@ -23,11 +23,19 @@ import { IS_AUTH } from 'src/query/user';
 const Container = styled.div({
   width: '100%',
   display: 'flex',
-  flexDirection: 'column'
+  flexDirection: 'column',
+  alignItems: 'center'
 });
 
+const AddButton = styled.button<{ themeMode: ThemeMode }>((props) => ({
+  padding: '.5rem',
+  borderRadius: '.5rem',
+  backgroundColor: theme[props.themeMode].submitButtonColor,
+  color: '#f1f2f3'
+}));
+
 const CategoryContainer = styled.div({
-  width: '90%',
+  width: '100%',
   display: 'flex',
   alignItems: 'center'
 });
@@ -68,7 +76,7 @@ const PreviewTitle = styled.span({
   fontSize: '1.4rem',
   fontWeight: 'bold',
   textAlign: 'left',
-  wordBreak: 'keep-all',
+  wordBreak: 'break-all',
   overflow: 'hidden',
   display: '-webkit-box',
   WebkitLineClamp: 1,
@@ -90,32 +98,6 @@ const PreviewContent = styled.span({
   display: '-webkit-box',
   WebkitLineClamp: 3,
   WebkitBoxOrient: 'vertical'
-});
-
-const ButtonContainer = styled.div({
-  marginLeft: '1rem',
-  display: 'flex',
-  height: 'max-content'
-});
-
-const Button = styled.button<{ danger?: boolean; themeMode: ThemeMode }>((props) => ({
-  marginRight: '.5rem',
-  fontSize: '.9rem',
-  borderRadius: '4px',
-  padding: '.5rem',
-  height: 'max-content',
-  backgroundColor: props.danger ? theme[props.themeMode].dangerButtonColor : theme[props.themeMode].buttonBackground,
-  color: props.danger ? theme[props.themeMode].dangerContentText : 'inherit',
-  '&:hover': {
-    textDecoration: 'underline'
-  }
-}));
-
-const InputContainer = styled.div({
-  display: 'flex',
-  width: '100%',
-  alignItems: 'center',
-  margin: '.71rem 0'
 });
 
 const Input = styled.input<{ themeMode: ThemeMode }>((props) => ({
@@ -167,7 +149,8 @@ export default function Category(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const categories: CategoryDetails[] = props.categories;
   const titleRef = useRef<HTMLSpanElement>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const client = useApollo();
   const [deleteCategory] = useMutation(DELETE_CATEGORY);
   // const [addCategory] = useMutation(ADD_CATEGORY);
@@ -213,9 +196,16 @@ export default function Category(props: Props) {
 
   function checkEditing() {}
 
+  async function addNewCategory() {}
+
   return (
     <AdminPageLayout>
-      <>
+      <div style={{ width: '100%', padding: '0 5%' }}>
+        <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
+          <AddButton themeMode={themeMode} onClick={() => setIsAddModalOpen(true)}>
+            Add
+          </AddButton>
+        </div>
         <Container>
           {categories.map((category, index) => {
             if (index === editingCategoryId) {
@@ -243,31 +233,26 @@ export default function Category(props: Props) {
                       </div>
                       <Content>
                         <PreviewTextWrapper>
-                          <Input type={'text'} themeMode={themeMode} defaultValue={category.title} />
-                          <Input type={'text'} themeMode={themeMode} defaultValue={category.description} />
+                          <Input type='text' themeMode={themeMode} defaultValue={category.title} />
+                          <Input type='text' themeMode={themeMode} defaultValue={category.description} />
                         </PreviewTextWrapper>
                         <PreviewImage src={category.previewImage} alt='preview image' />
                       </Content>
                     </div>
                   </BorderBox>
-                  {/* <ButtonContainer>
-                    <Button
-                      themeMode={themeMode}
-                      onClick={() => {
-                        editCategory(index);
-                      }}
-                    >
-                      Edit
-                    </Button>
-                    <Button themeMode={themeMode} danger onClick={() => setIsModalOpen(true)}>
-                      Delete
-                    </Button>
-                  </ButtonContainer> */}
                 </CategoryContainer>
               );
             } else {
               return (
-                <CategoryContainer key={category.title}>
+                <CategoryContainer
+                  key={category.title}
+                  onDragOver={(e: React.DragEvent<HTMLDivElement>) => {
+                    e.currentTarget.draggable = true;
+                  }}
+                  onDrop={(e: React.DragEvent<HTMLDivElement>) => {
+                    e.currentTarget.draggable = false;
+                  }}
+                >
                   <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
                       <div
@@ -283,7 +268,7 @@ export default function Category(props: Props) {
                         </CircleRippleWrapper>
                         <CircleRippleWrapper
                           onClick={() => {
-                            setIsModalOpen(true);
+                            setIsDeleteModalOpen(true);
                           }}
                         >
                           <FontAwesomeIcon icon={faTrash} style={{ fontSize: '1.25rem' }} />
@@ -305,47 +290,63 @@ export default function Category(props: Props) {
                       </Content>
                     </div>
                   </BorderBox>
-                  {/* <ButtonContainer>
-                    <Button
-                      themeMode={themeMode}
-                      onClick={() => {
-                        editCategory(index);
-                      }}
-                    >
-                      Edit
-                    </Button>
-                    <Button themeMode={themeMode} danger onClick={() => setIsModalOpen(true)}>
-                      Delete
-                    </Button>
-                  </ButtonContainer> */}
                 </CategoryContainer>
               );
             }
           })}
         </Container>
-        <ModalWrapper visible={isModalOpen}>
+        <ModalWrapper visible={isDeleteModalOpen}>
           <ModalContainer>
             <ModalParagraph>{'정말 삭제하시겠습니까?\n모든 글도 같이 삭제됩니다.'}</ModalParagraph>
             <ModalButtonContainer>
               <ModalButton
                 onClick={() => {
-                  setIsModalOpen(false);
+                  setIsDeleteModalOpen(false);
                   handleDeleteCategory();
                 }}
                 themeMode={themeMode}
               >
                 예
               </ModalButton>
-              <ModalButton onClick={() => setIsModalOpen(false)}>아니요</ModalButton>
+              <ModalButton onClick={() => setIsDeleteModalOpen(false)}>아니요</ModalButton>
             </ModalButtonContainer>
           </ModalContainer>
         </ModalWrapper>
-      </>
+        <ModalWrapper visible={isAddModalOpen}>
+          <ModalContainer>
+            <ModalParagraph>{'새 카테고리를 만듭니다.'}</ModalParagraph>
+            <Input type='text' placeholder='Title' minLength={2} themeMode={themeMode} />
+            <Input type='text' placeholder='Description' minLength={2} themeMode={themeMode} />
+            <Input type='file' minLength={2} themeMode={themeMode} accept='image/x-png,image/jpeg' />
+            <ModalButtonContainer>
+              <ModalButton
+                onClick={() => {
+                  setIsAddModalOpen(false);
+                  addNewCategory();
+                }}
+                themeMode={themeMode}
+              >
+                저장
+              </ModalButton>
+              <ModalButton onClick={() => setIsAddModalOpen(false)}>취소</ModalButton>
+            </ModalButtonContainer>
+          </ModalContainer>
+        </ModalWrapper>
+      </div>
     </AdminPageLayout>
   );
 }
 
 export async function getServerSideProps(context: NextPageContext) {
+  if (!appCommponProps.app.isLogin) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/admin/login'
+      }
+    };
+  }
+
   const client = initApolloClient({}, context);
   const { data } = await client.query({ query: GET_CATEGORY });
 
