@@ -1,6 +1,8 @@
 import React from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import Link from 'next/link';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import { theme } from 'src/styles';
 import { BorderBox } from 'src/components';
@@ -8,6 +10,7 @@ import { BorderBox } from 'src/components';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
+import { useRouter } from 'next/router';
 
 const FadeIn = keyframes({
   from: {
@@ -58,9 +61,28 @@ const Container = styled.nav<{ themeMode: ThemeMode }>(
   `
 );
 
-const CategoryName = styled.span({
+const FlexWrapper = styled.div({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between'
+});
+
+const CategoryName = styled.p({
   fontSize: '1.4rem',
-  fontWeight: 'bold'
+  fontWeight: 'bold',
+  maxWidth: '90%',
+  wordBreak: 'break-all'
+});
+
+const WriteButton = styled.button({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  padding: '.3rem',
+  borderRadius: '50%',
+  '&:hover': {
+    backgroundColor: '#eee'
+  }
 });
 
 const TitleContainer = styled.ul({
@@ -92,14 +114,27 @@ interface Props {
   titles: [{ title: string; _id: number }];
   currentPostId: number;
   category: { title: string };
+  isLogin: boolean;
 }
 
 export default function PostCategory(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  const router = useRouter();
+
+  function handleWriteButtonClick() {
+    router.push('/admin/writer');
+  }
 
   return (
     <Container themeMode={themeMode}>
-      <CategoryName>{props.category.title}</CategoryName>
+      <FlexWrapper>
+        <CategoryName>{props.category.title}</CategoryName>
+        {props.isLogin && (
+          <WriteButton onClick={() => handleWriteButtonClick()}>
+            <FontAwesomeIcon icon={faPlus} />
+          </WriteButton>
+        )}
+      </FlexWrapper>
       <TitleContainer>
         {props.titles.map(({ title, _id }) => {
           return (

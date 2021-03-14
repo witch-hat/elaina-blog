@@ -152,10 +152,10 @@ export default function PostId(props: Props) {
       onTouchEnd={(event: React.TouchEvent) => handleTouchEnd(event)}
     >
       {width > 767 ? (
-        <PostCategory category={category} titles={titles} currentPostId={post._id} />
+        <PostCategory category={category} titles={titles} currentPostId={post._id} isLogin={props.app.isLogin} />
       ) : (
         <FocusWrapper visible={showPostCategory} onClickOutside={() => setShowPostCategory(false)}>
-          <PostCategory category={category} titles={titles} currentPostId={post._id} />
+          <PostCategory category={category} titles={titles} currentPostId={post._id} isLogin={props.app.isLogin} />
         </FocusWrapper>
       )}
       <ContentContainer themeMode={themeMode}>
