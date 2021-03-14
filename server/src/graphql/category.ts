@@ -38,6 +38,7 @@ export const categoryTypeDef = gql`
 
   extend type Mutation {
     addCategory(title: String!, description: String!, previewImage: String!): AddResoponse
+    updateCategory(id: Int, title: String, description: String): AddResoponse
     deleteCategory(index: Int!): DeleteResponse
   }
 `;
@@ -127,6 +128,30 @@ export const categoryResolver = {
         return { isAdded: true };
       } catch (err) {
         return { isAdded: false };
+      }
+    },
+
+    async updateCategory(_: any, args: { id: number; title: string; description: string }, context: ContextType) {
+      try {
+        console.log(args);
+
+        await CategoryModel.updateOne(
+          {
+            _id: args.id
+          },
+          {
+            title: args.title,
+            description: args.description
+          }
+        );
+
+        return {
+          isAdded: true
+        };
+      } catch {
+        return {
+          isAdded: false
+        };
       }
     },
 

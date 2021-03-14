@@ -8,16 +8,16 @@ import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
 
 import { BorderBox } from 'src/components';
-import { AdminPageLayout } from '../component/AdminPageLayout';
 import { theme } from 'src/styles';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { CircleRippleWrapper } from 'src/components/common/wrapper/CircleRippleWrapper';
 import { initApolloClient } from 'src/apollo/withApollo';
 import { appCommponProps, AppCommonProps } from 'src/pages/_app';
-import { CategoryDetails, DELETE_CATEGORY, GET_CATEGORY } from 'src/query/category';
+import { CategoryDetails, DELETE_CATEGORY, GET_CATEGORY, UPDATE_CATEGORY } from 'src/query/category';
 import { ModalWrapper } from 'src/components';
 import { useApollo } from 'src/apollo/apolloClient';
+import { AdminPageLayout } from '../component/AdminPageLayout';
 import { DeleteCategoryModal } from './component/DeleteCategoryModal';
 import { AddCategoryModal } from './component/AddCategoryModal';
 
@@ -158,26 +158,27 @@ interface Props extends AppCommonProps {
 }
 
 export default function Category(props: Props) {
-  const [editingCategoryId, setEditingCategoryId] = useState<number>(-1);
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
-  const categories: CategoryDetails[] = props.categories;
+  const [editingCategoryIndex, setEditingCategoryIndex] = useState<number>(-1);
+  const [categories, setCategories] = useState<CategoryDetails[]>(props.categories);
   const [deletedCategory, setDeletedCategory] = useState<{ isModalOpen: boolean; index?: number }>({ isModalOpen: false });
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   // const [addCategory] = useMutation(ADD_CATEGORY);
-  const router = useRouter();
+  const [updateCategory] = useMutation(UPDATE_CATEGORY);
+  const titleEditInput = useRef<HTMLInputElement>(null);
+  const descriptionEditInput = useRef<HTMLInputElement>(null);
 
-  function editCategory(index: number) {
-    if (editingCategoryId === index) {
-      setEditingCategoryId(-1);
-    } else {
-      setEditingCategoryId(index);
-    }
+  async function save() {
+    const result = await updateCategory({
+      variables: {
+        id: categories[editingCategoryIndex]._id,
+        title: titleEditInput.current?.value,
+        description: descriptionEditInput.current?.value
+      }
+    });
+
+    console.log(result);
   }
-  function saveEditing(index: number) {}
-
-  function checkEditing() {}
-
-  async function addNewCategory() {}
 
   return (
     <AdminPageLayout>
@@ -189,7 +190,7 @@ export default function Category(props: Props) {
         </div>
         <Container>
           {categories.map((category, index) => {
-            if (index === editingCategoryId) {
+            if (index === editingCategoryIndex) {
               return (
                 <CategoryContainer key={category.title}>
                   <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
@@ -197,16 +198,12 @@ export default function Category(props: Props) {
                       <div
                         style={{ flex: 1, display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', padding: '4px 8px 0px 8px' }}
                       >
-                        <CircleRippleWrapper
-                          onClick={() => {
-                            console.log('edit');
-                          }}
-                        >
+                        <CircleRippleWrapper onClick={save}>
                           <FontAwesomeIcon icon={faSave} style={{ fontSize: '1.25rem' }} />
                         </CircleRippleWrapper>
                         <CircleRippleWrapper
                           onClick={() => {
-                            editCategory(index);
+                            setEditingCategoryIndex(-1);
                           }}
                         >
                           <FontAwesomeIcon icon={faTimesCircle} style={{ fontSize: '1.25rem' }} />
@@ -214,8 +211,8 @@ export default function Category(props: Props) {
                       </div>
                       <Content>
                         <PreviewTextWrapper>
-                          <Input type='text' themeMode={themeMode} defaultValue={category.title} />
-                          <Input type='text' themeMode={themeMode} defaultValue={category.description} />
+                          <Input type='text' ref={titleEditInput} themeMode={themeMode} defaultValue={category.title} />
+                          <Input type='text' ref={descriptionEditInput} themeMode={themeMode} defaultValue={category.description} />
                         </PreviewTextWrapper>
                         <PreviewImage src={category.previewImage} alt='preview image' />
                       </Content>
@@ -241,8 +238,7 @@ export default function Category(props: Props) {
                       >
                         <CircleRippleWrapper
                           onClick={() => {
-                            // console.log('HERE');
-                            editCategory(index);
+                            setEditingCategoryIndex(index);
                           }}
                         >
                           <FontAwesomeIcon icon={faPen} style={{ fontSize: '1.25rem' }} />
