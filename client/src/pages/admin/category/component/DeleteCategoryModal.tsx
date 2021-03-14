@@ -47,6 +47,7 @@ interface Props {
     }>
   >;
   index: number | undefined;
+  defaultCategoryTitle: string;
 }
 
 export function DeleteCategoryModal(props: Props) {
@@ -89,7 +90,7 @@ export function DeleteCategoryModal(props: Props) {
   return (
     <ModalWrapper visible={props.isDeleteModalOpen}>
       <ModalContainer>
-        <ModalParagraph>{'정말 삭제하시겠습니까?'}</ModalParagraph>
+        <ModalParagraph>{`정말 삭제하시겠습니까?\n 글은 "${props.defaultCategoryTitle}" 카테로리로 이동됩니다.`}</ModalParagraph>
         <ModalButtonContainer>
           <ModalButton
             onClick={() => {

@@ -276,6 +276,7 @@ export default function Category(props: Props) {
           isDeleteModalOpen={deletedCategory.isModalOpen}
           setDeletedCategory={setDeletedCategory}
           index={deletedCategory.index}
+          defaultCategoryTitle={categories.filter((category) => category._id === 0)[0].title}
         />
         <AddCategoryModal isAddModalOpen={isAddModalOpen} setIsAddModalOpen={setIsAddModalOpen} />
       </div>
