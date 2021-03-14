@@ -23,6 +23,18 @@ function parseLiteral(ast: ValueNode) {
   return null;
 }
 
+function loadAllFiles() {
+  const schemas = loadFilesSync(__dirname, { extensions: ['ts'], ignoreIndex: true });
+
+  const typeDefs: any = schemas.map((schema) => Object.values(schema)[0]);
+  const resolvers: any = schemas.map((schema) => Object.values(schema)[1]);
+
+  const mergedTypeDefs = mergeTypeDefs(typeDefs);
+  const mergedResolvers = mergeResolvers(resolvers);
+
+  return { mergedTypeDefs, mergedResolvers };
+}
+
 const dateScalar = new GraphQLScalarType({
   name: 'DateTime',
   description: 'Date custom scalar type',
@@ -60,15 +72,3 @@ export const schema = makeExecutableSchema({
   typeDefs: [rootTypeDef, mergedTypeDefs],
   resolvers: merge(resolvers, { ...mergedResolvers })
 });
-
-function loadAllFiles() {
-  const schemas = loadFilesSync(__dirname, { extensions: ['ts'], ignoreIndex: true });
-
-  const typeDefs: any = schemas.map((schema) => Object.values(schema)[0]);
-  const resolvers: any = schemas.map((schema) => Object.values(schema)[1]);
-
-  const mergedTypeDefs = mergeTypeDefs(typeDefs);
-  const mergedResolvers = mergeResolvers(resolvers);
-
-  return { mergedTypeDefs, mergedResolvers };
-}

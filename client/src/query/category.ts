@@ -61,6 +61,14 @@ export const ADD_CATEGORY = gql`
   }
 `;
 
+export const UPDATE_CATEGORY = gql`
+  mutation($id: Int, $title: String, $description: String) {
+    updateCategory(id: $id, title: $title, description: $description) {
+      isAdded
+    }
+  }
+`;
+
 export const DELETE_CATEGORY = gql`
   mutation($index: Int!) {
     deleteCategory(index: $index) {

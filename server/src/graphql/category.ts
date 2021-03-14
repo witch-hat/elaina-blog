@@ -30,6 +30,7 @@ export const categoryTypeDef = gql`
 
   extend type Mutation {
     addCategory(title: String!, description: String!, previewImage: String!): MutationResponse
+    updateCategory(id: Int, title: String, description: String): MutationResponse
     deleteCategory(index: Int!): MutationResponse
   }
 `;
@@ -119,6 +120,28 @@ export const categoryResolver = {
         return { isSuccess: true };
       } catch (err) {
         return { isSuccess: false, errorMsg: 'Error occured with DB and Server connection' };
+      }
+    },
+
+    async updateCategory(_: any, args: { id: number; title: string; description: string }, context: ContextType) {
+      try {
+        console.log(args);
+
+        await CategoryModel.updateOne(
+          {
+            _id: args.id
+          },
+          {
+            title: args.title,
+            description: args.description
+          }
+        );
+
+        return {
+          isSuccess: true
+        };
+      } catch {
+        return { isSuccess: false, errorMsg: 'Server Error: Cannot update category' };
       }
     },
 
