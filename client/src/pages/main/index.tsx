@@ -15,7 +15,7 @@ interface Props extends AppCommonProps {
 export default function Main(props: Props) {
   return (
     <MainPageLayout profile={props.profile} isLogin={props.app.isLogin}>
-      <ContentCategory categories={props.categories} latestPosts={props.latestPosts} />
+      <ContentCategory categories={props.categories} latestPosts={props.latestPosts} isLogin={props.app.isLogin} />
     </MainPageLayout>
   );
 }
