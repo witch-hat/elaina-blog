@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGripVertical, faPen, faTrash, faSave, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { useMutation } from '@apollo/client';
+import cloneDeep from 'lodash/cloneDeep';
 
 import { BorderBox } from 'src/components';
 import { theme } from 'src/styles';
@@ -128,15 +129,30 @@ export default function Category(props: Props) {
   const descriptionEditInput = useRef<HTMLInputElement>(null);
 
   async function save() {
-    const result = await updateCategory({
-      variables: {
-        id: categories[editingCategoryIndex]._id,
-        title: titleEditInput.current?.value,
-        description: descriptionEditInput.current?.value
-      }
-    });
+    if (titleEditInput.current && descriptionEditInput.current) {
+      const result = await updateCategory({
+        variables: {
+          id: categories[editingCategoryIndex]._id,
+          title: titleEditInput.current?.value,
+          description: descriptionEditInput.current?.value
+        }
+      });
 
-    console.log(result);
+      if (result.data.updateCategory.isSuccess) {
+        const copiedCategories = cloneDeep(categories);
+        const editingCategory = copiedCategories[editingCategoryIndex];
+
+        if (editingCategory !== undefined) {
+          editingCategory.title = titleEditInput.current.value;
+          editingCategory.description = descriptionEditInput.current.value;
+          setCategories(copiedCategories);
+        }
+
+        setEditingCategoryIndex(-1);
+      } else {
+        alert(result.data.updateCategory.errorMsg);
+      }
+    }
   }
 
   return (
