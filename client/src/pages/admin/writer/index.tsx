@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { InferGetServerSidePropsType, NextPageContext } from 'next';
-import { withRouter, NextRouter } from 'next/router';
+import { withRouter, NextRouter, useRouter } from 'next/router';
 
 import { Writer } from 'src/components/writer/Writer';
 import { theme } from 'src/styles';
@@ -13,7 +13,7 @@ import { isAuth } from 'src/pages/api/isAuth';
 import { AppCommonProps, appCommponProps } from 'src/pages/_app';
 import { initApolloClient } from 'src/apollo/withApollo';
 import { GET_PROFILE, ProfileType } from 'src/query';
-import { GET_CATEGORY } from 'src/query/category';
+import { CategoryDetails, GET_CATEGORY } from 'src/query/category';
 
 const Container = styled.div<{ themeMode: ThemeMode }>((props) => ({
   display: 'flex',
@@ -35,13 +35,20 @@ function WriterPage(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const profile: ProfileType = props.profile;
   const categoryTitleFromQuery = props.router.query.title as string | undefined;
+  const categories: CategoryDetails[] = props.categories;
+  const router = useRouter();
+
+  if (categoryTitleFromQuery && !categories.find((category) => category.title === categoryTitleFromQuery)) {
+    alert('존재하지 않는 Category Title 입니다.');
+    router.push('/');
+  }
 
   return (
     <Container themeMode={themeMode}>
       {categoryTitleFromQuery ? (
-        <Writer author={profile.name || ''} categories={props.categories} category={categoryTitleFromQuery} />
+        <Writer author={profile.name || ''} categories={categories} category={categoryTitleFromQuery} />
       ) : (
-        <Writer author={profile.name || ''} categories={props.categories} />
+        <Writer author={profile.name || ''} categories={categories} />
       )}
     </Container>
   );
