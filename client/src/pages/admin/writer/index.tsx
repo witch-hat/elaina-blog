@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { InferGetServerSidePropsType, NextPageContext } from 'next';
+import { withRouter, NextRouter } from 'next/router';
 
 import { Writer } from 'src/components/writer/Writer';
 import { theme } from 'src/styles';
@@ -21,21 +22,32 @@ const Container = styled.div<{ themeMode: ThemeMode }>((props) => ({
   padding: '.5rem'
 }));
 
-interface Props extends AppCommonProps {
+interface WithRouterProps {
+  router: NextRouter;
+}
+
+interface Props extends AppCommonProps, WithRouterProps {
   profile: InferGetServerSidePropsType<typeof getServerSideProps>;
   categories: InferGetServerSidePropsType<typeof getServerSideProps>;
 }
 
-export default function Admin(props: Props) {
+function WriterPage(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const profile: ProfileType = props.profile;
+  const categoryTitleFromQuery = props.router.query.title as string | undefined;
 
   return (
     <Container themeMode={themeMode}>
-      <Writer author={profile.name || ''} categories={props.categories} />
+      {categoryTitleFromQuery ? (
+        <Writer author={profile.name || ''} categories={props.categories} category={categoryTitleFromQuery} />
+      ) : (
+        <Writer author={profile.name || ''} categories={props.categories} />
+      )}
     </Container>
   );
 }
+
+export default withRouter(WriterPage);
 
 export async function getServerSideProps(context: NextPageContext) {
   if (!appCommponProps.app.isLogin) {
