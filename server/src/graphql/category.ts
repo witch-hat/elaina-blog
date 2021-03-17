@@ -32,6 +32,7 @@ export const categoryTypeDef = gql`
     addCategory(title: String!, description: String!, previewImage: String!): MutationResponse
     updateCategory(id: Int, title: String, description: String): MutationResponse
     deleteCategory(index: Int!): MutationResponse
+    orderCategory(ids: [Int]): MutationResponse
   }
 `;
 
@@ -168,6 +169,19 @@ export const categoryResolver = {
         return { isSuccess: true };
       } catch (err) {
         return { isSuccess: false, errorMsg: 'Error occured with DB and Server connection' };
+      }
+    },
+
+    async orderCategory(_: any, args: { ids: number[] }, context: ContextType) {
+      try {
+        for (let i = 0; i <= CategoryModel.length; i++) {
+          const currentId = args.ids[i];
+          const newOrder = args.ids.indexOf(currentId);
+          await CategoryModel.findByIdAndUpdate(currentId, { order: newOrder });
+        }
+        return { isSuccess: true };
+      } catch {
+        return { isSuccess: false, errorMsg: 'Server Error: Cannot change order' };
       }
     }
   }

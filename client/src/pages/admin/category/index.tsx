@@ -14,7 +14,7 @@ import { ThemeMode } from 'src/redux/common/type';
 import { CircleRippleWrapper } from 'src/components/common/wrapper/CircleRippleWrapper';
 import { initApolloClient } from 'src/apollo/withApollo';
 import { appCommponProps, AppCommonProps } from 'src/pages/_app';
-import { CategoryDetails, GET_CATEGORY, UPDATE_CATEGORY } from 'src/query/category';
+import { CategoryDetails, GET_CATEGORY, ORDER_CATEGORY, UPDATE_CATEGORY } from 'src/query/category';
 import { AdminPageLayout } from '../component/AdminPageLayout';
 import { DeleteCategoryModal } from './component/DeleteCategoryModal';
 import { AddCategoryModal } from './component/AddCategoryModal';
@@ -133,6 +133,7 @@ export default function Category(props: Props) {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   // const [addCategory] = useMutation(ADD_CATEGORY);
   const [updateCategory] = useMutation(UPDATE_CATEGORY);
+  const [orderCategory] = useMutation(ORDER_CATEGORY);
   const titleEditInput = useRef<HTMLInputElement>(null);
   const descriptionEditInput = useRef<HTMLInputElement>(null);
 
@@ -168,30 +169,30 @@ export default function Category(props: Props) {
   }
 
   function onDragStart(e: React.DragEvent<HTMLDivElement>) {
-    if (isGrabbed) {
-      setGrabbedElement(e.currentTarget);
-      e.dataTransfer.effectAllowed = 'move';
-      e.dataTransfer.setData('text/html', e.currentTarget);
-    }
+    setGrabbedElement(e.currentTarget);
+    e.dataTransfer.effectAllowed = 'move';
+    // @ts-ignore
+    e.dataTransfer.setData('text/html', e.currentTarget);
   }
 
   function onDragEnd(e: React.DragEvent<HTMLDivElement>) {
-    if (isGrabbed) {
-      e.dataTransfer.dropEffect = 'move';
-    }
+    e.dataTransfer.dropEffect = 'move';
   }
 
   function onDrop(e: React.DragEvent<HTMLDivElement>) {
-    if (isGrabbed) {
-      let grabPosition = Number(grabbedElement?.dataset.position);
-      let dropPosition = Number(e.currentTarget.dataset.position);
+    let grabPosition = Number(grabbedElement?.dataset.position);
+    let dropPosition = Number(e.currentTarget.dataset.position);
 
-      let newCategories = [...categories];
-      newCategories[grabPosition] = newCategories.splice(dropPosition, 1, newCategories[grabPosition])[0];
+    let newCategories = [...categories];
+    newCategories[grabPosition] = newCategories.splice(dropPosition, 1, newCategories[grabPosition])[0];
 
-      setCategories(newCategories);
-      setIsGrabbed(false);
-    }
+    setCategories(newCategories);
+    setIsGrabbed(false);
+    orderCategory({
+      variables: {
+        ids: newCategories.map((category) => category._id)
+      }
+    });
   }
 
   return (
@@ -241,9 +242,9 @@ export default function Category(props: Props) {
                   data-position={index}
                   draggable={isGrabbed}
                   onDragOver={(e: React.DragEvent<HTMLDivElement>) => onDragOver(e)}
-                  onDragStart={(e: React.DragEvent<HTMLDivElement>) => onDragStart(e)}
-                  onDragEnd={(e: React.DragEvent<HTMLDivElement>) => onDragEnd(e)}
-                  onDrop={(e: React.DragEvent<HTMLDivElement>) => onDrop(e)}
+                  onDragStart={(e: React.DragEvent<HTMLDivElement>) => isGrabbed && onDragStart(e)}
+                  onDragEnd={(e: React.DragEvent<HTMLDivElement>) => isGrabbed && onDragEnd(e)}
+                  onDrop={(e: React.DragEvent<HTMLDivElement>) => isGrabbed && onDrop(e)}
                 >
                   <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
@@ -272,6 +273,7 @@ export default function Category(props: Props) {
                               setIsGrabbed(false);
                             }
                           }}
+                          onTouchStart={() => setIsGrabbed(true)}
                         >
                           <CircleRippleWrapper onClick={() => {}}>
                             <FontAwesomeIcon icon={faGripVertical} style={{ fontSize: '1.25rem' }} />

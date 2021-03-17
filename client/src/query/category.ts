@@ -78,3 +78,12 @@ export const DELETE_CATEGORY = gql`
     }
   }
 `;
+
+export const ORDER_CATEGORY = gql`
+  mutation($ids: [Int]) {
+    orderCategory(ids: $ids) {
+      isSuccess
+      errorMsg
+    }
+  }
+`;
