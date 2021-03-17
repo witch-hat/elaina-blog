@@ -51,7 +51,6 @@ interface Props {
 }
 
 export function DeleteCategoryModal(props: Props) {
-  console.log(props.index);
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const client = useApollo();
   const router = useRouter();

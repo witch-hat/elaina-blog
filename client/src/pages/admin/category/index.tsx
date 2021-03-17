@@ -125,6 +125,7 @@ interface Props extends AppCommonProps {
 
 export default function Category(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  const [isGrabbed, setIsGrabbed] = useState(false);
   const [grabbedElement, setGrabbedElement] = useState<(EventTarget & HTMLDivElement) | null>(null);
   const [editingCategoryIndex, setEditingCategoryIndex] = useState<number>(-1);
   const [categories, setCategories] = useState<CategoryDetails[]>(props.categories);
@@ -167,26 +168,30 @@ export default function Category(props: Props) {
   }
 
   function onDragStart(e: React.DragEvent<HTMLDivElement>) {
-    console.log('ds');
-    setGrabbedElement(e.currentTarget);
-    e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/html', e.currentTarget);
+    if (isGrabbed) {
+      setGrabbedElement(e.currentTarget);
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/html', e.currentTarget);
+    }
   }
 
   function onDragEnd(e: React.DragEvent<HTMLDivElement>) {
-    console.log('de');
-    e.dataTransfer.dropEffect = 'move';
+    if (isGrabbed) {
+      e.dataTransfer.dropEffect = 'move';
+    }
   }
 
   function onDrop(e: React.DragEvent<HTMLDivElement>) {
-    console.log('drop');
-    let grabPosition = Number(grabbedElement?.dataset.position);
-    let dropPosition = Number(e.currentTarget.dataset.position);
+    if (isGrabbed) {
+      let grabPosition = Number(grabbedElement?.dataset.position);
+      let dropPosition = Number(e.currentTarget.dataset.position);
 
-    let newCategories = [...categories];
-    newCategories[grabPosition] = newCategories.splice(dropPosition, 1, newCategories[grabPosition])[0];
+      let newCategories = [...categories];
+      newCategories[grabPosition] = newCategories.splice(dropPosition, 1, newCategories[grabPosition])[0];
 
-    setCategories(newCategories);
+      setCategories(newCategories);
+      setIsGrabbed(false);
+    }
   }
 
   return (
@@ -234,7 +239,7 @@ export default function Category(props: Props) {
                 <CategoryContainer
                   key={category.title}
                   data-position={index}
-                  draggable
+                  draggable={isGrabbed}
                   onDragOver={(e: React.DragEvent<HTMLDivElement>) => onDragOver(e)}
                   onDragStart={(e: React.DragEvent<HTMLDivElement>) => onDragStart(e)}
                   onDragEnd={(e: React.DragEvent<HTMLDivElement>) => onDragEnd(e)}
@@ -259,12 +264,16 @@ export default function Category(props: Props) {
                         >
                           <FontAwesomeIcon icon={faTrash} style={{ fontSize: '1.25rem' }} />
                         </CircleRippleWrapper>
-                        <GrabButtonContainer>
-                          <CircleRippleWrapper
-                            onClick={() => {
-                              console.log('HERE');
-                            }}
-                          >
+                        <GrabButtonContainer
+                          onMouseDown={(e: React.MouseEvent<HTMLDivElement>) => {
+                            if (e.button === 0) {
+                              setIsGrabbed(true);
+                            } else {
+                              setIsGrabbed(false);
+                            }
+                          }}
+                        >
+                          <CircleRippleWrapper onClick={() => {}}>
                             <FontAwesomeIcon icon={faGripVertical} style={{ fontSize: '1.25rem' }} />
                           </CircleRippleWrapper>
                         </GrabButtonContainer>
