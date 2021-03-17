@@ -99,6 +99,12 @@ const PreviewContent = styled.span({
   WebkitBoxOrient: 'vertical'
 });
 
+const GrabButtonContainer = styled.div({
+  '&:hover > *': {
+    cursor: 'grab'
+  }
+});
+
 const Input = styled.input<{ themeMode: ThemeMode }>((props) => ({
   display: 'inline-block',
   width: '100%',
@@ -119,6 +125,7 @@ interface Props extends AppCommonProps {
 
 export default function Category(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  const [grabbedElement, setGrabbedElement] = useState<(EventTarget & HTMLDivElement) | null>(null);
   const [editingCategoryIndex, setEditingCategoryIndex] = useState<number>(-1);
   const [categories, setCategories] = useState<CategoryDetails[]>(props.categories);
   const [deletedCategory, setDeletedCategory] = useState<{ isModalOpen: boolean; index?: number }>({ isModalOpen: false });
@@ -153,6 +160,33 @@ export default function Category(props: Props) {
         alert(result.data.updateCategory.errorMsg);
       }
     }
+  }
+
+  function onDragOver(e: React.DragEvent<HTMLDivElement>) {
+    e.preventDefault();
+  }
+
+  function onDragStart(e: React.DragEvent<HTMLDivElement>) {
+    console.log('ds');
+    setGrabbedElement(e.currentTarget);
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/html', e.currentTarget);
+  }
+
+  function onDragEnd(e: React.DragEvent<HTMLDivElement>) {
+    console.log('de');
+    e.dataTransfer.dropEffect = 'move';
+  }
+
+  function onDrop(e: React.DragEvent<HTMLDivElement>) {
+    console.log('drop');
+    let grabPosition = Number(grabbedElement?.dataset.position);
+    let dropPosition = Number(e.currentTarget.dataset.position);
+
+    let newCategories = [...categories];
+    newCategories[grabPosition] = newCategories.splice(dropPosition, 1, newCategories[grabPosition])[0];
+
+    setCategories(newCategories);
   }
 
   return (
@@ -199,12 +233,12 @@ export default function Category(props: Props) {
               return (
                 <CategoryContainer
                   key={category.title}
-                  onDragOver={(e: React.DragEvent<HTMLDivElement>) => {
-                    e.currentTarget.draggable = true;
-                  }}
-                  onDrop={(e: React.DragEvent<HTMLDivElement>) => {
-                    e.currentTarget.draggable = false;
-                  }}
+                  data-position={index}
+                  draggable
+                  onDragOver={(e: React.DragEvent<HTMLDivElement>) => onDragOver(e)}
+                  onDragStart={(e: React.DragEvent<HTMLDivElement>) => onDragStart(e)}
+                  onDragEnd={(e: React.DragEvent<HTMLDivElement>) => onDragEnd(e)}
+                  onDrop={(e: React.DragEvent<HTMLDivElement>) => onDrop(e)}
                 >
                   <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
@@ -225,13 +259,15 @@ export default function Category(props: Props) {
                         >
                           <FontAwesomeIcon icon={faTrash} style={{ fontSize: '1.25rem' }} />
                         </CircleRippleWrapper>
-                        <CircleRippleWrapper
-                          onClick={() => {
-                            console.log('HERE');
-                          }}
-                        >
-                          <FontAwesomeIcon icon={faGripVertical} style={{ fontSize: '1.25rem' }} />
-                        </CircleRippleWrapper>
+                        <GrabButtonContainer>
+                          <CircleRippleWrapper
+                            onClick={() => {
+                              console.log('HERE');
+                            }}
+                          >
+                            <FontAwesomeIcon icon={faGripVertical} style={{ fontSize: '1.25rem' }} />
+                          </CircleRippleWrapper>
+                        </GrabButtonContainer>
                       </div>
                       <Content>
                         <PreviewTextWrapper>
