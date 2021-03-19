@@ -117,18 +117,20 @@ export const postResolver = {
         const searchResult: { post: Post; content: string }[] = [];
 
         posts.forEach((post) => {
+          // filter images, bar ...etc
+          const ignore = new RegExp(/^(!|\[|--|==)/);
           if (post.title.match(ignoreCaseRegex)) {
             const content = post.article
               .split('\n')
               .filter((sentence) => {
-                return !sentence.trim().startsWith('!' || '--' || '==' || '[');
+                return !sentence.trim().match(ignore);
               })
               .join(' ');
             return searchResult.push({ post, content });
           }
 
           if (post.article.match(ignoreCaseRegex)) {
-            // TODO...
+            // TODO...Highlighting
             const keywordIncludedPart = '';
 
             return searchResult.push({ post, content: post.article });
