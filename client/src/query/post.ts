@@ -95,20 +95,16 @@ export const EDIT_POST = gql`
 export const SEARCH = gql`
   query($keyword: String!) {
     search(keyword: $keyword) {
-      titleSearchResult {
-        _id
-        title
-        article
-        createdAt
-        categoryId
+      result {
+        post {
+          _id
+          title
+          createdAt
+          categoryId
+        }
+        content
       }
-      articleSearchResult {
-        _id
-        title
-        article
-        createdAt
-        categoryId
-      }
+      errorMsg
     }
   }
 `;

@@ -24,14 +24,14 @@ export const postTypeDef = gql`
     categoryId: Int
   }
 
-  type ArticleSearchResult {
+  type SearchResult {
     post: Post
-    keywordIncludedPart: String
+    content: String
   }
 
   type SearchResponse {
-    titleSearchResult: [Post]
-    articleSearchResult: [Post]
+    result: [SearchResult]
+    errorMsg: String
   }
 
   extend type Query {
@@ -111,27 +111,33 @@ export const postResolver = {
           throw new Error('부적절한 글자 수');
         }
 
-        const posts: Post[] = await PostModel.find();
+        const posts: Post[] = await PostModel.find({}, {}, { sort: { _id: -1 } });
         const ignoreCaseRegex = RegExp(args.keyword, 'i');
 
-        const titleSearchResult = posts.filter((post) => post.title.match(ignoreCaseRegex)).reverse();
+        const searchResult: { post: Post; content: string }[] = [];
 
-        // const articleSearchResult = posts.map((post) => {
-        //   if (post.article.match(ignoreCaseRegex)) {
-        //     // TODO...
-        //     const keywordIncludedPart = '';
+        posts.forEach((post) => {
+          if (post.title.match(ignoreCaseRegex)) {
+            const content = post.article
+              .split('\n')
+              .filter((sentence) => {
+                return !sentence.trim().startsWith('!' || '--' || '==' || '[');
+              })
+              .join(' ');
+            return searchResult.push({ post, content });
+          }
 
-        //     return {
-        //       post,
-        //       keywordIncludedPart
-        //     };
-        //   }
-        // });
-        const articleSearchResult = posts.filter((post) => post.article.match(ignoreCaseRegex)).reverse();
+          if (post.article.match(ignoreCaseRegex)) {
+            // TODO...
+            const keywordIncludedPart = '';
 
-        return { titleSearchResult, articleSearchResult };
+            return searchResult.push({ post, content: post.article });
+          }
+        });
+
+        return { result: searchResult };
       } catch (err) {
-        throw err;
+        throw { errorMsg: 'Sever Error: Search failed' };
       }
     }
   },
