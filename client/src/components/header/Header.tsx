@@ -159,7 +159,8 @@ export function Header(props: Props) {
       alert('2글자 이상 입력해주세요');
       return;
     }
-    router.push(`/search/${searchKeyword}`);
+
+    router.push({ pathname: '/search', query: { word: searchKeyword } });
   }
 
   return (
