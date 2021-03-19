@@ -2,6 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import { InferGetServerSidePropsType, NextPageContext } from 'next';
 import Link from 'next/link';
+import Gfm from 'remark-gfm';
+import ReactMarkDown from 'react-markdown';
+import { Reset } from 'styled-reset';
 
 import { Post, SEARCH } from 'src/query/post';
 import { initApolloClient } from 'src/apollo/withApollo';
@@ -54,13 +57,13 @@ const PostTitle = styled.p({
   display: 'block',
   fontSize: '1.125rem',
   fontWeight: 'bold',
-  marginBottom: '.25rem'
+  marginBottom: '.5rem'
 });
 
 const CreatedAt = styled.p({
   display: 'block',
   fontSize: '.8rem',
-  marginBottom: '.25rem'
+  marginBottom: '.5rem'
 });
 
 const Article = styled.p({
@@ -71,20 +74,18 @@ const Article = styled.p({
   textAlign: 'left',
   overflow: 'hidden',
   display: '-webkit-box',
-  WebkitLineClamp: 2,
+  WebkitLineClamp: 3,
   WebkitBoxOrient: 'vertical'
 });
 
 interface Props {
-  titleSearchResult: InferGetServerSidePropsType<typeof getServerSideProps>;
-  articleSearchResult: InferGetServerSidePropsType<typeof getServerSideProps>;
+  searchResult: InferGetServerSidePropsType<typeof getServerSideProps>;
 }
 
 export default function KeywordFinder(props: Props) {
-  const titleSearchResult: Post[] = props.titleSearchResult;
-  const articleSearchResult: Post[] = props.articleSearchResult;
+  const searchResults: { post: Post; content: string }[] = props.searchResult;
 
-  if (titleSearchResult.length === 0 && articleSearchResult.length === 0) {
+  if (searchResults.length === 0) {
     return (
       <Container isEmptyResult>
         <p>검색 결과가 없습니다.</p>
@@ -96,44 +97,23 @@ export default function KeywordFinder(props: Props) {
     <Container>
       <ResultWrapper>
         <TitleContainer>
-          <Title>{`제목 검색 결과 ${titleSearchResult.length}건`}</Title>
+          <Title>{`검색 결과 ${searchResults.length}건`}</Title>
         </TitleContainer>
         <PostWrapper>
-          {titleSearchResult.map((post) => {
-            const createdAt = new Date(post.createdAt);
+          {searchResults.map((result) => {
+            const createdAt = new Date(result.post.createdAt);
             const formatHelper = new FormatUnifier.FormatDate();
             return (
-              <Link key={post._id} href={`/post/${post._id}`} passHref>
+              <Link key={result.post._id} href={`/post/${result.post._id}`} passHref>
                 <a style={{ width: '100%' }}>
                   <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
                     <Content>
-                      <PostTitle>{post.title}</PostTitle>
+                      <PostTitle>{result.post.title}</PostTitle>
                       <CreatedAt>{formatHelper.getFullFormatDate(createdAt)}</CreatedAt>
-                      <Article>{post.article}</Article>
-                    </Content>
-                  </BorderBox>
-                </a>
-              </Link>
-            );
-          })}
-        </PostWrapper>
-      </ResultWrapper>
-      <ResultWrapper>
-        <TitleContainer>
-          <Title>{`본문 내 검색 결과 ${articleSearchResult.length}건`}</Title>
-        </TitleContainer>
-        <PostWrapper>
-          {articleSearchResult.map((post) => {
-            const createdAt = new Date(post.createdAt);
-            const formatHelper = new FormatUnifier.FormatDate();
-            return (
-              <Link key={post._id} href={`/post/${post._id}`} passHref>
-                <a style={{ width: '100%' }}>
-                  <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
-                    <Content>
-                      <PostTitle>{post.title}</PostTitle>
-                      <CreatedAt>{formatHelper.getFullFormatDate(createdAt)}</CreatedAt>
-                      <Article>{post.article}</Article>
+                      <Article>
+                        <Reset />
+                        <ReactMarkDown>{result.content}</ReactMarkDown>
+                      </Article>
                     </Content>
                   </BorderBox>
                 </a>
@@ -152,13 +132,11 @@ export async function getServerSideProps(context: NextPageContext) {
 
   const { data } = await client.query({ query: SEARCH, variables: { keyword } });
 
-  const titleSearchResult = data.search.titleSearchResult;
-  const articleSearchResult = data.search.articleSearchResult;
+  const searchResult = data.search.result;
 
   return {
     props: {
-      titleSearchResult,
-      articleSearchResult
+      searchResult
     }
   };
 }
