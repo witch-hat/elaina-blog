@@ -201,8 +201,18 @@ const InputContainer = styled.div({
   margin: '.71rem 0'
 });
 
+const ParagraphLink = styled.a({
+  display: 'block',
+  width: '100%'
+});
+
 const Paragraph = styled.p({
-  wordBreak: 'break-all'
+  display: 'block',
+  width: '100%',
+  overflow: 'hidden',
+  wordBreak: 'break-all',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap'
 });
 
 interface ProfileIconProps {
@@ -224,8 +234,8 @@ export default function Profile(props: Props) {
   const [isSelectImage, setIsSelectImage] = useState(false);
   const [selectedImageFile, setSelectedImageFile] = useState<File>();
   const [croppedImageFile, setCroppedImageFile] = useState<Blob>();
-  const [mutateProfile, setMutateProfile] = useState<ProfileType>(props.profile);
-  const [completedProfile, setCompletedProfile] = useState<ProfileType>(props.profile);
+  const [edtingProfile, setEditingProfile] = useState<ProfileType>(props.profile);
+  const [viewedProfile, setViewedProfile] = useState<ProfileType>(props.profile);
   const [uploadFile] = useMutation<{ uploadFile: FileType }>(UPLOAD_FILE);
   const [updateProfile] = useMutation<{ updateProfile: ProfileType }>(UPDATE_PROFILE);
   const client = useApollo();
@@ -241,7 +251,7 @@ export default function Profile(props: Props) {
       return;
     }
 
-    if (mutateProfile.image !== completedProfile.image) {
+    if (edtingProfile.image !== viewedProfile.image) {
       const uploadResponse = await uploadFile({
         variables: {
           file: croppedImageFile
@@ -253,19 +263,19 @@ export default function Profile(props: Props) {
 
     const updateResponse = await updateProfile({
       variables: {
-        id: mutateProfile._id,
-        image: uploadedImagePath ? uploadedImagePath : completedProfile.image,
-        name: mutateProfile.name,
-        introduce: mutateProfile.introduce,
-        link: mutateProfile.link,
-        company: mutateProfile.company,
-        location: mutateProfile.location,
-        email: mutateProfile.email
+        id: edtingProfile._id,
+        image: uploadedImagePath ? uploadedImagePath : viewedProfile.image,
+        name: edtingProfile.name,
+        introduce: edtingProfile.introduce,
+        link: edtingProfile.link,
+        company: edtingProfile.company,
+        location: edtingProfile.location,
+        email: edtingProfile.email
       }
     });
 
     if (updateResponse.data.updateProfile.isSuccess) {
-      setCompletedProfile({ ...mutateProfile, image: uploadedImagePath ? uploadedImagePath : completedProfile.image });
+      setViewedProfile({ ...edtingProfile, image: uploadedImagePath ? uploadedImagePath : viewedProfile.image });
       setIsEditMode(false);
     } else {
       alert('Error: cannot update profile');
@@ -276,7 +286,7 @@ export default function Profile(props: Props) {
     <Container>
       <div style={{ position: 'relative' }}>
         <RoundImage
-          src={isEditMode ? mutateProfile.image : completedProfile.image}
+          src={isEditMode ? edtingProfile.image : viewedProfile.image}
           styles={{
             borderRadius: '50%',
             width: '280px',
@@ -307,13 +317,13 @@ export default function Profile(props: Props) {
           </>
         )}
       </div>
-      {!isEditMode && <Name>{mutateProfile.name}</Name>}
+      {!isEditMode && <Name>{edtingProfile.name}</Name>}
       {isEditMode ? (
         <Form
           id='profile-form'
           onSubmit={async (event: React.FormEvent<HTMLFormElement>) => {
             event.preventDefault();
-            if (completedProfile !== mutateProfile) {
+            if (viewedProfile !== edtingProfile) {
               await changeProfile();
             } else {
               setIsEditMode(false);
@@ -325,9 +335,9 @@ export default function Profile(props: Props) {
               placeholder='Username'
               themeMode={themeMode}
               type='text'
-              defaultValue={mutateProfile.name}
+              defaultValue={edtingProfile.name}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setMutateProfile({ ...mutateProfile, name: event.target.value });
+                setEditingProfile({ ...edtingProfile, name: event.target.value });
               }}
             />
           </InputContainer>
@@ -335,9 +345,9 @@ export default function Profile(props: Props) {
             placeholder='Introduce'
             themeMode={themeMode}
             role='textbox'
-            defaultValue={mutateProfile.introduce}
+            defaultValue={edtingProfile.introduce}
             onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
-              setMutateProfile({ ...mutateProfile, introduce: event.target.value });
+              setEditingProfile({ ...edtingProfile, introduce: event.target.value });
             }}
           />
           <InputContainer>
@@ -346,9 +356,9 @@ export default function Profile(props: Props) {
               placeholder='Link'
               themeMode={themeMode}
               type='text'
-              defaultValue={mutateProfile.link}
+              defaultValue={edtingProfile.link}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setMutateProfile({ ...mutateProfile, link: event.target.value });
+                setEditingProfile({ ...edtingProfile, link: event.target.value });
               }}
             />
           </InputContainer>
@@ -358,9 +368,9 @@ export default function Profile(props: Props) {
               placeholder='Company'
               themeMode={themeMode}
               type='text'
-              defaultValue={mutateProfile.company}
+              defaultValue={edtingProfile.company}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setMutateProfile({ ...mutateProfile, company: event.target.value });
+                setEditingProfile({ ...edtingProfile, company: event.target.value });
               }}
             />
           </InputContainer>
@@ -370,9 +380,9 @@ export default function Profile(props: Props) {
               placeholder='Region'
               themeMode={themeMode}
               type='text'
-              defaultValue={mutateProfile.location}
+              defaultValue={edtingProfile.location}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setMutateProfile({ ...mutateProfile, location: event.target.value });
+                setEditingProfile({ ...edtingProfile, location: event.target.value });
               }}
             />
           </InputContainer>
@@ -382,9 +392,9 @@ export default function Profile(props: Props) {
               placeholder='Email'
               themeMode={themeMode}
               type='text'
-              defaultValue={mutateProfile.email}
+              defaultValue={edtingProfile.email}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setMutateProfile({ ...mutateProfile, email: event.target.value });
+                setEditingProfile({ ...edtingProfile, email: event.target.value });
               }}
             />
           </InputContainer>
@@ -392,27 +402,27 @@ export default function Profile(props: Props) {
       ) : (
         <ListWrapper>
           <Description>
-            <Paragraph>{completedProfile.introduce}</Paragraph>
+            <Paragraph>{viewedProfile.introduce}</Paragraph>
           </Description>
           <Description>
             <ProfileIcon icon={faLink} />
-            <a href={completedProfile.link} target='_blank' rel='noopener noreferer nofollow'>
-              <Paragraph>{completedProfile.link}</Paragraph>
-            </a>
+            <ParagraphLink href={viewedProfile.link} target='_blank' rel='noopener noreferer nofollow'>
+              <Paragraph>{viewedProfile.link}</Paragraph>
+            </ParagraphLink>
           </Description>
           <Description>
             <ProfileIcon icon={faBuilding} />
-            <Paragraph>{completedProfile.company}</Paragraph>
+            <Paragraph>{viewedProfile.company}</Paragraph>
           </Description>
           <Description>
             <ProfileIcon icon={faMapMarkerAlt} />
-            <Paragraph>{completedProfile.location}</Paragraph>
+            <Paragraph>{viewedProfile.location}</Paragraph>
           </Description>
           <Description>
             <ProfileIcon icon={faEnvelope} />
-            <a href='mailto:'>
-              <Paragraph>{completedProfile.email}</Paragraph>
-            </a>
+            <ParagraphLink href='mailto:'>
+              <Paragraph>{viewedProfile.email}</Paragraph>
+            </ParagraphLink>
           </Description>
         </ListWrapper>
       )}
@@ -424,7 +434,7 @@ export default function Profile(props: Props) {
             </SaveButton>
             <CancelButton
               onClick={() => {
-                setMutateProfile({ ...completedProfile });
+                setEditingProfile({ ...viewedProfile });
                 setIsEditMode(false);
               }}
             >
@@ -440,7 +450,7 @@ export default function Profile(props: Props) {
         imageFile={selectedImageFile}
         onSave={(croppedImage: Blob) => {
           setCroppedImageFile(croppedImage);
-          setMutateProfile({ ...mutateProfile, image: URL.createObjectURL(croppedImage) });
+          setEditingProfile({ ...edtingProfile, image: URL.createObjectURL(croppedImage) });
           setIsSelectImage(false);
         }}
         onCancel={() => {
