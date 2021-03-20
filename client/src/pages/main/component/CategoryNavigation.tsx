@@ -10,6 +10,7 @@ import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { faBook, faStream, faUser } from '@fortawesome/free-solid-svg-icons';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { Lang, trans } from 'src/resources/languages';
 
 const Container = styled.nav({
   width: '100%',
@@ -39,7 +40,7 @@ export default function CategoryNavigation(props: Props) {
       <NavigationButton href='/'>
         <>
           <NavigationIcon icon={faBook} />
-          <NavName>게시글</NavName>
+          <NavName>{trans(Lang.Board)}</NavName>
         </>
       </NavigationButton>
       <NavigationButton href='/timeline'>
