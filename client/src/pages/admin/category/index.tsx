@@ -125,8 +125,8 @@ interface Props extends AppCommonProps {
 
 export default function Category(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
-  const [isGrabbed, setIsGrabbed] = useState(false);
   const [grabbedElement, setGrabbedElement] = useState<(EventTarget & HTMLDivElement) | null>(null);
+  const [grabbingCategoryIndex, setGrabbingCategoryIndex] = useState<number>(-1);
   const [editingCategoryIndex, setEditingCategoryIndex] = useState<number>(-1);
   const [categories, setCategories] = useState<CategoryDetails[]>(props.categories);
   const [deletedCategory, setDeletedCategory] = useState<{ isModalOpen: boolean; index?: number }>({ isModalOpen: false });
@@ -139,7 +139,7 @@ export default function Category(props: Props) {
 
   async function save() {
     if (titleEditInput.current && descriptionEditInput.current) {
-      const result = await updateCategory({
+      const response = await updateCategory({
         variables: {
           id: categories[editingCategoryIndex]._id,
           title: titleEditInput.current?.value,
@@ -147,7 +147,7 @@ export default function Category(props: Props) {
         }
       });
 
-      if (result.data.updateCategory.isSuccess) {
+      if (response.data.updateCategory.isSuccess) {
         const copiedCategories = cloneDeep(categories);
         const editingCategory = copiedCategories[editingCategoryIndex];
 
@@ -159,13 +159,9 @@ export default function Category(props: Props) {
 
         setEditingCategoryIndex(-1);
       } else {
-        alert(result.data.updateCategory.errorMsg);
+        alert(response.data.updateCategory.errorMsg);
       }
     }
-  }
-
-  function onDragOver(e: React.DragEvent<HTMLDivElement>) {
-    e.preventDefault();
   }
 
   function onDragStart(e: React.DragEvent<HTMLDivElement>) {
@@ -173,6 +169,10 @@ export default function Category(props: Props) {
     e.dataTransfer.effectAllowed = 'move';
     // @ts-ignore
     e.dataTransfer.setData('text/html', e.currentTarget);
+  }
+
+  function onDragOver(e: React.DragEvent<HTMLDivElement>) {
+    e.preventDefault();
   }
 
   function onDragEnd(e: React.DragEvent<HTMLDivElement>) {
@@ -183,16 +183,21 @@ export default function Category(props: Props) {
     let grabPosition = Number(grabbedElement?.dataset.position);
     let dropPosition = Number(e.currentTarget.dataset.position);
 
-    let newCategories = [...categories];
-    newCategories[grabPosition] = newCategories.splice(dropPosition, 1, newCategories[grabPosition])[0];
+    try {
+      const newCategories = [...categories];
+      newCategories[grabPosition] = newCategories.splice(dropPosition, 1, newCategories[grabPosition])[0];
 
-    setCategories(newCategories);
-    setIsGrabbed(false);
-    orderCategory({
-      variables: {
-        ids: newCategories.map((category) => category._id)
-      }
-    });
+      orderCategory({
+        variables: {
+          ids: newCategories.map((category) => category._id)
+        }
+      });
+      setCategories(newCategories);
+      setGrabbingCategoryIndex(-1);
+    } catch (e) {
+      const backUpCategories = [...categories];
+      setCategories(backUpCategories);
+    }
   }
 
   return (
@@ -240,11 +245,11 @@ export default function Category(props: Props) {
                 <CategoryContainer
                   key={category.title}
                   data-position={index}
-                  draggable={isGrabbed}
+                  draggable={grabbingCategoryIndex === index}
                   onDragOver={(e: React.DragEvent<HTMLDivElement>) => onDragOver(e)}
-                  onDragStart={(e: React.DragEvent<HTMLDivElement>) => isGrabbed && onDragStart(e)}
-                  onDragEnd={(e: React.DragEvent<HTMLDivElement>) => isGrabbed && onDragEnd(e)}
-                  onDrop={(e: React.DragEvent<HTMLDivElement>) => isGrabbed && onDrop(e)}
+                  onDragStart={(e: React.DragEvent<HTMLDivElement>) => grabbingCategoryIndex && onDragStart(e)}
+                  onDragEnd={(e: React.DragEvent<HTMLDivElement>) => grabbingCategoryIndex && onDragEnd(e)}
+                  onDrop={(e: React.DragEvent<HTMLDivElement>) => grabbingCategoryIndex && onDrop(e)}
                 >
                   <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
@@ -268,12 +273,15 @@ export default function Category(props: Props) {
                         <GrabButtonContainer
                           onMouseDown={(e: React.MouseEvent<HTMLDivElement>) => {
                             if (e.button === 0) {
-                              setIsGrabbed(true);
+                              setGrabbingCategoryIndex(index);
                             } else {
-                              setIsGrabbed(false);
+                              setGrabbingCategoryIndex(-1);
                             }
                           }}
-                          onTouchStart={() => setIsGrabbed(true)}
+                          onMouseUp={() => {
+                            setGrabbingCategoryIndex(-1);
+                          }}
+                          onTouchStart={() => setGrabbingCategoryIndex(index)}
                         >
                           <CircleRippleWrapper onClick={() => {}}>
                             <FontAwesomeIcon icon={faGripVertical} style={{ fontSize: '1.25rem' }} />
