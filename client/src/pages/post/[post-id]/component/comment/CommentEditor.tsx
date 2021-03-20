@@ -85,32 +85,36 @@ interface Props {
 export default function CommentEditor(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
+  function submitComment() {}
+
   return (
     <EditorContainer action='/comment' method='POST'>
-      <InputWrapper>
-        <UserInput>
-          ID:&nbsp;
-          <InputBox
-            id='comment-id'
-            type='text'
-            maxLength={10}
-            minLength={2}
-            placeholder='ID'
-            styles={{ width: '100px', height: '2rem', small: { width: '100px', height: '2rem' } }}
-          />
-        </UserInput>
-        <UserInput>
-          PW:&nbsp;
-          <InputBox
-            id='comment-pw'
-            type='password'
-            maxLength={12}
-            minLength={4}
-            placeholder='Password'
-            styles={{ width: '100px', height: '2rem', small: { width: '100px', height: '2rem' } }}
-          />
-        </UserInput>
-      </InputWrapper>
+      {props.isLogin || (
+        <InputWrapper>
+          <UserInput>
+            ID:&nbsp;
+            <InputBox
+              id='comment-id'
+              type='text'
+              maxLength={10}
+              minLength={2}
+              placeholder='ID'
+              styles={{ width: '100px', height: '2rem', small: { width: '100px', height: '2rem' } }}
+            />
+          </UserInput>
+          <UserInput>
+            PW:&nbsp;
+            <InputBox
+              id='comment-pw'
+              type='password'
+              maxLength={12}
+              minLength={4}
+              placeholder='Password'
+              styles={{ width: '100px', height: '2rem', small: { width: '100px', height: '2rem' } }}
+            />
+          </UserInput>
+        </InputWrapper>
+      )}
       <Editor role='textbox' themeMode={themeMode} contentEditable />
       <SubmitButton themeMode={themeMode}>덧글 작성</SubmitButton>
     </EditorContainer>
