@@ -242,13 +242,13 @@ export default function Profile(props: Props) {
     }
 
     if (mutateProfile.image !== completedProfile.image) {
-      const response = await uploadFile({
+      const uploadResponse = await uploadFile({
         variables: {
           file: croppedImageFile
         }
       });
 
-      uploadedImagePath = response.data?.uploadFile.path;
+      uploadedImagePath = uploadResponse.data?.uploadFile.path;
     }
 
     const updateResponse = await updateProfile({
@@ -264,15 +264,12 @@ export default function Profile(props: Props) {
       }
     });
 
-    const isSuccess = updateResponse.data.updateProfile.isSuccess;
-    if (isSuccess) {
-      alert('Profile Update Success!');
+    if (updateResponse.data.updateProfile.isSuccess) {
+      setCompletedProfile({ ...mutateProfile, image: uploadedImagePath ? uploadedImagePath : completedProfile.image });
+      setIsEditMode(false);
     } else {
       alert('Error: cannot update profile');
     }
-
-    setCompletedProfile({ ...mutateProfile, image: uploadedImagePath ? uploadedImagePath : completedProfile.image });
-    setIsEditMode(false);
   }
 
   return (
