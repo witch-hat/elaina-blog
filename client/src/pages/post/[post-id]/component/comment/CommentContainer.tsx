@@ -36,6 +36,7 @@ const Counter = styled.p({
 
 interface Props {
   comment: Comments;
+  isLogin: boolean;
 }
 
 export default function CommentContainer(props: Props) {
@@ -43,11 +44,11 @@ export default function CommentContainer(props: Props) {
   return (
     <Container>
       <Title>Comments</Title>
-      <CommentEditor />
+      <CommentEditor isLogin={props.isLogin} />
       <div style={{ width: '100%' }}>
         <Counter>{`덧글 수: ${props.comment.count}개`}</Counter>
         {props.comment.comments.map((comment: Comment) => {
-          return <CommentElement key={`${comment.createdAt}`} comment={comment} />;
+          return <CommentElement key={`${comment.createdAt}`} comment={comment} isLogin={props.isLogin} />;
         })}
       </div>
     </Container>

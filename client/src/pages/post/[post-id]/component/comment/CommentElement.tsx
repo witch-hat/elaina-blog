@@ -3,10 +3,11 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faClock, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 
-import { BorderBox } from 'src/components';
+import { BorderBox, FocusWrapper } from 'src/components';
 import CommentEditor from './CommentEditor';
 import { Reply, Comment } from 'src/query/comment';
 import { FormatUnifier } from 'src/utils';
+import { ReplyElement } from './ReplyElement';
 
 const CommentContainer = styled.div({
   width: '98%',
@@ -51,7 +52,7 @@ const Time = styled.span({
   alignItems: 'center'
 });
 
-const MenuButton = styled.div({
+const MenuIconButton = styled.div({
   fontSize: '.8rem',
   padding: '.5rem .8rem',
   cursor: 'pointer',
@@ -86,21 +87,43 @@ const ReplyButton = styled.span({
   }
 });
 
-const ReplyContainer = styled.div({
-  width: '95%',
-  margin: '.5rem',
-  padding: '.5rem',
-  borderRadius: '12px',
-  backgroundColor: 'rgba(0,0,0,.01)'
+const MenuContainer = styled.div({
+  position: 'relative'
 });
+
+const MenuListWrapper = styled.div({
+  position: 'absolute',
+  top: '32.6px',
+  right: 0,
+  zIndex: 1
+});
+
+const MenuList = styled.div({
+  backgroundColor: '#eee',
+  borderRadius: '.3rem'
+});
+
+const MenuButton = styled.p<{ danger?: boolean }>((props) => ({
+  display: 'block',
+  padding: '.5rem',
+  textAlign: 'center',
+  cursor: 'pointer',
+  color: props.danger ? '#dd0000' : 'inherit',
+  '&:hover': {
+    backgroundColor: '#ddd'
+  }
+}));
 
 interface Props {
   comment: Comment;
+  isLogin: boolean;
 }
 
 export default function CommentElement(props: Props) {
   const [isShowingReply, setIsShowingReply] = useState(false);
   const [isAddReply, setIsAddReply] = useState(false);
+  const [isOpenMenu, setIsOpenMenu] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const createdTime = new Date(props.comment.createdAt);
   const dateFormatHelper = new FormatUnifier.FormatDate();
 
@@ -119,9 +142,22 @@ export default function CommentElement(props: Props) {
                 <p>{dateFormatHelper.getFullFormatDate(createdTime)}</p>
               </Time>
             </InformationContainer>
-            <MenuButton>
-              <FontAwesomeIcon icon={faEllipsisV} />
-            </MenuButton>
+            {props.isLogin && (
+              <MenuContainer>
+                <MenuIconButton onClick={() => setIsOpenMenu(!isOpenMenu)}>
+                  <FontAwesomeIcon icon={faEllipsisV} />
+                </MenuIconButton>
+                <MenuListWrapper>
+                  <FocusWrapper visible={isOpenMenu} onClickOutside={() => setIsOpenMenu(false)}>
+                    <MenuList>
+                      <MenuButton danger onClick={() => setIsModalOpen(true)}>
+                        Delete
+                      </MenuButton>
+                    </MenuList>
+                  </FocusWrapper>
+                </MenuListWrapper>
+              </MenuContainer>
+            )}
           </DetailsContainer>
           <CommentContent>{props.comment.comment}</CommentContent>
           <ReplyButtonContainer>
@@ -130,32 +166,10 @@ export default function CommentElement(props: Props) {
             } Reply `}</ReplyButton>
             <ReplyButton onClick={() => setIsAddReply(!isAddReply)}>{isAddReply ? 'Cancel' : `Add Reply`}</ReplyButton>
           </ReplyButtonContainer>
-          {isAddReply ? <CommentEditor /> : null}
+          {isAddReply ? <CommentEditor isLogin={props.isLogin} /> : null}
           {isShowingReply
             ? props.comment.replies.map((reply: Reply) => {
-                const replyCreatedTime = new Date(reply.createdAt);
-                return (
-                  <ReplyContainer key={`${reply.createdAt}`}>
-                    <DetailsContainer>
-                      <InformationContainer>
-                        <Author>
-                          <FontAwesomeIcon icon={faUser} style={{ marginRight: '.5rem' }} />
-                          <p>{reply.username}</p>
-                        </Author>
-                        <Time>
-                          <FontAwesomeIcon icon={faClock} style={{ marginRight: '.5rem' }} />
-                          <p>{`${replyCreatedTime.getFullYear()}.${
-                            replyCreatedTime.getMonth() + 1
-                          }.${replyCreatedTime.getDate()} ${replyCreatedTime.getHours()}:${replyCreatedTime.getMinutes()}`}</p>
-                        </Time>
-                      </InformationContainer>
-                      <MenuButton>
-                        <FontAwesomeIcon icon={faEllipsisV} />
-                      </MenuButton>
-                    </DetailsContainer>
-                    <CommentContent>{reply.comment}</CommentContent>
-                  </ReplyContainer>
-                );
+                return <ReplyElement reply={reply} isLogin={props.isLogin} />;
               })
             : null}
         </CommentContainer>

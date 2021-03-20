@@ -160,7 +160,7 @@ export default function PostId(props: Props) {
       )}
       <ContentContainer themeMode={themeMode}>
         <Content title={post.title} author={author} createdAt={post.createdAt} article={post.article} isLogin={props.app.isLogin} />
-        <CommentContainer comment={comment} />
+        <CommentContainer comment={comment} isLogin={props.app.isLogin} />
       </ContentContainer>
       <ContentNavigation />
       {/* TODO: Alert shows only first... */}

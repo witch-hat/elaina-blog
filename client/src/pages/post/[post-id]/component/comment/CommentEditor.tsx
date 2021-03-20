@@ -78,7 +78,9 @@ const SubmitButton = styled.button<{ themeMode: ThemeMode }>((props) => ({
   }
 }));
 
-interface Props {}
+interface Props {
+  isLogin: boolean;
+}
 
 export default function CommentEditor(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
