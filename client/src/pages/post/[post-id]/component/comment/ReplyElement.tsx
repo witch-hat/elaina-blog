@@ -87,6 +87,7 @@ const MenuButton = styled.p<{ danger?: boolean }>((props) => ({
   padding: '.5rem',
   textAlign: 'center',
   cursor: 'pointer',
+  userSelect: 'none',
   color: props.danger ? '#dd0000' : 'inherit',
   '&:hover': {
     backgroundColor: '#ddd'
