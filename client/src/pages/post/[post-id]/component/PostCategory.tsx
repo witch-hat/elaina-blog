@@ -122,7 +122,7 @@ export default function PostCategory(props: Props) {
   const router = useRouter();
 
   function handleWriteButtonClick() {
-    router.push({ pathname: '/admin/writer', query: { title: props.category.title } });
+    router.push({ pathname: '/admin/writer', query: { category: props.category.title } });
   }
 
   return (

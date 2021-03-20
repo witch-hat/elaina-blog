@@ -34,7 +34,7 @@ interface Props extends AppCommonProps, WithRouterProps {
 function WriterPage(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const profile: ProfileType = props.profile;
-  const categoryTitleFromQuery = props.router.query.title as string | undefined;
+  const categoryTitleFromQuery = props.router.query.category as string | undefined;
   const categories: CategoryDetails[] = props.categories;
   const router = useRouter();
 
