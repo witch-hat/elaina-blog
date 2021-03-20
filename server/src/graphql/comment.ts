@@ -8,6 +8,7 @@ export const commentTypeDef = gql`
     password: String
     createdAt: DateTime
     comment: String
+    isAdmin: Boolean
   }
 
   type Comment {
@@ -15,6 +16,7 @@ export const commentTypeDef = gql`
     password: String
     createdAt: DateTime
     comment: String
+    isAdmin: Boolean
     replies: [Reply]
   }
 

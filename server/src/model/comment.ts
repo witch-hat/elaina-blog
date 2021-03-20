@@ -6,6 +6,7 @@ interface Reply {
   password: string;
   createdAt: Date;
   comment: string;
+  isAdmin: boolean;
 }
 
 interface Comment {
@@ -14,6 +15,7 @@ interface Comment {
   createdAt: Date;
   comment: string;
   replies: Reply[];
+  isAdmin: boolean;
 }
 
 interface Comments extends Document {
