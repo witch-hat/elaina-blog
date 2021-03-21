@@ -263,13 +263,15 @@ export default function Category(props: Props) {
                         >
                           <FontAwesomeIcon icon={faPen} style={{ fontSize: '1.25rem' }} />
                         </CircleRippleWrapper>
-                        <CircleRippleWrapper
-                          onClick={() => {
-                            setDeletedCategory({ isModalOpen: true, index });
-                          }}
-                        >
-                          <FontAwesomeIcon icon={faTrash} style={{ fontSize: '1.25rem' }} />
-                        </CircleRippleWrapper>
+                        {category._id > 0 && (
+                          <CircleRippleWrapper
+                            onClick={() => {
+                              setDeletedCategory({ isModalOpen: true, index });
+                            }}
+                          >
+                            <FontAwesomeIcon icon={faTrash} style={{ fontSize: '1.25rem' }} />
+                          </CircleRippleWrapper>
+                        )}
                         <GrabButtonContainer
                           onMouseDown={(e: React.MouseEvent<HTMLDivElement>) => {
                             if (e.button === 0) {
