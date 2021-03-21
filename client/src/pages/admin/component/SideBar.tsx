@@ -108,7 +108,7 @@ export function SideBar(props: Props) {
         <List
           onClick={() => {
             logout();
-            router.push('admin/login');
+            router.push('/admin/login');
           }}
         >
           로그아웃

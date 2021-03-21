@@ -182,6 +182,7 @@ export default function Category(props: Props) {
   function onDrop(e: React.DragEvent<HTMLDivElement>) {
     let grabPosition = Number(grabbedElement?.dataset.position);
     let dropPosition = Number(e.currentTarget.dataset.position);
+    console.log(grabPosition, dropPosition);
 
     try {
       const newCategories = [...categories];
@@ -247,9 +248,9 @@ export default function Category(props: Props) {
                   data-position={index}
                   draggable={grabbingCategoryIndex === index}
                   onDragOver={(e: React.DragEvent<HTMLDivElement>) => onDragOver(e)}
-                  onDragStart={(e: React.DragEvent<HTMLDivElement>) => grabbingCategoryIndex && onDragStart(e)}
-                  onDragEnd={(e: React.DragEvent<HTMLDivElement>) => grabbingCategoryIndex && onDragEnd(e)}
-                  onDrop={(e: React.DragEvent<HTMLDivElement>) => grabbingCategoryIndex && onDrop(e)}
+                  onDragStart={(e: React.DragEvent<HTMLDivElement>) => grabbingCategoryIndex > -1 && onDragStart(e)}
+                  onDragEnd={(e: React.DragEvent<HTMLDivElement>) => grabbingCategoryIndex > -1 && onDragEnd(e)}
+                  onDrop={(e: React.DragEvent<HTMLDivElement>) => grabbingCategoryIndex > -1 && onDrop(e)}
                 >
                   <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
