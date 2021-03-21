@@ -3,11 +3,9 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
-import UAParser from 'ua-parser-js';
 
 import { schema } from './graphql';
 import { graphqlUploadExpress } from 'graphql-upload';
-import { isAuth } from './util/isAuth';
 
 dotenv.config();
 
@@ -35,10 +33,6 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.static('public'));
 app.use(graphqlUploadExpress({ maxFileSize: 33554432, maxFiles: 10 }));
-
-app.post('/is_auth', async (req, res) => {
-  await isAuth(req, res);
-});
 
 const server = new ApolloServer({
   schema,
