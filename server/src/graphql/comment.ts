@@ -1,6 +1,7 @@
 import { gql } from 'apollo-server';
 import { CommentModel, Comments, Comment } from '../model/comment';
 import { ContextType } from '../types/context';
+import { userResolver } from './user';
 
 export const commentTypeDef = gql`
   type Reply {
@@ -41,6 +42,7 @@ export const commentTypeDef = gql`
       isAdmin: Boolean!
       index: Int!
     ): MutationResponse
+    deleteComment(_id: Int!, index: Int!): MutationResponse
   }
 `;
 
@@ -91,7 +93,23 @@ export const commentResolver = {
 
         return { isSuccess: true };
       } catch (err) {
-        throw { isSuccess: false, errorMsg: 'Cannor write comment; Server Error' };
+        return { isSuccess: false, errorMsg: 'Cannor write comment; Server Error' };
+      }
+    },
+
+    async deleteComment(_: any, args: { _id: number; index: number }, context: ContextType) {
+      try {
+        const commentContainer: Comments = await CommentModel.findById(args._id);
+        const decreaseCount = commentContainer.comments[args.index].replies.length + 1;
+        commentContainer.comments.splice(args.index, 1);
+
+        commentContainer.count -= decreaseCount;
+
+        commentContainer.save();
+
+        return { isSuccess: true };
+      } catch (err) {
+        return { isSuccess: false, errorMsg: 'Cannor delete comment; Server Error' };
       }
     }
   }

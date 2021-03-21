@@ -54,3 +54,12 @@ export const WRITE_COMMENT = gql`
     }
   }
 `;
+
+export const DELETE_COMMENT = gql`
+  mutation($_id: Int!, $index: Int!) {
+    deleteComment(_id: $_id, index: $index) {
+      isSuccess
+      errorMsg
+    }
+  }
+`;
