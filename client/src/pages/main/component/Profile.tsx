@@ -404,26 +404,34 @@ export default function Profile(props: Props) {
           <Description>
             <Paragraph>{viewedProfile.introduce}</Paragraph>
           </Description>
-          <Description>
-            <ProfileIcon icon={faLink} />
-            <ParagraphLink href={viewedProfile.link} target='_blank' rel='noopener noreferer nofollow'>
-              <Paragraph>{viewedProfile.link}</Paragraph>
-            </ParagraphLink>
-          </Description>
-          <Description>
-            <ProfileIcon icon={faBuilding} />
-            <Paragraph>{viewedProfile.company}</Paragraph>
-          </Description>
-          <Description>
-            <ProfileIcon icon={faMapMarkerAlt} />
-            <Paragraph>{viewedProfile.location}</Paragraph>
-          </Description>
-          <Description>
-            <ProfileIcon icon={faEnvelope} />
-            <ParagraphLink href='mailto:'>
-              <Paragraph>{viewedProfile.email}</Paragraph>
-            </ParagraphLink>
-          </Description>
+          {viewedProfile.link && (
+            <Description>
+              <ProfileIcon icon={faLink} />
+              <ParagraphLink href={viewedProfile.link} target='_blank' rel='noopener noreferer nofollow'>
+                <Paragraph>{viewedProfile.link}</Paragraph>
+              </ParagraphLink>
+            </Description>
+          )}
+          {viewedProfile.company && (
+            <Description>
+              <ProfileIcon icon={faBuilding} />
+              <Paragraph>{viewedProfile.company}</Paragraph>
+            </Description>
+          )}
+          {viewedProfile.location && (
+            <Description>
+              <ProfileIcon icon={faMapMarkerAlt} />
+              <Paragraph>{viewedProfile.location}</Paragraph>
+            </Description>
+          )}
+          {viewedProfile.email && (
+            <Description>
+              <ProfileIcon icon={faEnvelope} />
+              <ParagraphLink href={`mailto:${viewedProfile.email}`}>
+                <Paragraph>{viewedProfile.email}</Paragraph>
+              </ParagraphLink>
+            </Description>
+          )}
         </ListWrapper>
       )}
       <ButtonContainer>
