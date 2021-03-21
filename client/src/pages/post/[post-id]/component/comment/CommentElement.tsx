@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faClock, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
+import { useSelector } from 'react-redux';
 
-import { BorderBox, FocusWrapper, CommentBox } from 'src/components';
+import { BorderBox, CommentBox } from 'src/components';
 import CommentEditor from './CommentEditor';
 import { Reply, Comment } from 'src/query/comment';
-import { FormatUnifier } from 'src/utils';
 import { ReplyElement } from './ReplyElement';
+import { theme } from 'src/styles';
+import { RootState } from 'src/redux/rootReducer';
+import { ThemeMode } from 'src/redux/common/type';
+
+const Container = styled.div<{ themeMode: ThemeMode; isAdmin: boolean }>((props) => ({
+  borderRadius: '12px',
+  backgroundColor: props.isAdmin ? theme[props.themeMode].adminCommentColor : 'inherit'
+}));
 
 const ReplyButtonContainer = styled.div({
   width: '100%',
@@ -31,22 +37,22 @@ interface Props {
   comment: Comment;
   isLogin: boolean;
   author: string;
-  count: number;
-  setCount: React.Dispatch<React.SetStateAction<number>>;
+  isCommentFromAdmin: boolean;
 }
 
 export default function CommentElement(props: Props) {
   const [isShowingReply, setIsShowingReply] = useState(false);
   const [isAddReply, setIsAddReply] = useState(false);
   const [newReply, setNewReply] = useState<Reply>();
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   if (newReply) {
     props.comment.replies.push(newReply);
-    props.setCount(props.count + 1);
+    // props.setCount(props.count + 1);
   }
 
   return (
-    <div>
+    <Container themeMode={themeMode} isAdmin={props.isCommentFromAdmin}>
       <BorderBox isTransform={false} styles={{ margin: '1rem 0 0', width: '100%' }}>
         <CommentBox isLogin={props.isLogin} comment={props.comment} author={props.author}>
           <>
@@ -65,6 +71,6 @@ export default function CommentElement(props: Props) {
           </>
         </CommentBox>
       </BorderBox>
-    </div>
+    </Container>
   );
 }

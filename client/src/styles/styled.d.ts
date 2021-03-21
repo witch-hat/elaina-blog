@@ -15,6 +15,7 @@ declare module 'styled-components' {
       submitButtonColor: string;
       editorBackground: string;
       dangerButtonColor: string;
+      adminCommentColor: string;
       // Text Color
       blogName: string;
       mainText: string;

@@ -59,8 +59,7 @@ export default function CommentContainer(props: Props) {
               comment={comment}
               isLogin={props.isLogin}
               author={props.author}
-              // count={commentCount}
-              // setCount={setCommentCount}
+              isCommentFromAdmin={comment.isAdmin}
             />
           );
         })}
