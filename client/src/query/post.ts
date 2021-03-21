@@ -77,7 +77,7 @@ export const WRITE_POST = gql`
 export const DELETE_POST = gql`
   mutation($id: Int!) {
     deletePost(id: $id) {
-      isDeleted
+      isSuccess
       categoryId
     }
   }

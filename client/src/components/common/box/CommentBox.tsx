@@ -140,7 +140,7 @@ interface Props {
 
 export function CommentBox(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
-  const [isOpenMenu, setIsOpenMenu] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [deleteComment] = useMutation(DELETE_COMMENT);
   const createdAt = new Date(props.comment.createdAt);
@@ -190,13 +190,19 @@ export function CommentBox(props: Props) {
         </InformationContainer>
         {props.isLogin && (
           <MenuContainer>
-            <MenuIconButton onClick={() => setIsOpenMenu(!isOpenMenu)}>
+            <MenuIconButton onClick={() => setIsMenuOpen(!isMenuOpen)}>
               <FontAwesomeIcon icon={faEllipsisV} />
             </MenuIconButton>
             <MenuListWrapper>
-              <FocusWrapper visible={isOpenMenu} onClickOutside={() => setIsOpenMenu(false)}>
+              <FocusWrapper visible={isMenuOpen} onClickOutside={() => setIsMenuOpen(false)}>
                 <MenuList>
-                  <MenuButton danger onClick={() => setIsModalOpen(true)}>
+                  <MenuButton
+                    danger
+                    onClick={() => {
+                      setIsModalOpen(true);
+                      setIsMenuOpen(false);
+                    }}
+                  >
                     Delete
                   </MenuButton>
                 </MenuList>
