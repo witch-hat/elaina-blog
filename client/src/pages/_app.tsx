@@ -10,7 +10,6 @@ import '@fortawesome/fontawesome-svg-core/styles.css';
 import Layout from 'src/components/Layout';
 import { withApollo, initApolloClient } from '../apollo/withApollo';
 import { store, persistor } from 'src/redux';
-import { isAuth } from './api/isAuth';
 import setCookie from 'set-cookie-parser';
 import { IS_AUTH } from 'src/query/user';
 

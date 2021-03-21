@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { NextPageContext } from 'next';
 
 import { AdminPageLayout } from './component/AdminPageLayout';
-import { isAuth } from 'src/pages/api/isAuth';
 import { AppCommonProps, appCommponProps } from '../_app';
 
 interface Props extends AppCommonProps {}

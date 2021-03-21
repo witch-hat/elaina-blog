@@ -119,6 +119,7 @@ export const postResolver = {
         posts.forEach((post) => {
           // filter images, bar ...etc
           const ignore = new RegExp(/^(!|\[|--|==)/);
+
           if (post.title.match(ignoreCaseRegex)) {
             const content = post.article
               .split('\n')

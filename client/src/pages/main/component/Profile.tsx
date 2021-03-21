@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { useMutation } from '@apollo/client';
@@ -13,9 +13,7 @@ import { ProfileType, UPDATE_PROFILE } from 'src/query';
 
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
-import { Crop } from 'react-image-crop';
 import { FileType, UPLOAD_FILE } from 'src/query/file';
-import { isAuth } from 'src/pages/api/isAuth';
 import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';
 

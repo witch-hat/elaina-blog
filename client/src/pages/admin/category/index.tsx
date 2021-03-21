@@ -182,7 +182,6 @@ export default function Category(props: Props) {
   function onDrop(e: React.DragEvent<HTMLDivElement>) {
     let grabPosition = Number(grabbedElement?.dataset.position);
     let dropPosition = Number(e.currentTarget.dataset.position);
-    console.log(grabPosition, dropPosition);
 
     try {
       const newCategories = [...categories];

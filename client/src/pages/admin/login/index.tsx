@@ -7,7 +7,6 @@ import { NextPageContext } from 'next';
 import { InputBox } from 'src/components';
 import { theme } from 'src/styles';
 import { LOGIN } from 'src/query/user';
-import { isAuth } from 'src/pages/api/isAuth';
 
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';

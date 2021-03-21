@@ -1,5 +1,6 @@
+import React from 'react';
 import { NextPageContext } from 'next';
-import React, { useState, useRef } from 'react';
+
 import { initApolloClient } from 'src/apollo/withApollo';
 import { GET_LAST_POST } from 'src/query/post';
 

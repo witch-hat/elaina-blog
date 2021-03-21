@@ -1,7 +1,5 @@
 import Document, { Html, Head, Main, NextScript, DocumentContext } from 'next/document';
 import { ServerStyleSheet } from 'styled-components';
-import { GlobalStyles } from 'src/styles/GlobalStyles';
-import { ThemeMode } from 'src/redux/common/type';
 
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {

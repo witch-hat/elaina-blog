@@ -100,7 +100,7 @@ function createApolloClient(
       headers: {
         ...init.headers,
         cookie: ctx?.req?.headers.cookie || '',
-        ['user-agent']: ctx?.req?.headers['user-agent'] || ''
+        ['user-agent']: ctx?.req?.headers['user-agent']
       }
     }).then((response) => {
       return response;

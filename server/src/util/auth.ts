@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { config } from './config';
-import { UserModel } from '../model/user';
 
 export function encryptPassword(password: string) {
   new Promise((resolve, reject) => {

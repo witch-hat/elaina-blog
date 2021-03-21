@@ -1,7 +1,7 @@
 import React from 'react';
-import { InferGetServerSidePropsType, NextPageContext } from 'next';
+import { NextPageContext } from 'next';
 import { ContentCategory } from 'src/pages/main/component/ContentCategory';
-import { MainPageLayout, Loading } from 'src/components';
+import { MainPageLayout } from 'src/components';
 import { AppCommonProps } from '../_app';
 import { ProfileType } from 'src/query';
 import { CategoryDetails } from 'src/query/category';

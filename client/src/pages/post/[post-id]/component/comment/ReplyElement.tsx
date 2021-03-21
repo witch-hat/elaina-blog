@@ -1,10 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faClock, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 
 import { CommentBox } from 'src/components';
-import { FormatUnifier } from 'src/utils';
 import { Reply } from 'src/query/comment';
 
 const ReplyContainer = styled.div({
