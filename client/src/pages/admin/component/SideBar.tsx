@@ -93,18 +93,10 @@ export function SideBar(props: Props) {
         <List>댓글 관리</List>
       </ListContainer>
       <TitleWrapper>
-        <SideBarIcon icon={faChartBar} />
-        <Title>통계</Title>
-      </TitleWrapper>
-      <ListContainer>
-        <List>조회수</List>
-      </ListContainer>
-      <TitleWrapper>
         <SideBarIcon icon={faUsersCog} />
         <Title>설정</Title>
       </TitleWrapper>
       <ListContainer>
-        <List>이름 변경</List>
         <List
           onClick={() => {
             logout();
