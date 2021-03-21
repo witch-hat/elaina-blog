@@ -16,6 +16,7 @@ interface Props {
   reply: Reply;
   isLogin: boolean;
   author: string;
+  index: number;
 }
 
 export function ReplyElement(props: Props) {
@@ -23,7 +24,7 @@ export function ReplyElement(props: Props) {
 
   return (
     <ReplyContainer key={`${createdAt}`}>
-      <CommentBox isLogin={props.isLogin} comment={props.reply} author={props.author} />
+      <CommentBox isLogin={props.isLogin} comment={props.reply} author={props.author} index={props.index} isReply />
     </ReplyContainer>
   );
 }

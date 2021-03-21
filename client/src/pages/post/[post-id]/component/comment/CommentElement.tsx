@@ -38,6 +38,8 @@ interface Props {
   isLogin: boolean;
   author: string;
   isCommentFromAdmin: boolean;
+  index: number;
+  setDeletedIndex: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export default function CommentElement(props: Props) {
@@ -54,7 +56,13 @@ export default function CommentElement(props: Props) {
   return (
     <Container themeMode={themeMode} isAdmin={props.isCommentFromAdmin}>
       <BorderBox isTransform={false} styles={{ margin: '1rem 0 0', width: '100%' }}>
-        <CommentBox isLogin={props.isLogin} comment={props.comment} author={props.author}>
+        <CommentBox
+          isLogin={props.isLogin}
+          comment={props.comment}
+          author={props.author}
+          index={props.index}
+          setDeletedIndex={props.setDeletedIndex}
+        >
           <>
             <ReplyButtonContainer>
               <ReplyButton onClick={() => setIsShowingReply(!isShowingReply)}>{`${
@@ -64,8 +72,8 @@ export default function CommentElement(props: Props) {
             </ReplyButtonContainer>
             {isAddReply ? <CommentEditor isLogin={props.isLogin} setNewReply={setNewReply} /> : null}
             {isShowingReply
-              ? props.comment.replies.map((reply: Reply) => {
-                  return <ReplyElement reply={reply} isLogin={props.isLogin} author={props.author} />;
+              ? props.comment.replies.map((reply: Reply, index: number) => {
+                  return <ReplyElement key={index} reply={reply} isLogin={props.isLogin} author={props.author} index={index} />;
                 })
               : null}
           </>

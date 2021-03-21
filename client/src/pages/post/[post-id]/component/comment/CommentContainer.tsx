@@ -33,33 +33,50 @@ const Counter = styled.p({
 });
 
 interface Props {
-  comment: Comments;
+  comments: Comments;
   isLogin: boolean;
   author: string;
 }
 
 export default function CommentContainer(props: Props) {
+  const [commentContainer, setCommentContainer] = useState<Comments>(props.comments);
   const [newComment, setNewComment] = useState<Comment>();
+  const [count, setCount] = useState(props.comments.count);
+  const [deletedIndex, setDeletedIndex] = useState(-1);
 
-  if (newComment) {
-    props.comment.comments.push(newComment);
-    props.comment.count += 1;
-  }
+  useEffect(() => {
+    if (newComment) {
+      setCommentContainer({ ...commentContainer, comments: [...commentContainer.comments, newComment] });
+      setCount(count + 1);
+    }
+  }, [newComment]);
+
+  useEffect(() => {
+    if (deletedIndex > -1) {
+      const decreaseCount = commentContainer.comments[deletedIndex].replies.length + 1;
+      const filteredComment = commentContainer.comments.filter((comment, index) => index !== deletedIndex);
+      setCommentContainer({ ...commentContainer, comments: [...filteredComment] });
+      setCount(count - decreaseCount);
+    }
+    setDeletedIndex(-1);
+  }, [deletedIndex]);
 
   return (
     <Container>
       <Title>Comments</Title>
       <CommentEditor isLogin={props.isLogin} setNewComment={setNewComment} />
       <div style={{ width: '100%' }}>
-        <Counter>{`덧글 수: ${props.comment.count}개`}</Counter>
-        {props.comment.comments.map((comment: Comment) => {
+        <Counter>{`덧글 수: ${count}개`}</Counter>
+        {commentContainer.comments.map((comment: Comment, index: number) => {
           return (
             <CommentElement
-              key={`${comment.createdAt}`}
+              key={index}
               comment={comment}
               isLogin={props.isLogin}
               author={props.author}
               isCommentFromAdmin={comment.isAdmin}
+              index={index}
+              setDeletedIndex={setDeletedIndex}
             />
           );
         })}
