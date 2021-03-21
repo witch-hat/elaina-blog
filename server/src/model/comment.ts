@@ -1,7 +1,7 @@
 import { values } from 'lodash';
 import { Schema, model, Document, SchemaType } from 'mongoose';
 
-interface Reply {
+export interface Reply {
   username: string;
   password: string;
   createdAt: Date;
@@ -9,16 +9,16 @@ interface Reply {
   isAdmin: boolean;
 }
 
-interface Comment {
-  username: string;
-  password: string;
+export interface Comment {
+  username?: string;
+  password?: string;
   createdAt: Date;
   comment: string;
   replies: Reply[];
   isAdmin: boolean;
 }
 
-interface Comments extends Document {
+export interface Comments extends Document {
   _id: number;
   count: number;
   comments: Comment[];

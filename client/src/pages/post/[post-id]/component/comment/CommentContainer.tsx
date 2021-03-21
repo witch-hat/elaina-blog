@@ -1,10 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
-import { BorderBox, InputBox } from 'src/components';
 import CommentElement from './CommentElement';
 import CommentEditor from './CommentEditor';
-import { ThemeMode } from 'src/redux/common/type';
 import { Comments, Comment } from 'src/query/comment';
 
 const Container = styled.section({
@@ -37,18 +35,34 @@ const Counter = styled.p({
 interface Props {
   comment: Comments;
   isLogin: boolean;
+  author: string;
 }
 
 export default function CommentContainer(props: Props) {
-  console.log(props.comment);
+  const [newComment, setNewComment] = useState<Comment>();
+
+  if (newComment) {
+    props.comment.comments.push(newComment);
+    props.comment.count += 1;
+  }
+
   return (
     <Container>
       <Title>Comments</Title>
-      <CommentEditor isLogin={props.isLogin} />
+      <CommentEditor isLogin={props.isLogin} setNewComment={setNewComment} />
       <div style={{ width: '100%' }}>
         <Counter>{`덧글 수: ${props.comment.count}개`}</Counter>
         {props.comment.comments.map((comment: Comment) => {
-          return <CommentElement key={`${comment.createdAt}`} comment={comment} isLogin={props.isLogin} />;
+          return (
+            <CommentElement
+              key={`${comment.createdAt}`}
+              comment={comment}
+              isLogin={props.isLogin}
+              author={props.author}
+              // count={commentCount}
+              // setCount={setCommentCount}
+            />
+          );
         })}
       </div>
     </Container>

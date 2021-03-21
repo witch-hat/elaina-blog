@@ -96,6 +96,7 @@ const MenuButton = styled.p<{ danger?: boolean }>((props) => ({
 interface Props {
   isLogin: boolean;
   comment: Comment | Reply;
+  author: string;
   children?: JSX.Element;
 }
 
@@ -111,7 +112,7 @@ export function CommentBox(props: Props) {
         <InformationContainer>
           <Author>
             <FontAwesomeIcon icon={faUser} style={{ marginRight: '.5rem' }} />
-            <p>{props.comment.username}</p>
+            <p>{props.comment.isAdmin ? props.author : props.comment.username}</p>
           </Author>
           <Time>
             <FontAwesomeIcon icon={faClock} style={{ marginRight: '.5rem' }} />

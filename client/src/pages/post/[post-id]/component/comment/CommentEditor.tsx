@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import styled, { css } from 'styled-components';
+import { useMutation } from '@apollo/client';
+import { useRouter } from 'next/router';
 
 import { theme } from 'src/styles';
 import { InputBox } from 'src/components';
@@ -7,6 +9,9 @@ import { InputBox } from 'src/components';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
+import { Reply, WRITE_COMMENT, Comment } from 'src/query/comment';
+import { useApollo } from 'src/apollo/apolloClient';
+import { IS_AUTH } from 'src/query/user';
 
 const EditorContainer = styled.form({
   width: '100%',
@@ -33,7 +38,7 @@ const UserInput = styled.div({
   }
 });
 
-const Editor = styled.span<{ themeMode: ThemeMode }>(
+const Editor = styled.pre<{ themeMode: ThemeMode }>(
   (props) => ({
     display: 'block',
     fontFamily: '"Nanum Gothic", sans-serif',
@@ -80,12 +85,95 @@ const SubmitButton = styled.button<{ themeMode: ThemeMode }>((props) => ({
 
 interface Props {
   isLogin: boolean;
+  setNewComment?: React.Dispatch<React.SetStateAction<Comment | undefined>>;
+  setNewReply?: React.Dispatch<React.SetStateAction<Reply | undefined>>;
 }
 
 export default function CommentEditor(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  const [writeComment] = useMutation(WRITE_COMMENT);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [comment, setComment] = useState('');
+  const usernameRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+  const editor = useRef<HTMLPreElement>(null);
+  const client = useApollo();
+  const router = useRouter();
 
-  function submitComment() {}
+  function reset() {
+    if (usernameRef.current && passwordRef.current) {
+      usernameRef.current.value = '';
+      passwordRef.current.value = '';
+    }
+    if (editor.current) {
+      editor.current.innerText = '';
+    }
+    setUsername('');
+    setPassword('');
+    setComment('');
+  }
+
+  async function submitComment() {
+    const AuthResponse = await client.query({ query: IS_AUTH });
+    const isAdmin = AuthResponse.data.isAuth.isAuth;
+    const _id = +router.query['post-id'];
+    const createdAt = new Date().toISOString();
+
+    if (comment.length < 2) {
+      alert('덧글을 2자 이상 작성해주세요');
+      return;
+    }
+
+    if (isAdmin) {
+      writeComment({
+        variables: {
+          _id,
+          comment,
+          createdAt,
+          isAdmin
+        }
+      });
+
+      if (props.setNewComment) {
+        props.setNewComment({
+          comment,
+          createdAt: new Date(createdAt),
+          isAdmin,
+          replies: []
+        });
+      }
+    } else {
+      if (username.length < 2 || password.length < 4) {
+        alert('username: 2자 이상, password: 4자 이상 입력해주세요');
+        return;
+      }
+
+      writeComment({
+        variables: {
+          _id,
+          username,
+          password,
+          comment,
+          createdAt,
+          isAdmin
+        }
+      });
+
+      if (props.setNewComment) {
+        props.setNewComment({
+          username,
+          password,
+          comment,
+          createdAt: new Date(createdAt),
+          isAdmin,
+          replies: []
+        });
+      }
+    }
+
+    reset();
+  }
 
   return (
     <EditorContainer action='/comment' method='POST'>
@@ -95,28 +183,46 @@ export default function CommentEditor(props: Props) {
             ID:&nbsp;
             <InputBox
               id='comment-id'
+              ref={usernameRef}
               type='text'
               maxLength={10}
               minLength={2}
               placeholder='ID'
               styles={{ width: '100px', height: '2rem', small: { width: '100px', height: '2rem' } }}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
             />
           </UserInput>
           <UserInput>
             PW:&nbsp;
             <InputBox
               id='comment-pw'
+              ref={passwordRef}
               type='password'
               maxLength={12}
               minLength={4}
               placeholder='Password'
               styles={{ width: '100px', height: '2rem', small: { width: '100px', height: '2rem' } }}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
             />
           </UserInput>
         </InputWrapper>
       )}
-      <Editor role='textbox' themeMode={themeMode} contentEditable />
-      <SubmitButton themeMode={themeMode}>덧글 작성</SubmitButton>
+      <Editor
+        role='textbox'
+        themeMode={themeMode}
+        contentEditable
+        ref={editor}
+        onInput={(e: React.KeyboardEvent<HTMLPreElement>) => setComment(e.currentTarget.textContent || '')}
+      />
+      <SubmitButton
+        themeMode={themeMode}
+        onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+          e.preventDefault();
+          submitComment();
+        }}
+      >
+        덧글 작성
+      </SubmitButton>
     </EditorContainer>
   );
 }

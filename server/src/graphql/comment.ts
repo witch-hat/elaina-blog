@@ -1,5 +1,5 @@
 import { gql } from 'apollo-server';
-import { CommentModel } from '../model/comment';
+import { CommentModel, Comments, Comment } from '../model/comment';
 import { ContextType } from '../types/context';
 
 export const commentTypeDef = gql`
@@ -31,7 +31,16 @@ export const commentTypeDef = gql`
   }
 
   extend type Mutation {
-    writeComment(_id: Int!, username: String!, password: String!, comment: String!, createdAt: DateTime!): MutationResponse
+    writeComment(_id: Int!, username: String, password: String, comment: String!, createdAt: DateTime!, isAdmin: Boolean!): MutationResponse
+    writeReply(
+      _id: Int!
+      username: String
+      password: String
+      comment: String!
+      createdAt: DateTime!
+      isAdmin: Boolean!
+      index: Int!
+    ): MutationResponse
   }
 `;
 
@@ -50,18 +59,30 @@ export const commentResolver = {
   Mutation: {
     async writeComment(
       _: any,
-      args: { _id: number; username: string; password: string; comment: string; createdAt: Date },
+      args: { _id: number; username: string; password: string; comment: string; createdAt: Date; isAdmin: boolean },
       context: ContextType
     ) {
       try {
-        const existComments = await CommentModel.findById(args._id);
-        const newComment = {
-          username: args.username,
-          password: args.password,
-          comment: args.comment,
-          createdAt: args.createdAt,
-          replies: []
-        };
+        const existComments: Comments = await CommentModel.findById(args._id);
+
+        let newComment: Comment;
+        if (args.isAdmin) {
+          newComment = {
+            comment: args.comment,
+            createdAt: args.createdAt,
+            replies: [],
+            isAdmin: args.isAdmin
+          };
+        } else {
+          newComment = {
+            username: args.username,
+            password: args.password,
+            comment: args.comment,
+            createdAt: args.createdAt,
+            replies: [],
+            isAdmin: args.isAdmin
+          };
+        }
 
         existComments.comments.push(newComment);
         existComments.count += 1;

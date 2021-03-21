@@ -107,6 +107,7 @@ interface Props extends AppCommonProps {
 export default function PostId(props: Props) {
   const post: Post = props.post;
   const comment: Comments = props.comment;
+  const [commentCount, setCommentCount] = useState(comment.count);
   const titles: [{ title: string; _id: number }] = props.sameCategoryTitles;
   const category: { title: string } = props.category;
   const author: string = props.author;
@@ -160,7 +161,7 @@ export default function PostId(props: Props) {
       )}
       <ContentContainer themeMode={themeMode}>
         <Content title={post.title} author={author} createdAt={post.createdAt} article={post.article} isLogin={props.app.isLogin} />
-        <CommentContainer comment={comment} isLogin={props.app.isLogin} />
+        <CommentContainer comment={comment} isLogin={props.app.isLogin} author={author} />
       </ContentContainer>
       <ContentNavigation />
       {/* TODO: Alert shows only first... */}

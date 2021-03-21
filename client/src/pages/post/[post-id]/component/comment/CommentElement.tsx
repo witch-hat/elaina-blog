@@ -30,16 +30,25 @@ const ReplyButton = styled.span({
 interface Props {
   comment: Comment;
   isLogin: boolean;
+  author: string;
+  count: number;
+  setCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export default function CommentElement(props: Props) {
   const [isShowingReply, setIsShowingReply] = useState(false);
   const [isAddReply, setIsAddReply] = useState(false);
+  const [newReply, setNewReply] = useState<Reply>();
+
+  if (newReply) {
+    props.comment.replies.push(newReply);
+    props.setCount(props.count + 1);
+  }
 
   return (
     <div>
       <BorderBox isTransform={false} styles={{ margin: '1rem 0 0', width: '100%' }}>
-        <CommentBox isLogin={props.isLogin} comment={props.comment}>
+        <CommentBox isLogin={props.isLogin} comment={props.comment} author={props.author}>
           <>
             <ReplyButtonContainer>
               <ReplyButton onClick={() => setIsShowingReply(!isShowingReply)}>{`${
@@ -47,10 +56,10 @@ export default function CommentElement(props: Props) {
               } Reply `}</ReplyButton>
               <ReplyButton onClick={() => setIsAddReply(!isAddReply)}>{isAddReply ? 'Cancel' : `Add Reply`}</ReplyButton>
             </ReplyButtonContainer>
-            {isAddReply ? <CommentEditor isLogin={props.isLogin} /> : null}
+            {isAddReply ? <CommentEditor isLogin={props.isLogin} setNewReply={setNewReply} /> : null}
             {isShowingReply
               ? props.comment.replies.map((reply: Reply) => {
-                  return <ReplyElement reply={reply} isLogin={props.isLogin} />;
+                  return <ReplyElement reply={reply} isLogin={props.isLogin} author={props.author} />;
                 })
               : null}
           </>

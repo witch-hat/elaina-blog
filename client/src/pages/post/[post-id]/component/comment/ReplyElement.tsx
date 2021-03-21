@@ -18,6 +18,7 @@ const ReplyContainer = styled.div({
 interface Props {
   reply: Reply;
   isLogin: boolean;
+  author: string;
 }
 
 export function ReplyElement(props: Props) {
@@ -25,7 +26,7 @@ export function ReplyElement(props: Props) {
 
   return (
     <ReplyContainer key={`${createdAt}`}>
-      <CommentBox isLogin={props.isLogin} comment={props.reply} />
+      <CommentBox isLogin={props.isLogin} comment={props.reply} author={props.author} />
     </ReplyContainer>
   );
 }
