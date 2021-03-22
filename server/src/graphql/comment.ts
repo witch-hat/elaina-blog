@@ -1,5 +1,5 @@
 import { gql } from 'apollo-server';
-import { CommentModel, Comments, Comment } from '../model/comment';
+import { CommentModel, Comments, Comment, Reply } from '../model/comment';
 import { ContextType } from '../types/context';
 import { userResolver } from './user';
 
@@ -43,6 +43,16 @@ export const commentTypeDef = gql`
       index: Int!
     ): MutationResponse
     deleteComment(_id: Int!, index: Int!): MutationResponse
+    writeReply(
+      _id: Int!
+      commentIndex: Int!
+      username: String
+      password: String
+      comment: String!
+      createdAt: DateTime!
+      isAdmin: Boolean!
+    ): MutationResponse
+    deleteReply(_id: Int!, commentIndex: Int!, replyIndex: Int!): MutationResponse
   }
 `;
 
@@ -110,6 +120,58 @@ export const commentResolver = {
         return { isSuccess: true };
       } catch (err) {
         return { isSuccess: false, errorMsg: 'Cannor delete comment; Server Error' };
+      }
+    },
+
+    async writeReply(
+      _: any,
+      args: { _id: number; commentIndex: number; username: string; password: string; comment: string; createdAt: Date; isAdmin: boolean },
+      context: ContextType
+    ) {
+      try {
+        const commentContainer: Comments = await CommentModel.findById(args._id);
+
+        let newReply: Reply;
+
+        if (args.isAdmin) {
+          newReply = {
+            comment: args.comment,
+            createdAt: args.createdAt,
+            isAdmin: args.isAdmin
+          };
+        } else {
+          newReply = {
+            username: args.username,
+            password: args.password,
+            comment: args.comment,
+            createdAt: args.createdAt,
+            isAdmin: args.isAdmin
+          };
+        }
+
+        commentContainer.comments[args.commentIndex].replies.push(newReply);
+        commentContainer.count += 1;
+
+        commentContainer.save();
+
+        return { isSuccess: true };
+      } catch {
+        return { isSuccess: false, errorMsg: 'ServerError: Cannot write reply' };
+      }
+    },
+
+    async deleteReply(_: any, args: { _id: number; commentIndex: number; replyIndex: number }, context: ContextType) {
+      try {
+        const commentContainer: Comments = await CommentModel.findById(args._id);
+
+        commentContainer.comments[args.commentIndex].replies.splice(args.replyIndex, 1);
+        commentContainer.count -= 1;
+
+        commentContainer.save();
+
+        return { isSuccess: true };
+      } catch {
+        return { isSuccess: false, errorMsg: 'Server Error: Cannot delete reply' };
       }
     }
   }

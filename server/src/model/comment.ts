@@ -2,8 +2,8 @@ import { values } from 'lodash';
 import { Schema, model, Document, SchemaType } from 'mongoose';
 
 export interface Reply {
-  username: string;
-  password: string;
+  username?: string;
+  password?: string;
   createdAt: Date;
   comment: string;
   isAdmin: boolean;

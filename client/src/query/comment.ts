@@ -63,3 +63,37 @@ export const DELETE_COMMENT = gql`
     }
   }
 `;
+
+export const WRITE_REPLY = gql`
+  mutation(
+    $_id: Int!
+    $commentIndex: Int!
+    $username: String
+    $password: String
+    $comment: String!
+    $createdAt: DateTime!
+    $isAdmin: Boolean!
+  ) {
+    writeReply(
+      _id: $_id
+      commentIndex: $commentIndex
+      username: $username
+      password: $password
+      comment: $comment
+      createdAt: $createdAt
+      isAdmin: $isAdmin
+    ) {
+      isSuccess
+      errorMsg
+    }
+  }
+`;
+
+export const DELETE_REPLY = gql`
+  mutation($_id: Int!, $commentIndex: Int!, $replyIndex: Int!) {
+    deleteReply(_id: $_id, commentIndex: $commentIndex, replyIndex: $replyIndex) {
+      isSuccess
+      errorMsg
+    }
+  }
+`;
