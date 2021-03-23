@@ -18,13 +18,77 @@ export interface Comment {
   isAdmin: boolean;
 }
 
+interface ReplySchemaType extends Document {
+  username?: string;
+  password?: string;
+  createdAt: Date;
+  comment: string;
+  isAdmin: boolean;
+}
+
+interface CommentSchemaType extends Document {
+  username?: string;
+  password?: string;
+  createdAt: Date;
+  comment: string;
+  replies: Reply[];
+  isAdmin: boolean;
+}
+
 export interface Comments extends Document {
   _id: number;
   count: number;
   comments: Comment[];
 }
 
-export const commentSchema = new Schema<Comments>(
+const replySchema = new Schema<ReplySchemaType>({
+  username: {
+    type: String
+  },
+  password: {
+    type: String
+  },
+  createdAt: {
+    type: String,
+    required: true
+  },
+  comment: {
+    type: String,
+    required: true
+  },
+  isAdmin: {
+    type: Boolean,
+    required: true
+  }
+});
+
+const commentSchema = new Schema<CommentSchemaType>({
+  username: {
+    type: String
+  },
+  password: {
+    type: String
+  },
+  createdAt: {
+    type: String,
+    required: true
+  },
+  comment: {
+    type: String,
+    required: true
+  },
+  replies: {
+    type: [replySchema],
+    required: true,
+    default: []
+  },
+  isAdmin: {
+    type: Boolean,
+    required: true
+  }
+});
+
+export const commentContainerSchema = new Schema<Comments>(
   {
     _id: {
       type: Number,
@@ -36,7 +100,8 @@ export const commentSchema = new Schema<Comments>(
       required: true
     },
     comments: {
-      type: Array,
+      type: [commentSchema],
+      required: true,
       default: []
     }
   },
@@ -46,4 +111,4 @@ export const commentSchema = new Schema<Comments>(
   }
 );
 
-export const CommentModel = model<Comments>('Comment', commentSchema);
+export const CommentModel = model<Comments>('Comment', commentContainerSchema);
