@@ -33,15 +33,6 @@ export const commentTypeDef = gql`
 
   extend type Mutation {
     writeComment(_id: Int!, username: String, password: String, comment: String!, createdAt: DateTime!, isAdmin: Boolean!): MutationResponse
-    writeReply(
-      _id: Int!
-      username: String
-      password: String
-      comment: String!
-      createdAt: DateTime!
-      isAdmin: Boolean!
-      index: Int!
-    ): MutationResponse
     deleteComment(_id: Int!, index: Int!): MutationResponse
     writeReply(
       _id: Int!
@@ -150,7 +141,11 @@ export const commentResolver = {
         }
 
         commentContainer.comments[args.commentIndex].replies.push(newReply);
+        const nc = commentContainer.comments;
+        commentContainer.comments = nc;
         commentContainer.count += 1;
+
+        console.log(commentContainer.comments[args.commentIndex].replies);
 
         commentContainer.save();
 

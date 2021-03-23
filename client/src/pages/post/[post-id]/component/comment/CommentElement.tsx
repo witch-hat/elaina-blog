@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 
@@ -39,19 +39,24 @@ interface Props {
   author: string;
   isCommentFromAdmin: boolean;
   index: number;
+  count: number;
   setDeletedIndex: React.Dispatch<React.SetStateAction<number>>;
+  setCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export default function CommentElement(props: Props) {
   const [isShowingReply, setIsShowingReply] = useState(false);
   const [isAddReply, setIsAddReply] = useState(false);
+  const [replies, setReplies] = useState<Reply[]>(props.comment.replies);
   const [newReply, setNewReply] = useState<Reply>();
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
-  if (newReply) {
-    props.comment.replies.push(newReply);
-    // props.setCount(props.count + 1);
-  }
+  useEffect(() => {
+    if (newReply) {
+      setReplies([...replies, newReply]);
+      props.setCount(props.count + 1);
+    }
+  }, [newReply]);
 
   return (
     <Container themeMode={themeMode} isAdmin={props.isCommentFromAdmin}>
@@ -66,13 +71,13 @@ export default function CommentElement(props: Props) {
           <>
             <ReplyButtonContainer>
               <ReplyButton onClick={() => setIsShowingReply(!isShowingReply)}>{`${
-                isShowingReply ? 'Hide' : `Show ${props.comment.replies.length}`
+                isShowingReply ? 'Hide' : `Show ${replies.length}`
               } Reply `}</ReplyButton>
               <ReplyButton onClick={() => setIsAddReply(!isAddReply)}>{isAddReply ? 'Cancel' : `Add Reply`}</ReplyButton>
             </ReplyButtonContainer>
-            {isAddReply ? <CommentEditor isLogin={props.isLogin} setNewReply={setNewReply} /> : null}
+            {isAddReply ? <CommentEditor isLogin={props.isLogin} setNewReply={setNewReply} isReply commentIndex={props.index} /> : null}
             {isShowingReply
-              ? props.comment.replies.map((reply: Reply, index: number) => {
+              ? replies.map((reply: Reply, index: number) => {
                   return <ReplyElement key={index} reply={reply} isLogin={props.isLogin} author={props.author} index={index} />;
                 })
               : null}

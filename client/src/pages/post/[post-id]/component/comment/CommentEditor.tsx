@@ -9,7 +9,7 @@ import { InputBox } from 'src/components';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
-import { Reply, WRITE_COMMENT, Comment } from 'src/query/comment';
+import { Reply, WRITE_COMMENT, Comment, WRITE_REPLY } from 'src/query/comment';
 import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';
 
@@ -85,6 +85,8 @@ const SubmitButton = styled.button<{ themeMode: ThemeMode }>((props) => ({
 
 interface Props {
   isLogin: boolean;
+  isReply?: boolean;
+  commentIndex?: number;
   setNewComment?: React.Dispatch<React.SetStateAction<Comment | undefined>>;
   setNewReply?: React.Dispatch<React.SetStateAction<Reply | undefined>>;
 }
@@ -92,6 +94,7 @@ interface Props {
 export default function CommentEditor(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const [writeComment] = useMutation(WRITE_COMMENT);
+  const [writeReply] = useMutation(WRITE_REPLY);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [comment, setComment] = useState('');
@@ -115,15 +118,15 @@ export default function CommentEditor(props: Props) {
   }
 
   async function submitComment() {
-    const AuthResponse = await client.query({ query: IS_AUTH });
-    const isAdmin = AuthResponse.data.isAuth.isAuth;
-    const _id = +router.query['post-id'];
-    const createdAt = new Date().toISOString();
-
     if (comment.length < 2) {
       alert('덧글을 2자 이상 작성해주세요');
       return;
     }
+
+    const AuthResponse = await client.query({ query: IS_AUTH });
+    const isAdmin = AuthResponse.data.isAuth.isAuth;
+    const _id = +router.query['post-id'];
+    const createdAt = new Date().toISOString();
 
     if (isAdmin) {
       writeComment({
@@ -175,6 +178,59 @@ export default function CommentEditor(props: Props) {
     reset();
   }
 
+  async function submitReply() {
+    if (comment.length < 2) {
+      alert('덧글을 2자 이상 작성해주세요');
+      return;
+    }
+
+    const AuthResponse = await client.query({ query: IS_AUTH });
+    const isAdmin = AuthResponse.data.isAuth.isAuth;
+    const _id = +router.query['post-id'];
+    const createdAt = new Date().toISOString();
+
+    if (isAdmin) {
+      writeReply({
+        variables: {
+          _id,
+          commentIndex: props.commentIndex,
+          comment,
+          createdAt,
+          isAdmin
+        }
+      });
+    } else {
+      if (username.length < 2 || password.length < 4) {
+        alert('username: 2자 이상, password: 4자 이상 입력해주세요');
+        return;
+      }
+
+      writeReply({
+        variables: {
+          _id,
+          commentIndex: props.commentIndex,
+          username,
+          password,
+          comment,
+          createdAt,
+          isAdmin
+        }
+      });
+    }
+
+    if (props.setNewReply) {
+      props.setNewReply({
+        username,
+        password,
+        comment,
+        createdAt: new Date(createdAt),
+        isAdmin
+      });
+    }
+
+    reset();
+  }
+
   return (
     <EditorContainer action='/comment' method='POST'>
       {props.isLogin || (
@@ -218,7 +274,7 @@ export default function CommentEditor(props: Props) {
         themeMode={themeMode}
         onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
           e.preventDefault();
-          submitComment();
+          props.isReply ? submitReply() : submitComment();
         }}
       >
         덧글 작성
