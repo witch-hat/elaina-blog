@@ -15,6 +15,7 @@ export const theme: DefaultTheme = {
     editorBackground: '#313131',
     dangerButtonColor: '#dd0000',
     adminCommentColor: 'rgba(77, 77, 77, 0.5)',
+    adminReplyColor: 'rgba(77, 77, 77, 0.7)',
     // Text Color
     blogName: '#f1f2f3',
     mainText: '#f1f2f3',
@@ -48,6 +49,7 @@ export const theme: DefaultTheme = {
     editorBackground: '#fff',
     dangerButtonColor: '#ff0000',
     adminCommentColor: 'rgba(145, 255, 0, 0.05)',
+    adminReplyColor: 'rgba(145, 255, 0, 0.15)',
     // Text Color
     blogName: '#121314',
     mainText: '#121314',

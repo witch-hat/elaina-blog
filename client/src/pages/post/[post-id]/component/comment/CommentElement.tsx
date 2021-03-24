@@ -52,8 +52,6 @@ export default function CommentElement(props: Props) {
   const [deletedReplyIndex, setDeletedReplyIndex] = useState(-1);
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
-  console.log(deletedReplyIndex);
-
   useEffect(() => {
     if (newReply) {
       setReplies([...replies, newReply]);
