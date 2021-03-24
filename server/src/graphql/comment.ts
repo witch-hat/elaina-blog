@@ -141,11 +141,7 @@ export const commentResolver = {
         }
 
         commentContainer.comments[args.commentIndex].replies.push(newReply);
-        const nc = commentContainer.comments;
-        commentContainer.comments = nc;
         commentContainer.count += 1;
-
-        console.log(commentContainer.comments[args.commentIndex].replies);
 
         commentContainer.save();
 
