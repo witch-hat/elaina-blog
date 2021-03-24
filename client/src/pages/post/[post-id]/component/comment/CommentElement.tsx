@@ -49,7 +49,10 @@ export default function CommentElement(props: Props) {
   const [isAddReply, setIsAddReply] = useState(false);
   const [replies, setReplies] = useState<Reply[]>(props.comment.replies);
   const [newReply, setNewReply] = useState<Reply>();
+  const [deletedReplyIndex, setDeletedReplyIndex] = useState(-1);
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+
+  console.log(deletedReplyIndex);
 
   useEffect(() => {
     if (newReply) {
@@ -58,14 +61,23 @@ export default function CommentElement(props: Props) {
     }
   }, [newReply]);
 
+  useEffect(() => {
+    if (deletedReplyIndex > -1) {
+      setReplies([...replies.filter((reply, index) => index !== deletedReplyIndex)]);
+      props.setCount(props.count - 1);
+    }
+    setDeletedReplyIndex(-1);
+  }, [deletedReplyIndex]);
+
   return (
     <Container themeMode={themeMode} isAdmin={props.isCommentFromAdmin}>
       <BorderBox isTransform={false} styles={{ margin: '1rem 0 0', width: '100%' }}>
         <CommentBox
           isLogin={props.isLogin}
+          isCommentFromAdmin={props.isCommentFromAdmin}
           comment={props.comment}
           author={props.author}
-          index={props.index}
+          commentIndex={props.index}
           setDeletedIndex={props.setDeletedIndex}
         >
           <>
@@ -78,7 +90,17 @@ export default function CommentElement(props: Props) {
             {isAddReply ? <CommentEditor isLogin={props.isLogin} setNewReply={setNewReply} isReply commentIndex={props.index} /> : null}
             {isShowingReply
               ? replies.map((reply: Reply, index: number) => {
-                  return <ReplyElement key={index} reply={reply} isLogin={props.isLogin} author={props.author} index={index} />;
+                  return (
+                    <ReplyElement
+                      key={index}
+                      isLogin={props.isLogin}
+                      author={props.author}
+                      commentIndex={props.index}
+                      reply={reply}
+                      replyIndex={index}
+                      setDeletedReplyIndex={setDeletedReplyIndex}
+                    />
+                  );
                 })
               : null}
           </>

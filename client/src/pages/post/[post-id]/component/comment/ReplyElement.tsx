@@ -16,7 +16,9 @@ interface Props {
   reply: Reply;
   isLogin: boolean;
   author: string;
-  index: number;
+  commentIndex: number;
+  replyIndex: number;
+  setDeletedReplyIndex: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export function ReplyElement(props: Props) {
@@ -24,7 +26,16 @@ export function ReplyElement(props: Props) {
 
   return (
     <ReplyContainer key={`${createdAt}`}>
-      <CommentBox isLogin={props.isLogin} comment={props.reply} author={props.author} index={props.index} isReply />
+      <CommentBox
+        isLogin={props.isLogin}
+        isCommentFromAdmin={props.reply.isAdmin}
+        comment={props.reply}
+        author={props.author}
+        commentIndex={props.commentIndex}
+        isReply
+        replyIndex={props.replyIndex}
+        setDeletedReplyIndex={props.setDeletedReplyIndex}
+      />
     </ReplyContainer>
   );
 }

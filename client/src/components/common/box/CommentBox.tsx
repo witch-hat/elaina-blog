@@ -7,7 +7,7 @@ import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
 
 import { FocusWrapper } from 'src/components';
-import { Comment, DELETE_COMMENT, Reply } from 'src/query/comment';
+import { Comment, DELETE_COMMENT, DELETE_REPLY, Reply } from 'src/query/comment';
 import { ModalWrapper } from 'src/components';
 import { FormatUnifier } from 'src/utils';
 import { RootState } from 'src/redux/rootReducer';
@@ -130,12 +130,15 @@ const ModalButton = styled.button<{ themeMode?: ThemeMode }>((props) => ({
 
 interface Props {
   isLogin: boolean;
+  isCommentFromAdmin: boolean;
   comment: Comment | Reply;
   author: string;
+  commentIndex: number;
   children?: JSX.Element;
   isReply?: boolean;
-  index: number;
-  setDeletedIndex: React.Dispatch<React.SetStateAction<number>>;
+  replyIndex?: number;
+  setDeletedIndex?: React.Dispatch<React.SetStateAction<number>>;
+  setDeletedReplyIndex?: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export function CommentBox(props: Props) {
@@ -143,6 +146,7 @@ export function CommentBox(props: Props) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [deleteComment] = useMutation(DELETE_COMMENT);
+  const [deleteReply] = useMutation(DELETE_REPLY);
   const createdAt = new Date(props.comment.createdAt);
   const dateFormatHelper = new FormatUnifier.FormatDate();
   const client = useApollo();
@@ -158,12 +162,12 @@ export function CommentBox(props: Props) {
       const { data } = await deleteComment({
         variables: {
           _id,
-          index: props.index
+          index: props.commentIndex
         }
       });
 
-      if (data.deleteComment.isSuccess) {
-        props.setDeletedIndex(props.index);
+      if (data.deleteComment.isSuccess && props.setDeletedIndex) {
+        props.setDeletedIndex(props.commentIndex);
       } else {
         alert(data.deleteComment.errorMsg);
       }
@@ -173,7 +177,31 @@ export function CommentBox(props: Props) {
     }
   }
 
-  async function handleDeleteReply() {}
+  async function handleDeleteReply() {
+    const AuthResponse = await client.query({ query: IS_AUTH });
+    const isAuth = AuthResponse.data.isAuth.isAuth;
+    const _id = +router.query['post-id'];
+
+    // Admin can delete all replies
+    if (isAuth) {
+      const { data } = await deleteReply({
+        variables: {
+          _id,
+          commentIndex: props.commentIndex,
+          replyIndex: props.replyIndex
+        }
+      });
+
+      if (data.deleteReply.isSuccess && props.setDeletedReplyIndex) {
+        props.setDeletedReplyIndex(props.replyIndex || -1);
+      } else {
+        alert(data.deleteReply.errorMsg);
+      }
+    }
+    // common users can delete only their reply
+    else {
+    }
+  }
 
   return (
     <Container>
@@ -188,7 +216,7 @@ export function CommentBox(props: Props) {
             <p>{dateFormatHelper.getFullFormatDate(createdAt)}</p>
           </Time>
         </InformationContainer>
-        {props.isLogin && (
+        {(props.isLogin || !props.isCommentFromAdmin) && (
           <MenuContainer>
             <MenuIconButton onClick={() => setIsMenuOpen(!isMenuOpen)}>
               <FontAwesomeIcon icon={faEllipsisV} />
@@ -199,8 +227,10 @@ export function CommentBox(props: Props) {
                   <MenuButton
                     danger
                     onClick={() => {
-                      setIsModalOpen(true);
-                      setIsMenuOpen(false);
+                      if (props.isLogin) {
+                        setIsModalOpen(true);
+                        setIsMenuOpen(false);
+                      }
                     }}
                   >
                     Delete
