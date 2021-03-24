@@ -15,6 +15,7 @@ import { ThemeMode } from 'src/redux/common/type';
 import { theme } from 'src/styles';
 import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';
+import { InputBox } from './InputBox';
 
 const Container = styled.div({
   width: '100%',
@@ -111,6 +112,11 @@ const ModalParagraph = styled.p({
   width: '100%'
 });
 
+const Password = styled.div({
+  margin: '.5rem 0',
+  width: '60%'
+});
+
 const ModalButtonContainer = styled.div({
   display: 'flex',
   width: '100%',
@@ -145,6 +151,7 @@ export function CommentBox(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [password, setPassword] = useState('');
   const [deleteComment] = useMutation(DELETE_COMMENT);
   const [deleteReply] = useMutation(DELETE_REPLY);
   const createdAt = new Date(props.comment.createdAt);
@@ -227,10 +234,8 @@ export function CommentBox(props: Props) {
                   <MenuButton
                     danger
                     onClick={() => {
-                      if (props.isLogin) {
-                        setIsModalOpen(true);
-                        setIsMenuOpen(false);
-                      }
+                      setIsModalOpen(true);
+                      setIsMenuOpen(false);
                     }}
                   >
                     Delete
@@ -245,7 +250,20 @@ export function CommentBox(props: Props) {
       {props.children}
       <ModalWrapper visible={isModalOpen}>
         <ModalContainer>
-          <ModalParagraph>{`정말 삭제하시겠습니까?`}</ModalParagraph>
+          <ModalParagraph>{props.isLogin ? '정말 삭제하시겠습니까?' : '비밀번호를 입력해주세요'}</ModalParagraph>
+          {props.isLogin || (
+            <Password>
+              <InputBox
+                id='comment-pw-auth'
+                type='password'
+                placeholder='Password'
+                maxLength={12}
+                minLength={4}
+                styles={{ width: '100%' }}
+                onChange={(e) => setPassword(e.currentTarget.value)}
+              />
+            </Password>
+          )}
           <ModalButtonContainer>
             <ModalButton
               onClick={() => {
@@ -258,9 +276,9 @@ export function CommentBox(props: Props) {
               }}
               themeMode={themeMode}
             >
-              예
+              {props.isLogin ? '예' : '삭제'}
             </ModalButton>
-            <ModalButton onClick={() => setIsModalOpen(false)}>아니요</ModalButton>
+            <ModalButton onClick={() => setIsModalOpen(false)}>{props.isLogin ? '아니요' : '취소'}</ModalButton>
           </ModalButtonContainer>
         </ModalContainer>
       </ModalWrapper>
