@@ -1,5 +1,6 @@
-import { values } from 'lodash';
-import { Schema, model, Document, SchemaType } from 'mongoose';
+import { Schema, model, Document } from 'mongoose';
+import bcrypt from 'bcrypt';
+const saltRounds = 10;
 
 export interface Reply {
   username?: string;
@@ -110,5 +111,37 @@ export const commentContainerSchema = new Schema<Comments>(
     versionKey: false
   }
 );
+
+replySchema.pre('save', function (next) {
+  if (this.isModified('password')) {
+    bcrypt.genSalt(saltRounds, (err: Error, salt: string) => {
+      if (err) return next(err);
+
+      bcrypt.hash(this.password, salt, (err: Error, hash: string) => {
+        if (err) return next(err);
+        this.password = hash;
+        next();
+      });
+    });
+  } else {
+    next();
+  }
+});
+
+commentSchema.pre('save', function (next) {
+  if (this.isModified('password')) {
+    bcrypt.genSalt(saltRounds, (err: Error, salt: string) => {
+      if (err) return next(err);
+
+      bcrypt.hash(this.password, salt, (err: Error, hash: string) => {
+        if (err) return next(err);
+        this.password = hash;
+        next();
+      });
+    });
+  } else {
+    next();
+  }
+});
 
 export const CommentModel = model<Comments>('Comment', commentContainerSchema);
