@@ -111,7 +111,7 @@ export const commentResolver = {
           const isMatch = await comparePassword(args.password, hash || '');
 
           if (!isMatch) {
-            return { isSuccess: false, errorMsg: 'Cannot delete: fail to login' };
+            return { isSuccess: false, errorMsg: 'Cannot delete: password not matched' };
           }
         }
 
@@ -174,7 +174,7 @@ export const commentResolver = {
           const isMatch = await comparePassword(args.password, hash || '');
 
           if (!isMatch) {
-            return { isSuccess: false, errorMsg: 'Cannot delete: fail to login' };
+            return { isSuccess: false, errorMsg: 'Cannot delete: password not matched' };
           }
         }
 

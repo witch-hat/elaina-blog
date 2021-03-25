@@ -163,24 +163,32 @@ export function CommentBox(props: Props) {
     const AuthResponse = await client.query({ query: IS_AUTH });
     const isAuth = AuthResponse.data.isAuth.isAuth;
     const _id = +router.query['post-id'];
+    let deleteResponse;
 
     // Admin can delete all comments
     if (isAuth) {
-      const { data } = await deleteComment({
+      deleteResponse = await deleteComment({
         variables: {
           _id,
           index: props.commentIndex
         }
       });
-
-      if (data.deleteComment.isSuccess && props.setDeletedIndex) {
-        props.setDeletedIndex(props.commentIndex);
-      } else {
-        alert(data.deleteComment.errorMsg);
-      }
     }
     // common users can delete only their comment
     else {
+      deleteResponse = await deleteComment({
+        variables: {
+          _id,
+          index: props.commentIndex,
+          password
+        }
+      });
+    }
+
+    if (deleteResponse.data.deleteComment.isSuccess && props.setDeletedIndex) {
+      props.setDeletedIndex(props.commentIndex);
+    } else {
+      alert(deleteResponse.data.deleteComment.errorMsg);
     }
   }
 
@@ -188,25 +196,34 @@ export function CommentBox(props: Props) {
     const AuthResponse = await client.query({ query: IS_AUTH });
     const isAuth = AuthResponse.data.isAuth.isAuth;
     const _id = +router.query['post-id'];
+    let deleteResponse;
 
     // Admin can delete all replies
     if (isAuth) {
-      const { data } = await deleteReply({
+      deleteResponse = await deleteReply({
         variables: {
           _id,
           commentIndex: props.commentIndex,
           replyIndex: props.replyIndex
         }
       });
-
-      if (data.deleteReply.isSuccess && props.setDeletedReplyIndex) {
-        props.setDeletedReplyIndex(props.replyIndex || -1);
-      } else {
-        alert(data.deleteReply.errorMsg);
-      }
     }
     // common users can delete only their reply
     else {
+      deleteResponse = await deleteReply({
+        variables: {
+          _id,
+          commentIndex: props.commentIndex,
+          replyIndex: props.replyIndex,
+          password
+        }
+      });
+    }
+
+    if (deleteResponse.data.deleteReply.isSuccess && props.setDeletedReplyIndex) {
+      props.setDeletedReplyIndex(props.replyIndex || -1);
+    } else {
+      alert(deleteResponse.data.deleteReply.errorMsg);
     }
   }
 

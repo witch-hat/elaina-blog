@@ -56,8 +56,8 @@ export const WRITE_COMMENT = gql`
 `;
 
 export const DELETE_COMMENT = gql`
-  mutation($_id: Int!, $index: Int!) {
-    deleteComment(_id: $_id, index: $index) {
+  mutation($_id: Int!, $index: Int!, $password: String) {
+    deleteComment(_id: $_id, index: $index, password: $password) {
       isSuccess
       errorMsg
     }
@@ -90,8 +90,8 @@ export const WRITE_REPLY = gql`
 `;
 
 export const DELETE_REPLY = gql`
-  mutation($_id: Int!, $commentIndex: Int!, $replyIndex: Int!) {
-    deleteReply(_id: $_id, commentIndex: $commentIndex, replyIndex: $replyIndex) {
+  mutation($_id: Int!, $commentIndex: Int!, $replyIndex: Int!, $password: String) {
+    deleteReply(_id: $_id, commentIndex: $commentIndex, replyIndex: $replyIndex, password: $password) {
       isSuccess
       errorMsg
     }
