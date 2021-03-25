@@ -1,7 +1,11 @@
 import { gql } from 'apollo-server';
 import { CommentModel, Comments, Comment, Reply } from '../model/comment';
 import { ContextType } from '../types/context';
+import { comparePassword } from '../util/auth';
+import bcrypt from 'bcrypt';
 import { userResolver } from './user';
+
+const SALT = 10;
 
 export const commentTypeDef = gql`
   type Reply {
@@ -33,7 +37,7 @@ export const commentTypeDef = gql`
 
   extend type Mutation {
     writeComment(_id: Int!, username: String, password: String, comment: String!, createdAt: DateTime!, isAdmin: Boolean!): MutationResponse
-    deleteComment(_id: Int!, index: Int!): MutationResponse
+    deleteComment(_id: Int!, index: Int!, password: String): MutationResponse
     writeReply(
       _id: Int!
       commentIndex: Int!
@@ -43,7 +47,7 @@ export const commentTypeDef = gql`
       createdAt: DateTime!
       isAdmin: Boolean!
     ): MutationResponse
-    deleteReply(_id: Int!, commentIndex: Int!, replyIndex: Int!): MutationResponse
+    deleteReply(_id: Int!, commentIndex: Int!, replyIndex: Int!, password: String): MutationResponse
   }
 `;
 
@@ -98,9 +102,19 @@ export const commentResolver = {
       }
     },
 
-    async deleteComment(_: any, args: { _id: number; index: number }, context: ContextType) {
+    async deleteComment(_: any, args: { _id: number; index: number; password?: string }, context: ContextType) {
       try {
         const commentContainer: Comments = await CommentModel.findById(args._id);
+
+        if (args.password) {
+          const hash = commentContainer.comments[args.index].password;
+          const isMatch = await comparePassword(args.password, hash || '');
+
+          if (!isMatch) {
+            return { isSuccess: false, errorMsg: 'Cannot delete: fail to login' };
+          }
+        }
+
         const decreaseCount = commentContainer.comments[args.index].replies.length + 1;
         commentContainer.comments.splice(args.index, 1);
 
@@ -151,9 +165,18 @@ export const commentResolver = {
       }
     },
 
-    async deleteReply(_: any, args: { _id: number; commentIndex: number; replyIndex: number }, context: ContextType) {
+    async deleteReply(_: any, args: { _id: number; commentIndex: number; replyIndex: number; password?: string }, context: ContextType) {
       try {
         const commentContainer: Comments = await CommentModel.findById(args._id);
+
+        if (args.password) {
+          const hash = commentContainer.comments[args.commentIndex].replies[args.replyIndex].password;
+          const isMatch = await comparePassword(args.password, hash || '');
+
+          if (!isMatch) {
+            return { isSuccess: false, errorMsg: 'Cannot delete: fail to login' };
+          }
+        }
 
         commentContainer.comments[args.commentIndex].replies.splice(args.replyIndex, 1);
         commentContainer.count -= 1;
