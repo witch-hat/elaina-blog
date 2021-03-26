@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 
 import { BorderBox, CommentBox } from 'src/components';
 import CommentEditor from './CommentEditor';
-import { Reply, Comment } from 'src/query/comment';
+import { Reply, Comment, Comments } from 'src/query/comment';
 import { ReplyElement } from './ReplyElement';
 import { theme } from 'src/styles';
 import { RootState } from 'src/redux/rootReducer';
@@ -40,6 +40,8 @@ interface Props {
   isCommentFromAdmin: boolean;
   index: number;
   count: number;
+  commentContainer: Comments;
+  setCommentContainer: React.Dispatch<React.SetStateAction<Comments | null>>;
   setDeletedIndex: React.Dispatch<React.SetStateAction<number>>;
   setCount: React.Dispatch<React.SetStateAction<number>>;
 }
@@ -53,9 +55,18 @@ export default function CommentElement(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   useEffect(() => {
+    setReplies(props.comment.replies);
+  }, [props.commentContainer]);
+
+  useEffect(() => {
     if (newReply) {
       setReplies([...replies, newReply]);
       props.setCount(props.count + 1);
+
+      props.commentContainer.comments[props.index].replies.push(newReply);
+      const newComments = props.commentContainer.comments;
+
+      props.setCommentContainer({ ...props.commentContainer, comments: newComments });
     }
   }, [newReply]);
 
@@ -63,8 +74,12 @@ export default function CommentElement(props: Props) {
     if (deletedReplyIndex > -1) {
       setReplies([...replies.filter((reply, index) => index !== deletedReplyIndex)]);
       props.setCount(props.count - 1);
+
+      props.commentContainer.comments[props.index].replies.splice(deletedReplyIndex, 1);
+      const newComments = props.commentContainer.comments;
+
+      props.setCommentContainer({ ...props.commentContainer, comments: newComments });
     }
-    setDeletedReplyIndex(-1);
   }, [deletedReplyIndex]);
 
   return (

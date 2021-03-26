@@ -221,7 +221,7 @@ export function CommentBox(props: Props) {
     }
 
     if (deleteResponse.data.deleteReply.isSuccess && props.setDeletedReplyIndex) {
-      props.setDeletedReplyIndex(props.replyIndex || -1);
+      (props.replyIndex as number) > -1 && props.setDeletedReplyIndex(props.replyIndex as number);
     } else {
       alert(deleteResponse.data.deleteReply.errorMsg);
     }

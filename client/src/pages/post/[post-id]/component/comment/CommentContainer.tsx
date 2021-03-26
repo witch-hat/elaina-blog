@@ -84,6 +84,8 @@ export default function CommentContainer(props: Props) {
                 isCommentFromAdmin={comment.isAdmin}
                 index={index}
                 count={count}
+                commentContainer={commentContainer}
+                setCommentContainer={setCommentContainer}
                 setDeletedIndex={setDeletedIndex}
                 setCount={setCount}
               />
