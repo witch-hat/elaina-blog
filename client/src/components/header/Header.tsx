@@ -46,7 +46,7 @@ const Container = styled.div({
   }
 });
 
-const BlogName = styled.div<{ themeMode: ThemeMode }>((props) => ({
+const BlogName = styled.a<{ themeMode: ThemeMode }>((props) => ({
   fontSize: '1.8rem',
   padding: '10px',
   cursor: 'pointer',
