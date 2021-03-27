@@ -55,6 +55,15 @@ export const WRITE_COMMENT = gql`
   }
 `;
 
+export const EDIT_COMMENT = gql`
+  mutation($_id: Int!, $index: Int!, $newComment: String!, $password: String) {
+    editComment(_id: $_id, index: $index, newComment: $newComment, password: $password) {
+      isSuccess
+      errorMsg
+    }
+  }
+`;
+
 export const DELETE_COMMENT = gql`
   mutation($_id: Int!, $index: Int!, $password: String) {
     deleteComment(_id: $_id, index: $index, password: $password) {
@@ -83,6 +92,15 @@ export const WRITE_REPLY = gql`
       createdAt: $createdAt
       isAdmin: $isAdmin
     ) {
+      isSuccess
+      errorMsg
+    }
+  }
+`;
+
+export const EDIT_REPLY = gql`
+  mutation($_id: Int!, $commentIndex: Int!, $replyIndex: Int!, $newReply: String!, $password: String) {
+    editReply(_id: $_id, commentIndex: $commentIndex, replyIndex: $replyIndex, newReply: $newReply, password: $password) {
       isSuccess
       errorMsg
     }

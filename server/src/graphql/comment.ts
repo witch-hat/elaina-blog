@@ -2,10 +2,6 @@ import { gql } from 'apollo-server';
 import { CommentModel, Comments, Comment, Reply } from '../model/comment';
 import { ContextType } from '../types/context';
 import { comparePassword } from '../util/auth';
-import bcrypt from 'bcrypt';
-import { userResolver } from './user';
-
-const SALT = 10;
 
 export const commentTypeDef = gql`
   type Reply {
@@ -37,6 +33,7 @@ export const commentTypeDef = gql`
 
   extend type Mutation {
     writeComment(_id: Int!, username: String, password: String, comment: String!, createdAt: DateTime!, isAdmin: Boolean!): MutationResponse
+    editComment(_id: Int!, index: Int!, newComment: String!, password: String): MutationResponse
     deleteComment(_id: Int!, index: Int!, password: String): MutationResponse
     writeReply(
       _id: Int!
@@ -47,6 +44,7 @@ export const commentTypeDef = gql`
       createdAt: DateTime!
       isAdmin: Boolean!
     ): MutationResponse
+    editReply(_id: Int!, commentIndex: Int!, replyIndex: Int!, newReply: String!, password: String): MutationResponse
     deleteReply(_id: Int!, commentIndex: Int!, replyIndex: Int!, password: String): MutationResponse
   }
 `;
@@ -99,6 +97,26 @@ export const commentResolver = {
         return { isSuccess: true };
       } catch (err) {
         return { isSuccess: false, errorMsg: 'Cannor write comment; Server Error' };
+      }
+    },
+
+    async editComment(_: any, args: { _id: number; index: number; newComment: string; password?: string }, context: ContextType) {
+      try {
+        const commentContainer: Comments = await CommentModel.findById(args._id);
+
+        if (args.password) {
+          const hash = commentContainer.comments[args.index].password;
+          const isMatch = await comparePassword(args.password, hash || '');
+
+          if (!isMatch) return { isSuccess: false, errorMsg: 'Login failed.' };
+        }
+
+        commentContainer.comments[args.index].comment = args.newComment;
+        commentContainer.save();
+
+        return { isSuccess: true };
+      } catch {
+        return { isSuccess: false, errorMsg: 'Server Error: Cannot edit comment' };
       }
     },
 
@@ -162,6 +180,30 @@ export const commentResolver = {
         return { isSuccess: true };
       } catch {
         return { isSuccess: false, errorMsg: 'ServerError: Cannot write reply' };
+      }
+    },
+
+    async editReply(
+      _: any,
+      args: { _id: number; commentIndex: number; replyIndex: number; newReply: string; password?: string },
+      context: ContextType
+    ) {
+      try {
+        const commentContainer: Comments = await CommentModel.findById(args._id);
+
+        if (args.password) {
+          const hash = commentContainer.comments[args.commentIndex].password;
+          const isMatch = await comparePassword(args.password, hash || '');
+
+          if (!isMatch) return { isSuccess: false, errorMsg: 'Login failed.' };
+        }
+
+        commentContainer.comments[args.commentIndex].replies[args.replyIndex].comment = args.newReply;
+        commentContainer.save();
+
+        return { isSuccess: true };
+      } catch {
+        return { isSuccess: false, errorMsg: 'Server Error: Cannot edit reply' };
       }
     },
 
