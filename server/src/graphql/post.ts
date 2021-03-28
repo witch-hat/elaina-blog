@@ -148,6 +148,10 @@ export const postResolver = {
   Mutation: {
     async writePost(_: any, args: { title: string; createdAt: Date; article: string; category: string }, context: ContextType) {
       try {
+        if (!args.article || args.title.length < 2 || !args.category) {
+          return;
+        }
+
         const lastPost: Post = await PostModel.findOne({}, {}, { sort: { _id: -1 } });
         const _id = lastPost._id + 1;
 

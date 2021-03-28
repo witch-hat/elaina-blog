@@ -19,6 +19,7 @@ import { FocusWrapper } from 'src/components';
 import { EDIT_POST, WRITE_POST } from 'src/query/post';
 import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';
+import { isArrayLiteralExpression } from 'typescript';
 
 const Container = styled.div<{ themeMode: ThemeMode }>((props) => ({
   display: 'flex',
@@ -212,6 +213,11 @@ export function Writer(props: Props) {
       window.scrollTo(0, 0);
       titleRef.current?.focus();
       return alert('제목을 입력해주세요');
+    }
+
+    if (!article) {
+      editor.current?.focus();
+      return alert('본문을 1글자 이상 써주세요');
     }
 
     const { data } = await client.query({ query: IS_AUTH });
