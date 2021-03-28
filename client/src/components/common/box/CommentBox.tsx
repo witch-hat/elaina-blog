@@ -248,6 +248,7 @@ export function CommentBox(props: Props) {
             <MenuListWrapper>
               <FocusWrapper visible={isMenuOpen} onClickOutside={() => setIsMenuOpen(false)}>
                 <MenuList>
+                  <MenuButton onClick={() => {}}>Edit</MenuButton>
                   <MenuButton
                     danger
                     onClick={() => {
