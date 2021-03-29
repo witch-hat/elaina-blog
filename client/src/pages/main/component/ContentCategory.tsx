@@ -87,7 +87,6 @@ interface Props {
 }
 
 export function ContentCategory(props: Props) {
-  console.log(props.latestPosts);
   return (
     <section style={{ width: '100%' }}>
       <Container>

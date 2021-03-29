@@ -8,11 +8,13 @@ import { theme } from 'src/styles';
 import { InputBox, FocusWrapper, useWidth } from 'src/components';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
+import { LangCode, changeLang, getCurrentLangCode } from 'src/resources/languages';
 import { ModeSwitch } from './ModeSwitch';
 import AdminMenuButton from './AdminMenuButton';
 import { ProgressBar } from './ProgressBar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faBars } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faBars, faGlobe, faCaretDown } from '@fortawesome/free-solid-svg-icons';
+import { commonDispatch } from 'src/redux/common/dispatch';
 
 const StyledHeader = styled.header<{ themeMode: ThemeMode }>((props) => {
   return {
@@ -101,6 +103,51 @@ const MobileMenuButton = styled.div({
   }
 });
 
+const RotateIcon = styled.span<{ isOpen: boolean }>((props) => {
+  return {
+    display: 'inline-block',
+    marginLeft: '.3rem',
+    transition: '.3s all',
+    transform: props.isOpen ? 'rotate(180deg)' : 'none'
+  };
+});
+
+const LangMenuContainer = styled.div({
+  position: 'relative',
+  marginLeft: '.5rem'
+});
+
+const LanguageMenuButton = styled.div({
+  display: 'flex',
+  padding: '.5rem',
+  borderRadius: '.5rem',
+  alignItems: 'center',
+  cursor: 'pointer',
+  '&:hover': {
+    backgroundColor: '#ddd'
+  }
+});
+
+const LanguageContainer = styled.div({
+  position: 'absolute',
+  top: '.5rem',
+  right: '0',
+  width: 'max-content',
+  backgroundColor: '#ddd',
+  borderRadius: '.5rem'
+});
+
+const LanguageList = styled.p({
+  width: '100%',
+  padding: '.5rem',
+  cursor: 'pointer',
+  textAlign: 'center',
+  borderRadius: '.5rem',
+  '&:hover': {
+    backgroundColor: '#eee'
+  }
+});
+
 const OpeningAnimation = keyframes({
   from: {
     opacity: 0,
@@ -139,17 +186,24 @@ interface Props {
 
 export function Header(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  const lang: LangCode = useSelector<RootState, any>((state) => state.common.lang);
   const width = useWidth();
-  const [isMenuVisible, setIsMenuVisible] = useState<boolean>(width > 767);
+  const [isAdminMenuVisible, setIsAdminMenuVisible] = useState<boolean>(width > 767);
+  const [isLangMenuVisible, setIsLangMenuVisible] = useState(false);
   const [searchKeyword, setSearchKeyWord] = useState('');
   const router = useRouter();
+  const currentLangCode = getCurrentLangCode();
+  const languages = {
+    [LangCode.ko]: '한국어',
+    [LangCode.en]: 'English'
+  };
 
   useEffect(() => {
-    setIsMenuVisible(width > 767);
+    setIsAdminMenuVisible(width > 767);
   }, [width]);
 
   function onMobileMenuButtonClick() {
-    setIsMenuVisible(!isMenuVisible);
+    setIsAdminMenuVisible(!isAdminMenuVisible);
   }
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -172,13 +226,13 @@ export function Header(props: Props) {
         </Link>
         <Flex>
           <FocusWrapper
-            visible={isMenuVisible}
+            visible={isAdminMenuVisible}
             onClickOutside={() => {
-              if (width <= 767) setIsMenuVisible(false);
+              if (width <= 767) setIsAdminMenuVisible(false);
             }}
           >
             <>
-              {isMenuVisible && (
+              {isAdminMenuVisible && (
                 <ResponsiveMenuBox themeMode={themeMode}>
                   <ModeSwitch />
                   <SearchForm onSubmit={(e: React.FormEvent<HTMLFormElement>) => handleSubmit(e)}>
@@ -199,6 +253,32 @@ export function Header(props: Props) {
               )}
             </>
           </FocusWrapper>
+          <LangMenuContainer onClick={() => setIsLangMenuVisible(!isLangMenuVisible)}>
+            <LanguageMenuButton>
+              <FontAwesomeIcon icon={faGlobe} />
+              <RotateIcon isOpen={isLangMenuVisible}>
+                <FontAwesomeIcon icon={faCaretDown} />
+              </RotateIcon>
+            </LanguageMenuButton>
+            {isLangMenuVisible && (
+              <FocusWrapper visible={isLangMenuVisible} onClickOutside={() => setIsLangMenuVisible(false)}>
+                <LanguageContainer>
+                  {Object.keys(languages).map((code: any) => {
+                    return (
+                      <LanguageList
+                        onClick={() => {
+                          changeLang(code as LangCode);
+                          commonDispatch.SetLanguage(code);
+                        }}
+                      >
+                        {languages[code as LangCode]}
+                      </LanguageList>
+                    );
+                  })}
+                </LanguageContainer>
+              </FocusWrapper>
+            )}
+          </LangMenuContainer>
           <AdminMenuButton isLogin={props.isLogin} />
           <MobileMenuButton onClick={() => onMobileMenuButtonClick()}>
             <FontAwesomeIcon icon={faBars} />

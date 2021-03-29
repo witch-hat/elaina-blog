@@ -12,6 +12,7 @@ import { withApollo, initApolloClient } from '../apollo/withApollo';
 import { store, persistor } from 'src/redux';
 import setCookie from 'set-cookie-parser';
 import { IS_AUTH } from 'src/query/user';
+import { useTranslation } from 'react-i18next';
 
 // Skip Adding FontAwesome CSS
 config.autoAddCss = false;
@@ -38,6 +39,8 @@ function ElainaBlog({ Component, pageProps, apolloClient, cookies }: any) {
       document.cookie = cookies[1];
     }
   }
+
+  useTranslation();
 
   return (
     <ApolloProvider client={apolloClient}>
