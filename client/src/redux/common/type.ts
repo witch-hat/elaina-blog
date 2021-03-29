@@ -1,3 +1,5 @@
+import { LangCode } from 'src/resources/languages';
+
 export enum ThemeMode {
   light = 'light',
   dark = 'dark'
@@ -5,10 +7,12 @@ export enum ThemeMode {
 
 export interface CommonState {
   theme: ThemeMode;
+  lang: LangCode;
 }
 
 export enum ActionTypes {
-  SetTheme = 'SetTheme'
+  SetTheme = 'SetTheme',
+  SetLang = 'SetLang'
 }
 
 interface SetTheme {
@@ -16,4 +20,9 @@ interface SetTheme {
   payload: ThemeMode;
 }
 
-export type CommonAction = SetTheme;
+interface SetLang {
+  type: ActionTypes.SetLang;
+  payload: LangCode;
+}
+
+export type CommonAction = SetTheme | SetLang;
