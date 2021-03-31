@@ -1,4 +1,9 @@
 {
+  "EditProfile": "Edit Profile",
+  "Save": "Save",
+  "Cancel": "Cancel",
+  "Edit": "Edit",
+  "Delete": "Delete",
   "Board": "Board",
   "TimeLine": "TimeLine",
   "About": "About",
@@ -8,11 +13,13 @@
   "Login": "Login",
   "Logout": "Logout",
   "Content": "Content",
-  "CategoryManage": "CategoryManage",
-  "BoardManage": "BoardManage",
-  "CommentManage": "CommentManage",
-  "Statistic": "Statistic",
-  "VisitorViews": "VisitorViews",
+  "Write": "Write Board",
+  "CategoryManage": "Category Manage",
+  "BoardManage": "Board Manage",
+  "CommentManage": "Comment Manage",
   "Setting": "Setting",
-  "NameChange": "NameChange"
+  "Comments": "Comments",
+  "WriteComments": "Write Comments",
+  "Reply": "Reply",
+  "WriteReply": "Write Reply"
 }

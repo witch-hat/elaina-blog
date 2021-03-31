@@ -10,6 +10,7 @@ import { RoundImage } from 'src/components';
 import { ProfileImageCropper } from './ProfileImageCropper';
 import { theme } from 'src/styles';
 import { ProfileType, UPDATE_PROFILE } from 'src/query';
+import { Lang, trans } from 'src/resources/languages';
 
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
@@ -236,6 +237,7 @@ export default function Profile(props: Props) {
   const [viewedProfile, setViewedProfile] = useState<ProfileType>(props.profile);
   const [uploadFile] = useMutation<{ uploadFile: FileType }>(UPLOAD_FILE);
   const [updateProfile] = useMutation<{ updateProfile: ProfileType }>(UPDATE_PROFILE);
+  const [success, setSuccess] = useState(false);
   const client = useApollo();
 
   async function changeProfile() {
@@ -275,10 +277,13 @@ export default function Profile(props: Props) {
     if (updateResponse.data.updateProfile.isSuccess) {
       setViewedProfile({ ...edtingProfile, image: uploadedImagePath ? uploadedImagePath : viewedProfile.image });
       setIsEditMode(false);
+      setSuccess(true);
     } else {
       alert('Error: cannot update profile');
     }
   }
+
+  console.log(success);
 
   return (
     <Container>
@@ -436,7 +441,7 @@ export default function Profile(props: Props) {
         {isEditMode ? (
           <>
             <SaveButton themeMode={themeMode} form='profile-form' type='submit'>
-              Save
+              {trans(Lang.Save)}
             </SaveButton>
             <CancelButton
               onClick={() => {
@@ -444,11 +449,11 @@ export default function Profile(props: Props) {
                 setIsEditMode(false);
               }}
             >
-              Cancel
+              {trans(Lang.Cancel)}
             </CancelButton>
           </>
         ) : (
-          props.isLogin && <EditButton onClick={() => setIsEditMode(true)}>Edit Profile</EditButton>
+          props.isLogin && <EditButton onClick={() => setIsEditMode(true)}>{trans(Lang.EditProfile)}</EditButton>
         )}
       </ButtonContainer>
       <ProfileImageCropper
@@ -463,6 +468,7 @@ export default function Profile(props: Props) {
           setIsSelectImage(false);
         }}
       />
+      {success && <div>hello</div>}
     </Container>
   );
 }

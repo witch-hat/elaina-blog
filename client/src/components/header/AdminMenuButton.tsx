@@ -12,6 +12,7 @@ import { ThemeMode } from 'src/redux/common/type';
 import { LOGOUT } from 'src/query/user';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
+import { trans, Lang } from 'src/resources/languages';
 
 const Container = styled.div({
   position: 'relative'
@@ -79,7 +80,7 @@ export default function AdminMenuButton(props: Props) {
   return (
     <Container>
       <Button onClick={() => setIsMenuOpen(!isMenuOpen)} themeMode={themeMode}>
-        Menu&nbsp;
+        {trans(Lang.Menu)}&nbsp;
         <RotateIcon isOpen={isMenuOpen}>
           <FontAwesomeIcon icon={faCaretDown} />
         </RotateIcon>
@@ -89,7 +90,7 @@ export default function AdminMenuButton(props: Props) {
           <ListContainer themeMode={themeMode}>
             <Link href='/admin'>
               <List themeMode={themeMode} onClick={() => setIsMenuOpen(false)}>
-                Admin
+                {trans(Lang.Admin)}
               </List>
             </Link>
             {props.isLogin ? (
@@ -99,12 +100,12 @@ export default function AdminMenuButton(props: Props) {
                   logout();
                 }}
               >
-                Logout
+                {trans(Lang.Logout)}
               </List>
             ) : (
               <Link href='/admin/login'>
                 <List themeMode={themeMode} onClick={() => setIsMenuOpen(false)}>
-                  Login
+                  {trans(Lang.Login)}
                 </List>
               </Link>
             )}

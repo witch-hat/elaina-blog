@@ -4,7 +4,12 @@ export enum LangCode {
 }
 
 export enum Lang {
+  EditProfile = 'EditProfile',
+  Save = 'Save',
+  Cancel = 'Cancel',
   Board = 'Board',
+  Edit = 'Edit',
+  Delete = 'Delete',
   TimeLine = 'TimeLine',
   About = 'About',
   Search = 'Search',
@@ -13,11 +18,13 @@ export enum Lang {
   Login = 'Login',
   Logout = 'Logout',
   Content = 'Content',
+  Write = 'Write',
   CategoryManage = 'CategoryManage',
   BoardManage = 'BoardManage',
   CommentManage = 'CommentManage',
-  Statistic = 'Statistic',
-  VisitorViews = 'VisitorViews',
   Setting = 'Setting',
-  NameChange = 'NameChange'
+  Comments = 'Comments',
+  WriteComments = 'WriteComments',
+  Reply = 'Reply',
+  WriteReply = 'WriteReply'
 }

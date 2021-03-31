@@ -18,6 +18,7 @@ import { ThemeMode } from 'src/redux/common/type';
 import { theme } from 'src/styles';
 import { RootState } from 'src/redux/rootReducer';
 import { FormatUnifier } from 'src/utils';
+import { trans, Lang } from 'src/resources/languages';
 
 const Container = styled.section({
   width: '800px',
@@ -97,6 +98,7 @@ const MenuButton = styled.p<{ danger?: boolean }>((props) => ({
   textAlign: 'center',
   cursor: 'pointer',
   userSelect: 'none',
+  wordBreak: 'keep-all',
   color: props.danger ? '#dd0000' : 'inherit',
   '&:hover': {
     backgroundColor: '#ddd'
@@ -214,10 +216,10 @@ export default function Content(props: Props) {
               <FocusWrapper visible={isOpenMenu} onClickOutside={() => setIsOpenMenu(false)}>
                 <MenuList>
                   <MenuButton>
-                    <Link href={`/post/${id}/edit`}>Edit</Link>
+                    <Link href={`/post/${id}/edit`}>{trans(Lang.Edit)}</Link>
                   </MenuButton>
                   <MenuButton danger onClick={() => setIsModalOpen(true)}>
-                    Delete
+                    {trans(Lang.Delete)}
                   </MenuButton>
                 </MenuList>
               </FocusWrapper>

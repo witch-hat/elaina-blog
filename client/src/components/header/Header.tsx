@@ -8,13 +8,13 @@ import { theme } from 'src/styles';
 import { InputBox, FocusWrapper, useWidth } from 'src/components';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
-import { LangCode, changeLang, getCurrentLangCode } from 'src/resources/languages';
 import { ModeSwitch } from './ModeSwitch';
 import AdminMenuButton from './AdminMenuButton';
 import { ProgressBar } from './ProgressBar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faBars, faGlobe, faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { commonDispatch } from 'src/redux/common/dispatch';
+import { LangCode, changeLang, getCurrentLangCode, trans, Lang } from 'src/resources/languages';
 
 const StyledHeader = styled.header<{ themeMode: ThemeMode }>((props) => {
   return {
@@ -238,7 +238,7 @@ export function Header(props: Props) {
                   <SearchForm onSubmit={(e: React.FormEvent<HTMLFormElement>) => handleSubmit(e)}>
                     <InputBox
                       type='text'
-                      placeholder='Search'
+                      placeholder={trans(Lang.Search)}
                       id='search'
                       minLength={2}
                       maxLength={10}

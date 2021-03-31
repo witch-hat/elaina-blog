@@ -16,6 +16,7 @@ import { theme } from 'src/styles';
 import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';
 import { InputBox } from './InputBox';
+import { Lang, trans } from 'src/resources/languages';
 
 const Container = styled.div({
   width: '100%',
@@ -94,9 +95,11 @@ const MenuList = styled.div({
 const MenuButton = styled.p<{ danger?: boolean }>((props) => ({
   display: 'block',
   padding: '.5rem',
+  fontSize: '.875rem',
   textAlign: 'center',
   cursor: 'pointer',
   userSelect: 'none',
+  wordBreak: 'keep-all',
   color: props.danger ? '#dd0000' : 'inherit',
   '&:hover': {
     backgroundColor: '#ddd'
@@ -248,7 +251,7 @@ export function CommentBox(props: Props) {
             <MenuListWrapper>
               <FocusWrapper visible={isMenuOpen} onClickOutside={() => setIsMenuOpen(false)}>
                 <MenuList>
-                  <MenuButton onClick={() => {}}>Edit</MenuButton>
+                  <MenuButton onClick={() => {}}>{trans(Lang.Edit)}</MenuButton>
                   <MenuButton
                     danger
                     onClick={() => {
@@ -256,7 +259,7 @@ export function CommentBox(props: Props) {
                       setIsMenuOpen(false);
                     }}
                   >
-                    Delete
+                    {trans(Lang.Delete)}
                   </MenuButton>
                 </MenuList>
               </FocusWrapper>

@@ -8,6 +8,7 @@ import { faChartBar, faUsersCog, faBookmark } from '@fortawesome/free-solid-svg-
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 import { LOGOUT } from '../../../query/user';
+import { Lang, trans } from 'src/resources/languages';
 
 interface Props {}
 
@@ -77,24 +78,24 @@ export function SideBar(props: Props) {
   return (
     <Container>
       <Link href='/admin/writer'>
-        <Button>글쓰기</Button>
+        <Button>{trans(Lang.Write)}</Button>
       </Link>
       <TitleWrapper>
         <SideBarIcon icon={faBookmark} />
-        <Title>컨텐츠</Title>
+        <Title>{trans(Lang.Content)}</Title>
       </TitleWrapper>
       <ListContainer>
         <Link href='/admin/category' passHref>
           <a>
-            <List>카테고리 관리</List>
+            <List>{trans(Lang.CategoryManage)}</List>
           </a>
         </Link>
-        <List>글 관리</List>
-        <List>댓글 관리</List>
+        <List>{trans(Lang.BoardManage)}</List>
+        <List>{trans(Lang.CommentManage)}</List>
       </ListContainer>
       <TitleWrapper>
         <SideBarIcon icon={faUsersCog} />
-        <Title>설정</Title>
+        <Title>{trans(Lang.Setting)}</Title>
       </TitleWrapper>
       <ListContainer>
         <List
@@ -103,7 +104,7 @@ export function SideBar(props: Props) {
             router.push('/admin/login');
           }}
         >
-          로그아웃
+          {trans(Lang.Logout)}
         </List>
       </ListContainer>
     </Container>

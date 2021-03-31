@@ -9,6 +9,7 @@ import { ReplyElement } from './ReplyElement';
 import { theme } from 'src/styles';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
+import { trans, Lang } from 'src/resources/languages';
 
 const Container = styled.div<{ themeMode: ThemeMode; isAdmin: boolean }>((props) => ({
   borderRadius: '12px',
@@ -98,7 +99,9 @@ export default function CommentElement(props: Props) {
               <ReplyButton onClick={() => setIsShowingReply(!isShowingReply)}>{`${
                 isShowingReply ? 'Hide' : `Show ${replies.length}`
               } Reply `}</ReplyButton>
-              <ReplyButton onClick={() => setIsAddReply(!isAddReply)}>{isAddReply ? 'Cancel' : `Add Reply`}</ReplyButton>
+              <ReplyButton onClick={() => setIsAddReply(!isAddReply)}>
+                {isAddReply ? trans(Lang.Cancel) : trans(Lang.WriteReply)}
+              </ReplyButton>
             </ReplyButtonContainer>
             {isAddReply ? <CommentEditor isLogin={props.isLogin} setNewReply={setNewReply} isReply commentIndex={props.index} /> : null}
             {isShowingReply

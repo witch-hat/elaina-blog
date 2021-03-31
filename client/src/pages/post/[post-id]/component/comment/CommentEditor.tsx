@@ -12,6 +12,7 @@ import { ThemeMode } from 'src/redux/common/type';
 import { Reply, WRITE_COMMENT, Comment, WRITE_REPLY } from 'src/query/comment';
 import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';
+import { Lang, trans } from 'src/resources/languages';
 
 const EditorContainer = styled.form({
   width: '100%',
@@ -277,7 +278,7 @@ export default function CommentEditor(props: Props) {
           props.isReply ? submitReply() : submitComment();
         }}
       >
-        덧글 작성
+        {trans(Lang.WriteComments)}
       </SubmitButton>
     </EditorContainer>
   );
