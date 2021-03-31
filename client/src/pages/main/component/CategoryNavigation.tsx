@@ -45,13 +45,13 @@ export default function CategoryNavigation(props: Props) {
       <NavigationButton href='/timeline'>
         <>
           <NavigationIcon icon={faStream} />
-          <NavName>TimeLine</NavName>
+          <NavName>{trans(Lang.TimeLine)}</NavName>
         </>
       </NavigationButton>
       <NavigationButton href='/about'>
         <>
           <NavigationIcon icon={faUser} />
-          <NavName>About</NavName>
+          <NavName>{trans(Lang.About)}</NavName>
         </>
       </NavigationButton>
     </Container>

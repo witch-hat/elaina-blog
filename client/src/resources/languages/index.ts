@@ -4,8 +4,6 @@ import Detactor from 'i18next-browser-languagedetector';
 
 import { Lang, LangCode } from './lang';
 
-export type KeyLang = keyof typeof Lang;
-
 const languages = {
   [LangCode.en]: {
     translation: require('./en-us.json')
