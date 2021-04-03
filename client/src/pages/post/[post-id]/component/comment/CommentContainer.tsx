@@ -9,7 +9,7 @@ import { trans, Lang } from 'src/resources/languages';
 const Container = styled.section({
   display: 'flex',
   width: '100%',
-  marginTop: '20px',
+  margin: '20px 0',
   padding: '.5rem 1.5rem',
   flexDirection: 'column',
   jusitfyContent: 'flex-start',

@@ -34,6 +34,13 @@ const ReplyButton = styled.span({
   }
 });
 
+const ReplyContainer = styled.div({
+  width: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center'
+});
+
 interface Props {
   comment: Comment;
   isLogin: boolean;
@@ -114,21 +121,23 @@ export default function CommentElement(props: Props) {
                 commentIndex={props.index}
               />
             )}
-            {isShowingReply
-              ? replies.map((reply: Reply, index: number) => {
-                  return (
-                    <ReplyElement
-                      key={index}
-                      isLogin={props.isLogin}
-                      author={props.author}
-                      commentIndex={props.index}
-                      reply={reply}
-                      replyIndex={index}
-                      setDeletedReplyIndex={setDeletedReplyIndex}
-                    />
-                  );
-                })
-              : null}
+            <ReplyContainer>
+              {isShowingReply
+                ? replies.map((reply: Reply, index: number) => {
+                    return (
+                      <ReplyElement
+                        key={index}
+                        isLogin={props.isLogin}
+                        author={props.author}
+                        commentIndex={props.index}
+                        reply={reply}
+                        replyIndex={index}
+                        setDeletedReplyIndex={setDeletedReplyIndex}
+                      />
+                    );
+                  })
+                : null}
+            </ReplyContainer>
           </>
         </CommentBox>
       </BorderBox>
