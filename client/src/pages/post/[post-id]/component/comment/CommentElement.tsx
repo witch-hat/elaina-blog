@@ -98,7 +98,7 @@ export default function CommentElement(props: Props) {
         >
           <>
             <ReplyButtonContainer>
-              <ReplyButton onClick={() => setIsShowingReply(!isShowingReply)}>{`${
+              <ReplyButton onClick={() => replies.length && setIsShowingReply(!isShowingReply)}>{`${
                 isShowingReply ? 'Hide' : `Show ${replies.length}`
               } Reply `}</ReplyButton>
               <ReplyButton onClick={() => setIsAddReply(!isAddReply)}>
