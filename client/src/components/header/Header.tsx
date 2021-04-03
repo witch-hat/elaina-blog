@@ -137,12 +137,13 @@ const LanguageContainer = styled.div({
   borderRadius: '.5rem'
 });
 
-const LanguageList = styled.p({
+const LanguageItem = styled.p({
   width: '100%',
   padding: '.5rem',
   cursor: 'pointer',
   textAlign: 'center',
   borderRadius: '.5rem',
+  userSelect: 'none',
   '&:hover': {
     backgroundColor: '#eee'
   }
@@ -265,14 +266,14 @@ export function Header(props: Props) {
                 <LanguageContainer>
                   {Object.keys(languages).map((code: any) => {
                     return (
-                      <LanguageList
+                      <LanguageItem
                         onClick={() => {
                           changeLang(code as LangCode);
                           commonDispatch.SetLanguage(code);
                         }}
                       >
                         {languages[code as LangCode]}
-                      </LanguageList>
+                      </LanguageItem>
                     );
                   })}
                 </LanguageContainer>

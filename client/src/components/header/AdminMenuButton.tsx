@@ -51,11 +51,12 @@ const ListContainer = styled.div<{ themeMode: ThemeMode }>((props) => ({
   boxShadow: '0 6px 3px -3px rgba(38,38,38,.2)'
 }));
 
-const List = styled.div<{ themeMode: ThemeMode }>((props) => {
+const MenuItem = styled.a<{ themeMode: ThemeMode }>((props) => {
   return {
     padding: '.5rem',
     textAlign: 'center',
     cursor: 'pointer',
+    userSelect: 'none',
     '&:hover': {
       backgroundColor: theme[props.themeMode].hoverBackground
     }
@@ -89,24 +90,24 @@ export default function AdminMenuButton(props: Props) {
         <FocusWrapper visible={isMenuOpen} onClickOutside={() => setIsMenuOpen(false)}>
           <ListContainer themeMode={themeMode}>
             <Link href='/admin'>
-              <List themeMode={themeMode} onClick={() => setIsMenuOpen(false)}>
+              <MenuItem themeMode={themeMode} onClick={() => setIsMenuOpen(false)}>
                 {trans(Lang.Admin)}
-              </List>
+              </MenuItem>
             </Link>
             {props.isLogin ? (
-              <List
+              <MenuItem
                 themeMode={themeMode}
                 onClick={() => {
                   logout();
                 }}
               >
                 {trans(Lang.Logout)}
-              </List>
+              </MenuItem>
             ) : (
               <Link href='/admin/login'>
-                <List themeMode={themeMode} onClick={() => setIsMenuOpen(false)}>
+                <MenuItem themeMode={themeMode} onClick={() => setIsMenuOpen(false)}>
                   {trans(Lang.Login)}
-                </List>
+                </MenuItem>
               </Link>
             )}
           </ListContainer>
