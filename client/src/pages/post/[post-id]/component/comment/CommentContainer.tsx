@@ -71,7 +71,7 @@ export default function CommentContainer(props: Props) {
   return (
     <Container>
       <Title>{trans(Lang.Comments)}</Title>
-      <CommentWriter isLogin={props.isLogin} setNewComment={setNewComment} />
+      <CommentWriter isLogin={props.isLogin} buttonText={trans(Lang.Save)} setNewComment={setNewComment} />
       <div style={{ width: '100%' }}>
         <Counter>{`덧글 수: ${count}개`}</Counter>
         {commentContainer &&

@@ -86,6 +86,7 @@ const SubmitButton = styled.button<{ themeMode: ThemeMode }>((props) => ({
 
 interface Props {
   isLogin: boolean;
+  buttonText: string;
   isReply?: boolean;
   commentIndex?: number;
   setNewComment?: React.Dispatch<React.SetStateAction<Comment | undefined>>;
@@ -278,7 +279,7 @@ export function CommentWriter(props: Props) {
           props.isReply ? submitReply() : submitComment();
         }}
       >
-        {trans(Lang.WriteComments)}
+        {props.buttonText}
       </SubmitButton>
     </EditorContainer>
   );
