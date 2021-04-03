@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { InferGetServerSidePropsType, NextPageContext } from 'next';
 import { withRouter, NextRouter, useRouter } from 'next/router';
 
-import { Writer } from 'src/components/writer/Writer';
+import { Writer } from 'src/pages/admin/writer/component/Writer';
 import { theme } from 'src/styles';
 
 import { useSelector } from 'react-redux';

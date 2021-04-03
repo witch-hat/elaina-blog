@@ -8,7 +8,7 @@ import { faUser, faClock } from '@fortawesome/free-solid-svg-icons';
 
 import { GET_PROFILE, ProfileType } from 'src/query';
 import { initApolloClient } from 'src/apollo/withApollo';
-import { MainPageLayout } from 'src/components';
+import { MainPageLayout } from 'src/pages/main/component/MainPageLayout';
 
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';

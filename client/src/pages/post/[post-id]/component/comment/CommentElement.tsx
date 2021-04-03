@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 
 import { BorderBox, CommentBox } from 'src/components';
-import { CommentWriter } from 'src/components';
+import { CommentWriter } from 'src/pages/admin/writer/component/CommentWriter';
 import { Reply, Comment, Comments } from 'src/query/comment';
 import { ReplyElement } from './ReplyElement';
 import { theme } from 'src/styles';

@@ -19,9 +19,3 @@ export { RoundImage } from './common/image/RoundImage';
 
 // hook
 export { useWidth } from './common/hook/useWidth';
-
-// main
-export { MainPageLayout } from '../pages/main/component/MainPageLayout';
-
-// writer
-export { CommentWriter } from './writer/CommentWriter';
