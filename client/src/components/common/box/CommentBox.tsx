@@ -251,7 +251,12 @@ export function CommentBox(props: Props) {
             <MenuListWrapper>
               <FocusWrapper visible={isMenuOpen} onClickOutside={() => setIsMenuOpen(false)}>
                 <MenuList>
-                  <MenuButton onClick={() => {}}>{trans(Lang.Edit)}</MenuButton>
+                  {/* admin인경우: 자기것만 edit, 나머지는 edit 버튼 X, admin 아닌경우 edit 버튼 O */}
+                  {props.isLogin ? (
+                    props.comment.isAdmin && <MenuButton onClick={() => {}}>{trans(Lang.Edit)}</MenuButton>
+                  ) : (
+                    <MenuButton onClick={() => {}}>{trans(Lang.Edit)}</MenuButton>
+                  )}
                   <MenuButton
                     danger
                     onClick={() => {
