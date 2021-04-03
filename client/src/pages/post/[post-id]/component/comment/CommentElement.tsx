@@ -68,6 +68,8 @@ export default function CommentElement(props: Props) {
       const newComments = props.commentContainer.comments;
 
       props.setCommentContainer({ ...props.commentContainer, comments: newComments });
+      setIsAddReply(false);
+      setIsShowingReply(true);
     }
   }, [newReply]);
 
@@ -103,7 +105,15 @@ export default function CommentElement(props: Props) {
                 {isAddReply ? trans(Lang.Cancel) : trans(Lang.WriteReply)}
               </ReplyButton>
             </ReplyButtonContainer>
-            {isAddReply && <CommentWriter isLogin={props.isLogin} setNewReply={setNewReply} isReply commentIndex={props.index} />}
+            {isAddReply && (
+              <CommentWriter
+                isLogin={props.isLogin}
+                buttonText={trans(Lang.Save)}
+                setNewReply={setNewReply}
+                isReply
+                commentIndex={props.index}
+              />
+            )}
             {isShowingReply
               ? replies.map((reply: Reply, index: number) => {
                   return (
