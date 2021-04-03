@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 import CommentElement from './CommentElement';
-import CommentEditor from './CommentEditor';
+import { CommentWriter } from 'src/components';
 import { Comments, Comment } from 'src/query/comment';
 import { trans, Lang } from 'src/resources/languages';
 
@@ -71,7 +71,7 @@ export default function CommentContainer(props: Props) {
   return (
     <Container>
       <Title>{trans(Lang.Comments)}</Title>
-      <CommentEditor isLogin={props.isLogin} setNewComment={setNewComment} />
+      <CommentWriter isLogin={props.isLogin} setNewComment={setNewComment} />
       <div style={{ width: '100%' }}>
         <Counter>{`덧글 수: ${count}개`}</Counter>
         {commentContainer &&

@@ -92,7 +92,7 @@ interface Props {
   setNewReply?: React.Dispatch<React.SetStateAction<Reply | undefined>>;
 }
 
-export default function CommentEditor(props: Props) {
+export function CommentWriter(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const [writeComment] = useMutation(WRITE_COMMENT);
   const [writeReply] = useMutation(WRITE_REPLY);

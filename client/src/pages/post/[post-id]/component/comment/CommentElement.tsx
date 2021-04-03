@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 
 import { BorderBox, CommentBox } from 'src/components';
-import CommentEditor from './CommentEditor';
+import { CommentWriter } from 'src/components';
 import { Reply, Comment, Comments } from 'src/query/comment';
 import { ReplyElement } from './ReplyElement';
 import { theme } from 'src/styles';
@@ -103,7 +103,7 @@ export default function CommentElement(props: Props) {
                 {isAddReply ? trans(Lang.Cancel) : trans(Lang.WriteReply)}
               </ReplyButton>
             </ReplyButtonContainer>
-            {isAddReply ? <CommentEditor isLogin={props.isLogin} setNewReply={setNewReply} isReply commentIndex={props.index} /> : null}
+            {isAddReply && <CommentWriter isLogin={props.isLogin} setNewReply={setNewReply} isReply commentIndex={props.index} />}
             {isShowingReply
               ? replies.map((reply: Reply, index: number) => {
                   return (
