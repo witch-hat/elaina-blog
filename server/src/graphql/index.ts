@@ -49,7 +49,6 @@ const rootTypeDef = gql`
 
   type MutationResponse {
     isSuccess: Boolean!
-    errorMsg: String
   }
 
   type Query {

@@ -1,4 +1,4 @@
-import { gql } from 'apollo-server';
+import { gql, ApolloError } from 'apollo-server';
 import { ProfileModel } from '../model/profile';
 import { ContextType } from '../types/context';
 
@@ -43,15 +43,14 @@ export const profileResolver = {
         const profile = await ProfileModel.findOne();
         return profile;
       } catch (err) {
-        console.log(err);
-        throw err;
+        throw new ApolloError('Server Error: Cannot find profile');
       }
     }
   },
   Mutation: {
     async updateProfile(_: any, args: any, context: ContextType) {
       try {
-        const result = await ProfileModel.findByIdAndUpdate(
+        await ProfileModel.findByIdAndUpdate(
           args.id,
           {
             ...args
@@ -60,7 +59,7 @@ export const profileResolver = {
         );
         return { isSuccess: true };
       } catch (err) {
-        return { isSuccess: false, errorMsg: 'Cannot update profile: Server Error' };
+        throw new ApolloError('Server Error: Cannot update profile');
       }
     }
   }

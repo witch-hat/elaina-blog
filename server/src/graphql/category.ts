@@ -1,4 +1,4 @@
-import { gql } from 'apollo-server';
+import { ApolloError, gql, UserInputError, ValidationError } from 'apollo-server';
 import { CategoryModel, Category } from '../model/category';
 import { CommentModel } from '../model/comment';
 import { Post, PostModel } from '../model/post';
@@ -105,8 +105,10 @@ export const categoryResolver = {
       try {
         const categoryList: Category[] = await CategoryModel.find();
 
-        if (categoryList.filter((category) => category.title === args.title).length) {
-          return { isSuccess: false, errorMsg: '이미 존재하는 Title 입니다.' };
+        if (!args.title || !args.description) {
+          throw new UserInputError('카테고리 제목 또는 소개를 입력해주세요.');
+        } else if (categoryList.filter((category) => category.title === args.title).length) {
+          throw new ValidationError('이미 존재하는 제목입니다.');
         }
 
         const newId = (categoryList[categoryList.length - 1]._id += 1);
@@ -120,13 +122,15 @@ export const categoryResolver = {
 
         return { isSuccess: true };
       } catch (err) {
-        return { isSuccess: false, errorMsg: 'Error occured with DB and Server connection' };
+        throw new ApolloError('Server Error: Cannot create new category');
       }
     },
 
     async updateCategory(_: any, args: { id: number; title: string; description: string }, context: ContextType) {
       try {
-        console.log(args);
+        if (!args.title || !args.description) {
+          throw new UserInputError('카테고리 제목 또는 소개를 입력해주세요.');
+        }
 
         await CategoryModel.updateOne(
           {
@@ -142,20 +146,20 @@ export const categoryResolver = {
           isSuccess: true
         };
       } catch {
-        return { isSuccess: false, errorMsg: 'Server Error: Cannot update category' };
+        throw new ApolloError('Server Error: Cannot update category');
       }
     },
 
     async deleteCategory(_: any, args: { index: number }, context: ContextType) {
       try {
         if (args.index === undefined) {
-          return { isSuccess: false, errorMsg: '잘못된 index값' };
+          throw new ValidationError('잘못된 index값 입니다.');
         }
 
         const deletedCategory: Category = await CategoryModel.findOne({ order: args.index });
 
         if (deletedCategory._id === 0) {
-          return { isSuccess: false, errorMsg: '기본 카테고리는 삭제할 수 없습니다.' };
+          throw new ValidationError('기본 카테고리는 삭제할 수 없습니다.');
         }
 
         await CategoryModel.deleteOne({ order: args.index });
@@ -168,7 +172,7 @@ export const categoryResolver = {
 
         return { isSuccess: true };
       } catch (err) {
-        return { isSuccess: false, errorMsg: 'Error occured with DB and Server connection' };
+        throw new ApolloError('Server Error: Cannot delete category');
       }
     },
 
@@ -181,7 +185,7 @@ export const categoryResolver = {
         }
         return { isSuccess: true };
       } catch {
-        return { isSuccess: false, errorMsg: 'Server Error: Cannot change order' };
+        throw new ApolloError('Server Error: Cannot update category order');
       }
     }
   }

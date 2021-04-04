@@ -1,4 +1,4 @@
-import { gql } from 'apollo-server';
+import { ApolloError, gql, UserInputError } from 'apollo-server';
 import { PostModel, Post } from '../model/post';
 import { ContextType } from '../types/context';
 import { CategoryModel, Category } from '../model/category';
@@ -149,7 +149,7 @@ export const postResolver = {
     async writePost(_: any, args: { title: string; createdAt: Date; article: string; category: string }, context: ContextType) {
       try {
         if (!args.article || args.title.length < 2 || !args.category) {
-          return;
+          throw new UserInputError('카테고리, 제목 또는 본문을 입력해주세요');
         }
 
         const lastPost: Post = await PostModel.findOne({}, {}, { sort: { _id: -1 } });
@@ -162,7 +162,9 @@ export const postResolver = {
 
         const result = PostModel.create({ _id, title: args.title, createdAt: args.createdAt, categoryId, article: args.article });
         return result;
-      } catch (err) {}
+      } catch (err) {
+        throw err;
+      }
     },
 
     async deletePost(_: any, args: { id: number }, context: ContextType) {
@@ -177,6 +179,10 @@ export const postResolver = {
 
     async editPost(_: any, args: { id: number; title: string; article: string; category: string }, context: ContextType) {
       try {
+        if (!args.article || args.title.length < 2 || !args.category) {
+          throw new UserInputError('카테고리, 제목 또는 본문을 입력해주세요');
+        }
+
         const editPost: Post = await PostModel.findById(args.id);
         editPost.title = args.title;
         editPost.article = args.article;
@@ -190,7 +196,7 @@ export const postResolver = {
 
         return { isSuccess: true };
       } catch {
-        return { isEdited: false, errorMsg: 'Cannot edit post: Server Error' };
+        throw new ApolloError('Server Error: Cannot edit post');
       }
     }
   }

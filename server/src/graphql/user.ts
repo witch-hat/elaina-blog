@@ -1,11 +1,9 @@
-import { gql, AuthenticationError, Request } from 'apollo-server';
-import express from 'express';
+import { gql, AuthenticationError, UserInputError, ApolloError } from 'apollo-server';
 import { UserModel, User, Auth } from '../model/user';
 import { comparePassword, getToken, verifyToken } from '../util/auth';
 import { ContextType } from '../types/context';
 import jwt, { TokenExpiredError } from 'jsonwebtoken';
 import { config } from '../util/config';
-import { getConnection } from 'typeorm';
 import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 import Cookies from 'cookies';
@@ -185,7 +183,15 @@ export const userResolver = {
       }
     },
 
-    async login(_: any, args: any, context: ContextType) {
+    async login(_: any, args: { emailId: string; password: string }, context: ContextType) {
+      const emailRegExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+      if (args.emailId.length < 4 || args.password.length < 4) {
+        throw new UserInputError('4자 이상 입력해주세요.');
+      } else if (args.emailId.match(emailRegExp) === null) {
+        throw new UserInputError('이메일을 입력해 주세요');
+      }
+
       const macList: MACList = await macaddress.all();
       const mac = Object.values(macList)[0];
       const ua = new UAParser(context.req.headers['user-agent']);
@@ -273,7 +279,7 @@ export const userResolver = {
 
         return { isSuccess: true };
       } catch (err) {
-        return { isSuccess: false, errorMsg: '로그아웃 도중 에러발생' };
+        throw new ApolloError('Server Error: Cannot logout');
       }
     }
   }

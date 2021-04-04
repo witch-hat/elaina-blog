@@ -1,4 +1,4 @@
-import { gql } from 'apollo-server';
+import { ApolloError, AuthenticationError, gql, UserInputError } from 'apollo-server';
 import { CommentModel, Comments, Comment, Reply } from '../model/comment';
 import { ContextType } from '../types/context';
 import { comparePassword } from '../util/auth';
@@ -68,6 +68,9 @@ export const commentResolver = {
       context: ContextType
     ) {
       try {
+        if (!args.comment) {
+          throw new UserInputError('내용을 입력해 주세요.');
+        }
         const existComments: Comments = await CommentModel.findById(args._id);
 
         let newComment: Comment;
@@ -79,6 +82,10 @@ export const commentResolver = {
             isAdmin: args.isAdmin
           };
         } else {
+          if (args.password.length < 4 || args.password.length > 12 || args.username.length < 2 || args.username.length > 10) {
+            throw new UserInputError('username: 2~10 자 이내, password: 4~12자 이내로 입력해주세요');
+          }
+
           newComment = {
             username: args.username,
             password: args.password,
@@ -96,19 +103,23 @@ export const commentResolver = {
 
         return { isSuccess: true };
       } catch (err) {
-        return { isSuccess: false, errorMsg: 'Cannor write comment; Server Error' };
+        throw new ApolloError('Server Error: Cannot write comment');
       }
     },
 
     async editComment(_: any, args: { _id: number; index: number; newComment: string; password?: string }, context: ContextType) {
       try {
+        if (!args.newComment) {
+          throw new UserInputError('내용을 입력해 주세요.');
+        }
+
         const commentContainer: Comments = await CommentModel.findById(args._id);
 
         if (args.password) {
           const hash = commentContainer.comments[args.index].password;
           const isMatch = await comparePassword(args.password, hash || '');
 
-          if (!isMatch) return { isSuccess: false, errorMsg: 'Login failed.' };
+          if (!isMatch) throw new AuthenticationError('비밀번호가 맞지 않습니다.');
         }
 
         commentContainer.comments[args.index].comment = args.newComment;
@@ -116,7 +127,7 @@ export const commentResolver = {
 
         return { isSuccess: true };
       } catch {
-        return { isSuccess: false, errorMsg: 'Server Error: Cannot edit comment' };
+        throw new ApolloError('Server Error: Cannot edit comment');
       }
     },
 
@@ -128,9 +139,7 @@ export const commentResolver = {
           const hash = commentContainer.comments[args.index].password;
           const isMatch = await comparePassword(args.password, hash || '');
 
-          if (!isMatch) {
-            return { isSuccess: false, errorMsg: 'Cannot delete: password not matched' };
-          }
+          if (!isMatch) throw new AuthenticationError('비밀번호가 맞지 않습니다.');
         }
 
         const decreaseCount = commentContainer.comments[args.index].replies.length + 1;
@@ -142,7 +151,7 @@ export const commentResolver = {
 
         return { isSuccess: true };
       } catch (err) {
-        return { isSuccess: false, errorMsg: 'Cannor delete comment; Server Error' };
+        throw new ApolloError('Server Error: Cannot delete comment');
       }
     },
 
@@ -163,6 +172,10 @@ export const commentResolver = {
             isAdmin: args.isAdmin
           };
         } else {
+          if (args.password.length < 4 || args.password.length > 12 || args.username.length < 2 || args.username.length > 10) {
+            throw new UserInputError('username: 2~10 자 이내, password: 4~12자 이내로 입력해주세요');
+          }
+
           newReply = {
             username: args.username,
             password: args.password,
@@ -179,7 +192,7 @@ export const commentResolver = {
 
         return { isSuccess: true };
       } catch {
-        return { isSuccess: false, errorMsg: 'ServerError: Cannot write reply' };
+        throw new ApolloError('Server Error: Cannot write reply');
       }
     },
 
@@ -189,13 +202,17 @@ export const commentResolver = {
       context: ContextType
     ) {
       try {
+        if (!args.newReply) {
+          throw new UserInputError('내용을 입력해 주세요.');
+        }
+
         const commentContainer: Comments = await CommentModel.findById(args._id);
 
         if (args.password) {
           const hash = commentContainer.comments[args.commentIndex].password;
           const isMatch = await comparePassword(args.password, hash || '');
 
-          if (!isMatch) return { isSuccess: false, errorMsg: 'Login failed.' };
+          if (!isMatch) throw new AuthenticationError('비밀번호가 맞지 않습니다.');
         }
 
         commentContainer.comments[args.commentIndex].replies[args.replyIndex].comment = args.newReply;
@@ -203,7 +220,7 @@ export const commentResolver = {
 
         return { isSuccess: true };
       } catch {
-        return { isSuccess: false, errorMsg: 'Server Error: Cannot edit reply' };
+        throw new ApolloError('Server Error: Cannot edit reply');
       }
     },
 
@@ -215,9 +232,7 @@ export const commentResolver = {
           const hash = commentContainer.comments[args.commentIndex].replies[args.replyIndex].password;
           const isMatch = await comparePassword(args.password, hash || '');
 
-          if (!isMatch) {
-            return { isSuccess: false, errorMsg: 'Cannot delete: password not matched' };
-          }
+          if (!isMatch) throw new AuthenticationError('비밀번호가 맞지 않습니다.');
         }
 
         commentContainer.comments[args.commentIndex].replies.splice(args.replyIndex, 1);
@@ -227,7 +242,7 @@ export const commentResolver = {
 
         return { isSuccess: true };
       } catch {
-        return { isSuccess: false, errorMsg: 'Server Error: Cannot delete reply' };
+        throw new ApolloError('Server Error: Cannot delete reply');
       }
     }
   }
