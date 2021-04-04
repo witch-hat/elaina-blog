@@ -37,7 +37,6 @@ export const UPDATE_PROFILE = gql`
       email: $email
     ) {
       isSuccess
-      errorMsg
     }
   }
 `;

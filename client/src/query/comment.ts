@@ -50,7 +50,6 @@ export const WRITE_COMMENT = gql`
   mutation($_id: Int!, $username: String, $password: String, $comment: String!, $createdAt: DateTime!, $isAdmin: Boolean!) {
     writeComment(_id: $_id, username: $username, password: $password, comment: $comment, createdAt: $createdAt, isAdmin: $isAdmin) {
       isSuccess
-      errorMsg
     }
   }
 `;
@@ -59,7 +58,6 @@ export const EDIT_COMMENT = gql`
   mutation($_id: Int!, $index: Int!, $newComment: String!, $password: String) {
     editComment(_id: $_id, index: $index, newComment: $newComment, password: $password) {
       isSuccess
-      errorMsg
     }
   }
 `;
@@ -68,7 +66,6 @@ export const DELETE_COMMENT = gql`
   mutation($_id: Int!, $index: Int!, $password: String) {
     deleteComment(_id: $_id, index: $index, password: $password) {
       isSuccess
-      errorMsg
     }
   }
 `;
@@ -93,7 +90,6 @@ export const WRITE_REPLY = gql`
       isAdmin: $isAdmin
     ) {
       isSuccess
-      errorMsg
     }
   }
 `;
@@ -102,7 +98,6 @@ export const EDIT_REPLY = gql`
   mutation($_id: Int!, $commentIndex: Int!, $replyIndex: Int!, $newReply: String!, $password: String) {
     editReply(_id: $_id, commentIndex: $commentIndex, replyIndex: $replyIndex, newReply: $newReply, password: $password) {
       isSuccess
-      errorMsg
     }
   }
 `;
@@ -111,7 +106,6 @@ export const DELETE_REPLY = gql`
   mutation($_id: Int!, $commentIndex: Int!, $replyIndex: Int!, $password: String) {
     deleteReply(_id: $_id, commentIndex: $commentIndex, replyIndex: $replyIndex, password: $password) {
       isSuccess
-      errorMsg
     }
   }
 `;

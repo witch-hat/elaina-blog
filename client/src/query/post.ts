@@ -87,7 +87,6 @@ export const EDIT_POST = gql`
   mutation($id: Int!, $title: String!, $article: String!, $category: String!) {
     editPost(id: $id, title: $title, article: $article, category: $category) {
       isSuccess
-      errorMsg
     }
   }
 `;
@@ -104,7 +103,6 @@ export const SEARCH = gql`
         }
         content
       }
-      errorMsg
     }
   }
 `;

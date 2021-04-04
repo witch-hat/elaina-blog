@@ -56,7 +56,6 @@ export const ADD_CATEGORY = gql`
   mutation($title: String!, $description: String!, $previewImage: String!) {
     addCategory(title: $title, description: $description, previewImage: $previewImage) {
       isSuccess
-      errorMsg
     }
   }
 `;
@@ -65,7 +64,6 @@ export const UPDATE_CATEGORY = gql`
   mutation($id: Int, $title: String, $description: String) {
     updateCategory(id: $id, title: $title, description: $description) {
       isSuccess
-      errorMsg
     }
   }
 `;
@@ -74,7 +72,6 @@ export const DELETE_CATEGORY = gql`
   mutation($index: Int!) {
     deleteCategory(index: $index) {
       isSuccess
-      errorMsg
     }
   }
 `;
@@ -83,7 +80,6 @@ export const ORDER_CATEGORY = gql`
   mutation($ids: [Int]) {
     orderCategory(ids: $ids) {
       isSuccess
-      errorMsg
     }
   }
 `;
