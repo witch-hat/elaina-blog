@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBuilding, faCamera, faEnvelope, faLink, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
-import { RoundImage } from 'src/components';
+import { RoundImage, AlertBox } from 'src/components';
 import { ProfileImageCropper } from './ProfileImageCropper';
 import { theme } from 'src/styles';
 import { ProfileType, UPDATE_PROFILE } from 'src/query';
@@ -237,7 +237,9 @@ export default function Profile(props: Props) {
   const [viewedProfile, setViewedProfile] = useState<ProfileType>(props.profile);
   const [uploadFile] = useMutation<{ uploadFile: FileType }>(UPLOAD_FILE);
   const [updateProfile] = useMutation<{ updateProfile: ProfileType }>(UPDATE_PROFILE);
-  const [success, setSuccess] = useState(false);
+  const [popAlterBox, setPopAlterBox] = useState(false);
+  const [alertMsg, setAlertMsg] = useState('');
+  const [isApolloError, setIsApolloError] = useState(false);
   const client = useApollo();
 
   async function changeProfile() {
@@ -274,16 +276,20 @@ export default function Profile(props: Props) {
       }
     });
 
+    if (updateResponse.errors) {
+      setPopAlterBox(true);
+      setAlertMsg(updateResponse.errors.message);
+      setIsApolloError(true);
+    }
+
     if (updateResponse.data.updateProfile.isSuccess) {
       setViewedProfile({ ...edtingProfile, image: uploadedImagePath ? uploadedImagePath : viewedProfile.image });
       setIsEditMode(false);
-      setSuccess(true);
-    } else {
-      alert('Error: cannot update profile');
+      setPopAlterBox(true);
+      setAlertMsg('Profile changed successfully');
+      setIsApolloError(false);
     }
   }
-
-  console.log(success);
 
   return (
     <Container>
@@ -468,7 +474,17 @@ export default function Profile(props: Props) {
           setIsSelectImage(false);
         }}
       />
-      {success && <div>hello</div>}
+      {popAlterBox && (
+        <AlertBox
+          isError={isApolloError}
+          msg={alertMsg}
+          onCloseButtonClick={() => {
+            setAlertMsg('');
+            setIsApolloError(false);
+            setPopAlterBox(false);
+          }}
+        />
+      )}
     </Container>
   );
 }
