@@ -267,6 +267,7 @@ export function Header(props: Props) {
                   {Object.keys(languages).map((code: any) => {
                     return (
                       <LanguageItem
+                        key={code}
                         onClick={() => {
                           changeLang(code as LangCode);
                           commonDispatch.SetLanguage(code);
