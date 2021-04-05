@@ -103,7 +103,7 @@ export const commentResolver = {
 
         return { isSuccess: true };
       } catch (err) {
-        throw new ApolloError('Server Error: Cannot write comment');
+        throw err;
       }
     },
 
@@ -126,8 +126,8 @@ export const commentResolver = {
         commentContainer.save();
 
         return { isSuccess: true };
-      } catch {
-        throw new ApolloError('Server Error: Cannot edit comment');
+      } catch (err) {
+        throw err;
       }
     },
 
@@ -151,7 +151,7 @@ export const commentResolver = {
 
         return { isSuccess: true };
       } catch (err) {
-        throw new ApolloError('Server Error: Cannot delete comment');
+        throw err;
       }
     },
 
@@ -191,8 +191,8 @@ export const commentResolver = {
         commentContainer.save();
 
         return { isSuccess: true };
-      } catch {
-        throw new ApolloError('Server Error: Cannot write reply');
+      } catch (err) {
+        throw err;
       }
     },
 
@@ -219,8 +219,8 @@ export const commentResolver = {
         commentContainer.save();
 
         return { isSuccess: true };
-      } catch {
-        throw new ApolloError('Server Error: Cannot edit reply');
+      } catch (err) {
+        throw err;
       }
     },
 
@@ -241,8 +241,8 @@ export const commentResolver = {
         commentContainer.save();
 
         return { isSuccess: true };
-      } catch {
-        throw new ApolloError('Server Error: Cannot delete reply');
+      } catch (err) {
+        throw err;
       }
     }
   }

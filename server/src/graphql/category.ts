@@ -122,7 +122,7 @@ export const categoryResolver = {
 
         return { isSuccess: true };
       } catch (err) {
-        throw new ApolloError('Server Error: Cannot create new category');
+        throw err;
       }
     },
 
@@ -145,8 +145,8 @@ export const categoryResolver = {
         return {
           isSuccess: true
         };
-      } catch {
-        throw new ApolloError('Server Error: Cannot update category');
+      } catch (err) {
+        throw err;
       }
     },
 
@@ -172,7 +172,7 @@ export const categoryResolver = {
 
         return { isSuccess: true };
       } catch (err) {
-        throw new ApolloError('Server Error: Cannot delete category');
+        throw err;
       }
     },
 
@@ -184,8 +184,8 @@ export const categoryResolver = {
           await CategoryModel.findByIdAndUpdate(currentId, { order: newOrder });
         }
         return { isSuccess: true };
-      } catch {
-        throw new ApolloError('Server Error: Cannot update category order');
+      } catch (err) {
+        throw err;
       }
     }
   }

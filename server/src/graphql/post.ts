@@ -108,7 +108,7 @@ export const postResolver = {
     async search(_: any, args: { keyword: string }, context: ContextType) {
       try {
         if (args.keyword.length < 2 || args.keyword.length > 10) {
-          throw new Error('부적절한 글자 수');
+          throw new Error('2~10자 이내로 입력해 주세요');
         }
 
         const posts: Post[] = await PostModel.find({}, {}, { sort: { _id: -1 } });
@@ -140,7 +140,7 @@ export const postResolver = {
 
         return { result: searchResult };
       } catch (err) {
-        throw { errorMsg: 'Sever Error: Search failed' };
+        throw err;
       }
     }
   },
@@ -195,8 +195,8 @@ export const postResolver = {
         editPost.save();
 
         return { isSuccess: true };
-      } catch {
-        throw new ApolloError('Server Error: Cannot edit post');
+      } catch (err) {
+        throw err;
       }
     }
   }

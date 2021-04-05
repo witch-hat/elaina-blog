@@ -17,6 +17,7 @@ import { ThemeMode } from 'src/redux/common/type';
 import { FileType, UPLOAD_FILE } from 'src/query/file';
 import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';
+import { onError } from 'apollo-link-error';
 
 const Container = styled.aside({
   display: 'flex',
@@ -236,7 +237,13 @@ export default function Profile(props: Props) {
   const [edtingProfile, setEditingProfile] = useState<ProfileType>(props.profile);
   const [viewedProfile, setViewedProfile] = useState<ProfileType>(props.profile);
   const [uploadFile] = useMutation<{ uploadFile: FileType }>(UPLOAD_FILE);
-  const [updateProfile] = useMutation<{ updateProfile: ProfileType }>(UPDATE_PROFILE);
+  const [updateProfile] = useMutation<{ updateProfile: ProfileType }>(UPDATE_PROFILE, {
+    onError: (err: Error) => {
+      setPopAlterBox(true);
+      setAlertMsg(err.message);
+      setIsApolloError(true);
+    }
+  });
   const [popAlterBox, setPopAlterBox] = useState(false);
   const [alertMsg, setAlertMsg] = useState('');
   const [isApolloError, setIsApolloError] = useState(false);
@@ -276,13 +283,7 @@ export default function Profile(props: Props) {
       }
     });
 
-    if (updateResponse.errors) {
-      setPopAlterBox(true);
-      setAlertMsg(updateResponse.errors.message);
-      setIsApolloError(true);
-    }
-
-    if (updateResponse.data.updateProfile.isSuccess) {
+    if (updateResponse?.data?.updateProfile?.isSuccess) {
       setViewedProfile({ ...edtingProfile, image: uploadedImagePath ? uploadedImagePath : viewedProfile.image });
       setIsEditMode(false);
       setPopAlterBox(true);

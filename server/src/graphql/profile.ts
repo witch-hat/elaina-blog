@@ -1,4 +1,4 @@
-import { gql, ApolloError } from 'apollo-server';
+import { gql, ApolloError, UserInputError } from 'apollo-server';
 import { ProfileModel } from '../model/profile';
 import { ContextType } from '../types/context';
 
@@ -59,7 +59,7 @@ export const profileResolver = {
         );
         return { isSuccess: true };
       } catch (err) {
-        throw new ApolloError('Server Error: Cannot update profile');
+        throw err;
       }
     }
   }

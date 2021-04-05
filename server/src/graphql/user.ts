@@ -279,7 +279,7 @@ export const userResolver = {
 
         return { isSuccess: true };
       } catch (err) {
-        throw new ApolloError('Server Error: Cannot logout');
+        throw err;
       }
     }
   }
