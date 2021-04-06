@@ -7,7 +7,7 @@ import { useMutation } from '@apollo/client';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { ModalWrapper } from 'src/components';
-import { DELETE_CATEGORY } from 'src/query/category';
+import { DELETE_CATEGORY, CategoryDetails } from 'src/query/category';
 import { theme } from 'src/styles';
 import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';
@@ -48,6 +48,8 @@ interface Props {
   >;
   index: number | undefined;
   defaultCategoryTitle: string;
+  categories: CategoryDetails[];
+  setCategories: React.Dispatch<React.SetStateAction<CategoryDetails[]>>;
 }
 
 export function DeleteCategoryModal(props: Props) {
@@ -74,15 +76,19 @@ export function DeleteCategoryModal(props: Props) {
       }
     });
 
-    const isSuccess = data.deleteCategory.isSuccess;
-
-    if (isSuccess) {
-      alert('deleted successfully');
-      return router.reload();
+    if (data?.deleteCategory?.isSuccess) {
+      const filteredCategories = props.categories.filter((category) => category.order != props.index);
+      const orderedCategories = filteredCategories.map((category) => {
+        if (props.index !== undefined && category.order > props.index) {
+          return { ...category, order: category.order - 1 };
+        } else {
+          return category;
+        }
+      });
+      props.setCategories(orderedCategories);
     } else {
       const errorMsg = data.deleteCategory.errorMsg;
       alert(errorMsg);
-      return router.reload();
     }
   }
 

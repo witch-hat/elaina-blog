@@ -109,7 +109,6 @@ export function AddCategoryModal(props: Props) {
   const [newCategory, setNewCategory] = useState<CategoryDetails | null>(null);
 
   useEffect(() => {
-    console.log(newCategory);
     newCategory && props.setCategories([...props.categories, newCategory]);
   }, [newCategory]);
 
@@ -129,7 +128,8 @@ export function AddCategoryModal(props: Props) {
         description,
         previewImage,
         postCount: 0,
-        recentCreatedAt: new Date()
+        recentCreatedAt: new Date(),
+        order: props.categories.length
       });
     }
   }

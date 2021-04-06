@@ -132,7 +132,6 @@ export default function Category(props: Props) {
   const [categories, setCategories] = useState<CategoryDetails[]>(props.categories);
   const [deletedCategory, setDeletedCategory] = useState<{ isModalOpen: boolean; index?: number }>({ isModalOpen: false });
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  // const [addCategory] = useMutation(ADD_CATEGORY);
   const [updateCategory] = useMutation(UPDATE_CATEGORY);
   const [orderCategory] = useMutation(ORDER_CATEGORY);
   const titleEditInput = useRef<HTMLInputElement>(null);
@@ -310,6 +309,8 @@ export default function Category(props: Props) {
           setDeletedCategory={setDeletedCategory}
           index={deletedCategory.index}
           defaultCategoryTitle={categories.filter((category) => category._id === 0)[0].title}
+          categories={categories}
+          setCategories={setCategories}
         />
         <AddCategoryModal
           isAddModalOpen={isAddModalOpen}

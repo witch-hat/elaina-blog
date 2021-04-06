@@ -20,6 +20,7 @@ export const categoryTypeDef = gql`
     previewImage: String!
     postCount: Int
     recentCreatedAt: DateTime
+    order: Int!
   }
 
   type AddResponse {
@@ -85,7 +86,8 @@ export const categoryResolver = {
             description: category.description,
             previewImage: category.previewImage,
             postCount,
-            recentCreatedAt
+            recentCreatedAt,
+            order: category.order
           };
         });
 
@@ -175,6 +177,12 @@ export const categoryResolver = {
         const posts: Post[] = await PostModel.find({ categoryId: deletedCategory._id });
         posts.forEach(async (post) => {
           await PostModel.findByIdAndUpdate(post._id, { categoryId: 0 });
+        });
+        const categories: Category[] = await CategoryModel.find();
+        categories.forEach(async (category) => {
+          if (category.order > args.index) {
+            await CategoryModel.findByIdAndUpdate(category._id, { order: category.order - 1 });
+          }
         });
 
         return { isSuccess: true };
