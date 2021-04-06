@@ -30,13 +30,12 @@ interface Props {
 
 export function ContentCategoryDetails(props: Props) {
   const latestCreatedTime = new Date(props.time as string);
-  const dateFormatHelper = new FormatUnifier.FormatDate();
 
   return (
     <Container>
       <LatestTime>
         <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
-        <p>{props.time ? dateFormatHelper.getFullFormatDate(latestCreatedTime) : 'None'}</p>
+        <p>{props.time ? FormatUnifier.getFullFormatDate(latestCreatedTime) : 'None'}</p>
       </LatestTime>
       <PostCount>
         <FontAwesomeIcon icon={faBook} style={{ marginRight: '5px' }} />
