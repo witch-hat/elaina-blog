@@ -22,6 +22,11 @@ export const categoryTypeDef = gql`
     recentCreatedAt: DateTime
   }
 
+  type AddResponse {
+    isSuccess: Boolean
+    _id: Int
+  }
+
   extend type Query {
     categories: [Category]
     categoriesWithDetails: [CategoryWithDetails]
@@ -29,7 +34,7 @@ export const categoryTypeDef = gql`
   }
 
   extend type Mutation {
-    addCategory(title: String!, description: String!, previewImage: String!): MutationResponse
+    addCategory(title: String!, description: String!, previewImage: String!): AddResponse
     updateCategory(id: Int, title: String, description: String): MutationResponse
     deleteCategory(index: Int!): MutationResponse
     orderCategory(ids: [Int]): MutationResponse
@@ -112,15 +117,17 @@ export const categoryResolver = {
         }
 
         const newId = (categoryList[categoryList.length - 1]._id += 1);
+        const order = categoryList.length;
 
         CategoryModel.create({
           _id: newId,
           title: args.title,
           description: args.description,
-          previewImage: args.previewImage
+          previewImage: args.previewImage,
+          order
         });
 
-        return { isSuccess: true };
+        return { isSuccess: true, _id: newId };
       } catch (err) {
         throw err;
       }

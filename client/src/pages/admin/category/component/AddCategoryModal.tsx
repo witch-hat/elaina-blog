@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCamera } from '@fortawesome/free-solid-svg-icons';
+import { useMutation } from '@apollo/client';
 
+import { AlertBox } from 'src/components';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { theme } from 'src/styles';
 import { ModalWrapper, BorderBox } from 'src/components';
+import { ADD_CATEGORY, CategoryDetails } from 'src/query/category';
 
 const Content = styled.div({
   display: 'flex',
@@ -93,12 +96,43 @@ const SelectedImage = styled.div({
 interface Props {
   isAddModalOpen: boolean;
   setIsAddModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  categories: CategoryDetails[];
+  setCategories: React.Dispatch<React.SetStateAction<CategoryDetails[]>>;
 }
 
 export function AddCategoryModal(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [previewImage, setPreviewImage] = useState('');
+  const [addCategory] = useMutation(ADD_CATEGORY);
+  const [newCategory, setNewCategory] = useState<CategoryDetails | null>(null);
 
-  async function addNewCategory() {}
+  useEffect(() => {
+    console.log(newCategory);
+    newCategory && props.setCategories([...props.categories, newCategory]);
+  }, [newCategory]);
+
+  async function addNewCategory() {
+    const { data } = await addCategory({
+      variables: {
+        title,
+        description,
+        previewImage
+      }
+    });
+
+    if (data?.addCategory?.isSuccess) {
+      setNewCategory({
+        _id: data.addCategory._id,
+        title,
+        description,
+        previewImage,
+        postCount: 0,
+        recentCreatedAt: new Date()
+      });
+    }
+  }
 
   return (
     <ModalWrapper visible={props.isAddModalOpen}>
@@ -107,15 +141,21 @@ export function AddCategoryModal(props: Props) {
         <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
           <Content>
             <PreviewTextWrapper>
-              <Input type='text' themeMode={themeMode} placeholder='Title' />
-              <Input type='text' themeMode={themeMode} placeholder='Description' />
+              <Input type='text' themeMode={themeMode} placeholder='Title' onChange={(e) => setTitle(e.target.value)} />
+              <Input type='text' themeMode={themeMode} placeholder='Description' onChange={(e) => setDescription(e.target.value)} />
             </PreviewTextWrapper>
             <SelectedImage>
               <label htmlFor='category-image-select'>
                 <FontAwesomeIcon icon={faCamera} /> Choose
               </label>
               <span hidden>
-                <Input id='category-image-select' type='file' themeMode={themeMode} accept='image/x-png,image/jpeg' />
+                <Input
+                  id='category-image-select'
+                  type='file'
+                  themeMode={themeMode}
+                  accept='image/x-png,image/jpeg'
+                  onChange={(e) => setPreviewImage(e.target.value)}
+                />
               </span>
             </SelectedImage>
           </Content>

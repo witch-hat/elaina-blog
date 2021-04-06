@@ -56,6 +56,7 @@ export const ADD_CATEGORY = gql`
   mutation($title: String!, $description: String!, $previewImage: String!) {
     addCategory(title: $title, description: $description, previewImage: $previewImage) {
       isSuccess
+      _id
     }
   }
 `;
