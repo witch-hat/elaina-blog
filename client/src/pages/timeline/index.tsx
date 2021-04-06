@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { NextPageContext } from 'next';
 
-import { GET_PROFILE } from 'src/query';
+import { GET_PROFILE } from 'src/query/profile';
 import { initApolloClient } from 'src/apollo/withApollo';
 import { MainPageLayout } from 'src/pages/main/component/MainPageLayout';
 import { TimeLineEditor } from './component/TimeLineEditor';

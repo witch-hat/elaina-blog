@@ -87,7 +87,7 @@ const ButtonContainer = styled.div({
 const EditButton = styled.div({
   width: '100%',
   padding: '.5rem',
-  borderRadius: '12px',
+  borderRadius: '6px',
   border: '1px solid #ddd',
   cursor: 'pointer',
   display: 'flex',
@@ -102,7 +102,7 @@ const SaveButton = styled.button<{ themeMode: ThemeMode }>((props) => ({
   width: '47.5%',
   marginRight: '5%',
   padding: '.5rem',
-  borderRadius: '12px',
+  borderRadius: '6px',
   cursor: 'pointer',
   display: 'flex',
   justifyContent: 'center',

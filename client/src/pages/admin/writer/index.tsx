@@ -11,7 +11,7 @@ import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { AppCommonProps, appCommponProps } from 'src/pages/_app';
 import { initApolloClient } from 'src/apollo/withApollo';
-import { GET_PROFILE, ProfileType } from 'src/query';
+import { GET_PROFILE, ProfileType } from 'src/query/profile';
 import { CategoryDetails, GET_CATEGORY } from 'src/query/category';
 
 const Container = styled.div<{ themeMode: ThemeMode }>((props) => ({

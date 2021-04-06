@@ -5,6 +5,7 @@ import ReactCrop, { Crop } from 'react-image-crop';
 import styled from 'styled-components';
 
 import { ModalWrapper } from 'src/components';
+import { Lang, trans } from 'src/resources/languages';
 
 const Container = styled.div({
   width: '500px',
@@ -30,7 +31,7 @@ const Button = styled.div({
   cursor: 'pointer',
   border: '1px solid #ddd',
   textAlign: 'center',
-  borderRadius: '12px'
+  borderRadius: '6px'
 });
 
 async function getCropImage(image: HTMLImageElement, imageName: string, imageType: string, crop: Crop): Promise<Blob> {
@@ -99,9 +100,9 @@ export function ProfileImageCropper(props: Props) {
                 props.onSave(croppedImage);
               }}
             >
-              Save
+              {trans(Lang.Save)}
             </Button>
-            <Button onClick={() => props.onCancel()}>Cancel</Button>
+            <Button onClick={() => props.onCancel()}>{trans(Lang.Cancel)}</Button>
           </ButtonContainer>
         </Container>
       </ModalWrapper>

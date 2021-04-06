@@ -3,7 +3,7 @@ import { NextPageContext } from 'next';
 import { ContentCategory } from 'src/pages/main/component/ContentCategory';
 import { MainPageLayout } from 'src/pages/main/component/MainPageLayout';
 import { AppCommonProps } from '../_app';
-import { ProfileType } from 'src/query';
+import { ProfileType } from 'src/query/profile';
 import { CategoryDetails } from 'src/query/category';
 
 interface Props extends AppCommonProps {

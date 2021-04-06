@@ -6,7 +6,7 @@ import gfm from 'remark-gfm';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faClock } from '@fortawesome/free-solid-svg-icons';
 
-import { GET_PROFILE, ProfileType } from 'src/query';
+import { GET_PROFILE, ProfileType } from 'src/query/profile';
 import { initApolloClient } from 'src/apollo/withApollo';
 import { MainPageLayout } from 'src/pages/main/component/MainPageLayout';
 
