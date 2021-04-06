@@ -1,5 +1,6 @@
-import { ActionTypes, CommonAction, CommonState, ThemeMode } from './type';
 import { LangCode } from 'src/resources/languages';
+
+import { ActionTypes, CommonAction, CommonState, ThemeMode } from './type';
 
 export const initialCommonState: CommonState = {
   theme: ThemeMode.light,

@@ -1,9 +1,8 @@
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 
 import { Header, Footer } from 'src/components';
 import { GlobalStyles } from 'src/styles';
-
-import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { mockUpData } from 'src/resources';

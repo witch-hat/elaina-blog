@@ -51,7 +51,6 @@ export default function AboutPage(props: Props) {
   const about: About = props.about;
   const profile: ProfileType = props.profile;
   const updatedAt = new Date(about.updatedAt);
-  const formatHelper = new FormatUnifier.FormatDate();
 
   return (
     <MainPageLayout profile={props.profile} isLogin={props.app.isLogin}>
@@ -64,7 +63,7 @@ export default function AboutPage(props: Props) {
             </Author>
             <Time>
               <FontAwesomeIcon icon={faClock} style={{ marginRight: '0.5rem' }} />
-              {formatHelper.getFullFormatDate(updatedAt)}
+              {FormatUnifier.getFullFormatDate(updatedAt)}
             </Time>
           </ContentInfoWrapper>
         </div>

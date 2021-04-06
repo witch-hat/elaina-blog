@@ -102,14 +102,13 @@ export default function SearchPage(props: Props) {
         <PostWrapper>
           {searchResults.map((result) => {
             const createdAt = new Date(result.post.createdAt);
-            const formatHelper = new FormatUnifier.FormatDate();
             return (
               <Link key={result.post._id} href={`/post/${result.post._id}`} passHref>
                 <a style={{ width: '100%' }}>
                   <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
                     <Content>
                       <PostTitle>{result.post.title}</PostTitle>
-                      <CreatedAt>{formatHelper.getFullFormatDate(createdAt)}</CreatedAt>
+                      <CreatedAt>{FormatUnifier.getFullFormatDate(createdAt)}</CreatedAt>
                       <Article>
                         <Reset />
                         <ReactMarkDown>{result.content}</ReactMarkDown>

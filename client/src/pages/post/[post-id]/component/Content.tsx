@@ -159,8 +159,6 @@ export function Content(props: Props) {
 
   const id = router.query['post-id'];
 
-  const dateFormatHelper = new FormatUnifier.FormatDate();
-
   async function handleDeleteButtonClick() {
     const authResponse = await client.query({ query: IS_AUTH });
 
@@ -204,7 +202,7 @@ export function Content(props: Props) {
           </Author>
           <Time>
             <FontAwesomeIcon icon={faClock} style={{ marginRight: '0.5rem' }} />
-            {dateFormatHelper.getFullFormatDate(time)}
+            {FormatUnifier.getFullFormatDate(time)}
           </Time>
         </ContentInfoWrapper>
         {props.isLogin && (

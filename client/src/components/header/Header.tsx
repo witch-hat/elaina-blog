@@ -3,18 +3,19 @@ import { useSelector } from 'react-redux';
 import styled, { keyframes, css } from 'styled-components';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch, faBars, faCaretDown, faLanguage } from '@fortawesome/free-solid-svg-icons';
 
 import { theme } from 'src/styles';
 import { InputBox, FocusWrapper, useWidth } from 'src/components';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
+import { commonDispatch } from 'src/redux/common/dispatch';
+import { LangCode, changeLang, getCurrentLangCode, trans, Lang } from 'src/resources/languages';
+
 import { ModeSwitch } from './ModeSwitch';
 import AdminMenuButton from './AdminMenuButton';
 import { ProgressBar } from './ProgressBar';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faBars, faCaretDown, faLanguage } from '@fortawesome/free-solid-svg-icons';
-import { commonDispatch } from 'src/redux/common/dispatch';
-import { LangCode, changeLang, getCurrentLangCode, trans, Lang } from 'src/resources/languages';
 
 const StyledHeader = styled.header<{ themeMode: ThemeMode }>((props) => {
   return {
@@ -256,7 +257,7 @@ export function Header(props: Props) {
           </FocusWrapper>
           <LangMenuContainer onClick={() => setIsLangMenuVisible(!isLangMenuVisible)}>
             <LanguageMenuButton>
-              <FontAwesomeIcon icon={faLanguage} />
+              <FontAwesomeIcon size={'lg'} icon={faLanguage} />
               <RotateIcon isOpen={isLangMenuVisible}>
                 <FontAwesomeIcon icon={faCaretDown} />
               </RotateIcon>

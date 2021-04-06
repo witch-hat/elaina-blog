@@ -15,8 +15,8 @@ import { ThemeMode } from 'src/redux/common/type';
 import { theme } from 'src/styles';
 import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';
-import { InputBox } from './InputBox';
 import { Lang, trans } from 'src/resources/languages';
+import { InputBox } from './InputBox';
 
 const Container = styled.div({
   width: '100%',
@@ -158,7 +158,6 @@ export function CommentBox(props: Props) {
   const [deleteComment] = useMutation(DELETE_COMMENT);
   const [deleteReply] = useMutation(DELETE_REPLY);
   const createdAt = new Date(props.comment.createdAt);
-  const dateFormatHelper = new FormatUnifier.FormatDate();
   const client = useApollo();
   const router = useRouter();
 
@@ -240,7 +239,7 @@ export function CommentBox(props: Props) {
           </Author>
           <Time>
             <FontAwesomeIcon icon={faClock} style={{ marginRight: '.5rem' }} />
-            <p>{dateFormatHelper.getFullFormatDate(createdAt)}</p>
+            <p>{FormatUnifier.getFullFormatDate(createdAt)}</p>
           </Time>
         </InformationContainer>
         {(props.isLogin || !props.isCommentFromAdmin) && (

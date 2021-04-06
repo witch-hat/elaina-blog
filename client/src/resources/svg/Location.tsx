@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { SvgProps } from './Svg';
 
 export function Location(props: SvgProps) {
