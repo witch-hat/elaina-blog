@@ -52,7 +52,7 @@ export const userTypeDef = gql`
   extend type Mutation {
     updatePassword(emailId: String, password: String): User
     login(emailId: String!, password: String!): LoginResponse
-    logout: MutationResponse
+    logout: Void
     refreshUserToken(userId: ID!): User
   }
 `;
@@ -277,7 +277,7 @@ export const userResolver = {
           expires: new Date(0)
         });
 
-        return { isSuccess: true };
+        return null;
       } catch (err) {
         throw err;
       }
