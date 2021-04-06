@@ -6,23 +6,6 @@ import { GraphQLUpload } from 'graphql-upload';
 import { loadFilesSync } from '@graphql-tools/load-files';
 import { mergeTypeDefs, mergeResolvers } from '@graphql-tools/merge';
 
-function serialize(value: Date) {
-  return value.toString();
-}
-
-function parseValue(value: any) {
-  console.log(value);
-  return new Date(value);
-}
-
-function parseLiteral(ast: ValueNode) {
-  console.log(ast);
-  if (ast.kind === Kind.STRING) {
-    return parseValue(ast.value);
-  }
-  return null;
-}
-
 function loadAllFiles() {
   const schemas = loadFilesSync(__dirname, { extensions: ['ts'], ignoreIndex: true });
 
@@ -38,14 +21,38 @@ function loadAllFiles() {
 const dateScalar = new GraphQLScalarType({
   name: 'DateTime',
   description: 'Date custom scalar type',
-  serialize,
-  parseValue,
-  parseLiteral
+  serialize(value: Date) {
+    return value.toString();
+  },
+  parseValue(value: any) {
+    return new Date(value);
+  },
+  parseLiteral(ast: ValueNode) {
+    if (ast.kind === Kind.STRING) {
+      return new Date(ast.value);
+    }
+    return null;
+  }
+});
+
+const voidScalar = new GraphQLScalarType({
+  name: 'Void',
+  description: 'return null',
+  serialize() {
+    return null;
+  },
+  parseValue() {
+    return null;
+  },
+  parseLiteral() {
+    return null;
+  }
 });
 
 const rootTypeDef = gql`
   scalar DateTime
   scalar Upload
+  scalar Void
 
   type MutationResponse {
     isSuccess: Boolean!
