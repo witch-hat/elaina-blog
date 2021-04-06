@@ -5,17 +5,17 @@ import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faClock } from '@fortawesome/free-solid-svg-icons';
+import { useSelector } from 'react-redux';
 
 import { GET_PROFILE, ProfileType } from 'src/query/profile';
 import { initApolloClient } from 'src/apollo/withApollo';
 import { MainPageLayout } from 'src/pages/main/component/MainPageLayout';
-
-import { useSelector } from 'react-redux';
-import { RootState } from 'src/redux/rootReducer';
-import { ThemeMode } from 'src/redux/common/type';
-import { AppCommonProps } from '../_app';
 import { About, GET_ABOUT } from 'src/query/about';
 import { FormatUnifier } from 'src/utils';
+import { RootState } from 'src/redux/rootReducer';
+import { ThemeMode } from 'src/redux/common/type';
+
+import { AppCommonProps } from '../_app';
 
 const Container = styled.div({
   marginTop: '2rem',

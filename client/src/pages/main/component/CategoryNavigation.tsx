@@ -1,15 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-import NavigationButton from './NavigationButton';
-
-import { useSelector } from 'react-redux';
-import { RootState } from 'src/redux/rootReducer';
-import { ThemeMode } from 'src/redux/common/type';
 import { faBook, faStream, faUser } from '@fortawesome/free-solid-svg-icons';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { useSelector } from 'react-redux';
+
+import { RootState } from 'src/redux/rootReducer';
+import { ThemeMode } from 'src/redux/common/type';
 import { Lang, trans } from 'src/resources/languages';
+
+import NavigationButton from './NavigationButton';
 
 const Container = styled.nav({
   width: '100%',

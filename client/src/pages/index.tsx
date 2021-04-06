@@ -1,12 +1,13 @@
 import React from 'react';
 import { NextPageContext, InferGetServerSidePropsType } from 'next';
+
 import { initApolloClient } from 'src/apollo/withApollo';
 import { GET_LASTEST_POSTS } from 'src/query/post';
 import { GET_CATEGORIES_WITH_DETAILS, CategoryDetails } from 'src/query/category';
 import { GET_PROFILE, ProfileType } from 'src/query/profile';
 
 import Main from './main';
-import { AppCommonProps, appCommponProps } from './_app';
+import { AppCommonProps } from './_app';
 
 interface Props extends AppCommonProps {
   latestPosts: InferGetServerSidePropsType<typeof getServerSideProps>;

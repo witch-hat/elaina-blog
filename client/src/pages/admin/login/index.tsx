@@ -3,12 +3,11 @@ import styled from 'styled-components';
 import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { NextPageContext } from 'next';
+import { useSelector } from 'react-redux';
 
 import { InputBox } from 'src/components';
 import { theme } from 'src/styles';
 import { LOGIN } from 'src/query/user';
-
-import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { appCommponProps } from 'src/pages/_app';

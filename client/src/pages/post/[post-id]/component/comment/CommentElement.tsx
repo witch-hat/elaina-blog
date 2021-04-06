@@ -5,11 +5,12 @@ import { useSelector } from 'react-redux';
 import { BorderBox, CommentBox } from 'src/components';
 import { CommentWriter } from 'src/pages/admin/writer/component/CommentWriter';
 import { Reply, Comment, Comments } from 'src/query/comment';
-import { ReplyElement } from './ReplyElement';
 import { theme } from 'src/styles';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { trans, Lang } from 'src/resources/languages';
+
+import { ReplyElement } from './ReplyElement';
 
 const Container = styled.div<{ themeMode: ThemeMode; isAdmin: boolean }>((props) => ({
   borderRadius: '12px',

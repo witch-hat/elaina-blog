@@ -1,12 +1,10 @@
 import React, { useState, useRef } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import { InferGetServerSidePropsType, NextPageContext } from 'next';
+import { useSelector } from 'react-redux';
 
-import { Content, ContentNavigation, PostCategory, CommentContainer } from './component';
 import { useWidth, FocusWrapper } from 'src/components';
 import { theme } from 'src/styles';
-
-import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { initApolloClient } from 'src/apollo/withApollo';
@@ -14,6 +12,8 @@ import { FIND_POST_BY_URL, FIND_SAME_CATEGORY_POSTS, Post } from 'src/query/post
 import { GET_COMMENTS, Comments } from 'src/query/comment';
 import { GET_PROFILE } from 'src/query/profile';
 import { AppCommonProps } from 'src/pages/_app';
+
+import { Content, ContentNavigation, PostCategory, CommentContainer } from './component';
 
 // interface ContentContainerProps {
 //   isOpenList: boolean;

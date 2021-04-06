@@ -1,15 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
-import { useMutation } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCamera } from '@fortawesome/free-solid-svg-icons';
 
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { theme } from 'src/styles';
-import { useApollo } from 'src/apollo/apolloClient';
-import { IS_AUTH } from 'src/query/user';
 import { ModalWrapper, BorderBox } from 'src/components';
 
 const Content = styled.div({

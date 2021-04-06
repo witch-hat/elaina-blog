@@ -6,13 +6,14 @@ import Head from 'next/head';
 import { ApolloProvider } from '@apollo/client';
 import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css';
+import setCookie from 'set-cookie-parser';
+import { useTranslation } from 'react-i18next';
 
 import Layout from 'src/components/Layout';
-import { withApollo, initApolloClient } from '../apollo/withApollo';
 import { store, persistor } from 'src/redux';
-import setCookie from 'set-cookie-parser';
 import { IS_AUTH } from 'src/query/user';
-import { useTranslation } from 'react-i18next';
+
+import { withApollo, initApolloClient } from '../apollo/withApollo';
 
 // Skip Adding FontAwesome CSS
 config.autoAddCss = false;

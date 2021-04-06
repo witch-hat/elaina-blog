@@ -7,17 +7,16 @@ import { faBuilding, faCamera, faEnvelope, faLink, faMapMarkerAlt } from '@forta
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 import { RoundImage, AlertBox } from 'src/components';
-import { ProfileImageCropper } from './ProfileImageCropper';
 import { theme } from 'src/styles';
 import { ProfileType, UPDATE_PROFILE } from 'src/query/profile';
 import { Lang, trans } from 'src/resources/languages';
-
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { FileType, UPLOAD_FILE } from 'src/query/file';
 import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';
-import { onError } from 'apollo-link-error';
+
+import { ProfileImageCropper } from './ProfileImageCropper';
 
 const Container = styled.aside({
   display: 'flex',

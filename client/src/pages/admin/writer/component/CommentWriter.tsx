@@ -2,11 +2,10 @@ import React, { useState, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
+import { useSelector } from 'react-redux';
 
 import { theme } from 'src/styles';
 import { InputBox } from 'src/components';
-
-import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { Reply, WRITE_COMMENT, Comment, WRITE_REPLY } from 'src/query/comment';

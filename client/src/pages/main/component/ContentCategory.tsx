@@ -3,8 +3,9 @@ import styled from 'styled-components';
 import Link from 'next/link';
 
 import { BorderBox } from 'src/components';
-import ContentCategoryDetails from './ContentCategoryDetails';
 import { CategoryDetails } from 'src/query/category';
+
+import ContentCategoryDetails from './ContentCategoryDetails';
 
 const Container = styled.div({
   display: 'flex',

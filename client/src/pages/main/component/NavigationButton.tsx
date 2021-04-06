@@ -1,10 +1,9 @@
-import { useRouter } from 'next/router';
+import React, { useRouter } from 'next/router';
 import Link from 'next/link';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 
 import { theme } from 'src/styles';
-
-import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 

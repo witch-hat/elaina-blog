@@ -2,11 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import { InferGetServerSidePropsType, NextPageContext } from 'next';
 import { withRouter, NextRouter, useRouter } from 'next/router';
+import { useSelector } from 'react-redux';
 
 import { Writer } from 'src/pages/admin/writer/component/Writer';
 import { theme } from 'src/styles';
-
-import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { AppCommonProps, appCommponProps } from 'src/pages/_app';

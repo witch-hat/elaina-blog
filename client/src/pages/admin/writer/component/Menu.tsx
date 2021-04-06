@@ -3,8 +3,9 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBold, faItalic, faFont, faCode, faListUl, faQuoteLeft, faImages } from '@fortawesome/free-solid-svg-icons';
 
-import { MenuButton } from './MenuButton';
 import { FormatBoldBlack } from 'src/resources/svg/FormatBoldBlack';
+
+import { MenuButton } from './MenuButton';
 
 const Container = styled.div({
   display: 'flex',

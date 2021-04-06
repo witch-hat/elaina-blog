@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import ReactMarkdown from 'react-markdown';
-const gfm = require('remark-gfm');
+import Gfm from 'remark-gfm';
 
 import styles from 'src/styles/MarkdownStyles.module.css';
 
@@ -123,7 +123,7 @@ export function TimeLineEditor() {
         </Editor>
       ) : (
         <PreviewContainer>
-          <ReactMarkdown className={styles['markdown-body']} plugins={gfm} children={text} />
+          <ReactMarkdown className={styles['markdown-body']} plugins={[Gfm]} children={text} />
         </PreviewContainer>
       )}
     </Container>

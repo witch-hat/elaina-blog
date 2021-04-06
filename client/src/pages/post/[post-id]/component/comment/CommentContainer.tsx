@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
-import CommentElement from './CommentElement';
 import { CommentWriter } from 'src/pages/admin/writer/component/CommentWriter';
 import { Comments, Comment } from 'src/query/comment';
 import { trans, Lang } from 'src/resources/languages';
+
+import CommentElement from './CommentElement';
 
 const Container = styled.section({
   display: 'flex',

@@ -1,9 +1,9 @@
+import React from 'react';
 import styled from 'styled-components';
-
-import { FormatBoldBlack } from 'src/resources/svg/FormatBoldBlack';
-import { theme } from 'src/styles';
-
 import { useSelector } from 'react-redux';
+
+import { theme } from 'src/styles';
+import { FormatBoldBlack } from 'src/resources/svg/FormatBoldBlack';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 

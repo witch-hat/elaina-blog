@@ -1,4 +1,4 @@
-import React, { ChangeEvent, createElement, useEffect, useRef } from 'react';
+import React, { ChangeEvent, useEffect, useRef } from 'react';
 import { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import ReactMarkdown from 'react-markdown';
@@ -6,20 +6,18 @@ import styled from 'styled-components';
 import styles from 'src/styles/MarkdownStyles.module.css';
 import gfm from 'remark-gfm';
 import { useRouter } from 'next/router';
-
-import { Menu } from './Menu';
-import { InputBox, useWidth } from 'src/components';
-import { theme } from 'src/styles';
-
 import { useSelector } from 'react-redux';
+
+import { InputBox, useWidth, FocusWrapper } from 'src/components';
+import { theme } from 'src/styles';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { CategoryDetails } from 'src/query/category';
-import { FocusWrapper } from 'src/components';
 import { EDIT_POST, WRITE_POST } from 'src/query/post';
 import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';
-import { isArrayLiteralExpression } from 'typescript';
+
+import { Menu } from './Menu';
 
 const Container = styled.div<{ themeMode: ThemeMode }>((props) => ({
   display: 'flex',

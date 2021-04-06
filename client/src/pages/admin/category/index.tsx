@@ -15,6 +15,7 @@ import { CircleRippleWrapper } from 'src/components/common/wrapper/CircleRippleW
 import { initApolloClient } from 'src/apollo/withApollo';
 import { appCommponProps, AppCommonProps } from 'src/pages/_app';
 import { CategoryDetails, GET_CATEGORY, ORDER_CATEGORY, UPDATE_CATEGORY } from 'src/query/category';
+
 import { AdminPageLayout } from '../component/AdminPageLayout';
 import { DeleteCategoryModal } from './component/DeleteCategoryModal';
 import { AddCategoryModal } from './component/AddCategoryModal';

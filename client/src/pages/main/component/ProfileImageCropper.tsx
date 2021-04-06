@@ -1,11 +1,11 @@
-import 'react-image-crop/dist/ReactCrop.css';
-
 import React, { useEffect, useState } from 'react';
 import ReactCrop, { Crop } from 'react-image-crop';
 import styled from 'styled-components';
 
 import { ModalWrapper } from 'src/components';
 import { Lang, trans } from 'src/resources/languages';
+
+import 'react-image-crop/dist/ReactCrop.css';
 
 const Container = styled.div({
   width: '500px',

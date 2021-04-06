@@ -4,11 +4,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useMutation } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartBar, faUsersCog, faBookmark } from '@fortawesome/free-solid-svg-icons';
+import { faUsersCog, faBookmark } from '@fortawesome/free-solid-svg-icons';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
-import { LOGOUT } from '../../../query/user';
 import { Lang, trans } from 'src/resources/languages';
+
+import { LOGOUT } from '../../../query/user';
 
 interface Props {}
 

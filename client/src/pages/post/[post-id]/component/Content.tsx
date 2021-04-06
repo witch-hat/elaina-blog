@@ -8,8 +8,8 @@ import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
-import styles from 'src/styles/MarkdownStyles.module.css';
 
+import styles from 'src/styles/MarkdownStyles.module.css';
 import { FocusWrapper, ModalWrapper } from 'src/components';
 import { DELETE_POST, FIND_SAME_CATEGORY_POSTS } from 'src/query/post';
 import { IS_AUTH } from 'src/query/user';
