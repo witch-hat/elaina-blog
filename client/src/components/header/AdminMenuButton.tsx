@@ -1,17 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import Link from 'next/link';
 import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 
 import { theme } from 'src/styles';
 import { FocusWrapper } from 'src/components';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { LOGOUT } from 'src/query/user';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { trans, Lang } from 'src/resources/languages';
 
 const Container = styled.div({

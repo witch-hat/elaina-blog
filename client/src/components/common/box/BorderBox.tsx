@@ -1,8 +1,7 @@
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 
 import { theme } from 'src/styles';
-
-import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 

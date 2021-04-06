@@ -15,8 +15,8 @@ import { ThemeMode } from 'src/redux/common/type';
 import { theme } from 'src/styles';
 import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';
-import { InputBox } from './InputBox';
 import { Lang, trans } from 'src/resources/languages';
+import { InputBox } from './InputBox';
 
 const Container = styled.div({
   width: '100%',
