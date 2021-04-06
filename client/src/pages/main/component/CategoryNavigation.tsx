@@ -9,7 +9,7 @@ import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { Lang, trans } from 'src/resources/languages';
 
-import NavigationButton from './NavigationButton';
+import { NavigationButton } from './NavigationButton';
 
 const Container = styled.nav({
   width: '100%',
@@ -31,7 +31,7 @@ function NavigationIcon(props: IconProps) {
 
 interface Props {}
 
-export default function CategoryNavigation(props: Props) {
+export function CategoryNavigation(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   return (

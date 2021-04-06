@@ -1,4 +1,4 @@
-import React, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
@@ -35,7 +35,7 @@ interface Props {
   children: JSX.Element;
 }
 
-export default function NavigationButton(props: Props) {
+export function NavigationButton(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const router = useRouter();
 

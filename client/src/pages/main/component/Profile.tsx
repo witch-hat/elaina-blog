@@ -227,7 +227,7 @@ interface Props {
   isLogin: boolean;
 }
 
-export default function Profile(props: Props) {
+export function Profile(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const [isEditMode, setIsEditMode] = useState(false);
   const [isSelectImage, setIsSelectImage] = useState(false);

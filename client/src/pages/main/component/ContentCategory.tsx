@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { BorderBox } from 'src/components';
 import { CategoryDetails } from 'src/query/category';
 
-import ContentCategoryDetails from './ContentCategoryDetails';
+import { ContentCategoryDetails } from './ContentCategoryDetails';
 
 const Container = styled.div({
   display: 'flex',

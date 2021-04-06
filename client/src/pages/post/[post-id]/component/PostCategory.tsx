@@ -115,7 +115,7 @@ interface Props {
   isLogin: boolean;
 }
 
-export default function PostCategory(props: Props) {
+export function PostCategory(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const router = useRouter();
 

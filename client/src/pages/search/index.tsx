@@ -82,7 +82,7 @@ interface Props {
   searchResult: InferGetServerSidePropsType<typeof getServerSideProps>;
 }
 
-export default function KeywordFinder(props: Props) {
+export default function SearchPage(props: Props) {
   const searchResults: { post: Post; content: string }[] = props.searchResult;
 
   if (searchResults.length === 0) {

@@ -29,7 +29,7 @@ const NavigationContainer = styled.div({
   boxShadow: 'inset 3px 0px #aaaaaa;'
 });
 
-export default function ContentNavigation() {
+export function ContentNavigation() {
   return (
     <Container>
       <NavigationContainer>

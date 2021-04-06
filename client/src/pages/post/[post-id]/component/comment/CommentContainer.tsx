@@ -5,7 +5,7 @@ import { CommentWriter } from 'src/pages/admin/writer/component/CommentWriter';
 import { Comments, Comment } from 'src/query/comment';
 import { trans, Lang } from 'src/resources/languages';
 
-import CommentElement from './CommentElement';
+import { CommentElement } from './CommentElement';
 
 const Container = styled.section({
   display: 'flex',
@@ -40,7 +40,7 @@ interface Props {
   author: string;
 }
 
-export default function CommentContainer(props: Props) {
+export function CommentContainer(props: Props) {
   const [commentContainer, setCommentContainer] = useState<Comments | null>(null);
   const [newComment, setNewComment] = useState<Comment>();
   const [count, setCount] = useState(props.comments.count);

@@ -1,6 +1,6 @@
-export { default as Content } from './Content';
-export { default as ContentNavigation } from './ContentNavigation';
-export { default as PostCategory } from './PostCategory';
+export { Content } from './Content';
+export { ContentNavigation } from './ContentNavigation';
+export { PostCategory } from './PostCategory';
 
 // Comment
-export { default as CommentContainer } from './comment/CommentContainer';
+export { CommentContainer } from './comment/CommentContainer';

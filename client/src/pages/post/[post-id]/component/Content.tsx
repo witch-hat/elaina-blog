@@ -148,7 +148,7 @@ interface Props {
   isLogin: boolean;
 }
 
-export default function Content(props: Props) {
+export function Content(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const time = new Date(props.createdAt);
   const [isOpenMenu, setIsOpenMenu] = useState(false);

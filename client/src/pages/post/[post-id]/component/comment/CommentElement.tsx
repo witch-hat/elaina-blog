@@ -55,7 +55,7 @@ interface Props {
   setCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export default function CommentElement(props: Props) {
+export function CommentElement(props: Props) {
   const [isShowingReply, setIsShowingReply] = useState(false);
   const [isAddReply, setIsAddReply] = useState(false);
   const [replies, setReplies] = useState<Reply[]>(props.comment.replies);

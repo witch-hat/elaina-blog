@@ -28,7 +28,7 @@ interface Props {
   count: number;
 }
 
-export default function ContentCategoryDetails(props: Props) {
+export function ContentCategoryDetails(props: Props) {
   const latestCreatedTime = new Date(props.time as string);
   const dateFormatHelper = new FormatUnifier.FormatDate();
 
