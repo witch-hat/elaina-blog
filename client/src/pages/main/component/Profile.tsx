@@ -9,7 +9,7 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { RoundImage, AlertBox } from 'src/components';
 import { ProfileImageCropper } from './ProfileImageCropper';
 import { theme } from 'src/styles';
-import { ProfileType, UPDATE_PROFILE } from 'src/query';
+import { ProfileType, UPDATE_PROFILE } from 'src/query/profile';
 import { Lang, trans } from 'src/resources/languages';
 
 import { RootState } from 'src/redux/rootReducer';

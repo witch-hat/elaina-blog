@@ -12,7 +12,7 @@ import { ThemeMode } from 'src/redux/common/type';
 import { initApolloClient } from 'src/apollo/withApollo';
 import { FIND_POST_BY_URL, FIND_SAME_CATEGORY_POSTS, Post } from 'src/query/post';
 import { GET_COMMENTS, Comments } from 'src/query/comment';
-import { GET_PROFILE } from 'src/query';
+import { GET_PROFILE } from 'src/query/profile';
 import { AppCommonProps } from 'src/pages/_app';
 
 // interface ContentContainerProps {

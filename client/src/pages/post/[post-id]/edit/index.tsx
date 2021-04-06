@@ -2,8 +2,8 @@ import React from 'react';
 import { InferGetServerSidePropsType, NextPageContext } from 'next';
 
 import { initApolloClient } from 'src/apollo/withApollo';
-import { Writer } from 'src/components/writer/Writer';
-import { GET_PROFILE } from 'src/query';
+import { Writer } from 'src/pages/admin/writer/component/Writer';
+import { GET_PROFILE } from 'src/query/profile';
 import { FIND_POST_BY_URL } from 'src/query/post';
 import { FIND_CATEGORY_BY_ID, GET_CATEGORY } from 'src/query/category';
 
