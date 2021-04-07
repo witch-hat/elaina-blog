@@ -134,7 +134,7 @@ export function AddCategoryModal(props: Props) {
         order: props.categories.length
       });
     } catch (err) {
-      alert(err);
+      alert(err.message);
     }
   }
 

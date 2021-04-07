@@ -256,14 +256,18 @@ export function Profile(props: Props) {
       return;
     }
 
-    if (edtingProfile.image !== viewedProfile.image) {
-      const uploadResponse = await uploadFile({
-        variables: {
-          file: croppedImageFile
-        }
-      });
+    try {
+      if (edtingProfile.image !== viewedProfile.image) {
+        const uploadResponse = await uploadFile({
+          variables: {
+            file: croppedImageFile
+          }
+        });
 
-      uploadedImagePath = uploadResponse.data?.uploadFile.path || '';
+        uploadedImagePath = uploadResponse.data?.uploadFile.path || '';
+      }
+    } catch (err) {
+      alert(err.message);
     }
 
     try {

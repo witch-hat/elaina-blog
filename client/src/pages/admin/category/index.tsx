@@ -163,7 +163,7 @@ export default function Category(props: Props) {
       }
     } catch (err) {
       setEditingCategoryIndex(-1);
-      alert(err);
+      alert(err.message);
     }
   }
 
@@ -199,8 +199,9 @@ export default function Category(props: Props) {
       setGrabbingCategoryIndex(-1);
     } catch (err) {
       const backUpCategories = [...categories];
+
       setCategories(backUpCategories);
-      alert(err);
+      alert(err.message);
     }
   }
 

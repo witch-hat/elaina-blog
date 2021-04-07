@@ -89,7 +89,7 @@ export function DeleteCategoryModal(props: Props) {
       });
       props.setCategories(orderedCategories);
     } catch (err) {
-      alert(err);
+      alert(err.message);
     }
   }
 
