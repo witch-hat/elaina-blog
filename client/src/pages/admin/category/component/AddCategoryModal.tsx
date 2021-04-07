@@ -101,29 +101,31 @@ interface Props {
 }
 
 export function AddCategoryModal(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [previewImage, setPreviewImage] = useState('');
-  const [addCategory] = useMutation(ADD_CATEGORY);
   const [newCategory, setNewCategory] = useState<CategoryDetails | null>(null);
+
+  const [addCategory] = useMutation(ADD_CATEGORY);
+
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   useEffect(() => {
     newCategory && props.setCategories([...props.categories, newCategory]);
   }, [newCategory]);
 
   async function addNewCategory() {
-    const { data } = await addCategory({
-      variables: {
-        title,
-        description,
-        previewImage
-      }
-    });
+    try {
+      const response = await addCategory({
+        variables: {
+          title,
+          description,
+          previewImage
+        }
+      });
 
-    if (data?.addCategory?.isSuccess) {
       setNewCategory({
-        _id: data.addCategory._id,
+        _id: response.data.addCategory._id,
         title,
         description,
         previewImage,
@@ -131,6 +133,8 @@ export function AddCategoryModal(props: Props) {
         recentCreatedAt: new Date(),
         order: props.categories.length
       });
+    } catch (err) {
+      alert(err);
     }
   }
 

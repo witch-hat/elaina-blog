@@ -36,9 +36,9 @@ export const categoryTypeDef = gql`
 
   extend type Mutation {
     addCategory(title: String!, description: String!, previewImage: String!): AddResponse
-    updateCategory(id: Int, title: String, description: String): MutationResponse
-    deleteCategory(index: Int!): MutationResponse
-    orderCategory(ids: [Int]): MutationResponse
+    updateCategory(id: Int, title: String, description: String): Void
+    deleteCategory(index: Int!): Void
+    orderCategory(ids: [Int]): Void
   }
 `;
 
@@ -114,7 +114,7 @@ export const categoryResolver = {
 
         if (!args.title || !args.description) {
           throw new UserInputError('카테고리 제목 또는 소개를 입력해주세요.');
-        } else if (categoryList.filter((category) => category.title === args.title).length) {
+        } else if (categoryList.filter((category) => category.title.toLowerCase() === args.title.toLowerCase()).length) {
           throw new ValidationError('이미 존재하는 제목입니다.');
         }
 
@@ -151,9 +151,7 @@ export const categoryResolver = {
           }
         );
 
-        return {
-          isSuccess: true
-        };
+        return null;
       } catch (err) {
         throw err;
       }
@@ -185,7 +183,7 @@ export const categoryResolver = {
           }
         });
 
-        return { isSuccess: true };
+        return null;
       } catch (err) {
         throw err;
       }
@@ -198,7 +196,7 @@ export const categoryResolver = {
           const newOrder = args.ids.indexOf(currentId);
           await CategoryModel.findByIdAndUpdate(currentId, { order: newOrder });
         }
-        return { isSuccess: true };
+        return null;
       } catch (err) {
         throw err;
       }

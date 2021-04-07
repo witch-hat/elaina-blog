@@ -126,28 +126,30 @@ interface Props extends AppCommonProps {
 
 export default function Category(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+
   const [grabbedElement, setGrabbedElement] = useState<(EventTarget & HTMLDivElement) | null>(null);
   const [grabbingCategoryIndex, setGrabbingCategoryIndex] = useState<number>(-1);
   const [editingCategoryIndex, setEditingCategoryIndex] = useState<number>(-1);
   const [categories, setCategories] = useState<CategoryDetails[]>(props.categories);
   const [deletedCategory, setDeletedCategory] = useState<{ isModalOpen: boolean; index?: number }>({ isModalOpen: false });
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [updateCategory] = useMutation(UPDATE_CATEGORY);
-  const [orderCategory] = useMutation(ORDER_CATEGORY);
   const titleEditInput = useRef<HTMLInputElement>(null);
   const descriptionEditInput = useRef<HTMLInputElement>(null);
 
-  async function save() {
-    if (titleEditInput.current && descriptionEditInput.current) {
-      const response = await updateCategory({
-        variables: {
-          id: categories[editingCategoryIndex]._id,
-          title: titleEditInput.current?.value,
-          description: descriptionEditInput.current?.value
-        }
-      });
+  const [updateCategory] = useMutation(UPDATE_CATEGORY);
+  const [orderCategory] = useMutation(ORDER_CATEGORY);
 
-      if (response.data.updateCategory.isSuccess) {
+  async function save() {
+    try {
+      if (titleEditInput.current && descriptionEditInput.current) {
+        await updateCategory({
+          variables: {
+            id: categories[editingCategoryIndex]._id,
+            title: titleEditInput.current?.value,
+            description: descriptionEditInput.current?.value
+          }
+        });
+
         const copiedCategories = cloneDeep(categories);
         const editingCategory = copiedCategories[editingCategoryIndex];
 
@@ -158,9 +160,10 @@ export default function Category(props: Props) {
         }
 
         setEditingCategoryIndex(-1);
-      } else {
-        alert(response.data.updateCategory.errorMsg);
       }
+    } catch (err) {
+      setEditingCategoryIndex(-1);
+      alert(err);
     }
   }
 
@@ -194,9 +197,10 @@ export default function Category(props: Props) {
       });
       setCategories(newCategories);
       setGrabbingCategoryIndex(-1);
-    } catch (e) {
+    } catch (err) {
       const backUpCategories = [...categories];
       setCategories(backUpCategories);
+      alert(err);
     }
   }
 

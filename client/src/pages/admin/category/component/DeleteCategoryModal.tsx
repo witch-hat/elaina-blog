@@ -53,10 +53,12 @@ interface Props {
 }
 
 export function DeleteCategoryModal(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
-  const client = useApollo();
   const router = useRouter();
+
+  const client = useApollo();
   const [deleteCategory] = useMutation(DELETE_CATEGORY);
+
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   async function handleDeleteCategory() {
     const authResponse = await client.query({ query: IS_AUTH });
@@ -70,13 +72,13 @@ export function DeleteCategoryModal(props: Props) {
       return;
     }
 
-    const { data } = await deleteCategory({
-      variables: {
-        index: props.index
-      }
-    });
+    try {
+      await deleteCategory({
+        variables: {
+          index: props.index
+        }
+      });
 
-    if (data?.deleteCategory?.isSuccess) {
       const filteredCategories = props.categories.filter((category) => category.order != props.index);
       const orderedCategories = filteredCategories.map((category) => {
         if (props.index !== undefined && category.order > props.index) {
@@ -86,9 +88,8 @@ export function DeleteCategoryModal(props: Props) {
         }
       });
       props.setCategories(orderedCategories);
-    } else {
-      const errorMsg = data.deleteCategory.errorMsg;
-      alert(errorMsg);
+    } catch (err) {
+      alert(err);
     }
   }
 
