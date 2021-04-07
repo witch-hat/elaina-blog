@@ -237,7 +237,7 @@ export function Profile(props: Props) {
   const [popAlterBox, setPopAlterBox] = useState(false);
   const [alertMsg, setAlertMsg] = useState('');
   const [isApolloError, setIsApolloError] = useState(false);
-  let uploadedImagePath: string | undefined;
+  const [uploadedImagePath, setUploadImagePath] = useState('');
 
   const client = useApollo();
   const [uploadFile] = useMutation<{ uploadFile: FileType }>(UPLOAD_FILE);
@@ -277,7 +277,7 @@ export function Profile(props: Props) {
         }
       });
 
-      uploadedImagePath = uploadResponse.data?.uploadFile.path;
+      setUploadImagePath(uploadResponse.data?.uploadFile.path || '');
     }
 
     await updateProfile({
