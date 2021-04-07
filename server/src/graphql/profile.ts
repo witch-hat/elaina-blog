@@ -32,7 +32,7 @@ export const profileTypeDef = gql`
       company: String
       location: String
       email: String
-    ): MutationResponse
+    ): Void
   }
 `;
 
@@ -57,7 +57,7 @@ export const profileResolver = {
           },
           { new: true }
         );
-        return { isSuccess: true };
+        return null;
       } catch (err) {
         throw err;
       }

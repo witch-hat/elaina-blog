@@ -228,28 +228,39 @@ interface Props {
 }
 
 export function Profile(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const [isEditMode, setIsEditMode] = useState(false);
   const [isSelectImage, setIsSelectImage] = useState(false);
   const [selectedImageFile, setSelectedImageFile] = useState<File>();
   const [croppedImageFile, setCroppedImageFile] = useState<Blob>();
   const [edtingProfile, setEditingProfile] = useState<ProfileType>(props.profile);
   const [viewedProfile, setViewedProfile] = useState<ProfileType>(props.profile);
+  const [popAlterBox, setPopAlterBox] = useState(false);
+  const [alertMsg, setAlertMsg] = useState('');
+  const [isApolloError, setIsApolloError] = useState(false);
+  let uploadedImagePath: string | undefined;
+
+  const client = useApollo();
   const [uploadFile] = useMutation<{ uploadFile: FileType }>(UPLOAD_FILE);
   const [updateProfile] = useMutation<{ updateProfile: ProfileType }>(UPDATE_PROFILE, {
     onError: (err: Error) => {
       setPopAlterBox(true);
       setAlertMsg(err.message);
       setIsApolloError(true);
+      setIsEditMode(false);
+      setEditingProfile(viewedProfile);
+    },
+    onCompleted() {
+      setViewedProfile({ ...edtingProfile, image: uploadedImagePath ? uploadedImagePath : viewedProfile.image });
+      setIsEditMode(false);
+      setPopAlterBox(true);
+      setAlertMsg('Profile changed successfully');
+      setIsApolloError(false);
     }
   });
-  const [popAlterBox, setPopAlterBox] = useState(false);
-  const [alertMsg, setAlertMsg] = useState('');
-  const [isApolloError, setIsApolloError] = useState(false);
-  const client = useApollo();
+
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   async function changeProfile() {
-    let uploadedImagePath: string | undefined;
     const { data } = await client.query({ query: IS_AUTH });
 
     const isAdmin = data.isAuth.isAuth;
@@ -269,7 +280,7 @@ export function Profile(props: Props) {
       uploadedImagePath = uploadResponse.data?.uploadFile.path;
     }
 
-    const updateResponse = await updateProfile({
+    await updateProfile({
       variables: {
         id: edtingProfile._id,
         image: uploadedImagePath ? uploadedImagePath : viewedProfile.image,
@@ -281,14 +292,6 @@ export function Profile(props: Props) {
         email: edtingProfile.email
       }
     });
-
-    if (updateResponse?.data?.updateProfile?.isSuccess) {
-      setViewedProfile({ ...edtingProfile, image: uploadedImagePath ? uploadedImagePath : viewedProfile.image });
-      setIsEditMode(false);
-      setPopAlterBox(true);
-      setAlertMsg('Profile changed successfully');
-      setIsApolloError(false);
-    }
   }
 
   return (
