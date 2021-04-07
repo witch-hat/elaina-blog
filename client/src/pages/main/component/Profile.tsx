@@ -241,10 +241,7 @@ export function Profile(props: Props) {
 
   const client = useApollo();
   const [uploadFile] = useMutation<{ uploadFile: FileType }>(UPLOAD_FILE);
-  const [updateProfile] = useMutation<{ updateProfile: ProfileType }>(UPDATE_PROFILE, {
-    onError: (err: Error) => {},
-    onCompleted() {}
-  });
+  const [updateProfile] = useMutation<{ updateProfile: ProfileType }>(UPDATE_PROFILE);
 
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
