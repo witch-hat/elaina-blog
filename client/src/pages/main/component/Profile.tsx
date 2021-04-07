@@ -237,30 +237,19 @@ export function Profile(props: Props) {
   const [popAlterBox, setPopAlterBox] = useState(false);
   const [alertMsg, setAlertMsg] = useState('');
   const [isApolloError, setIsApolloError] = useState(false);
-  const [uploadedImagePath, setUploadImagePath] = useState('');
+  // const [uploadedImagePath, setUploadImagePath] = useState('');
 
   const client = useApollo();
   const [uploadFile] = useMutation<{ uploadFile: FileType }>(UPLOAD_FILE);
   const [updateProfile] = useMutation<{ updateProfile: ProfileType }>(UPDATE_PROFILE, {
-    onError: (err: Error) => {
-      setPopAlterBox(true);
-      setAlertMsg(err.message);
-      setIsApolloError(true);
-      setIsEditMode(false);
-      setEditingProfile(viewedProfile);
-    },
-    onCompleted() {
-      setViewedProfile({ ...edtingProfile, image: uploadedImagePath ? uploadedImagePath : viewedProfile.image });
-      setIsEditMode(false);
-      setPopAlterBox(true);
-      setAlertMsg('Profile changed successfully');
-      setIsApolloError(false);
-    }
+    onError: (err: Error) => {},
+    onCompleted() {}
   });
 
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   async function changeProfile() {
+    let uploadedImagePath: string | undefined;
     const { data } = await client.query({ query: IS_AUTH });
 
     const isAdmin = data.isAuth.isAuth;
@@ -277,21 +266,35 @@ export function Profile(props: Props) {
         }
       });
 
-      setUploadImagePath(uploadResponse.data?.uploadFile.path || '');
+      uploadedImagePath = uploadResponse.data?.uploadFile.path || '';
     }
 
-    await updateProfile({
-      variables: {
-        id: edtingProfile._id,
-        image: uploadedImagePath ? uploadedImagePath : viewedProfile.image,
-        name: edtingProfile.name,
-        introduce: edtingProfile.introduce,
-        link: edtingProfile.link,
-        company: edtingProfile.company,
-        location: edtingProfile.location,
-        email: edtingProfile.email
-      }
-    });
+    try {
+      await updateProfile({
+        variables: {
+          id: edtingProfile._id,
+          image: uploadedImagePath ? uploadedImagePath : viewedProfile.image,
+          name: edtingProfile.name,
+          introduce: edtingProfile.introduce,
+          link: edtingProfile.link,
+          company: edtingProfile.company,
+          location: edtingProfile.location,
+          email: edtingProfile.email
+        }
+      });
+
+      setViewedProfile({ ...edtingProfile, image: uploadedImagePath ? uploadedImagePath : viewedProfile.image });
+      setIsEditMode(false);
+      setPopAlterBox(true);
+      setAlertMsg('Profile changed successfully');
+      setIsApolloError(false);
+    } catch (err) {
+      setPopAlterBox(true);
+      setAlertMsg(err.message);
+      setIsApolloError(true);
+      setIsEditMode(false);
+      setEditingProfile(viewedProfile);
+    }
   }
 
   return (
