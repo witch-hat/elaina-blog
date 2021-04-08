@@ -132,22 +132,26 @@ export function CommentWriter(props: Props) {
     const createdAt = new Date().toISOString();
 
     if (isAdmin) {
-      writeComment({
-        variables: {
-          _id,
-          comment,
-          createdAt,
-          isAdmin
-        }
-      });
-
-      if (props.setNewComment) {
-        props.setNewComment({
-          comment,
-          createdAt: new Date(createdAt),
-          isAdmin,
-          replies: []
+      try {
+        await writeComment({
+          variables: {
+            _id,
+            comment,
+            createdAt,
+            isAdmin
+          }
         });
+
+        if (props.setNewComment) {
+          props.setNewComment({
+            comment,
+            createdAt: new Date(createdAt),
+            isAdmin,
+            replies: []
+          });
+        }
+      } catch (err) {
+        alert(err.msg);
       }
     } else {
       if (username.length < 2 || password.length < 4) {
@@ -155,26 +159,30 @@ export function CommentWriter(props: Props) {
         return;
       }
 
-      writeComment({
-        variables: {
-          _id,
-          username,
-          password,
-          comment,
-          createdAt,
-          isAdmin
-        }
-      });
-
-      if (props.setNewComment) {
-        props.setNewComment({
-          username,
-          password,
-          comment,
-          createdAt: new Date(createdAt),
-          isAdmin,
-          replies: []
+      try {
+        await writeComment({
+          variables: {
+            _id,
+            username,
+            password,
+            comment,
+            createdAt,
+            isAdmin
+          }
         });
+
+        if (props.setNewComment) {
+          props.setNewComment({
+            username,
+            password,
+            comment,
+            createdAt: new Date(createdAt),
+            isAdmin,
+            replies: []
+          });
+        }
+      } catch (err) {
+        alert(err.message);
       }
     }
 
@@ -193,42 +201,60 @@ export function CommentWriter(props: Props) {
     const createdAt = new Date().toISOString();
 
     if (isAdmin) {
-      writeReply({
-        variables: {
-          _id,
-          commentIndex: props.commentIndex,
-          comment,
-          createdAt,
-          isAdmin
+      try {
+        await writeReply({
+          variables: {
+            _id,
+            commentIndex: props.commentIndex,
+            comment,
+            createdAt,
+            isAdmin
+          }
+        });
+
+        if (props.setNewReply) {
+          props.setNewReply({
+            username,
+            password,
+            comment,
+            createdAt: new Date(createdAt),
+            isAdmin
+          });
         }
-      });
+      } catch (err) {
+        alert(err);
+      }
     } else {
       if (username.length < 2 || password.length < 4) {
         alert('username: 2자 이상, password: 4자 이상 입력해주세요');
         return;
       }
 
-      writeReply({
-        variables: {
-          _id,
-          commentIndex: props.commentIndex,
-          username,
-          password,
-          comment,
-          createdAt,
-          isAdmin
-        }
-      });
-    }
+      try {
+        await writeReply({
+          variables: {
+            _id,
+            commentIndex: props.commentIndex,
+            username,
+            password,
+            comment,
+            createdAt,
+            isAdmin
+          }
+        });
 
-    if (props.setNewReply) {
-      props.setNewReply({
-        username,
-        password,
-        comment,
-        createdAt: new Date(createdAt),
-        isAdmin
-      });
+        if (props.setNewReply) {
+          props.setNewReply({
+            username,
+            password,
+            comment,
+            createdAt: new Date(createdAt),
+            isAdmin
+          });
+        }
+      } catch (err) {
+        alert(err);
+      }
     }
 
     reset();

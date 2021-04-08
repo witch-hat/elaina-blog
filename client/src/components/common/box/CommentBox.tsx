@@ -167,32 +167,37 @@ export function CommentBox(props: Props) {
     const AuthResponse = await client.query({ query: IS_AUTH });
     const isAuth = AuthResponse.data.isAuth.isAuth;
     const _id = +router.query['post-id'];
-    let deleteResponse;
 
     // Admin can delete all comments
     if (isAuth) {
-      deleteResponse = await deleteComment({
-        variables: {
-          _id,
-          index: props.commentIndex
-        }
-      });
+      try {
+        await deleteComment({
+          variables: {
+            _id,
+            index: props.commentIndex
+          }
+        });
+
+        if (props.setDeletedIndex) props.setDeletedIndex(props.commentIndex);
+      } catch (err) {
+        alert(err.message);
+      }
     }
     // common users can delete only their comment
     else {
-      deleteResponse = await deleteComment({
-        variables: {
-          _id,
-          index: props.commentIndex,
-          password
-        }
-      });
-    }
+      try {
+        await deleteComment({
+          variables: {
+            _id,
+            index: props.commentIndex,
+            password
+          }
+        });
 
-    if (deleteResponse.data.deleteComment.isSuccess && props.setDeletedIndex) {
-      props.setDeletedIndex(props.commentIndex);
-    } else {
-      alert(deleteResponse.data.deleteComment.errorMsg);
+        if (props.setDeletedIndex) props.setDeletedIndex(props.commentIndex);
+      } catch (err) {
+        alert(err.message);
+      }
     }
   }
 
@@ -200,34 +205,39 @@ export function CommentBox(props: Props) {
     const AuthResponse = await client.query({ query: IS_AUTH });
     const isAuth = AuthResponse.data.isAuth.isAuth;
     const _id = +router.query['post-id'];
-    let deleteResponse;
 
     // Admin can delete all replies
     if (isAuth) {
-      deleteResponse = await deleteReply({
-        variables: {
-          _id,
-          commentIndex: props.commentIndex,
-          replyIndex: props.replyIndex
-        }
-      });
+      try {
+        await deleteReply({
+          variables: {
+            _id,
+            commentIndex: props.commentIndex,
+            replyIndex: props.replyIndex
+          }
+        });
+
+        if (props.replyIndex !== undefined && props.setDeletedReplyIndex) props.setDeletedReplyIndex(props.replyIndex);
+      } catch (err) {
+        alert(err);
+      }
     }
     // common users can delete only their reply
     else {
-      deleteResponse = await deleteReply({
-        variables: {
-          _id,
-          commentIndex: props.commentIndex,
-          replyIndex: props.replyIndex,
-          password
-        }
-      });
-    }
+      try {
+        await deleteReply({
+          variables: {
+            _id,
+            commentIndex: props.commentIndex,
+            replyIndex: props.replyIndex,
+            password
+          }
+        });
 
-    if (deleteResponse.data.deleteReply.isSuccess && props.setDeletedReplyIndex) {
-      (props.replyIndex as number) > -1 && props.setDeletedReplyIndex(props.replyIndex as number);
-    } else {
-      alert(deleteResponse.data.deleteReply.errorMsg);
+        if (props.replyIndex !== undefined && props.setDeletedReplyIndex) props.setDeletedReplyIndex(props.replyIndex);
+      } catch (err) {
+        alert(err);
+      }
     }
   }
 

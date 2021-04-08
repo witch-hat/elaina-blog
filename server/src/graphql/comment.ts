@@ -32,9 +32,9 @@ export const commentTypeDef = gql`
   }
 
   extend type Mutation {
-    writeComment(_id: Int!, username: String, password: String, comment: String!, createdAt: DateTime!, isAdmin: Boolean!): MutationResponse
-    editComment(_id: Int!, index: Int!, newComment: String!, password: String): MutationResponse
-    deleteComment(_id: Int!, index: Int!, password: String): MutationResponse
+    writeComment(_id: Int!, username: String, password: String, comment: String!, createdAt: DateTime!, isAdmin: Boolean!): Void
+    editComment(_id: Int!, index: Int!, newComment: String!, password: String): Void
+    deleteComment(_id: Int!, index: Int!, password: String): Void
     writeReply(
       _id: Int!
       commentIndex: Int!
@@ -43,9 +43,9 @@ export const commentTypeDef = gql`
       comment: String!
       createdAt: DateTime!
       isAdmin: Boolean!
-    ): MutationResponse
-    editReply(_id: Int!, commentIndex: Int!, replyIndex: Int!, newReply: String!, password: String): MutationResponse
-    deleteReply(_id: Int!, commentIndex: Int!, replyIndex: Int!, password: String): MutationResponse
+    ): Void
+    editReply(_id: Int!, commentIndex: Int!, replyIndex: Int!, newReply: String!, password: String): Void
+    deleteReply(_id: Int!, commentIndex: Int!, replyIndex: Int!, password: String): Void
   }
 `;
 
@@ -101,7 +101,7 @@ export const commentResolver = {
 
         existComments.save();
 
-        return { isSuccess: true };
+        return null;
       } catch (err) {
         throw err;
       }
@@ -125,7 +125,7 @@ export const commentResolver = {
         commentContainer.comments[args.index].comment = args.newComment;
         commentContainer.save();
 
-        return { isSuccess: true };
+        return null;
       } catch (err) {
         throw err;
       }
@@ -149,7 +149,7 @@ export const commentResolver = {
 
         commentContainer.save();
 
-        return { isSuccess: true };
+        return null;
       } catch (err) {
         throw err;
       }
@@ -190,7 +190,7 @@ export const commentResolver = {
 
         commentContainer.save();
 
-        return { isSuccess: true };
+        return null;
       } catch (err) {
         throw err;
       }
@@ -218,7 +218,7 @@ export const commentResolver = {
         commentContainer.comments[args.commentIndex].replies[args.replyIndex].comment = args.newReply;
         commentContainer.save();
 
-        return { isSuccess: true };
+        return null;
       } catch (err) {
         throw err;
       }
@@ -240,7 +240,7 @@ export const commentResolver = {
 
         commentContainer.save();
 
-        return { isSuccess: true };
+        return null;
       } catch (err) {
         throw err;
       }
