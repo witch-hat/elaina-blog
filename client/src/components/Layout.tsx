@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 
-import { Header, Footer } from 'src/components';
+import { Header } from 'src/components';
 import { GlobalStyles } from 'src/styles';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
@@ -34,7 +34,6 @@ export default function Layout(props: Props) {
       <div>
         <Header name={mockUpData.blogName} isLogin={props.app.isLogin} />
         <Container>{props.children}</Container>
-        <Footer />
       </div>
     </>
   );

@@ -76,6 +76,11 @@ function Text(props: { children?: string }) {
 }
 
 export function TimeLineEditor() {
+  enum Mode {
+    write = 'Write',
+    preview = 'Preview'
+  }
+
   const [viewerMode, setViewerMode] = useState<Mode>(Mode.write);
   const editorRef = useRef<HTMLPreElement>(null);
   const remainText = useRef<string>();
@@ -83,10 +88,6 @@ export function TimeLineEditor() {
   const [initlizedP, setInitilizedP] = useState<Node>();
   const [initilizeSpan, setInitilizeSpan] = useState<Node>();
 
-  enum Mode {
-    write = 'Write',
-    preview = 'Preview'
-  }
   let text: string;
 
   useEffect(() => {
