@@ -116,7 +116,7 @@ const SaveButton = styled.button<{ themeMode: ThemeMode }>((props) => ({
 const CancelButton = styled.div({
   width: '47.5%',
   padding: '.5rem',
-  borderRadius: '12px',
+  borderRadius: '6px',
   border: '1px solid #ddd',
   cursor: 'pointer',
   display: 'flex',
