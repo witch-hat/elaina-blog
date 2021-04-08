@@ -30,11 +30,12 @@ interface Props extends AppCommonProps, WithRouterProps {
 }
 
 function WriterPage(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  const router = useRouter();
+
   const profile: ProfileType = props.profile;
   const categoryTitleFromQuery = props.router.query.category as string | undefined;
   const categories: CategoryDetails[] = props.categories;
-  const router = useRouter();
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   if (categoryTitleFromQuery && !categories.find((category) => category.title === categoryTitleFromQuery)) {
     alert('존재하지 않는 Category Title 입니다.');

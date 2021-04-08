@@ -151,15 +151,17 @@ interface Props {
 }
 
 export function CommentBox(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [password, setPassword] = useState('');
-  const [deleteComment] = useMutation(DELETE_COMMENT);
-  const [deleteReply] = useMutation(DELETE_REPLY);
-  const createdAt = new Date(props.comment.createdAt);
-  const client = useApollo();
   const router = useRouter();
+
+  const client = useApollo();
+  const [deleteReply] = useMutation(DELETE_REPLY);
+  const [deleteComment] = useMutation(DELETE_COMMENT);
+
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  const createdAt = new Date(props.comment.createdAt);
 
   async function handleDeleteComment() {
     const AuthResponse = await client.query({ query: IS_AUTH });

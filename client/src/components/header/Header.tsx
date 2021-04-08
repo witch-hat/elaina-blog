@@ -187,13 +187,14 @@ interface Props {
 }
 
 export function Header(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
-  const lang: LangCode = useSelector<RootState, any>((state) => state.common.lang);
   const width = useWidth();
+  const router = useRouter();
   const [isAdminMenuVisible, setIsAdminMenuVisible] = useState<boolean>(width > 767);
   const [isLangMenuVisible, setIsLangMenuVisible] = useState(false);
   const [searchKeyword, setSearchKeyWord] = useState('');
-  const router = useRouter();
+
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  const lang: LangCode = useSelector<RootState, any>((state) => state.common.lang);
   const currentLangCode = getCurrentLangCode();
   const languages = {
     [LangCode.ko]: '한국어',

@@ -9,6 +9,7 @@ interface Props {
 export function ProgressBar(props: Props) {
   const router = useRouter();
   const [progress, setProgress] = useState<number>(0);
+
   let increaseProgressInterval: number | undefined;
   let progressPercent: number;
 

@@ -116,8 +116,9 @@ interface Props {
 }
 
 export function PostCategory(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const router = useRouter();
+
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   function handleWriteButtonClick() {
     router.push({ pathname: '/admin/writer', query: { category: props.category.title } });

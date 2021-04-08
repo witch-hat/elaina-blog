@@ -58,8 +58,9 @@ function ModeSwitchIcon(props: SwitchIconProps) {
 }
 
 export function ModeSwitch() {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const [isChecked, setIsChecked] = useState(themeMode === ThemeMode.light ? false : true);
+
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   useEffect(() => {
     if (isChecked) {

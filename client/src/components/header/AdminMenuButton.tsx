@@ -68,14 +68,16 @@ interface Props {
 }
 
 export default function AdminMenuButton(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   const [logout] = useMutation(LOGOUT, {
     onCompleted: (data: any) => {
       router.reload();
     }
   });
+
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   return (
     <Container>

@@ -125,8 +125,6 @@ interface Props extends AppCommonProps {
 }
 
 export default function Category(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
-
   const [grabbedElement, setGrabbedElement] = useState<(EventTarget & HTMLDivElement) | null>(null);
   const [grabbingCategoryIndex, setGrabbingCategoryIndex] = useState<number>(-1);
   const [editingCategoryIndex, setEditingCategoryIndex] = useState<number>(-1);
@@ -138,6 +136,8 @@ export default function Category(props: Props) {
 
   const [updateCategory] = useMutation(UPDATE_CATEGORY);
   const [orderCategory] = useMutation(ORDER_CATEGORY);
+
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   async function save() {
     try {

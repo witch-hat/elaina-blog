@@ -61,6 +61,7 @@ export function CommentElement(props: Props) {
   const [replies, setReplies] = useState<Reply[]>(props.comment.replies);
   const [newReply, setNewReply] = useState<Reply>();
   const [deletedReplyIndex, setDeletedReplyIndex] = useState(-1);
+
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   useEffect(() => {

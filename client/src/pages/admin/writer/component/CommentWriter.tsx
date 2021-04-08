@@ -93,17 +93,19 @@ interface Props {
 }
 
 export function CommentWriter(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
-  const [writeComment] = useMutation(WRITE_COMMENT);
-  const [writeReply] = useMutation(WRITE_REPLY);
+  const router = useRouter();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [comment, setComment] = useState('');
   const usernameRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const editor = useRef<HTMLPreElement>(null);
+
   const client = useApollo();
-  const router = useRouter();
+  const [writeComment] = useMutation(WRITE_COMMENT);
+  const [writeReply] = useMutation(WRITE_REPLY);
+
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   function reset() {
     if (usernameRef.current && passwordRef.current) {

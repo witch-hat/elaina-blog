@@ -149,13 +149,15 @@ interface Props {
 }
 
 export function Content(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
-  const time = new Date(props.createdAt);
-  const [isOpenMenu, setIsOpenMenu] = useState(false);
-  const [deletePost] = useMutation(DELETE_POST);
   const router = useRouter();
-  const client = useApollo();
+  const [isOpenMenu, setIsOpenMenu] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const client = useApollo();
+  const [deletePost] = useMutation(DELETE_POST);
+
+  const time = new Date(props.createdAt);
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   const id = router.query['post-id'];
 

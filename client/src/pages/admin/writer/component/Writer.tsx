@@ -136,19 +136,29 @@ interface Props {
 }
 
 export function Writer(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  const width = useWidth();
+  const router = useRouter();
   const editor = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLInputElement>(null);
-  const [selectedCategory, setSelectedCategory] = useState(DEFAULT_CATEGORY);
+  const [mode, setMode] = useState(Mode.write);
   const [title, setTitle] = useState('');
   const [article, setArticle] = useState<string>('');
   const [isListOpen, setIsListOpen] = useState(false);
-  const width = useWidth();
-  const [mode, setMode] = useState(Mode.write);
-  const [writePost] = useMutation(WRITE_POST);
-  const [editPost] = useMutation(EDIT_POST);
-  const router = useRouter();
+  const [selectedCategory, setSelectedCategory] = useState(DEFAULT_CATEGORY);
+
   const client = useApollo();
+  const [writePost] = useMutation(WRITE_POST);
+  const [editPost] = useMutation(EDIT_POST, {
+    onCompleted() {
+      const id = +router.query['post-id'];
+      router.push(`/post/${id}`);
+    },
+    onError(err: Error) {
+      alert(err.message);
+    }
+  });
+
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   useEffect(() => {
     if (mode == Mode.write) {
@@ -255,7 +265,7 @@ export function Writer(props: Props) {
 
     const id = +router.query['post-id'];
 
-    const editResult = await editPost({
+    await editPost({
       variables: {
         id,
         title,
@@ -263,15 +273,6 @@ export function Writer(props: Props) {
         category: selectedCategory
       }
     });
-
-    const isSuccess = editResult.data.editPost.isSuccess;
-
-    if (isSuccess) {
-      return router.push(`/post/${id}`);
-    } else {
-      const errorMsg = editResult.data.editPost.errorMsg;
-      return alert(errorMsg);
-    }
   }
 
   return (

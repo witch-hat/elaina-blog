@@ -13,6 +13,7 @@ interface Props {
 
 export const FocusWrapper = React.forwardRef<HTMLDivElement, Props>((props: Props, forwardedRef) => {
   const focusRef = useRef<HTMLDivElement>(null);
+
   useImperativeHandle(forwardedRef, () => focusRef.current as HTMLDivElement);
 
   useEffect(() => {

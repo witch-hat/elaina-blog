@@ -82,12 +82,13 @@ interface Props {
 }
 
 export default function Login(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  const router = useRouter();
   const buttonRef = useRef<HTMLButtonElement>(null);
   const emailInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const router = useRouter();
+
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   const [login] = useMutation(LOGIN, {
     onCompleted: (data: any) => {
