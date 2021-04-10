@@ -148,15 +148,7 @@ export function Writer(props: Props) {
 
   const client = useApollo();
   const [writePost] = useMutation(WRITE_POST);
-  const [editPost] = useMutation(EDIT_POST, {
-    onCompleted() {
-      const id = +router.query['post-id'];
-      router.push(`/post/${id}`);
-    },
-    onError(err: Error) {
-      alert(err.message);
-    }
-  });
+  const [editPost] = useMutation(EDIT_POST);
 
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
@@ -214,18 +206,21 @@ export function Writer(props: Props) {
   async function handleCreatePost() {
     if (selectedCategory === DEFAULT_CATEGORY) {
       window.scrollTo(0, 0);
-      return alert('카테고리를 선택해 주세요');
+      alert('카테고리를 선택해 주세요');
+      return;
     }
 
     if (!title) {
       window.scrollTo(0, 0);
       titleRef.current?.focus();
-      return alert('제목을 입력해주세요');
+      alert('제목을 입력해주세요');
+      return;
     }
 
     if (!article) {
       editor.current?.focus();
-      return alert('본문을 1글자 이상 써주세요');
+      alert('본문을 1글자 이상 써주세요');
+      return;
     }
 
     const { data } = await client.query({ query: IS_AUTH });
@@ -233,19 +228,24 @@ export function Writer(props: Props) {
 
     if (!isAdmin) {
       alert('로그인에러. 다시 로그인해주세요.');
-      return router.push('/admin/login');
+      router.push('/admin/login');
+      return;
     }
 
-    const mutateData = await writePost({
-      variables: {
-        title,
-        createdAt: new Date().toISOString(),
-        article,
-        category: selectedCategory
-      }
-    });
+    try {
+      const mutateData = await writePost({
+        variables: {
+          title,
+          createdAt: new Date().toISOString(),
+          article,
+          category: selectedCategory
+        }
+      });
 
-    return router.push(`/post/${mutateData.data.writePost._id}`);
+      router.push(`/post/${mutateData.data.writePost._id}`);
+    } catch (err) {
+      alert(err.message);
+    }
   }
 
   async function handleEditPost() {
@@ -265,14 +265,20 @@ export function Writer(props: Props) {
 
     const id = +router.query['post-id'];
 
-    await editPost({
-      variables: {
-        id,
-        title,
-        article,
-        category: selectedCategory
-      }
-    });
+    try {
+      await editPost({
+        variables: {
+          id,
+          title,
+          article,
+          category: selectedCategory
+        }
+      });
+
+      router.push(`/post/${id}`);
+    } catch (err) {
+      alert(err.message);
+    }
   }
 
   return (

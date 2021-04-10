@@ -167,16 +167,15 @@ export function Content(props: Props) {
     const isAdmin = authResponse.data.isAuth.isAuth;
 
     if (isAdmin) {
-      const deleteResponse = await deletePost({
-        variables: {
-          id: +id
-        }
-      });
+      try {
+        const deleteResponse = await deletePost({
+          variables: {
+            id: +id
+          }
+        });
 
-      const isSuccess = deleteResponse.data.deletePost.isSuccess;
-      const categoryId = deleteResponse.data.deletePost.categoryId;
+        const categoryId = deleteResponse.data.deletePost.categoryId;
 
-      if (isSuccess) {
         const { data } = await client.query({ query: FIND_SAME_CATEGORY_POSTS, variables: { categoryId } });
         if (data.findSameCategoryPosts.post.length === 0) {
           router.push('/');
@@ -184,9 +183,8 @@ export function Content(props: Props) {
           const lastPostId = data.findSameCategoryPosts.post[data.findSameCategoryPosts.post.length - 1]._id;
           router.push(`/post/${lastPostId}`);
         }
-      } else {
-        alert('지우는 중 에러 발생. 다시 시도해 주세요');
-        router.push('/');
+      } catch (err) {
+        alert(err.message);
       }
     } else {
       return alert('Invalid User');

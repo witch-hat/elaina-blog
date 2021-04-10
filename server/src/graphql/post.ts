@@ -31,7 +31,6 @@ export const postTypeDef = gql`
 
   type SearchResponse {
     result: [SearchResult]
-    errorMsg: String
   }
 
   extend type Query {
@@ -46,7 +45,7 @@ export const postTypeDef = gql`
   extend type Mutation {
     writePost(title: String!, createdAt: DateTime, article: String!, category: String!): Post
     deletePost(id: Int!): DeleteResponse
-    editPost(id: Int!, title: String!, article: String!, category: String!): MutationResponse
+    editPost(id: Int!, title: String!, article: String!, category: String!): Void
   }
 `;
 
@@ -173,7 +172,7 @@ export const postResolver = {
         await CommentModel.findByIdAndDelete(args.id);
         return { isSuccess: true, categoryId: deletedPost.categoryId };
       } catch (err) {
-        return { isSuccess: false };
+        throw err;
       }
     },
 
@@ -194,7 +193,7 @@ export const postResolver = {
 
         editPost.save();
 
-        return { isSuccess: true };
+        return null;
       } catch (err) {
         throw err;
       }
