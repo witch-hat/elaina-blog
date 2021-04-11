@@ -10,7 +10,7 @@ import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 
 import styles from 'src/styles/MarkdownStyles.module.css';
-import { FocusWrapper, ModalWrapper } from 'src/components';
+import { ModalWrapper, DropDownMenu } from 'src/components';
 import { DELETE_POST, FIND_SAME_CATEGORY_POSTS } from 'src/query/post';
 import { IS_AUTH } from 'src/query/user';
 import { useApollo } from 'src/apollo/apolloClient';
@@ -76,22 +76,6 @@ const Time = styled.span({
   alignItems: 'center'
 });
 
-const MenuContainer = styled.div({
-  position: 'relative'
-});
-
-const MenuListWrapper = styled.div({
-  position: 'absolute',
-  top: '32.6px',
-  right: 0,
-  zIndex: 1
-});
-
-const MenuList = styled.div({
-  backgroundColor: '#eee',
-  borderRadius: '.3rem'
-});
-
 const MenuButton = styled.p<{ danger?: boolean }>((props) => ({
   display: 'block',
   padding: '.5rem',
@@ -104,15 +88,6 @@ const MenuButton = styled.p<{ danger?: boolean }>((props) => ({
     backgroundColor: '#ddd'
   }
 }));
-
-const MenuIconButton = styled.div({
-  padding: '.5rem .8rem',
-  cursor: 'pointer',
-  borderRadius: '4px',
-  '&:hover': {
-    backgroundColor: '#eee'
-  }
-});
 
 const ModalContainer = styled.div({
   width: '20rem',
@@ -206,23 +181,21 @@ export function Content(props: Props) {
           </Time>
         </ContentInfoWrapper>
         {props.isLogin && (
-          <MenuContainer>
-            <MenuIconButton onClick={() => setIsOpenMenu(!isOpenMenu)}>
-              <FontAwesomeIcon icon={faEllipsisV} />
-            </MenuIconButton>
-            <MenuListWrapper>
-              <FocusWrapper visible={isOpenMenu} onClickOutside={() => setIsOpenMenu(false)}>
-                <MenuList>
-                  <MenuButton>
-                    <Link href={`/post/${id}/edit`}>{trans(Lang.Edit)}</Link>
-                  </MenuButton>
-                  <MenuButton danger onClick={() => setIsModalOpen(true)}>
-                    {trans(Lang.Delete)}
-                  </MenuButton>
-                </MenuList>
-              </FocusWrapper>
-            </MenuListWrapper>
-          </MenuContainer>
+          <DropDownMenu
+            visible={isOpenMenu}
+            mainButton={<FontAwesomeIcon icon={faEllipsisV} />}
+            setVisible={setIsOpenMenu}
+            dropMenu={
+              <>
+                <MenuButton>
+                  <Link href={`/post/${id}/edit`}>{trans(Lang.Edit)}</Link>
+                </MenuButton>
+                <MenuButton danger onClick={() => setIsModalOpen(true)}>
+                  {trans(Lang.Delete)}
+                </MenuButton>
+              </>
+            }
+          />
         )}
       </Menu>
       <Article>

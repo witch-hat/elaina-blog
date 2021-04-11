@@ -6,7 +6,7 @@ import { faUser, faClock, faEllipsisV } from '@fortawesome/free-solid-svg-icons'
 import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
 
-import { FocusWrapper } from 'src/components';
+import { DropDownMenu } from 'src/components';
 import { Comment, DELETE_COMMENT, DELETE_REPLY, Reply } from 'src/query/comment';
 import { ModalWrapper } from 'src/components';
 import { FormatUnifier } from 'src/utils';
@@ -28,7 +28,8 @@ const Container = styled.div({
 const DetailsContainer = styled.div({
   display: 'flex',
   width: '100%',
-  height: '2.1rem',
+  height: 'max-content',
+  fontSize: '.8rem',
   justifyContent: 'space-between',
   '@media screen and (max-width: 767px)': {
     margin: '0 0 .2rem'
@@ -59,16 +60,6 @@ const Time = styled.span({
   alignItems: 'center'
 });
 
-const MenuIconButton = styled.div({
-  fontSize: '.8rem',
-  padding: '.5rem .8rem',
-  cursor: 'pointer',
-  borderRadius: '4px',
-  '&:hover': {
-    backgroundColor: '#eee'
-  }
-});
-
 const CommentContent = styled.p({
   margin: '2rem 0',
   display: 'flex',
@@ -76,26 +67,9 @@ const CommentContent = styled.p({
   width: '100%'
 });
 
-const MenuContainer = styled.div({
-  position: 'relative'
-});
-
-const MenuListWrapper = styled.div({
-  position: 'absolute',
-  top: '32.6px',
-  right: 0,
-  zIndex: 1
-});
-
-const MenuList = styled.div({
-  backgroundColor: '#eee',
-  borderRadius: '.3rem'
-});
-
 const MenuButton = styled.p<{ danger?: boolean }>((props) => ({
   display: 'block',
   padding: '.5rem',
-  fontSize: '.875rem',
   textAlign: 'center',
   cursor: 'pointer',
   userSelect: 'none',
@@ -255,32 +229,30 @@ export function CommentBox(props: Props) {
           </Time>
         </InformationContainer>
         {(props.isLogin || !props.isCommentFromAdmin) && (
-          <MenuContainer>
-            <MenuIconButton onClick={() => setIsMenuOpen(!isMenuOpen)}>
-              <FontAwesomeIcon icon={faEllipsisV} />
-            </MenuIconButton>
-            <MenuListWrapper>
-              <FocusWrapper visible={isMenuOpen} onClickOutside={() => setIsMenuOpen(false)}>
-                <MenuList>
-                  {/* admin인경우: 자기것만 edit, 나머지는 edit 버튼 X, admin 아닌경우 edit 버튼 O */}
-                  {props.isLogin ? (
-                    props.comment.isAdmin && <MenuButton onClick={() => {}}>{trans(Lang.Edit)}</MenuButton>
-                  ) : (
-                    <MenuButton onClick={() => {}}>{trans(Lang.Edit)}</MenuButton>
-                  )}
-                  <MenuButton
-                    danger
-                    onClick={() => {
-                      setIsModalOpen(true);
-                      setIsMenuOpen(false);
-                    }}
-                  >
-                    {trans(Lang.Delete)}
-                  </MenuButton>
-                </MenuList>
-              </FocusWrapper>
-            </MenuListWrapper>
-          </MenuContainer>
+          <DropDownMenu
+            visible={isMenuOpen}
+            mainButton={<FontAwesomeIcon icon={faEllipsisV} />}
+            setVisible={setIsMenuOpen}
+            dropMenu={
+              <>
+                {/* admin인경우: 자기것만 edit, 나머지는 edit 버튼 X, admin 아닌경우 edit 버튼 O */}
+                {props.isLogin ? (
+                  props.comment.isAdmin && <MenuButton onClick={() => {}}>{trans(Lang.Edit)}</MenuButton>
+                ) : (
+                  <MenuButton onClick={() => {}}>{trans(Lang.Edit)}</MenuButton>
+                )}
+                <MenuButton
+                  danger
+                  onClick={() => {
+                    setIsModalOpen(true);
+                    setIsMenuOpen(false);
+                  }}
+                >
+                  {trans(Lang.Delete)}
+                </MenuButton>
+              </>
+            }
+          />
         )}
       </DetailsContainer>
       <CommentContent>{props.comment.comment}</CommentContent>

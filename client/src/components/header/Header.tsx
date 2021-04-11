@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import styled, { keyframes, css } from 'styled-components';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useMutation } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faBars, faCaretDown, faLanguage } from '@fortawesome/free-solid-svg-icons';
 
@@ -13,13 +14,14 @@ import { ThemeMode } from 'src/redux/common/type';
 import { commonDispatch } from 'src/redux/common/dispatch';
 import { LangCode, changeLang, getCurrentLangCode, trans, Lang } from 'src/resources/languages';
 
+import { LOGOUT } from 'src/query/user';
 import { ModeSwitch } from './ModeSwitch';
-import AdminMenuButton from './AdminMenuButton';
 import { ProgressBar } from './ProgressBar';
+import { DropDownMenu } from '../common/box/DropDownMenu';
 
 const StyledHeader = styled.header<{ themeMode: ThemeMode }>((props) => {
   return {
-    width: '100vw',
+    width: '100%',
     display: 'flex',
     alignItems: 'center',
     borderBottom: '1px solid #ccc',
@@ -107,35 +109,10 @@ const MobileMenuButton = styled.div({
 const RotateIcon = styled.span<{ isOpen: boolean }>((props) => {
   return {
     display: 'inline-block',
-    marginLeft: '.3rem',
+    marginLeft: '.4rem',
     transition: '.3s all',
     transform: props.isOpen ? 'rotate(180deg)' : 'none'
   };
-});
-
-const LangMenuContainer = styled.div({
-  position: 'relative',
-  marginLeft: '.5rem'
-});
-
-const LanguageMenuButton = styled.div({
-  display: 'flex',
-  padding: '.5rem',
-  borderRadius: '.5rem',
-  alignItems: 'center',
-  cursor: 'pointer',
-  '&:hover': {
-    backgroundColor: '#ddd'
-  }
-});
-
-const LanguageContainer = styled.div({
-  position: 'absolute',
-  top: '.5rem',
-  right: '0',
-  width: 'max-content',
-  backgroundColor: '#ddd',
-  borderRadius: '.5rem'
 });
 
 const LanguageItem = styled.p({
@@ -181,6 +158,24 @@ const ResponsiveMenuBox = styled.div<{ themeMode: ThemeMode }>(
   `
 );
 
+const LanguageDropDown = styled.div({
+  margin: '0 .5rem'
+});
+
+const AdminDropDown = styled.div({});
+
+const MenuItem = styled.a<{ themeMode: ThemeMode }>((props) => {
+  return {
+    padding: '.5rem',
+    textAlign: 'center',
+    cursor: 'pointer',
+    userSelect: 'none',
+    '&:hover': {
+      backgroundColor: theme[props.themeMode].hoverBackground
+    }
+  };
+});
+
 interface Props {
   isLogin: boolean;
   name: string;
@@ -191,7 +186,14 @@ export function Header(props: Props) {
   const router = useRouter();
   const [isAdminMenuVisible, setIsAdminMenuVisible] = useState<boolean>(width > 767);
   const [isLangMenuVisible, setIsLangMenuVisible] = useState(false);
+  const [isAdminMenuOpen, setIsAdminMenuOpen] = useState(false);
   const [searchKeyword, setSearchKeyWord] = useState('');
+
+  const [logout] = useMutation(LOGOUT, {
+    onCompleted: () => {
+      router.reload();
+    }
+  });
 
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const lang: LangCode = useSelector<RootState, any>((state) => state.common.lang);
@@ -256,16 +258,20 @@ export function Header(props: Props) {
               )}
             </>
           </FocusWrapper>
-          <LangMenuContainer onClick={() => setIsLangMenuVisible(!isLangMenuVisible)}>
-            <LanguageMenuButton>
-              <FontAwesomeIcon size={'lg'} icon={faLanguage} />
-              <RotateIcon isOpen={isLangMenuVisible}>
-                <FontAwesomeIcon icon={faCaretDown} />
-              </RotateIcon>
-            </LanguageMenuButton>
-            {isLangMenuVisible && (
-              <FocusWrapper visible={isLangMenuVisible} onClickOutside={() => setIsLangMenuVisible(false)}>
-                <LanguageContainer>
+          <LanguageDropDown>
+            <DropDownMenu
+              visible={isLangMenuVisible}
+              mainButton={
+                <>
+                  <FontAwesomeIcon size={'lg'} icon={faLanguage} />
+                  <RotateIcon isOpen={isLangMenuVisible}>
+                    <FontAwesomeIcon icon={faCaretDown} />
+                  </RotateIcon>
+                </>
+              }
+              setVisible={setIsLangMenuVisible}
+              dropMenu={
+                <>
                   {Object.keys(languages).map((code: any) => {
                     return (
                       <LanguageItem
@@ -273,17 +279,56 @@ export function Header(props: Props) {
                         onClick={() => {
                           changeLang(code as LangCode);
                           commonDispatch.SetLanguage(code);
+                          setIsLangMenuVisible(false);
                         }}
                       >
                         {languages[code as LangCode]}
                       </LanguageItem>
                     );
                   })}
-                </LanguageContainer>
-              </FocusWrapper>
-            )}
-          </LangMenuContainer>
-          <AdminMenuButton isLogin={props.isLogin} />
+                </>
+              }
+            />
+          </LanguageDropDown>
+          <AdminDropDown>
+            <DropDownMenu
+              visible={isAdminMenuOpen}
+              mainButton={
+                <>
+                  {trans(Lang.Menu)}
+                  <RotateIcon isOpen={isAdminMenuOpen}>
+                    <FontAwesomeIcon icon={faCaretDown} />
+                  </RotateIcon>
+                </>
+              }
+              setVisible={setIsAdminMenuOpen}
+              dropMenu={
+                <>
+                  <Link href='/admin'>
+                    <MenuItem themeMode={themeMode} onClick={() => setIsAdminMenuOpen(false)}>
+                      {trans(Lang.Admin)}
+                    </MenuItem>
+                  </Link>
+                  {props.isLogin ? (
+                    <MenuItem
+                      themeMode={themeMode}
+                      onClick={() => {
+                        logout();
+                      }}
+                    >
+                      {trans(Lang.Logout)}
+                    </MenuItem>
+                  ) : (
+                    <Link href='/admin/login'>
+                      <MenuItem themeMode={themeMode} onClick={() => setIsAdminMenuOpen(false)}>
+                        {trans(Lang.Login)}
+                      </MenuItem>
+                    </Link>
+                  )}
+                </>
+              }
+            />
+          </AdminDropDown>
           <MobileMenuButton onClick={() => onMobileMenuButtonClick()}>
             <FontAwesomeIcon icon={faBars} />
           </MobileMenuButton>
