@@ -170,6 +170,7 @@ const MenuItem = styled.a<{ themeMode: ThemeMode }>((props) => {
     textAlign: 'center',
     cursor: 'pointer',
     userSelect: 'none',
+    wordBreak: 'keep-all',
     '&:hover': {
       backgroundColor: theme[props.themeMode].hoverBackground
     }
