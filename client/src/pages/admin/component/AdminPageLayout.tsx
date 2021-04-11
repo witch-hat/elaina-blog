@@ -11,7 +11,9 @@ const Container = styled.div({
 
 const Side = styled.aside({
   width: '300px',
-  height: '100%'
+  position: 'sticky',
+  height: 'calc(100vh - 5rem - 20px)',
+  top: 'calc(5rem + 20px)'
 });
 
 const Section = styled.section({
