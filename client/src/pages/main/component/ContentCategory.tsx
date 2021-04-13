@@ -95,7 +95,7 @@ export function ContentCategory(props: Props) {
           if (props.latestPosts[index] === null) {
             if (props.isLogin) {
               return (
-                <Link key={category.title} href={`/admin/writer`} passHref>
+                <Link key={category.title} href={`/admin/writer?category=${category.title}`} passHref>
                   <a style={{ width: '100%' }}>
                     <BorderBox key={index} isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
                       <Content>
