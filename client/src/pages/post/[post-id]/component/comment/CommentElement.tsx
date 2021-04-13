@@ -50,9 +50,8 @@ interface Props {
   index: number;
   count: number;
   commentContainer: Comments;
-  setCommentContainer: React.Dispatch<React.SetStateAction<Comments | null>>;
+  setCommentContainer: React.Dispatch<React.SetStateAction<Comments>>;
   setDeletedIndex: React.Dispatch<React.SetStateAction<number>>;
-  setCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export function CommentElement(props: Props) {
@@ -66,17 +65,17 @@ export function CommentElement(props: Props) {
 
   useEffect(() => {
     setReplies(props.comment.replies);
+    setIsShowingReply(false);
   }, [props.commentContainer]);
 
   useEffect(() => {
     if (newReply) {
       setReplies([...replies, newReply]);
-      props.setCount(props.count + 1);
 
       props.commentContainer.comments[props.index].replies.push(newReply);
       const newComments = props.commentContainer.comments;
 
-      props.setCommentContainer({ ...props.commentContainer, comments: newComments });
+      props.setCommentContainer({ ...props.commentContainer, comments: newComments, count: props.count + 1 });
       setIsAddReply(false);
       setIsShowingReply(true);
     }
@@ -85,13 +84,13 @@ export function CommentElement(props: Props) {
   useEffect(() => {
     if (deletedReplyIndex > -1) {
       setReplies([...replies.filter((reply, index) => index !== deletedReplyIndex)]);
-      props.setCount(props.count - 1);
 
       props.commentContainer.comments[props.index].replies.splice(deletedReplyIndex, 1);
       const newComments = props.commentContainer.comments;
 
-      props.setCommentContainer({ ...props.commentContainer, comments: newComments });
+      props.setCommentContainer({ ...props.commentContainer, comments: newComments, count: props.count - 1 });
     }
+    setDeletedReplyIndex(-1);
   }, [deletedReplyIndex]);
 
   return (

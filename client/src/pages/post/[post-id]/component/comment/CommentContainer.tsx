@@ -41,21 +41,17 @@ interface Props {
 }
 
 export function CommentContainer(props: Props) {
-  const [commentContainer, setCommentContainer] = useState<Comments | null>(null);
+  const [commentContainer, setCommentContainer] = useState<Comments>(props.comments);
   const [newComment, setNewComment] = useState<Comment>();
-  const [count, setCount] = useState(props.comments.count);
   const [deletedIndex, setDeletedIndex] = useState(-1);
-
-  // This occurs renders twice...
-  useEffect(() => {
-    setCommentContainer(props.comments);
-    setCount(props.comments.count);
-  }, [props.comments]);
 
   useEffect(() => {
     if (newComment && commentContainer) {
-      setCommentContainer({ ...commentContainer, comments: [...commentContainer.comments, newComment] });
-      setCount(count + 1);
+      setCommentContainer({
+        ...commentContainer,
+        comments: [...commentContainer.comments, newComment],
+        count: commentContainer.count + 1
+      });
     }
   }, [newComment]);
 
@@ -63,8 +59,11 @@ export function CommentContainer(props: Props) {
     if (deletedIndex > -1 && commentContainer) {
       const decreaseCount = commentContainer.comments[deletedIndex].replies.length + 1;
       const filteredComment = commentContainer.comments.filter((comment, index) => index !== deletedIndex);
-      setCommentContainer({ ...commentContainer, comments: [...filteredComment] });
-      setCount(count - decreaseCount);
+      setCommentContainer({
+        ...commentContainer,
+        comments: [...filteredComment],
+        count: commentContainer.count - decreaseCount
+      });
     }
     setDeletedIndex(-1);
   }, [deletedIndex]);
@@ -74,7 +73,7 @@ export function CommentContainer(props: Props) {
       <Title>{trans(Lang.Comments)}</Title>
       <CommentWriter isLogin={props.isLogin} buttonText={trans(Lang.Save)} setNewComment={setNewComment} />
       <div style={{ width: '100%' }}>
-        <Counter>{`덧글 수: ${count}개`}</Counter>
+        <Counter>{`덧글 수: ${commentContainer.count}개`}</Counter>
         {commentContainer &&
           commentContainer.comments.map((comment: Comment, index: number) => {
             return (
@@ -85,11 +84,10 @@ export function CommentContainer(props: Props) {
                 author={props.author}
                 isCommentFromAdmin={comment.isAdmin}
                 index={index}
-                count={count}
+                count={commentContainer.count}
                 commentContainer={commentContainer}
                 setCommentContainer={setCommentContainer}
                 setDeletedIndex={setDeletedIndex}
-                setCount={setCount}
               />
             );
           })}
