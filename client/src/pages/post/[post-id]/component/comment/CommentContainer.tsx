@@ -46,6 +46,10 @@ export function CommentContainer(props: Props) {
   const [deletedIndex, setDeletedIndex] = useState(-1);
 
   useEffect(() => {
+    setCommentContainer(props.comments);
+  }, [props.comments]);
+
+  useEffect(() => {
     if (newComment && commentContainer) {
       setCommentContainer({
         ...commentContainer,
