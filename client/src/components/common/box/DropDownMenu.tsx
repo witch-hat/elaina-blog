@@ -12,6 +12,7 @@ const MenuContainer = styled.div({
 });
 
 const MenuListWrapper = styled.div({
+  minWidth: '100%',
   position: 'absolute',
   top: '.5rem',
   right: '0',

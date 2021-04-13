@@ -319,7 +319,6 @@ export function Writer(props: Props) {
                 placeholder='제목'
                 styles={{ width: '100%' }}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                  console.log(e.currentTarget.value);
                   setTitle(e.currentTarget.value);
                 }}
               />
