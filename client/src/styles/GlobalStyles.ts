@@ -38,14 +38,14 @@ export const GlobalStyles = createGlobalStyle<{ themeMode: ThemeMode }>`
 		line-height: 1.4;
 	}
 	html {
-		font-size: 16px;
+		font-size: 17px;
 		font-family: "Nanum Gothic", sans-serif;
 		vertical-align: baseline;
 		@media screen and (max-width: 1380px) {
-			font-size: 15px;
+			font-size: 16px;
 		}
 		@media screen and (max-width: 767px) {
-			font-size: 14px;
+			font-size: 15px;
 		}
 	}
 `;
