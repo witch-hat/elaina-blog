@@ -59,3 +59,9 @@ export function AlertBox(props: Props) {
     </Container>
   );
 }
+
+export interface AlertStateType {
+  msg: string;
+  isPop: boolean;
+  isError: boolean;
+}
