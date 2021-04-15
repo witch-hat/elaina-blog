@@ -7,11 +7,11 @@ interface Props {
 }
 
 export function ProgressBar(props: Props) {
+  let progressPercent: number;
+  let increaseProgressInterval: number | undefined;
+
   const router = useRouter();
   const [progress, setProgress] = useState<number>(0);
-
-  let increaseProgressInterval: number | undefined;
-  let progressPercent: number;
 
   function stopIncreaseProgress() {
     if (increaseProgressInterval) {

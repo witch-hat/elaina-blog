@@ -36,9 +36,9 @@ interface Props {
 }
 
 export function NavigationButton(props: Props) {
-  const router = useRouter();
-
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+
+  const router = useRouter();
 
   return (
     <Link href={props.href}>

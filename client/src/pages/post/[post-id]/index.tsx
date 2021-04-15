@@ -105,20 +105,20 @@ interface Props extends AppCommonProps {
 }
 
 export default function PostId(props: Props) {
-  const width = useWidth();
-  const isAlerted = useRef<boolean>(false);
-  const [showPostCategory, setShowPostCategory] = useState(false);
-
-  let touchStartX: number;
-  let touchStartY: number;
-  let touchEndX: number;
-  let touchEndY: number;
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const post: Post = props.post;
   const comments: Comments = props.comment;
   const titles: [{ title: string; _id: number }] = props.sameCategoryTitles;
   const category: { title: string } = props.category;
   const author: string = props.author;
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  let touchStartX: number;
+  let touchStartY: number;
+  let touchEndX: number;
+  let touchEndY: number;
+
+  const width = useWidth();
+  const isAlerted = useRef<boolean>(false);
+  const [showPostCategory, setShowPostCategory] = useState(false);
 
   function handleTouchStart(event: React.TouchEvent) {
     if (width <= 767) {

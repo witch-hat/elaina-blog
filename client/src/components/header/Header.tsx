@@ -183,6 +183,14 @@ interface Props {
 }
 
 export function Header(props: Props) {
+  const languages = {
+    [LangCode.ko]: '한국어',
+    [LangCode.en]: 'English'
+  };
+  const currentLangCode = getCurrentLangCode();
+  const lang: LangCode = useSelector<RootState, any>((state) => state.common.lang);
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+
   const width = useWidth();
   const router = useRouter();
   const [isAdminMenuVisible, setIsAdminMenuVisible] = useState<boolean>(width > 767);
@@ -195,14 +203,6 @@ export function Header(props: Props) {
       router.reload();
     }
   });
-
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
-  const lang: LangCode = useSelector<RootState, any>((state) => state.common.lang);
-  const currentLangCode = getCurrentLangCode();
-  const languages = {
-    [LangCode.ko]: '한국어',
-    [LangCode.en]: 'English'
-  };
 
   useEffect(() => {
     setIsAdminMenuVisible(width > 767);

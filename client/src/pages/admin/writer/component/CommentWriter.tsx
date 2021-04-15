@@ -93,6 +93,8 @@ interface Props {
 }
 
 export function CommentWriter(props: Props) {
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+
   const router = useRouter();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -104,8 +106,6 @@ export function CommentWriter(props: Props) {
   const client = useApollo();
   const [writeComment] = useMutation(WRITE_COMMENT);
   const [writeReply] = useMutation(WRITE_REPLY);
-
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   function reset() {
     if (usernameRef.current && passwordRef.current) {

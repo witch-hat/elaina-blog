@@ -136,6 +136,8 @@ interface Props {
 }
 
 export function Writer(props: Props) {
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+
   const width = useWidth();
   const router = useRouter();
   const editor = useRef<HTMLDivElement>(null);
@@ -149,8 +151,6 @@ export function Writer(props: Props) {
   const client = useApollo();
   const [writePost] = useMutation(WRITE_POST);
   const [editPost] = useMutation(EDIT_POST);
-
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   useEffect(() => {
     if (mode == Mode.write) {

@@ -55,13 +55,13 @@ interface Props {
 }
 
 export function CommentElement(props: Props) {
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+
   const [isShowingReply, setIsShowingReply] = useState(false);
   const [isAddReply, setIsAddReply] = useState(false);
   const [replies, setReplies] = useState<Reply[]>(props.comment.replies);
   const [newReply, setNewReply] = useState<Reply>();
   const [deletedReplyIndex, setDeletedReplyIndex] = useState(-1);
-
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   useEffect(() => {
     setReplies(props.comment.replies);

@@ -80,6 +80,7 @@ export function TimeLineEditor() {
     write = 'Write',
     preview = 'Preview'
   }
+  let text: string;
 
   const [viewerMode, setViewerMode] = useState<Mode>(Mode.write);
   const editorRef = useRef<HTMLPreElement>(null);
@@ -87,8 +88,6 @@ export function TimeLineEditor() {
   const [tagText, setTagText] = useState<string>('');
   const [initlizedP, setInitilizedP] = useState<Node>();
   const [initilizeSpan, setInitilizeSpan] = useState<Node>();
-
-  let text: string;
 
   useEffect(() => {
     if (editorRef.current?.firstChild?.firstChild) {
