@@ -141,6 +141,9 @@ export const categoryResolver = {
           throw new UserInputError('카테고리 제목 또는 소개를 입력해주세요.');
         }
 
+        const categoryList: Category[] = await CategoryModel.find();
+        if (categoryList.find((category) => category.title === args.title)) throw new ValidationError('이미 존재하는 제목입니다.');
+
         await CategoryModel.updateOne(
           {
             _id: args.id
