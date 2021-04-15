@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBuilding, faCamera, faEnvelope, faLink, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
-import { RoundImage, AlertBox } from 'src/components';
+import { RoundImage, AlertBox, AlertStateType } from 'src/components';
 import { theme } from 'src/styles';
 import { ProfileType, UPDATE_PROFILE } from 'src/query/profile';
 import { Lang, trans } from 'src/resources/languages';
@@ -228,22 +228,21 @@ interface Props {
 }
 
 export function Profile(props: Props) {
+  const initAlertState: AlertStateType = { msg: '', isPop: false, isError: false };
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+
   const [isEditMode, setIsEditMode] = useState(false);
   const [isSelectImage, setIsSelectImage] = useState(false);
   const [selectedImageFile, setSelectedImageFile] = useState<File>();
   const [croppedImageFile, setCroppedImageFile] = useState<Blob>();
   const [edtingProfile, setEditingProfile] = useState<ProfileType>(props.profile);
   const [viewedProfile, setViewedProfile] = useState<ProfileType>(props.profile);
-  const [popAlterBox, setPopAlterBox] = useState(false);
-  const [alertMsg, setAlertMsg] = useState('');
-  const [isApolloError, setIsApolloError] = useState(false);
+  const [alertState, setAlertState] = useState<AlertStateType>(initAlertState);
   // const [uploadedImagePath, setUploadImagePath] = useState('');
 
   const client = useApollo();
   const [uploadFile] = useMutation<{ uploadFile: FileType }>(UPLOAD_FILE);
   const [updateProfile] = useMutation<{ updateProfile: ProfileType }>(UPDATE_PROFILE);
-
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   async function changeProfile() {
     let uploadedImagePath: string | undefined;
@@ -286,13 +285,17 @@ export function Profile(props: Props) {
 
       setViewedProfile({ ...edtingProfile, image: uploadedImagePath ? uploadedImagePath : viewedProfile.image });
       setIsEditMode(false);
-      setPopAlterBox(true);
-      setAlertMsg('Profile changed successfully');
-      setIsApolloError(false);
+      setAlertState({
+        msg: 'Profile changed successfully',
+        isPop: true,
+        isError: false
+      });
     } catch (err) {
-      setPopAlterBox(true);
-      setAlertMsg(err.message);
-      setIsApolloError(true);
+      setAlertState({
+        msg: err.message,
+        isPop: true,
+        isError: true
+      });
       setIsEditMode(false);
       setEditingProfile(viewedProfile);
     }
@@ -481,14 +484,12 @@ export function Profile(props: Props) {
           setIsSelectImage(false);
         }}
       />
-      {popAlterBox && (
+      {alertState.isPop && (
         <AlertBox
-          isError={isApolloError}
-          msg={alertMsg}
+          isError={alertState.isError}
+          msg={alertState.msg}
           onCloseButtonClick={() => {
-            setAlertMsg('');
-            setIsApolloError(false);
-            setPopAlterBox(false);
+            setAlertState(initAlertState);
           }}
         />
       )}

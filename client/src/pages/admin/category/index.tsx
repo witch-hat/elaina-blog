@@ -7,7 +7,7 @@ import { faGripVertical, faPen, faTrash, faSave, faTimesCircle } from '@fortawes
 import { useMutation } from '@apollo/client';
 import cloneDeep from 'lodash/cloneDeep';
 
-import { BorderBox } from 'src/components';
+import { BorderBox, AlertBox, AlertStateType } from 'src/components';
 import { theme } from 'src/styles';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
@@ -125,6 +125,9 @@ interface Props extends AppCommonProps {
 }
 
 export default function Category(props: Props) {
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  const initAlertState: AlertStateType = { msg: '', isPop: false, isError: false };
+
   const [grabbedElement, setGrabbedElement] = useState<(EventTarget & HTMLDivElement) | null>(null);
   const [grabbingCategoryIndex, setGrabbingCategoryIndex] = useState<number>(-1);
   const [editingCategoryIndex, setEditingCategoryIndex] = useState<number>(-1);
@@ -133,13 +136,14 @@ export default function Category(props: Props) {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const titleEditInput = useRef<HTMLInputElement>(null);
   const descriptionEditInput = useRef<HTMLInputElement>(null);
+  const [alertState, setAlertState] = useState<AlertStateType>(initAlertState);
 
   const [updateCategory] = useMutation(UPDATE_CATEGORY);
   const [orderCategory] = useMutation(ORDER_CATEGORY);
 
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
-
   async function save() {
+    setAlertState(initAlertState);
+
     try {
       if (titleEditInput.current && descriptionEditInput.current) {
         await updateCategory({
@@ -160,10 +164,19 @@ export default function Category(props: Props) {
         }
 
         setEditingCategoryIndex(-1);
+        setAlertState({
+          msg: 'Update category successfully.',
+          isPop: true,
+          isError: false
+        });
       }
     } catch (err) {
       setEditingCategoryIndex(-1);
-      alert(err.message);
+      setAlertState({
+        msg: err.message,
+        isPop: true,
+        isError: true
+      });
     }
   }
 
@@ -190,6 +203,8 @@ export default function Category(props: Props) {
       const newCategories = [...categories];
       newCategories[grabPosition] = newCategories.splice(dropPosition, 1, newCategories[grabPosition])[0];
 
+      setAlertState(initAlertState);
+
       orderCategory({
         variables: {
           ids: newCategories.map((category) => category._id)
@@ -201,129 +216,148 @@ export default function Category(props: Props) {
       const backUpCategories = [...categories];
 
       setCategories(backUpCategories);
-      alert(err.message);
+      setAlertState({
+        msg: err.message,
+        isPop: true,
+        isError: true
+      });
     }
   }
 
   return (
     <AdminPageLayout>
-      <div style={{ width: '100%', padding: '0 5%' }}>
-        <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
-          <AddButton themeMode={themeMode} onClick={() => setIsAddModalOpen(true)}>
-            Add
-          </AddButton>
-        </div>
-        <Container>
-          {categories.map((category, index) => {
-            if (index === editingCategoryIndex) {
-              return (
-                <CategoryContainer key={category.title}>
-                  <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
-                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                      <div
-                        style={{ flex: 1, display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', padding: '4px 8px 0px 8px' }}
-                      >
-                        <CircleRippleWrapper onClick={save}>
-                          <FontAwesomeIcon icon={faSave} style={{ fontSize: '1.25rem' }} />
-                        </CircleRippleWrapper>
-                        <CircleRippleWrapper
-                          onClick={() => {
-                            setEditingCategoryIndex(-1);
-                          }}
+      <>
+        <div style={{ width: '100%', padding: '0 5%' }}>
+          <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
+            <AddButton themeMode={themeMode} onClick={() => setIsAddModalOpen(true)}>
+              Add
+            </AddButton>
+          </div>
+          <Container>
+            {categories.map((category, index) => {
+              if (index === editingCategoryIndex) {
+                return (
+                  <CategoryContainer key={category.title}>
+                    <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
+                      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                        <div
+                          style={{ flex: 1, display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', padding: '4px 8px 0px 8px' }}
                         >
-                          <FontAwesomeIcon icon={faTimesCircle} style={{ fontSize: '1.25rem' }} />
-                        </CircleRippleWrapper>
-                      </div>
-                      <Content>
-                        <PreviewTextWrapper>
-                          <Input type='text' ref={titleEditInput} themeMode={themeMode} defaultValue={category.title} />
-                          <Input type='text' ref={descriptionEditInput} themeMode={themeMode} defaultValue={category.description} />
-                        </PreviewTextWrapper>
-                        <PreviewImage src={category.previewImage} alt='preview image' />
-                      </Content>
-                    </div>
-                  </BorderBox>
-                </CategoryContainer>
-              );
-            } else {
-              return (
-                <CategoryContainer
-                  key={category.title}
-                  data-position={index}
-                  draggable={grabbingCategoryIndex === index}
-                  onDragOver={(e: React.DragEvent<HTMLDivElement>) => onDragOver(e)}
-                  onDragStart={(e: React.DragEvent<HTMLDivElement>) => grabbingCategoryIndex > -1 && onDragStart(e)}
-                  onDragEnd={(e: React.DragEvent<HTMLDivElement>) => grabbingCategoryIndex > -1 && onDragEnd(e)}
-                  onDrop={(e: React.DragEvent<HTMLDivElement>) => grabbingCategoryIndex > -1 && onDrop(e)}
-                >
-                  <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
-                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                      <div
-                        style={{ flex: 1, display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', padding: '4px 8px 0px 8px' }}
-                      >
-                        <CircleRippleWrapper
-                          onClick={() => {
-                            setEditingCategoryIndex(index);
-                          }}
-                        >
-                          <FontAwesomeIcon icon={faPen} style={{ fontSize: '1.25rem' }} />
-                        </CircleRippleWrapper>
-                        {category._id > 0 && (
+                          <CircleRippleWrapper onClick={save}>
+                            <FontAwesomeIcon icon={faSave} style={{ fontSize: '1.25rem' }} />
+                          </CircleRippleWrapper>
                           <CircleRippleWrapper
                             onClick={() => {
-                              setDeletedCategory({ isModalOpen: true, index });
+                              setEditingCategoryIndex(-1);
                             }}
                           >
-                            <FontAwesomeIcon icon={faTrash} style={{ fontSize: '1.25rem' }} />
+                            <FontAwesomeIcon icon={faTimesCircle} style={{ fontSize: '1.25rem' }} />
                           </CircleRippleWrapper>
-                        )}
-                        <GrabButtonContainer
-                          onMouseDown={(e: React.MouseEvent<HTMLDivElement>) => {
-                            if (e.button === 0) {
-                              setGrabbingCategoryIndex(index);
-                            } else {
-                              setGrabbingCategoryIndex(-1);
-                            }
-                          }}
-                          onMouseUp={() => {
-                            setGrabbingCategoryIndex(-1);
-                          }}
-                          onTouchStart={() => setGrabbingCategoryIndex(index)}
-                        >
-                          <CircleRippleWrapper onClick={() => {}}>
-                            <FontAwesomeIcon icon={faGripVertical} style={{ fontSize: '1.25rem' }} />
-                          </CircleRippleWrapper>
-                        </GrabButtonContainer>
+                        </div>
+                        <Content>
+                          <PreviewTextWrapper>
+                            <Input type='text' ref={titleEditInput} themeMode={themeMode} defaultValue={category.title} />
+                            <Input type='text' ref={descriptionEditInput} themeMode={themeMode} defaultValue={category.description} />
+                          </PreviewTextWrapper>
+                          <PreviewImage src={category.previewImage} alt='preview image' />
+                        </Content>
                       </div>
-                      <Content>
-                        <PreviewTextWrapper>
-                          <PreviewTitle>{category.title}</PreviewTitle>
-                          <PreviewContent>{category.description}</PreviewContent>
-                        </PreviewTextWrapper>
-                        <PreviewImage src={category.previewImage} alt='preview image' />
-                      </Content>
-                    </div>
-                  </BorderBox>
-                </CategoryContainer>
-              );
-            }
-          })}
-        </Container>
-        <DeleteCategoryModal
-          isDeleteModalOpen={deletedCategory.isModalOpen}
-          setDeletedCategory={setDeletedCategory}
-          index={deletedCategory.index}
-          defaultCategoryTitle={categories.filter((category) => category._id === 0)[0].title}
-          categories={categories}
-          setCategories={setCategories}
-        />
-        <AddCategoryModal
-          isAddModalOpen={isAddModalOpen}
-          setIsAddModalOpen={setIsAddModalOpen}
-          categories={categories}
-          setCategories={setCategories}
-        />
-      </div>
+                    </BorderBox>
+                  </CategoryContainer>
+                );
+              } else {
+                return (
+                  <CategoryContainer
+                    key={category.title}
+                    data-position={index}
+                    draggable={grabbingCategoryIndex === index}
+                    onDragOver={(e: React.DragEvent<HTMLDivElement>) => onDragOver(e)}
+                    onDragStart={(e: React.DragEvent<HTMLDivElement>) => grabbingCategoryIndex > -1 && onDragStart(e)}
+                    onDragEnd={(e: React.DragEvent<HTMLDivElement>) => grabbingCategoryIndex > -1 && onDragEnd(e)}
+                    onDrop={(e: React.DragEvent<HTMLDivElement>) => grabbingCategoryIndex > -1 && onDrop(e)}
+                  >
+                    <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
+                      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                        <div
+                          style={{ flex: 1, display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', padding: '4px 8px 0px 8px' }}
+                        >
+                          <CircleRippleWrapper
+                            onClick={() => {
+                              setEditingCategoryIndex(index);
+                            }}
+                          >
+                            <FontAwesomeIcon icon={faPen} style={{ fontSize: '1.25rem' }} />
+                          </CircleRippleWrapper>
+                          {category._id > 0 && (
+                            <CircleRippleWrapper
+                              onClick={() => {
+                                setDeletedCategory({ isModalOpen: true, index });
+                              }}
+                            >
+                              <FontAwesomeIcon icon={faTrash} style={{ fontSize: '1.25rem' }} />
+                            </CircleRippleWrapper>
+                          )}
+                          <GrabButtonContainer
+                            onMouseDown={(e: React.MouseEvent<HTMLDivElement>) => {
+                              if (e.button === 0) {
+                                setGrabbingCategoryIndex(index);
+                              } else {
+                                setGrabbingCategoryIndex(-1);
+                              }
+                            }}
+                            onMouseUp={() => {
+                              setGrabbingCategoryIndex(-1);
+                            }}
+                            onTouchStart={() => setGrabbingCategoryIndex(index)}
+                          >
+                            <CircleRippleWrapper onClick={() => {}}>
+                              <FontAwesomeIcon icon={faGripVertical} style={{ fontSize: '1.25rem' }} />
+                            </CircleRippleWrapper>
+                          </GrabButtonContainer>
+                        </div>
+                        <Content>
+                          <PreviewTextWrapper>
+                            <PreviewTitle>{category.title}</PreviewTitle>
+                            <PreviewContent>{category.description}</PreviewContent>
+                          </PreviewTextWrapper>
+                          <PreviewImage src={category.previewImage} alt='preview image' />
+                        </Content>
+                      </div>
+                    </BorderBox>
+                  </CategoryContainer>
+                );
+              }
+            })}
+          </Container>
+          <DeleteCategoryModal
+            isDeleteModalOpen={deletedCategory.isModalOpen}
+            setDeletedCategory={setDeletedCategory}
+            index={deletedCategory.index}
+            defaultCategoryTitle={categories.filter((category) => category._id === 0)[0].title}
+            categories={categories}
+            setCategories={setCategories}
+            initAlertState={initAlertState}
+            setAlertState={setAlertState}
+          />
+          <AddCategoryModal
+            isAddModalOpen={isAddModalOpen}
+            setIsAddModalOpen={setIsAddModalOpen}
+            categories={categories}
+            setCategories={setCategories}
+            initAlertState={initAlertState}
+            setAlertState={setAlertState}
+          />
+        </div>
+        {alertState.isPop && (
+          <AlertBox
+            isError={alertState.isError}
+            msg={alertState.msg}
+            onCloseButtonClick={() => {
+              setAlertState(initAlertState);
+            }}
+          />
+        )}
+      </>
     </AdminPageLayout>
   );
 }

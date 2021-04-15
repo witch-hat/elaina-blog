@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCamera } from '@fortawesome/free-solid-svg-icons';
 import { useMutation } from '@apollo/client';
 
-import { AlertBox } from 'src/components';
+import { AlertStateType } from 'src/components';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { theme } from 'src/styles';
@@ -98,9 +98,13 @@ interface Props {
   setIsAddModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   categories: CategoryDetails[];
   setCategories: React.Dispatch<React.SetStateAction<CategoryDetails[]>>;
+  initAlertState: AlertStateType;
+  setAlertState: React.Dispatch<React.SetStateAction<AlertStateType>>;
 }
 
 export function AddCategoryModal(props: Props) {
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [previewImage, setPreviewImage] = useState('');
@@ -108,13 +112,13 @@ export function AddCategoryModal(props: Props) {
 
   const [addCategory] = useMutation(ADD_CATEGORY);
 
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
-
   useEffect(() => {
     newCategory && props.setCategories([...props.categories, newCategory]);
   }, [newCategory]);
 
   async function addNewCategory() {
+    props.setAlertState(props.initAlertState);
+
     try {
       const response = await addCategory({
         variables: {
@@ -133,8 +137,17 @@ export function AddCategoryModal(props: Props) {
         recentCreatedAt: new Date(),
         order: props.categories.length
       });
+      props.setAlertState({
+        msg: 'New category added successfully.',
+        isPop: true,
+        isError: false
+      });
     } catch (err) {
-      alert(err.message);
+      props.setAlertState({
+        msg: err.message,
+        isPop: true,
+        isError: true
+      });
     }
   }
 

@@ -6,7 +6,7 @@ import { useMutation } from '@apollo/client';
 
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
-import { ModalWrapper } from 'src/components';
+import { ModalWrapper, AlertStateType } from 'src/components';
 import { DELETE_CATEGORY, CategoryDetails } from 'src/query/category';
 import { theme } from 'src/styles';
 import { useApollo } from 'src/apollo/apolloClient';
@@ -50,15 +50,17 @@ interface Props {
   defaultCategoryTitle: string;
   categories: CategoryDetails[];
   setCategories: React.Dispatch<React.SetStateAction<CategoryDetails[]>>;
+  initAlertState: AlertStateType;
+  setAlertState: React.Dispatch<React.SetStateAction<AlertStateType>>;
 }
 
 export function DeleteCategoryModal(props: Props) {
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+
   const router = useRouter();
 
   const client = useApollo();
   const [deleteCategory] = useMutation(DELETE_CATEGORY);
-
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   async function handleDeleteCategory() {
     const authResponse = await client.query({ query: IS_AUTH });
@@ -71,6 +73,8 @@ export function DeleteCategoryModal(props: Props) {
     if (props.index === undefined) {
       return;
     }
+
+    props.setAlertState(props.initAlertState);
 
     try {
       await deleteCategory({
@@ -87,9 +91,19 @@ export function DeleteCategoryModal(props: Props) {
           return category;
         }
       });
+
       props.setCategories(orderedCategories);
+      props.setAlertState({
+        msg: 'Category deleted successfully.',
+        isPop: true,
+        isError: false
+      });
     } catch (err) {
-      alert(err.message);
+      props.setAlertState({
+        msg: err.message,
+        isPop: true,
+        isError: true
+      });
     }
   }
 
