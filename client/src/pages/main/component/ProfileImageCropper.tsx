@@ -31,7 +31,7 @@ const Button = styled.div({
   cursor: 'pointer',
   border: '1px solid #ddd',
   textAlign: 'center',
-  borderRadius: '6px'
+  borderRadius: '.5rem'
 });
 
 async function getCropImage(image: HTMLImageElement, imageName: string, imageType: string, crop: Crop): Promise<Blob> {

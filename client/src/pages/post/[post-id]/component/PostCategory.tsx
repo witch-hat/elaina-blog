@@ -48,7 +48,7 @@ const Container = styled.nav<{ themeMode: ThemeMode }>(
       left: 0,
       height: 'calc(100vh - 5rem)',
       backgroundColor: theme[props.themeMode].secondaryContentBackground,
-      borderRadius: '0 8px 8px 0',
+      borderRadius: '0 .5rem .5rem 0',
       boxShadow: `5px 0 4px ${theme[props.themeMode].shadowColor}`
     }
   }),
@@ -76,7 +76,7 @@ const WriteButton = styled.button({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
-  padding: '.3rem',
+  padding: '4px 5px',
   borderRadius: '50%',
   '&:hover': {
     backgroundColor: '#eee'

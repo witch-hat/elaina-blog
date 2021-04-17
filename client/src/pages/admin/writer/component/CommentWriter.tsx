@@ -49,7 +49,7 @@ const Editor = styled.pre<{ themeMode: ThemeMode }>(
     padding: '.5rem',
     resize: 'none',
     border: `1px solid ${theme[props.themeMode].inputBorder}`,
-    borderRadius: '12px',
+    borderRadius: '.5rem',
     wordBreak: 'keep-all',
     backgroundColor: theme[props.themeMode].inputBackground,
     color: theme[props.themeMode].inputText
@@ -76,7 +76,7 @@ const SubmitButton = styled.button<{ themeMode: ThemeMode }>((props) => ({
   cursor: 'pointer',
   alignItems: 'center',
   justifyContent: 'center',
-  borderRadius: '12px',
+  borderRadius: '.5rem',
   userSelect: 'none',
   '&:hover': {
     backgroundColor: theme[props.themeMode].hoverBackground

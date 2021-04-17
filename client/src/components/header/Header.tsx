@@ -147,7 +147,7 @@ const ResponsiveMenuBox = styled.div<{ themeMode: ThemeMode }>(
       right: '0',
       zIndex: 9999,
       backgroundColor: theme[props.themeMode].secondaryContentBackground,
-      borderRadius: '12px',
+      borderRadius: '.5rem',
       boxShadow: `0 8px 4px -4px ${theme[props.themeMode].shadowColor}`
     }
   }),
@@ -171,6 +171,7 @@ const MenuItem = styled.a<{ themeMode: ThemeMode }>((props) => {
     cursor: 'pointer',
     userSelect: 'none',
     wordBreak: 'keep-all',
+    borderRadius: '.5rem',
     '&:hover': {
       backgroundColor: theme[props.themeMode].hoverBackground
     }

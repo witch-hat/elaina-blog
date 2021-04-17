@@ -16,7 +16,7 @@ import { CategoryDetails, GET_CATEGORY } from 'src/query/category';
 const Container = styled.div<{ themeMode: ThemeMode }>((props) => ({
   display: 'flex',
   width: '100%',
-  borderRadius: '12px',
+  borderRadius: '.5rem',
   padding: '.5rem'
 }));
 

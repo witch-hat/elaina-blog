@@ -83,6 +83,7 @@ const MenuButton = styled.p<{ danger?: boolean }>((props) => ({
   cursor: 'pointer',
   userSelect: 'none',
   wordBreak: 'keep-all',
+  borderRadius: '.5rem',
   color: props.danger ? '#dd0000' : 'inherit',
   '&:hover': {
     backgroundColor: '#ddd'

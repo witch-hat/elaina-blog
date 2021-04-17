@@ -27,7 +27,7 @@ const LogInForm = styled.form({
   display: 'flex',
   flexDirection: 'column',
   border: '1px solid #ddd',
-  borderRadius: '1rem',
+  borderRadius: '.5rem',
   justifyContent: 'center',
   alignItems: 'center'
 });
@@ -63,7 +63,7 @@ const LogInButton = styled.button<{ themeMode: ThemeMode }>((props) => ({
   width: '85%',
   height: '2.5rem',
   marginTop: '24px',
-  borderRadius: '8px',
+  borderRadius: '.5rem',
   backgroundColor: theme[props.themeMode].submitButtonColor,
   color: '#f1f2f3'
 }));

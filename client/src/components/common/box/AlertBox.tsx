@@ -38,7 +38,7 @@ const Message = styled.p({
 
 const CloseButton = styled.button({
   padding: '.5rem',
-  marginRight: '2.5rem',
+  marginRight: '1.5rem',
   border: 'none',
   outline: 'none'
 });
@@ -55,7 +55,9 @@ export function AlertBox(props: Props) {
       <MessageContainer>
         <Message>{props.msg}</Message>
       </MessageContainer>
-      <CloseButton onClick={() => props.onCloseButtonClick()}>X</CloseButton>
+      <CloseButton onClick={() => props.onCloseButtonClick()}>
+        <b>X</b>
+      </CloseButton>
     </Container>
   );
 }

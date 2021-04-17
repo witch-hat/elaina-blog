@@ -32,7 +32,7 @@ const Editor = styled.pre({
   padding: '.5rem',
   backgroundColor: '#fff',
   outline: 'none',
-  borderRadius: '12px',
+  borderRadius: '.5rem',
   whiteSpace: 'pre-wrap',
   wordBreak: 'break-all',
   fontFamily: "'Nanum Gothic', sans-serif",
@@ -51,7 +51,7 @@ const PreviewContainer = styled.div({
   minHeight: '8rem',
   padding: '.5rem',
   backgroundColor: '#fff',
-  borderRadius: '12px'
+  borderRadius: '.5rem'
 });
 
 const Paragraph = styled.p({

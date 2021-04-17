@@ -56,7 +56,7 @@ const List = styled.li({
 const Button = styled.button({
   width: '100%',
   padding: '.625rem',
-  borderRadius: '1rem',
+  borderRadius: '.5rem',
   marginBottom: '1rem'
 });
 

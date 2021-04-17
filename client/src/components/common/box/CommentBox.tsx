@@ -22,7 +22,7 @@ const Container = styled.div({
   width: '100%',
   margin: '.5rem',
   padding: '.5rem',
-  borderRadius: '12px'
+  borderRadius: '.5rem'
 });
 
 const DetailsContainer = styled.div({
@@ -73,6 +73,7 @@ const MenuButton = styled.p<{ danger?: boolean }>((props) => ({
   textAlign: 'center',
   cursor: 'pointer',
   userSelect: 'none',
+  borderRadius: '.5rem',
   wordBreak: 'keep-all',
   color: props.danger ? '#dd0000' : 'inherit',
   '&:hover': {

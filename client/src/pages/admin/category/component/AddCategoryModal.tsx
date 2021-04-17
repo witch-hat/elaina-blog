@@ -50,7 +50,7 @@ const Input = styled.input<{ themeMode: ThemeMode }>((props) => ({
   outline: 'none',
   fontWeight: 'normal',
   border: `1px solid ${theme[props.themeMode].inputBorder}`,
-  borderRadius: '8px',
+  borderRadius: '.5rem',
   color: theme[props.themeMode].inputText,
   backgroundColor: theme[props.themeMode].inputBackground
 }));

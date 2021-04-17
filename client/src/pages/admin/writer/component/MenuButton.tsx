@@ -14,7 +14,7 @@ interface ContainerProps {
 
 const Toggle = styled.div({
   width: 'max-content',
-  borderRadius: '4px',
+  borderRadius: '.5rem',
   position: 'absolute',
   flexShrink: 0,
   top: '2.1rem',
@@ -35,7 +35,7 @@ const Container = styled.div<ContainerProps>((props: ContainerProps) => {
     position: 'relative',
     justifyContent: 'center',
     border: '1px solid transparent',
-    borderRadius: '4px',
+    borderRadius: '.5rem',
     cursor: props.isActive ? 'pointer' : 'not-allowed',
     '&:hover': {
       border: props.isActive ? `1px solid ${theme[props.themeMode].hoverBorderColor}` : '1px solid transparent'

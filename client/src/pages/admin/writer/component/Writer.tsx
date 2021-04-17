@@ -67,7 +67,7 @@ const Editor = styled.div<{ themeMode: ThemeMode }>((props) => ({
   outline: 'none',
   padding: '.5rem',
   border: `1px solid ${theme[props.themeMode].borderColor}`,
-  borderRadius: '12px',
+  borderRadius: '.5rem',
   wordBreak: 'break-word',
   whiteSpace: 'pre-wrap',
   overflowY: 'auto',
@@ -94,7 +94,7 @@ const Paragraph = styled.p({
 });
 
 const MoblieModeButton = styled.button({
-  borderRadius: '8px',
+  borderRadius: '.5rem',
   padding: '.3rem',
   display: 'none',
   '@media screen and (max-width: 767px)': {

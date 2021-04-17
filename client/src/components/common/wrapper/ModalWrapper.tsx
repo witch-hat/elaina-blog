@@ -28,7 +28,7 @@ const WrapperInner = styled.div({
   height: 'fit-content',
   margin: '0 auto',
   backgroundColor: '#fff',
-  borderRadius: '12px'
+  borderRadius: '.5rem'
 });
 
 // let ModalWrapperHashId = 0;

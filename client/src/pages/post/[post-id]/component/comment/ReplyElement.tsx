@@ -12,7 +12,7 @@ const ReplyContainer = styled.div<{ themeMode: ThemeMode; isAdmin: boolean }>((p
   width: '95%',
   margin: '.5rem',
   padding: '.5rem',
-  borderRadius: '12px',
+  borderRadius: '.5rem',
   backgroundColor: props.isAdmin ? theme[props.themeMode].adminReplyColor : 'rgba(0, 0, 0, .01)'
 }));
 

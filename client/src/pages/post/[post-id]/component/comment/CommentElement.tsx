@@ -13,7 +13,7 @@ import { trans, Lang } from 'src/resources/languages';
 import { ReplyElement } from './ReplyElement';
 
 const Container = styled.div<{ themeMode: ThemeMode; isAdmin: boolean }>((props) => ({
-  borderRadius: '12px',
+  borderRadius: '.5rem',
   backgroundColor: props.isAdmin ? theme[props.themeMode].adminCommentColor : 'inherit'
 }));
 

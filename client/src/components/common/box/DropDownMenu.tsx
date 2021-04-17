@@ -23,13 +23,13 @@ const MenuList = styled.div({
   display: 'flex',
   flexDirection: 'column',
   backgroundColor: '#eee',
-  borderRadius: '.3rem'
+  borderRadius: '.5rem'
 });
 
 const MainButton = styled.div({
   padding: '.5rem .8rem',
   cursor: 'pointer',
-  borderRadius: '4px',
+  borderRadius: '.5rem',
   '&:hover': {
     backgroundColor: '#eee'
   }

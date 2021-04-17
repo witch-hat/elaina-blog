@@ -34,7 +34,7 @@ const ContentContainer = styled.div<{ themeMode: ThemeMode }>((props) => ({
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
-  borderRadius: '12px',
+  borderRadius: '.5rem',
   backgroundColor: theme[props.themeMode].articleBackground,
   '@media screen and (max-width: 1380px)': {
     width: '72%'
@@ -55,7 +55,7 @@ const Index = styled.div({
     position: 'sticky',
     top: 'calc(5rem + 20px)',
     height: '120px',
-    borderRadius: '0 12px 12px 0',
+    borderRadius: '0 .5rem .5rem 0',
     maxWidth: '30px',
     minWidth: '18px'
   }
@@ -87,7 +87,7 @@ const Alert = styled.div(
     backgroundColor: 'rgba(0,0,0,.8)',
     color: '#f1f2f3',
     padding: '.5rem',
-    borderRadius: '12px',
+    borderRadius: '.5rem',
     display: 'flex',
     alignItems: 'center'
   },

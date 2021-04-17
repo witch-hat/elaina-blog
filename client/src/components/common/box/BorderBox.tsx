@@ -24,7 +24,7 @@ const Box = styled.div<BoxProps>((props) => {
     width: props.styles?.width || 'max-content',
     margin: props.styles?.margin || '10px',
     border: `1px solid ${theme[props.themeMode].borderColor}`,
-    borderRadius: '12px',
+    borderRadius: '.5rem',
     transition: '.2s all',
     cursor: `${props.isTransform ? 'pointer' : 'default'}`,
     '&:hover': {

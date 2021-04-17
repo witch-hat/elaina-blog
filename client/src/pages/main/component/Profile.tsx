@@ -86,7 +86,7 @@ const ButtonContainer = styled.div({
 const EditButton = styled.div({
   width: '100%',
   padding: '.5rem',
-  borderRadius: '6px',
+  borderRadius: '.5rem',
   border: '1px solid #ddd',
   cursor: 'pointer',
   display: 'flex',
@@ -101,7 +101,7 @@ const SaveButton = styled.button<{ themeMode: ThemeMode }>((props) => ({
   width: '47.5%',
   marginRight: '5%',
   padding: '.5rem',
-  borderRadius: '6px',
+  borderRadius: '.5rem',
   cursor: 'pointer',
   display: 'flex',
   justifyContent: 'center',
@@ -116,7 +116,7 @@ const SaveButton = styled.button<{ themeMode: ThemeMode }>((props) => ({
 const CancelButton = styled.div({
   width: '47.5%',
   padding: '.5rem',
-  borderRadius: '6px',
+  borderRadius: '.5rem',
   border: '1px solid #ddd',
   cursor: 'pointer',
   display: 'flex',
@@ -136,7 +136,7 @@ const Input = styled.input<{ themeMode: ThemeMode }>((props) => ({
   outline: 'none',
   fontWeight: 'normal',
   border: `1px solid ${theme[props.themeMode].inputBorder}`,
-  borderRadius: '8px',
+  borderRadius: '.5rem',
   color: theme[props.themeMode].inputText,
   backgroundColor: theme[props.themeMode].inputBackground
 }));
@@ -156,7 +156,7 @@ const ChangeImageButton = styled.label<{ themeMode: ThemeMode }>((props) => ({
   border: '1px solid #222',
   cursor: 'pointer',
   userSelect: 'none',
-  borderRadius: '8px'
+  borderRadius: '.5rem'
 }));
 
 const FileSelector = styled.input({
@@ -178,7 +178,7 @@ const Editor = styled.textarea<{ themeMode: ThemeMode }>((props) => ({
   padding: '.2rem',
   outline: 'none',
   border: `1px solid ${theme[props.themeMode].inputBorder}`,
-  borderRadius: '8px',
+  borderRadius: '.5rem',
   color: theme[props.themeMode].inputText,
   backgroundColor: theme[props.themeMode].inputBackground,
   whiteSpace: 'pre-wrap',
