@@ -301,9 +301,20 @@ export function Profile(props: Props) {
     }
   }
 
+  function selectImage(e: React.ChangeEvent<HTMLInputElement>) {
+    if (e.target.files) {
+      const file = e.target.files[0];
+      if (file) {
+        setSelectedImageFile(file);
+        setIsSelectImage(true);
+      }
+    }
+    e.target.value = '';
+  }
+
   return (
     <Container>
-      <div style={{ position: 'relative' }}>
+      <div style={{ position: 'relative', width: '100%' }}>
         <RoundImage
           src={isEditMode ? edtingProfile.image : viewedProfile.image}
           styles={{
@@ -319,20 +330,7 @@ export function Profile(props: Props) {
             <ChangeImageButton htmlFor='profile-select' themeMode={themeMode}>
               <ProfileIcon icon={faCamera} /> Edit
             </ChangeImageButton>
-            <FileSelector
-              type='file'
-              id='profile-select'
-              accept='image/x-png,image/jpeg'
-              onChange={(e) => {
-                if (e.target.files) {
-                  const file = e.target.files[0];
-                  if (file) {
-                    setSelectedImageFile(file);
-                    setIsSelectImage(true);
-                  }
-                }
-              }}
-            />
+            <FileSelector type='file' id='profile-select' accept='image/x-png,image/jpeg' onChange={(e) => selectImage(e)} />
           </>
         )}
       </div>
