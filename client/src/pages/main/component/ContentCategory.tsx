@@ -22,19 +22,19 @@ const Container = styled.div({
 
 const Content = styled.div({
   display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
   width: '100%',
+  height: '10rem',
   padding: '.8rem',
-  height: '10rem'
+  justifyContent: 'center',
+  alignItems: 'center'
 });
 
 const PreviewImage = styled.img({
-  width: '260px',
-  marginLeft: '1rem',
-  height: '8.4rem',
-  objectFit: 'cover',
   float: 'right',
+  width: '260px',
+  height: '8.4rem',
+  marginLeft: '1rem',
+  objectFit: 'cover',
   '@media screen and (max-width: 1380px)': {
     width: '32%',
     marginLeft: '3%'
@@ -42,24 +42,24 @@ const PreviewImage = styled.img({
 });
 
 const PreviewTextWrapper = styled.div({
-  width: '100%',
   display: 'flex',
-  height: '8.4rem',
   flexDirection: 'column',
+  width: '100%',
+  height: '8.4rem',
   alignItems: 'flex-start',
   justifyContent: 'center'
 });
 
 const PreviewTitle = styled.span({
+  display: '-webkit-box',
   flexShrink: 0,
-  height: '2rem',
   width: '100%',
+  height: '2rem',
+  textAlign: 'left',
   fontSize: '1.4rem',
   fontWeight: 'bold',
-  textAlign: 'left',
   wordBreak: 'keep-all',
   overflow: 'hidden',
-  display: '-webkit-box',
   WebkitLineClamp: 1,
   WebkitBoxOrient: 'vertical',
   '@media screen and (max-width: 1380px)': {
@@ -68,6 +68,7 @@ const PreviewTitle = styled.span({
 });
 
 const PreviewContent = styled.span({
+  display: '-webkit-box',
   flexShrink: 0,
   width: '100%',
   height: '4.5rem',
@@ -76,7 +77,6 @@ const PreviewContent = styled.span({
   wordBreak: 'keep-all',
   textAlign: 'left',
   overflow: 'hidden',
-  display: '-webkit-box',
   WebkitLineClamp: 3,
   WebkitBoxOrient: 'vertical'
 });
@@ -96,18 +96,16 @@ export function ContentCategory(props: Props) {
             if (props.isLogin) {
               return (
                 <Link key={category.title} href={`/admin/writer?category=${category.title}`} passHref>
-                  <a style={{ width: '100%' }}>
-                    <BorderBox key={index} isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
-                      <Content>
-                        <PreviewTextWrapper>
-                          <PreviewTitle>{category.title}</PreviewTitle>
-                          <PreviewContent>{category.description}</PreviewContent>
-                          <ContentCategoryDetails count={0} />
-                        </PreviewTextWrapper>
-                        <PreviewImage src={category.previewImage} alt={`${category.title} preview image`} />
-                      </Content>
-                    </BorderBox>
-                  </a>
+                  <BorderBox key={index} isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
+                    <Content>
+                      <PreviewTextWrapper>
+                        <PreviewTitle>{category.title}</PreviewTitle>
+                        <PreviewContent>{category.description}</PreviewContent>
+                        <ContentCategoryDetails count={0} />
+                      </PreviewTextWrapper>
+                      <PreviewImage src={category.previewImage} alt={`${category.title} preview image`} />
+                    </Content>
+                  </BorderBox>
                 </Link>
               );
             } else {
@@ -128,18 +126,16 @@ export function ContentCategory(props: Props) {
           return (
             // need to change href to recent post
             <Link key={category.title} href={`/post/${props.latestPosts[index]._id}`} passHref>
-              <a style={{ width: '100%' }}>
-                <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
-                  <Content>
-                    <PreviewTextWrapper>
-                      <PreviewTitle>{category.title}</PreviewTitle>
-                      <PreviewContent>{category.description}</PreviewContent>
-                      <ContentCategoryDetails time={`${category.recentCreatedAt}`} count={category.postCount} />
-                    </PreviewTextWrapper>
-                    <PreviewImage src={category.previewImage} alt={`${category.title} preview image`} />
-                  </Content>
-                </BorderBox>
-              </a>
+              <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
+                <Content>
+                  <PreviewTextWrapper>
+                    <PreviewTitle>{category.title}</PreviewTitle>
+                    <PreviewContent>{category.description}</PreviewContent>
+                    <ContentCategoryDetails time={`${category.recentCreatedAt}`} count={category.postCount} />
+                  </PreviewTextWrapper>
+                  <PreviewImage src={category.previewImage} alt={`${category.title} preview image`} />
+                </Content>
+              </BorderBox>
             </Link>
           );
         })}
