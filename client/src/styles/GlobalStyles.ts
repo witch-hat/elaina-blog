@@ -38,7 +38,7 @@ export const GlobalStyles = createGlobalStyle<{ themeMode: ThemeMode }>`
 		line-height: 1.4;
 	}
 	html {
-		font-size: 17px;
+		font-size: 16px;
 		font-family: "Nanum Gothic", sans-serif;
 		vertical-align: baseline;
 		@media screen and (max-width: 1380px) {

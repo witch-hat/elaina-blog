@@ -18,6 +18,7 @@ const Container = styled.nav({
 });
 
 const NavName = styled.span({
+  fontSize: '1.1rem',
   fontWeight: 'bold'
 });
 

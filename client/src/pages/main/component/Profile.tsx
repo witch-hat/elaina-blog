@@ -19,11 +19,11 @@ import { IS_AUTH } from 'src/query/user';
 import { ProfileImageCropper } from './ProfileImageCropper';
 
 const Container = styled.aside({
+  width: '300px',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'flex-start',
   alignItems: 'center',
-  width: '300px',
   padding: '10px',
   minHeight: 'calc(90vh - 40px)',
   alignSelf: 'stretch',
@@ -45,7 +45,7 @@ const Name = styled.span({
   fontSize: '1.4rem',
   fontWeight: 'bold',
   width: '100%',
-  margin: '15px 0',
+  margin: '8px 0 0 0',
   wordBreak: 'keep-all',
   '@media screen and (max-width: 767px)': {
     margin: '10px 0',
@@ -60,7 +60,7 @@ const ListWrapper = styled.ul({
   justifyContent: 'center',
   alignItems: 'flex-start',
   '& > li:first-child': {
-    margin: '0 0 .7rem',
+    margin: '0 0 0.7rem',
     '@media screen and (max-width: 767px)': {
       textAlign: 'center'
     }
@@ -73,7 +73,7 @@ const Description = styled.li({
   width: '100%',
   fontSize: '1.1rem',
   wordBreak: 'keep-all',
-  margin: '.7rem 0'
+  margin: '.4rem 0'
 });
 
 const ButtonContainer = styled.div({
@@ -131,7 +131,7 @@ const Input = styled.input<{ themeMode: ThemeMode }>((props) => ({
   display: 'inline-block',
   width: '100%',
   height: '2rem',
-  fontSize: '1.1rem',
+  fontSize: '1.0rem',
   padding: '.2rem',
   outline: 'none',
   fontWeight: 'normal',
@@ -183,6 +183,7 @@ const Editor = styled.textarea<{ themeMode: ThemeMode }>((props) => ({
   backgroundColor: theme[props.themeMode].inputBackground,
   whiteSpace: 'pre-wrap',
   wordBreak: 'break-word',
+  fontSize: '1.0rem',
   resize: 'none',
   '&:empty::before': {
     content: "'Add introduce'",
@@ -206,6 +207,7 @@ const ParagraphLink = styled.a({
 });
 
 const Paragraph = styled.p({
+  fontSize: '1.0rem',
   display: 'block',
   width: '100%',
   overflow: 'hidden',

@@ -15,10 +15,10 @@ const Container = styled.div({
 });
 
 const Wrapper = styled.div({
-  width: '850px',
-  marginLeft: '50px',
   display: 'flex',
   flexDirection: 'column',
+  width: '850px',
+  marginLeft: '50px',
   alignItems: 'center',
   justifyContent: 'flex-start',
   '@media screen and (max-width: 1380px)': {
