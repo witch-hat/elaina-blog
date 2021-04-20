@@ -8,7 +8,7 @@ import { ProfileType } from 'src/query/profile';
 import { CategoryDetails } from 'src/query/category';
 
 import { AppCommonProps } from '../_app';
-import { AboutPage } from '../about/About';
+import { AboutPage } from './about/About';
 
 interface Props extends AppCommonProps {
   latestPosts: any;
@@ -20,9 +20,7 @@ interface Props extends AppCommonProps {
 export default function Main(props: Props) {
   const router = useRouter();
 
-  console.log(props);
-
-  if (router.query['tab']) {
+  if (router.query['tab'] === 'about') {
     return (
       <MainPageLayout profile={props.profile} isLogin={props.app.isLogin}>
         <AboutPage profile={props.profile} about={props.about} />
