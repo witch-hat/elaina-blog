@@ -21,6 +21,7 @@ export interface Style {
 
 const Image = styled.img<Style>((props: Style) => {
   return {
+    display: 'block',
     width: props.width || '100px',
     height: props.height || '100px',
     borderRadius: props.borderRadius || '8px',
@@ -42,12 +43,13 @@ const Image = styled.img<Style>((props: Style) => {
 
 interface Props {
   src: string | undefined;
+  alt: string;
   styles?: Style;
 }
 
 export function RoundImage(props: Props) {
   if (props.src) {
-    return <Image {...props.styles} src={props.src} />;
+    return <Image {...props.styles} src={props.src} alt={props.alt} />;
   } else {
     return null;
   }

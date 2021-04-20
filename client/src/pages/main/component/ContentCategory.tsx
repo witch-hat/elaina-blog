@@ -30,6 +30,7 @@ const Content = styled.div({
 });
 
 const PreviewImage = styled.img({
+  display: 'block',
   float: 'right',
   width: '260px',
   height: '8.4rem',
@@ -81,6 +82,11 @@ const PreviewContent = styled.span({
   WebkitBoxOrient: 'vertical'
 });
 
+const FullWidthLink = styled.a({
+  display: 'block',
+  width: '100%'
+});
+
 interface Props {
   categories: CategoryDetails[];
   latestPosts: [{ _id: number }];
@@ -95,17 +101,19 @@ export function ContentCategory(props: Props) {
           if (props.latestPosts[index] === null) {
             if (props.isLogin) {
               return (
-                <Link key={category.title} href={`/admin/writer?category=${category.title}`} passHref>
-                  <BorderBox key={index} isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
-                    <Content>
-                      <PreviewTextWrapper>
-                        <PreviewTitle>{category.title}</PreviewTitle>
-                        <PreviewContent>{category.description}</PreviewContent>
-                        <ContentCategoryDetails count={0} />
-                      </PreviewTextWrapper>
-                      <PreviewImage src={category.previewImage} alt={`${category.title} preview image`} />
-                    </Content>
-                  </BorderBox>
+                <Link key={category.title} href={`/admin/writer?category=${category.title}`}>
+                  <FullWidthLink>
+                    <BorderBox key={index} isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
+                      <Content>
+                        <PreviewTextWrapper>
+                          <PreviewTitle>{category.title}</PreviewTitle>
+                          <PreviewContent>{category.description}</PreviewContent>
+                          <ContentCategoryDetails count={0} />
+                        </PreviewTextWrapper>
+                        <PreviewImage src={category.previewImage} alt={`${category.title} preview image`} />
+                      </Content>
+                    </BorderBox>
+                  </FullWidthLink>
                 </Link>
               );
             } else {
@@ -125,17 +133,19 @@ export function ContentCategory(props: Props) {
           }
           return (
             // need to change href to recent post
-            <Link key={category.title} href={`/post/${props.latestPosts[index]._id}`} passHref>
-              <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
-                <Content>
-                  <PreviewTextWrapper>
-                    <PreviewTitle>{category.title}</PreviewTitle>
-                    <PreviewContent>{category.description}</PreviewContent>
-                    <ContentCategoryDetails time={`${category.recentCreatedAt}`} count={category.postCount} />
-                  </PreviewTextWrapper>
-                  <PreviewImage src={category.previewImage} alt={`${category.title} preview image`} />
-                </Content>
-              </BorderBox>
+            <Link key={category.title} href={`/post/${props.latestPosts[index]._id}`}>
+              <FullWidthLink>
+                <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
+                  <Content>
+                    <PreviewTextWrapper>
+                      <PreviewTitle>{category.title}</PreviewTitle>
+                      <PreviewContent>{category.description}</PreviewContent>
+                      <ContentCategoryDetails time={`${category.recentCreatedAt}`} count={category.postCount} />
+                    </PreviewTextWrapper>
+                    <PreviewImage src={category.previewImage} alt={`${category.title} preview image`} />
+                  </Content>
+                </BorderBox>
+              </FullWidthLink>
             </Link>
           );
         })}

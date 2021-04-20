@@ -319,12 +319,13 @@ export function Profile(props: Props) {
       <div style={{ position: 'relative', width: '100%' }}>
         <RoundImage
           src={isEditMode ? edtingProfile.image : viewedProfile.image}
+          alt='Profile Image'
           styles={{
             borderRadius: '50%',
             width: '280px',
             height: '280px',
-            medium: { width: '100%', height: 'auto' },
-            small: { width: '200px', height: 'auto' }
+            medium: { width: '280px', height: '280px' },
+            small: { width: '200px', height: '200px' }
           }}
         />
         {isEditMode && (
