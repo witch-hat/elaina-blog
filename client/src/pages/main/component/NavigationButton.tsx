@@ -31,7 +31,8 @@ const NavButtons = styled.a<ButtonProps>((props) => {
 });
 
 interface Props {
-  href: string;
+  href?: string;
+  query?: string;
   children: JSX.Element;
 }
 
@@ -41,8 +42,8 @@ export function NavigationButton(props: Props) {
   const router = useRouter();
 
   return (
-    <Link href={props.href}>
-      <NavButtons isSelected={router.pathname === props.href} themeMode={themeMode}>
+    <Link href={props.href ? props.href : { query: { tab: props.query } }}>
+      <NavButtons isSelected={router.query['tab'] === props.query} themeMode={themeMode}>
         {props.children}
       </NavButtons>
     </Link>

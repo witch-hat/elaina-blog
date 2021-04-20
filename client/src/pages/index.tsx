@@ -5,6 +5,7 @@ import { initApolloClient } from 'src/apollo/withApollo';
 import { GET_LASTEST_POSTS } from 'src/query/post';
 import { GET_CATEGORIES_WITH_DETAILS, CategoryDetails } from 'src/query/category';
 import { GET_PROFILE, ProfileType } from 'src/query/profile';
+import { GET_ABOUT } from 'src/query/about';
 
 import Main from './main';
 import { AppCommonProps } from './_app';
@@ -13,6 +14,7 @@ interface Props extends AppCommonProps {
   latestPosts: InferGetServerSidePropsType<typeof getServerSideProps>;
   profile: InferGetServerSidePropsType<typeof getServerSideProps>;
   categories: InferGetServerSidePropsType<typeof getServerSideProps>;
+  about: InferGetServerSidePropsType<typeof getServerSideProps>;
 }
 
 export default function Index(props: Props) {
@@ -24,7 +26,9 @@ export async function getServerSideProps(context: NextPageContext) {
   const profileQueryResult = await apolloClient.query({ query: GET_PROFILE });
   const categoryQueryResult = await apolloClient.query({ query: GET_CATEGORIES_WITH_DETAILS });
   const categoryLatestPostQueryResult = await apolloClient.query({ query: GET_LASTEST_POSTS });
+  const aboutQueryResult = await apolloClient.query({ query: GET_ABOUT });
 
+  const about = aboutQueryResult.data.about;
   const profile: ProfileType = profileQueryResult.data.profile;
   const categories: CategoryDetails[] = categoryQueryResult.data.categoriesWithDetails;
   const latestPosts = categoryLatestPostQueryResult.data.getLatestPostsEachCategory;
@@ -33,7 +37,8 @@ export async function getServerSideProps(context: NextPageContext) {
     props: {
       latestPosts,
       profile,
-      categories
+      categories,
+      about
     }
   };
 }

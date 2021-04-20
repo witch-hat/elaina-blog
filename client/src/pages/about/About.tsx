@@ -41,52 +41,36 @@ const Article = styled.article({
   marginTop: '1.5rem'
 });
 
-interface Props extends AppCommonProps {
-  profile: InferGetStaticPropsType<typeof getServerSideProps>;
-  about: InferGetStaticPropsType<typeof getServerSideProps>;
+interface Props {
+  about: About;
+  profile: ProfileType;
 }
 
-export default function AboutPage(props: Props) {
+export function AboutPage(props: Props) {
   const theme: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const about: About = props.about;
   const profile: ProfileType = props.profile;
   const updatedAt = new Date(about.updatedAt);
 
   return (
-    <MainPageLayout profile={props.profile} isLogin={props.app.isLogin}>
-      <Container>
-        <div>
-          <ContentInfoWrapper>
-            <Author>
-              <FontAwesomeIcon icon={faUser} style={{ marginRight: '0.5rem' }} />
-              {profile.name}
-            </Author>
-            <Time>
-              <FontAwesomeIcon icon={faClock} style={{ marginRight: '0.5rem' }} />
-              {FormatUnifier.getFullFormatDate(updatedAt)}
-            </Time>
-          </ContentInfoWrapper>
-        </div>
-        <Article>
-          <ReactMarkdown plugins={[gfm]}>{about.article}</ReactMarkdown>
-        </Article>
-      </Container>
-    </MainPageLayout>
+    // <MainPageLayout profile={props.profile} isLogin={props.app.isLogin}>
+    <Container>
+      <div>
+        <ContentInfoWrapper>
+          <Author>
+            <FontAwesomeIcon icon={faUser} style={{ marginRight: '0.5rem' }} />
+            {profile.name}
+          </Author>
+          <Time>
+            <FontAwesomeIcon icon={faClock} style={{ marginRight: '0.5rem' }} />
+            {FormatUnifier.getFullFormatDate(updatedAt)}
+          </Time>
+        </ContentInfoWrapper>
+      </div>
+      <Article>
+        <ReactMarkdown plugins={[gfm]}>{about.article}</ReactMarkdown>
+      </Article>
+    </Container>
+    // </MainPageLayout>
   );
-}
-
-export async function getServerSideProps(context: NextPageContext) {
-  const apolloClient = initApolloClient({}, context);
-  const profileQueryResult = await apolloClient.query({ query: GET_PROFILE });
-  const profile = profileQueryResult.data.profile;
-
-  const aboutQueryResult = await apolloClient.query({ query: GET_ABOUT });
-  const about = aboutQueryResult.data.about;
-
-  return {
-    props: {
-      profile,
-      about
-    }
-  };
 }

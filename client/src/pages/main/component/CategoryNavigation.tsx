@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBook, faStream, faUser } from '@fortawesome/free-solid-svg-icons';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
 
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
@@ -35,6 +36,8 @@ interface Props {}
 export function CategoryNavigation(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
+  const router = useRouter();
+
   return (
     <Container>
       <NavigationButton href='/'>
@@ -43,13 +46,13 @@ export function CategoryNavigation(props: Props) {
           <NavName>{trans(Lang.Board)}</NavName>
         </>
       </NavigationButton>
-      <NavigationButton href='/timeline'>
+      {/* <NavigationButton href='?tab=timeline'>
         <>
           <NavigationIcon icon={faStream} />
           <NavName>{trans(Lang.TimeLine)}</NavName>
         </>
-      </NavigationButton>
-      <NavigationButton href='/about'>
+      </NavigationButton> */}
+      <NavigationButton query='about'>
         <>
           <NavigationIcon icon={faUser} />
           <NavName>{trans(Lang.About)}</NavName>
