@@ -109,8 +109,14 @@ export const commentResolver = {
 
     async editComment(_: any, args: { _id: number; index: number; newComment: string; password?: string }, context: ContextType) {
       try {
-        if (!args.newComment) {
+        if (!args.newComment.length) {
           throw new UserInputError('내용을 입력해 주세요.');
+        }
+
+        if (args.password) {
+          if (args.password.length < 4 || args.password.length > 12) {
+            throw new UserInputError('password: 4~12자 이내로 입력해주세요');
+          }
         }
 
         const commentContainer: Comments = await CommentModel.findById(args._id);
@@ -202,8 +208,14 @@ export const commentResolver = {
       context: ContextType
     ) {
       try {
-        if (!args.newReply) {
+        if (!args.newReply.length) {
           throw new UserInputError('내용을 입력해 주세요.');
+        }
+
+        if (args.password) {
+          if (args.password.length < 4 || args.password.length > 12) {
+            throw new UserInputError('password: 4~12자 이내로 입력해주세요');
+          }
         }
 
         const commentContainer: Comments = await CommentModel.findById(args._id);

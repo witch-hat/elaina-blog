@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -7,7 +7,7 @@ import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
 
 import { DropDownMenu } from 'src/components';
-import { Comment, DELETE_COMMENT, DELETE_REPLY, Reply } from 'src/query/comment';
+import { Comment, DELETE_COMMENT, DELETE_REPLY, EDIT_COMMENT, EDIT_REPLY, Reply } from 'src/query/comment';
 import { ModalWrapper } from 'src/components';
 import { FormatUnifier } from 'src/utils';
 import { RootState } from 'src/redux/rootReducer';
@@ -112,6 +112,38 @@ const ModalButton = styled.button<{ themeMode?: ThemeMode }>((props) => ({
   color: props.themeMode ? theme[props.themeMode].dangerContentText : 'inherit'
 }));
 
+const EditContainer = styled.div({
+  width: '100%',
+  margin: '1rem 0',
+  borderRadius: '.5rem',
+  backgroundColor: '#eee'
+});
+
+const CommentEditor = styled.span({
+  display: 'block',
+  width: '100%',
+  minHeight: '4rem',
+  padding: '.5rem',
+  border: '1px solid #ddd',
+  borderRadius: '.5rem',
+  backgroundColor: '#fff',
+  outline: 'none',
+  cursor: 'text',
+  resize: 'vertical',
+  overflow: 'auto'
+});
+
+const EditMenuContainer = styled.div({
+  display: 'flex',
+  justifyContent: 'flex-end'
+});
+
+const EditButtonItem = styled.button({
+  padding: '.5rem',
+  margin: '.5rem 0 .5rem .5rem',
+  borderRadius: '.5rem'
+});
+
 interface Props {
   isLogin: boolean;
   isCommentFromAdmin: boolean;
@@ -132,11 +164,20 @@ export function CommentBox(props: Props) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [password, setPassword] = useState('');
+  const [commentContent, setCommentContent] = useState<string>(props.comment.comment);
+  const [isAdminCommentEdit, setIsAdminCommentEdit] = useState(false);
+  const [isUserCommentEdit, setIsUserCommentEdit] = useState(false);
   const router = useRouter();
 
   const client = useApollo();
   const [deleteReply] = useMutation(DELETE_REPLY);
   const [deleteComment] = useMutation(DELETE_COMMENT);
+  const [editComment] = useMutation(EDIT_COMMENT);
+  const [editReply] = useMutation(EDIT_REPLY);
+
+  useEffect(() => {
+    setCommentContent(props.comment.comment);
+  }, [props.comment.comment]);
 
   async function handleDeleteComment() {
     const AuthResponse = await client.query({ query: IS_AUTH });
@@ -216,6 +257,90 @@ export function CommentBox(props: Props) {
     }
   }
 
+  async function handleCommentEdit() {
+    const AuthResponse = await client.query({ query: IS_AUTH });
+    const isAuth = AuthResponse.data.isAuth.isAuth;
+    const _id = +router.query['post-id'];
+
+    if (!commentContent) {
+      setCommentContent(props.comment.comment);
+      alert('내용을 입력해 주세요.');
+      return;
+    }
+
+    if (isAuth) {
+      try {
+        await editComment({
+          variables: {
+            _id,
+            index: props.commentIndex,
+            newComment: commentContent
+          }
+        });
+      } catch (err) {
+        setCommentContent(props.comment.comment);
+        alert(err.message);
+      }
+    } else {
+      try {
+        await editComment({
+          variables: {
+            _id,
+            index: props.commentIndex,
+            newComment: commentContent,
+            password
+          }
+        });
+      } catch (err) {
+        setCommentContent(props.comment.comment);
+        alert(err.message);
+      }
+    }
+  }
+
+  async function handleReplyEdit() {
+    const AuthResponse = await client.query({ query: IS_AUTH });
+    const isAuth = AuthResponse.data.isAuth.isAuth;
+    const _id = +router.query['post-id'];
+
+    if (!commentContent) {
+      setCommentContent(props.comment.comment);
+      alert('내용을 입력해 주세요.');
+      return;
+    }
+
+    if (isAuth) {
+      try {
+        await editReply({
+          variables: {
+            _id,
+            commentIndex: props.commentIndex,
+            replyIndex: props.replyIndex,
+            newReply: commentContent
+          }
+        });
+      } catch (err) {
+        setCommentContent(props.comment.comment);
+        alert(err.message);
+      }
+    } else {
+      try {
+        await editReply({
+          variables: {
+            _id,
+            commentIndex: props.commentIndex,
+            replyIndex: props.replyIndex,
+            newReply: commentContent,
+            password
+          }
+        });
+      } catch (err) {
+        setCommentContent(props.comment.comment);
+        alert(err.message);
+      }
+    }
+  }
+
   return (
     <Container>
       <DetailsContainer>
@@ -238,9 +363,25 @@ export function CommentBox(props: Props) {
               <>
                 {/* admin인경우: 자기것만 edit, 나머지는 edit 버튼 X, admin 아닌경우 edit 버튼 O */}
                 {props.isLogin ? (
-                  props.comment.isAdmin && <MenuButton onClick={() => {}}>{trans(Lang.Edit)}</MenuButton>
+                  props.comment.isAdmin && (
+                    <MenuButton
+                      onClick={() => {
+                        setIsAdminCommentEdit(true);
+                        setIsMenuOpen(false);
+                      }}
+                    >
+                      {trans(Lang.Edit)}
+                    </MenuButton>
+                  )
                 ) : (
-                  <MenuButton onClick={() => {}}>{trans(Lang.Edit)}</MenuButton>
+                  <MenuButton
+                    onClick={() => {
+                      setIsUserCommentEdit(true);
+                      setIsMenuOpen(false);
+                    }}
+                  >
+                    {trans(Lang.Edit)}
+                  </MenuButton>
                 )}
                 <MenuButton
                   danger
@@ -256,7 +397,47 @@ export function CommentBox(props: Props) {
           />
         )}
       </DetailsContainer>
-      <CommentContent>{props.comment.comment}</CommentContent>
+      {isAdminCommentEdit || isUserCommentEdit ? (
+        <EditContainer>
+          <CommentEditor
+            contentEditable={true}
+            suppressContentEditableWarning={true}
+            onInput={(e: React.ChangeEvent<HTMLSpanElement>) => {
+              setCommentContent(e.target.innerText);
+            }}
+          >
+            {props.comment.comment}
+          </CommentEditor>
+          <EditMenuContainer>
+            {props.isCommentFromAdmin || (
+              <input placeholder='password' type='password' minLength={4} maxLength={12} onChange={(e) => setPassword(e.target.value)} />
+            )}
+            <EditButtonItem
+              onClick={() => {
+                isAdminCommentEdit ? setIsAdminCommentEdit(false) : setIsUserCommentEdit(false);
+                setCommentContent(props.comment.comment);
+              }}
+            >
+              Cancel
+            </EditButtonItem>
+            <EditButtonItem
+              onClick={() => {
+                if (props.isReply) {
+                  handleReplyEdit();
+                } else {
+                  handleCommentEdit();
+                }
+                setIsAdminCommentEdit(false);
+                setIsUserCommentEdit(false);
+              }}
+            >
+              Edit
+            </EditButtonItem>
+          </EditMenuContainer>
+        </EditContainer>
+      ) : (
+        <CommentContent>{commentContent}</CommentContent>
+      )}
       {props.children}
       <ModalWrapper visible={isModalOpen}>
         <ModalContainer>
