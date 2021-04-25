@@ -18,17 +18,17 @@ import { AdminMenu } from './AdminMenu';
 
 const StyledHeader = styled.header<{ themeMode: ThemeMode }>((props) => {
   return {
-    width: '100%',
     display: 'flex',
-    alignItems: 'center',
-    borderBottom: '1px solid #ccc',
-    padding: '.5rem 0',
-    fontWeight: 'bold',
     position: 'fixed',
     top: '0',
-    zIndex: 9999,
+    width: '100%',
     height: '4rem',
-    backgroundColor: theme[props.themeMode].headerBackground
+    padding: '.5rem 0',
+    borderBottom: '1px solid #ccc',
+    backgroundColor: theme[props.themeMode].headerBackground,
+    fontWeight: 'bold',
+    alignItems: 'center',
+    zIndex: 9999
   };
 });
 
@@ -49,15 +49,15 @@ const Container = styled.div({
 });
 
 const BlogName = styled.a<{ themeMode: ThemeMode }>((props) => ({
-  fontSize: '1.8rem',
   padding: '10px',
-  cursor: 'pointer',
-  color: theme[props.themeMode].blogName
+  color: theme[props.themeMode].blogName,
+  fontSize: '1.8rem',
+  cursor: 'pointer'
 }));
 
 const Flex = styled.div({
-  width: 'max-content',
   display: 'flex',
+  width: 'max-content',
   alignItems: 'center',
   justifyContent: 'center'
 });
@@ -86,13 +86,13 @@ const ResponsiveMenuBox = styled.div<{ themeMode: ThemeMode }>(
   (props) => ({
     display: 'flex',
     '@media screen and (max-width: 767px)': {
-      padding: '10px',
       position: 'fixed',
       right: '0',
-      zIndex: 9999,
-      backgroundColor: theme[props.themeMode].secondaryContentBackground,
+      padding: '10px',
       borderRadius: '.5rem',
-      boxShadow: `0 8px 4px -4px ${theme[props.themeMode].shadowColor}`
+      backgroundColor: theme[props.themeMode].secondaryContentBackground,
+      boxShadow: `0 8px 4px -4px ${theme[props.themeMode].shadowColor}`,
+      zIndex: 9999
     }
   }),
   css`

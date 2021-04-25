@@ -28,9 +28,9 @@ const LanguageDropDown = styled.div({
 const LanguageItem = styled.p({
   width: '100%',
   padding: '.5rem',
-  cursor: 'pointer',
-  textAlign: 'center',
   borderRadius: '.5rem',
+  textAlign: 'center',
+  cursor: 'pointer',
   userSelect: 'none',
   '&:hover': {
     backgroundColor: '#eee'

@@ -6,22 +6,22 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 import { theme } from 'src/styles';
-import { InputBox, FocusWrapper, useWidth } from 'src/components';
+import { InputBox } from 'src/components';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
-import { LangCode, changeLang, getCurrentLangCode, trans, Lang } from 'src/resources/languages';
+import { trans, Lang } from 'src/resources/languages';
 
 const SearchButton = styled.button<{ themeMode: ThemeMode }>((props) => ({
   display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
   width: '45px',
   height: '45px',
   marginLeft: '5px',
-  fontSize: '1.2rem',
+  border: 'none',
   borderRadius: '50%',
   backgroundColor: theme[props.themeMode].headerBackground,
-  border: 'none',
+  fontSize: '1.2rem',
+  alignItems: 'center',
+  justifyContent: 'center',
   cursor: 'pointer',
   '&:focus': {
     outline: 'none'
@@ -37,10 +37,10 @@ const SearchButton = styled.button<{ themeMode: ThemeMode }>((props) => ({
 }));
 
 const SearchForm = styled.form({
-  width: '100%',
   display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center'
+  width: '100%',
+  alignItems: 'center',
+  justifyContent: 'center'
 });
 
 interface Props {}

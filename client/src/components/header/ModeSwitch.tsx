@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
@@ -11,38 +11,36 @@ import { RootState } from 'src/redux/rootReducer';
 
 const Container = styled.div({
   display: 'flex',
+  marginRight: '20px',
   alignItems: 'center',
-  justifyContent: 'center',
-  marginRight: '20px'
+  justifyContent: 'center'
 });
 
-const Icon = styled.div<{ left?: boolean }>((props) => ({
-  fontSize: '1.5rem',
-  marginRight: props.left ? '5px' : '0',
-  marginLeft: props.left ? '0' : '5px'
-}));
-
-const Switch = styled.div<{ isChecked: boolean }>`
-  position: relative;
-  cursor: pointer;
-  width: 45px;
-  height: 20px;
-  background-color: ${(props) => (props.isChecked ? '#555657' : '#ccc')};
-  transition: 0.4s;
-  border-radius: 34px;
-  &:before {
-    position: absolute;
-    content: '';
-    height: 12px;
-    width: 12px;
-    left: 4px;
-    bottom: 4px;
-    background-color: #fff;
-    transition: 0.4s;
-    border-radius: 50%;
-    transform: ${(props) => (props.isChecked ? 'translateX(26px)' : 'none')};
-  }
-`;
+const Switch = styled.div<{ isChecked: boolean }>(
+  (props) => ({
+    position: 'relative',
+    width: '45px',
+    height: '20px',
+    borderRadius: '34px',
+    backgroundColor: props.isChecked ? '#555657' : '#ccc',
+    cursor: 'pointer',
+    transition: '0.4s'
+  }),
+  css<{ isChecked: boolean }>`
+    &:before {
+      position: absolute;
+      left: 4px;
+      bottom: 4px;
+      height: 12px;
+      width: 12px;
+      border-radius: 50%;
+      background-color: #fff;
+      transition: 0.4s;
+      transform: ${(props) => (props.isChecked ? 'translateX(26px)' : 'none')};
+      content: '';
+    }
+  `
+);
 
 interface SwitchIconProps {
   icon: IconProp;

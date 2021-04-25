@@ -20,11 +20,11 @@ const AdminDropDown = styled.div({});
 const MenuItem = styled.a<{ themeMode: ThemeMode }>((props) => {
   return {
     padding: '.5rem',
+    borderRadius: '.5rem',
     textAlign: 'center',
     cursor: 'pointer',
     userSelect: 'none',
     wordBreak: 'keep-all',
-    borderRadius: '.5rem',
     '&:hover': {
       backgroundColor: theme[props.themeMode].hoverBackground
     }
