@@ -19,21 +19,21 @@ const MenuListWrapper = styled.div({
   zIndex: 1
 });
 
-const MenuList = styled.div({
+const MenuList = styled.div<{ themeMode: ThemeMode }>((props) => ({
   display: 'flex',
   flexDirection: 'column',
-  backgroundColor: '#eee',
+  backgroundColor: theme[props.themeMode].secondaryContentBackground,
   borderRadius: '.5rem'
-});
+}));
 
-const MainButton = styled.div({
+const MainButton = styled.div<{ themeMode: ThemeMode }>((props) => ({
   padding: '.5rem .8rem',
   cursor: 'pointer',
   borderRadius: '.5rem',
   '&:hover': {
-    backgroundColor: '#eee'
+    backgroundColor: theme[props.themeMode].hoverBackground
   }
-});
+}));
 
 interface Props {
   visible: boolean;
@@ -47,10 +47,12 @@ export function DropDownMenu(props: Props) {
 
   return (
     <MenuContainer>
-      <MainButton onClick={() => props.setVisible(!props.visible)}>{props.mainButton}</MainButton>
+      <MainButton onClick={() => props.setVisible(!props.visible)} themeMode={themeMode}>
+        {props.mainButton}
+      </MainButton>
       <FocusWrapper visible={props.visible} onClickOutside={() => props.setVisible(false)}>
         <MenuListWrapper>
-          <MenuList>{props.dropMenu}</MenuList>
+          <MenuList themeMode={themeMode}>{props.dropMenu}</MenuList>
         </MenuListWrapper>
       </FocusWrapper>
     </MenuContainer>

@@ -25,7 +25,7 @@ const LanguageDropDown = styled.div({
   margin: '0 .5rem'
 });
 
-const LanguageItem = styled.p({
+const LanguageItem = styled.p<{ themeMode: ThemeMode }>((props) => ({
   width: '100%',
   padding: '.5rem',
   borderRadius: '.5rem',
@@ -33,9 +33,9 @@ const LanguageItem = styled.p({
   cursor: 'pointer',
   userSelect: 'none',
   '&:hover': {
-    backgroundColor: '#eee'
+    backgroundColor: theme[props.themeMode].hoverBackground
   }
-});
+}));
 
 export function LanguageMenu() {
   const languages = {
@@ -44,6 +44,7 @@ export function LanguageMenu() {
   };
   const currentLangCode = getCurrentLangCode();
   const lang: LangCode = useSelector<RootState, any>((state) => state.common.lang);
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   const [isLangMenuVisible, setIsLangMenuVisible] = useState(false);
 
@@ -71,6 +72,7 @@ export function LanguageMenu() {
                     commonDispatch.SetLanguage(code);
                     setIsLangMenuVisible(false);
                   }}
+                  themeMode={themeMode}
                 >
                   {languages[code as LangCode]}
                 </LanguageItem>
