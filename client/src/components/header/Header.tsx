@@ -111,14 +111,14 @@ export function Header(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   const width = useWidth();
-  const [isAdminMenuVisible, setIsAdminMenuVisible] = useState<boolean>(width > 767);
+  const [isSwitchAndSearchVisible, setIsSwitchAndSearchVisible] = useState<boolean>(width > 767);
 
   useEffect(() => {
-    setIsAdminMenuVisible(width > 767);
+    setIsSwitchAndSearchVisible(width > 767);
   }, [width]);
 
   function onMobileMenuButtonClick() {
-    setIsAdminMenuVisible(!isAdminMenuVisible);
+    setIsSwitchAndSearchVisible(!isSwitchAndSearchVisible);
   }
 
   return (
@@ -130,13 +130,13 @@ export function Header(props: Props) {
         </Link>
         <Flex>
           <FocusWrapper
-            visible={isAdminMenuVisible}
+            visible={isSwitchAndSearchVisible}
             onClickOutside={() => {
-              if (width <= 767) setIsAdminMenuVisible(false);
+              if (width <= 767) setIsSwitchAndSearchVisible(false);
             }}
           >
             <>
-              {isAdminMenuVisible && (
+              {isSwitchAndSearchVisible && (
                 <ResponsiveMenuBox themeMode={themeMode}>
                   <ModeSwitch />
                   <SearchMenu />
