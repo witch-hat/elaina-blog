@@ -43,3 +43,12 @@
 - Open new terminal
 - Change pwd to `elaina-blog/server` and input `yarn install`
 - `yarn dev` in each terminal
+
+### Useful Documents
+
+- [MDN](https://developer.mozilla.org/ko/)
+- [TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/intro.html)
+- [React](https://ko.reactjs.org/)
+- [Next.js](https://nextjs.org/)
+- [Styled Component](https://styled-components.com/docs)
+- [ApolloGraphQL](https://www.apollographql.com/docs/)
