@@ -32,15 +32,15 @@ const CategoryContainer = styled.div({
   borderRadius: '.5rem'
 });
 
-const CategoryList = styled.div({
+const CategoryList = styled.div<{ themeMode: ThemeMode }>((props) => ({
   position: 'absolute',
   top: '.5rem',
   left: '-1px',
   border: '1px solid #1f1f1f',
-  backgroundColor: '#f1f2f3',
+  backgroundColor: theme[props.themeMode].secondaryContentBackground,
   zIndex: 1,
   borderRadius: '.5rem'
-});
+}));
 
 const CategoryTitle = styled.div({
   padding: '.5rem .2rem'
@@ -292,7 +292,7 @@ export function Writer(props: Props) {
                 <p style={{ padding: '.2rem' }}>{selectedCategory}</p>
               </div>
               <FocusWrapper visible={isListOpen} onClickOutside={() => setIsListOpen(false)}>
-                <CategoryList>
+                <CategoryList themeMode={themeMode}>
                   {props.categories.map((category) => {
                     return (
                       <CategoryTitle
