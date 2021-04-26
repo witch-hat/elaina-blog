@@ -13,7 +13,10 @@ import { GET_COMMENTS, Comments } from 'src/query/comment';
 import { GET_PROFILE } from 'src/query/profile';
 import { AppCommonProps } from 'src/pages/_app';
 
-import { Content, ContentNavigation, PostCategory, CommentContainer } from './component';
+import { Article } from './component/article/Article';
+import { CommentContainer } from './component/comment/CommentContainer';
+import { PostCategory } from './component/PostCategory';
+import { ContentNavigation } from './component/ContentNavigation';
 
 // interface ContentContainerProps {
 //   isOpenList: boolean;
@@ -160,7 +163,7 @@ export default function PostId(props: Props) {
         </FocusWrapper>
       )}
       <ContentContainer themeMode={themeMode}>
-        <Content title={post.title} author={author} createdAt={post.createdAt} article={post.article} isLogin={props.app.isLogin} />
+        <Article title={post.title} author={author} createdAt={post.createdAt} article={post.article} isLogin={props.app.isLogin} />
         <CommentContainer comments={comments} isLogin={props.app.isLogin} author={author} />
       </ContentContainer>
       <ContentNavigation />

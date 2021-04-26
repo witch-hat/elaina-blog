@@ -1,24 +1,21 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useMutation } from '@apollo/client';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faClock, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 
 import styles from 'src/styles/MarkdownStyles.module.css';
-import { ModalWrapper, DropDownMenu } from 'src/components';
+import { ModalWrapper } from 'src/components';
 import { DELETE_POST, FIND_SAME_CATEGORY_POSTS } from 'src/query/post';
 import { IS_AUTH } from 'src/query/user';
 import { useApollo } from 'src/apollo/apolloClient';
 import { ThemeMode } from 'src/redux/common/type';
 import { theme } from 'src/styles';
 import { RootState } from 'src/redux/rootReducer';
-import { FormatUnifier } from 'src/utils';
-import { trans, Lang } from 'src/resources/languages';
+
+import { ContentMenu } from './ArticleMenu';
 
 const Container = styled.section({
   width: '800px',
@@ -45,50 +42,12 @@ const Title = styled.header({
   }
 });
 
-const Menu = styled.div({
-  display: 'flex',
-  justifyContent: 'space-between',
-  width: '100%',
-  height: '2.2rem',
-  alignItems: 'center',
-  fontSize: '.875rem'
-});
-
-const Article = styled.article({
+const StyledArticle = styled.article({
   width: '100%',
   marginTop: '2rem',
   fontSize: '1.1rem',
   wordBreak: 'keep-all'
 });
-
-const ContentInfoWrapper = styled.div({
-  display: 'flex'
-});
-
-const Author = styled.span({
-  marginRight: '1rem',
-  display: 'flex',
-  alignItems: 'center'
-});
-
-const Time = styled.span({
-  display: 'flex',
-  alignItems: 'center'
-});
-
-const MenuButton = styled.p<{ danger?: boolean }>((props) => ({
-  display: 'block',
-  padding: '.5rem',
-  textAlign: 'center',
-  cursor: 'pointer',
-  userSelect: 'none',
-  wordBreak: 'keep-all',
-  borderRadius: '.5rem',
-  color: props.danger ? '#dd0000' : 'inherit',
-  '&:hover': {
-    backgroundColor: '#ddd'
-  }
-}));
 
 const ModalContainer = styled.div({
   width: '20rem',
@@ -124,12 +83,11 @@ interface Props {
   isLogin: boolean;
 }
 
-export function Content(props: Props) {
+export function Article(props: Props) {
   const time = new Date(props.createdAt);
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   const router = useRouter();
-  const [isOpenMenu, setIsOpenMenu] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const client = useApollo();
@@ -170,40 +128,12 @@ export function Content(props: Props) {
   return (
     <Container>
       <Title>{props.title}</Title>
-      <Menu>
-        <ContentInfoWrapper>
-          <Author>
-            <FontAwesomeIcon icon={faUser} style={{ marginRight: '0.5rem' }} />
-            {props.author}
-          </Author>
-          <Time>
-            <FontAwesomeIcon icon={faClock} style={{ marginRight: '0.5rem' }} />
-            {FormatUnifier.getFullFormatDate(time)}
-          </Time>
-        </ContentInfoWrapper>
-        {props.isLogin && (
-          <DropDownMenu
-            visible={isOpenMenu}
-            mainButton={<FontAwesomeIcon icon={faEllipsisV} />}
-            setVisible={setIsOpenMenu}
-            dropMenu={
-              <>
-                <MenuButton>
-                  <Link href={`/post/${id}/edit`}>{trans(Lang.Edit)}</Link>
-                </MenuButton>
-                <MenuButton danger onClick={() => setIsModalOpen(true)}>
-                  {trans(Lang.Delete)}
-                </MenuButton>
-              </>
-            }
-          />
-        )}
-      </Menu>
-      <Article>
+      <ContentMenu isLogin={props.isLogin} time={time} author={props.author} id={id as string} setIsModalOpen={setIsModalOpen} />
+      <StyledArticle>
         <ReactMarkdown plugins={[gfm]} className={styles['markdown-body']}>
           {props.article}
         </ReactMarkdown>
-      </Article>
+      </StyledArticle>
       <ModalWrapper visible={isModalOpen}>
         <ModalContainer>
           <ModalParagraph>정말 삭제하시겠습니까?</ModalParagraph>
