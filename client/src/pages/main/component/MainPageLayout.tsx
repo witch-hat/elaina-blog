@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { CategoryNavigation } from './CategoryNavigation';
-import { Profile } from './Profile';
+import { ProfileContainer } from './profile/ProfileContainer';
 
 const Container = styled.div({
   display: 'flex',
@@ -41,7 +41,7 @@ interface Props {
 export function MainPageLayout(props: Props) {
   return (
     <Container>
-      <Profile profile={props.profile} isLogin={props.isLogin} />
+      <ProfileContainer profile={props.profile} isLogin={props.isLogin} />
       <Wrapper>
         <CategoryNavigation />
         {props.children}
