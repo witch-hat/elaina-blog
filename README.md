@@ -2,7 +2,7 @@
 
 ### Development Environment
 
-- VS Code, Node.js(latest LTS version), MongoDB Compass
+- VS Code, [Node.js](https://nodejs.org/en/)(recommend latest LTS version), [MongoDB Compass](https://www.mongodb.com/try/download/compass)
 - Git(Using GitHub Desktop or Git Bash...etc)
 - Enter `elaina-blog/elaina-blog.code-workspace` and click `Open Workspace` button
 - We are working in workspace, CHECK you're working in workspace..!
