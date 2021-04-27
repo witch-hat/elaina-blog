@@ -92,7 +92,13 @@ export function SideBar(props: Props) {
             <List>{trans(Lang.CategoryManage)}</List>
           </a>
         </Link>
-        <List>{trans(Lang.BoardManage)}</List>
+
+        <Link href='/admin/posts' passHref>
+          <a>
+          <List>{trans(Lang.BoardManage)}</List>
+          </a>
+        </Link>
+
         <List>{trans(Lang.CommentManage)}</List>
       </ListContainer>
       <TitleWrapper>
