@@ -16,7 +16,7 @@ import { FileType, UPLOAD_FILE } from 'src/query/file';
 import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';
 
-import { ProfileImageCropper } from '../ProfileImageCropper';
+import { ProfileImageCropper } from './ProfileImageCropper';
 
 const ChangeImageButton = styled.label<{ themeMode: ThemeMode }>((props) => ({
   display: 'flex',
