@@ -177,11 +177,11 @@ export default function Category(props: Props) {
         <div style={{ width: '100%', padding: '0 5%' }}>
           <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
             {          
-              <AddButton themeMode={themeMode}>
                   <a href="/admin/writer">
+              <AddButton themeMode={themeMode}>
                       Add
-                  </a>
               </AddButton>
+                  </a>
                           }
           </div>
           <Container>
