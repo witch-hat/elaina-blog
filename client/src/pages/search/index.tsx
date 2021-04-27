@@ -1,15 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import { InferGetServerSidePropsType, NextPageContext } from 'next';
-import Link from 'next/link';
-import Gfm from 'remark-gfm';
-import ReactMarkDown from 'react-markdown';
-import { Reset } from 'styled-reset';
 
 import { Post, SEARCH } from 'src/query/post';
 import { initApolloClient } from 'src/apollo/withApollo';
-import { BorderBox } from 'src/components';
-import { FormatUnifier } from 'src/utils';
+import { ResultContainer } from './components/ResultContainer';
 
 const Container = styled.div<{ isEmptyResult?: boolean }>((props) => ({
   width: '100%',
@@ -23,7 +18,7 @@ const Container = styled.div<{ isEmptyResult?: boolean }>((props) => ({
   }
 }));
 
-const ResultWrapper = styled.div({
+const Wrapper = styled.div({
   width: '100%',
   padding: '0 15%',
   display: 'flex',
@@ -32,50 +27,14 @@ const ResultWrapper = styled.div({
   margin: '1rem 0'
 });
 
-const TitleContainer = styled.div({
+const CountContainer = styled.div({
   alignSelf: 'flex-start'
 });
 
-const Title = styled.p({
+const Count = styled.p({
   fontSize: '1.3rem',
   fontWeight: 'bold',
   marginBottom: '.5rem'
-});
-
-const PostWrapper = styled.div({
-  width: '100%',
-  padding: '0 5%'
-});
-
-const Content = styled.div({
-  width: '100%',
-  height: '7.5rem',
-  padding: '.5rem'
-});
-
-const PostTitle = styled.p({
-  display: 'block',
-  fontSize: '1.125rem',
-  fontWeight: 'bold',
-  marginBottom: '.5rem'
-});
-
-const CreatedAt = styled.p({
-  display: 'block',
-  fontSize: '.8rem',
-  marginBottom: '.5rem'
-});
-
-const Article = styled.p({
-  width: '100%',
-  height: '3rem',
-  fontSize: '1rem',
-  wordBreak: 'keep-all',
-  textAlign: 'left',
-  overflow: 'hidden',
-  display: '-webkit-box',
-  WebkitLineClamp: 3,
-  WebkitBoxOrient: 'vertical'
 });
 
 interface Props {
@@ -95,32 +54,12 @@ export default function SearchPage(props: Props) {
 
   return (
     <Container>
-      <ResultWrapper>
-        <TitleContainer>
-          <Title>{`검색 결과 ${searchResults.length}건`}</Title>
-        </TitleContainer>
-        <PostWrapper>
-          {searchResults.map((result) => {
-            const createdAt = new Date(result.post.createdAt);
-            return (
-              <Link key={result.post._id} href={`/post/${result.post._id}`} passHref>
-                <a style={{ width: '100%' }}>
-                  <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
-                    <Content>
-                      <PostTitle>{result.post.title}</PostTitle>
-                      <CreatedAt>{FormatUnifier.getFullFormatDate(createdAt)}</CreatedAt>
-                      <Article>
-                        <Reset />
-                        <ReactMarkDown>{result.content}</ReactMarkDown>
-                      </Article>
-                    </Content>
-                  </BorderBox>
-                </a>
-              </Link>
-            );
-          })}
-        </PostWrapper>
-      </ResultWrapper>
+      <Wrapper>
+        <CountContainer>
+          <Count>{`검색 결과 ${searchResults.length}건`}</Count>
+        </CountContainer>
+        <ResultContainer searchResults={searchResults} />
+      </Wrapper>
     </Container>
   );
 }

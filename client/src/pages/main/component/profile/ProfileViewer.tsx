@@ -12,8 +12,6 @@ import { ProfileType, UPDATE_PROFILE } from 'src/query/profile';
 import { Lang, trans } from 'src/resources/languages';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
-import { FileType, UPLOAD_FILE } from 'src/query/file';
-import { useApollo } from 'src/apollo/apolloClient';
 
 const Name = styled.span({
   display: 'block',
