@@ -1,7 +1,9 @@
 import React, { useState, useRef } from 'react';
 import styled, { keyframes, css } from 'styled-components';
-import { InferGetServerSidePropsType, NextPageContext } from 'next';
 import { useSelector } from 'react-redux';
+import { InferGetServerSidePropsType, NextPageContext } from 'next';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSwatchbook } from '@fortawesome/free-solid-svg-icons';
 
 import { useWidth, FocusWrapper } from 'src/components';
 import { theme } from 'src/styles';
@@ -47,55 +49,30 @@ const ContentContainer = styled.div<{ themeMode: ThemeMode }>((props) => ({
   }
 }));
 
-const Index = styled.div({
-  display: 'none',
-  '@media screen and (max-width: 767px)': {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(0,0,0,.125)',
-    width: '7%',
-    position: 'sticky',
-    top: 'calc(5rem + 20px)',
-    height: '120px',
-    borderRadius: '0 .5rem .5rem 0',
-    maxWidth: '30px',
-    minWidth: '18px'
-  }
-});
-
-const StyledP = styled.p({
-  display: 'inline-block',
-  transform: 'rotate(90deg)',
-  color: '#222324',
-  fontWeight: 'bold',
-  flexShrink: 0
-});
-
-const FadeOut = keyframes({
+const Rotate = keyframes({
   from: {
-    opacity: 1
+    transform: 'rotate(25deg)'
   },
   to: {
-    opacity: 0
+    transform: 'rotate(-25deg)'
   }
 });
 
-const Alert = styled.div(
-  {
-    position: 'fixed',
-    top: '50%',
-    width: '150px',
-    height: '150px',
-    backgroundColor: 'rgba(0,0,0,.8)',
-    color: '#f1f2f3',
-    padding: '.5rem',
-    borderRadius: '.5rem',
+const PostCategoryMobileButton = styled.button<{ themeMode: ThemeMode; holdingButton: boolean }>(
+  (props) => ({
     display: 'flex',
-    alignItems: 'center'
-  },
-  css`
-    animation: 2.5s ${FadeOut} 1s forwards;
+    position: 'fixed',
+    bottom: '1.5rem',
+    right: '1.5rem',
+    padding: '.85rem',
+    borderRadius: '50%',
+    backgroundColor: theme[props.themeMode].secondaryContentBackground,
+    boxShadow: `0 6px 3px -3px ${theme[props.themeMode].shadowColor}`,
+    alignItems: 'center',
+    justifyContent: 'center'
+  }),
+  css<{ holdingButton: boolean }>`
+    animation: ${(props) => props.holdingButton && Rotate} 0.2s infinite alternate linear;
   `
 );
 
@@ -120,40 +97,35 @@ export default function PostId(props: Props) {
   let touchEndY: number;
 
   const width = useWidth();
-  const isAlerted = useRef<boolean>(false);
+  const buttonRef = useRef<HTMLButtonElement>(null);
   const [showPostCategory, setShowPostCategory] = useState(false);
+  const [isHoldingButton, setIsHoldingButton] = useState(false);
 
-  function handleTouchStart(event: React.TouchEvent) {
-    if (width <= 767) {
-      const touch = event.touches[0];
-      touchStartX = touch.clientX;
-      touchStartY = touch.clientY;
+  function handleTouchStart(event: React.TouchEvent<HTMLButtonElement>) {
+    event.preventDefault();
+    // setTimeout(() => setIsHoldingButton(true), 1000);
+  }
+
+  function handleTouchMove(event: React.TouchEvent<HTMLButtonElement>) {
+    const newX = event.touches[0].clientX;
+    const newY = event.touches[0].clientY;
+    if (isHoldingButton && buttonRef.current) {
+      buttonRef.current.style.left = `${newX}px`;
+      buttonRef.current.style.top = `${newY}px`;
     }
   }
 
-  function handleTouchEnd(event: React.TouchEvent) {
-    if (width <= 767) {
-      const touch = event.changedTouches[event.changedTouches.length - 1];
-      touchEndX = touch.clientX;
-      touchEndY = touch.clientY;
-
-      const touchOffsetX = touchEndX - touchStartX;
-      const touchOffsetY = touchEndY - touchStartY;
-
-      if (Math.abs(touchOffsetX) >= 50 && Math.abs(touchOffsetY) <= 20) {
-        if (touchOffsetX > 0) {
-          setShowPostCategory(true);
-        } else {
-          setShowPostCategory(false);
-        }
-      }
+  function handleTouchEnd(event: React.TouchEvent<HTMLButtonElement>) {
+    // event.preventDefault();
+    if (isHoldingButton) {
+      setIsHoldingButton(false);
     }
   }
 
   return (
     <Container
-      onTouchStart={(event: React.TouchEvent) => handleTouchStart(event)}
-      onTouchEnd={(event: React.TouchEvent) => handleTouchEnd(event)}
+    // onTouchStart={(event: React.TouchEvent) => handleTouchStart(event)}
+    // onTouchEnd={(event: React.TouchEvent) => handleTouchEnd(event)}
     >
       {width > 767 ? (
         <PostCategory category={category} titles={titles} currentPostId={post._id} isLogin={props.app.isLogin} />
@@ -167,11 +139,19 @@ export default function PostId(props: Props) {
         <CommentContainer comments={comments} isLogin={props.app.isLogin} author={author} />
       </ContentContainer>
       <ContentNavigation />
-      {/* TODO: Alert shows only first... */}
-      {width <= 767 && !isAlerted.current.valueOf() && (
-        <Alert onAnimationEnd={() => (isAlerted.current = true)}>
-          <p style={{ fontSize: '1.3rem' }}>Swipe LEFT to RIGHT to show list</p>
-        </Alert>
+      {width <= 767 && !showPostCategory && (
+        <PostCategoryMobileButton
+          themeMode={themeMode}
+          holdingButton={isHoldingButton}
+          onClick={() => setShowPostCategory(true)}
+          onTouchStart={(e) => {
+            handleTouchStart(e);
+          }}
+          onTouchMove={(e) => handleTouchMove(e)}
+          onTouchEnd={(e) => handleTouchEnd(e)}
+        >
+          <FontAwesomeIcon icon={faSwatchbook} />
+        </PostCategoryMobileButton>
       )}
     </Container>
   );

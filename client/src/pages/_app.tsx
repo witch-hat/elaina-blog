@@ -9,7 +9,7 @@ import '@fortawesome/fontawesome-svg-core/styles.css';
 import setCookie from 'set-cookie-parser';
 import { useTranslation } from 'react-i18next';
 
-import Layout from 'src/components/Layout';
+import { Layout } from 'src/components/Layout';
 import { store, persistor } from 'src/redux';
 import { IS_AUTH } from 'src/query/user';
 
