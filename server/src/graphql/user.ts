@@ -89,11 +89,6 @@ export const userResolver = {
       const browserName = ua.getBrowser().name;
       const userUniqueId = mac.mac + mac.ipv4 + browserName;
 
-      // browser name undefined error
-      if (browserName === 'undefined') {
-        throw new Error('browser name undefined');
-      }
-
       const cookies = new Cookies(context.req, context.res);
       const accessToken = cookies.get('a_access');
       const refreshToken = cookies.get('a_refresh');
@@ -137,14 +132,18 @@ export const userResolver = {
 
               const hashedRefreshToken = await bcrypt.hash(refreshToken, saltRounds);
               cookies.set('a_refresh', hashedRefreshToken, {
-                httpOnly: false
+                httpOnly: true,
+                sameSite: 'strict',
+                secure: false
               });
 
               me.auth[authIndex].refreshToken = refreshToken;
               me.save();
 
               cookies.set('a_access', accessToken, {
-                httpOnly: false
+                httpOnly: true,
+                sameSite: 'strict',
+                secure: false
               });
 
               // context.res.getHeader('set-cookie') return Array<string> type
@@ -229,14 +228,16 @@ export const userResolver = {
               .hash(refreshToken, saltRounds)
               .then((hashedRefreshToken) => {
                 cookies.set('a_refresh', hashedRefreshToken, {
-                  httpOnly: false,
+                  httpOnly: true,
+                  sameSite: 'strict',
                   secure: false
                 });
               })
               .catch((err) => console.error(err));
 
             cookies.set('a_access', accessToken, {
-              httpOnly: false,
+              httpOnly: true,
+              sameSite: 'strict',
               secure: false
             });
 
