@@ -18,6 +18,14 @@ import { IS_AUTH } from 'src/query/user';
 
 import { ProfileImageCropper } from './ProfileImageCropper';
 
+const ImageContainer = styled.div({
+  poisition: 'relative',
+  display: 'flex',
+  width: '100%',
+  alignItems: 'center',
+  justifyContent: 'center'
+});
+
 const ChangeImageButton = styled.label<{ themeMode: ThemeMode }>((props) => ({
   display: 'flex',
   alignItems: 'center',
@@ -218,7 +226,7 @@ export function ProfileEditForm(props: Props) {
 
   return (
     <>
-      <div style={{ position: 'relative', width: '100%' }}>
+      <ImageContainer>
         <RoundImage
           src={editingProfile.image}
           alt='Profile Image'
@@ -226,7 +234,7 @@ export function ProfileEditForm(props: Props) {
             borderRadius: '50%',
             width: '280px',
             height: '280px',
-            medium: { width: '280px', height: '280px' },
+            medium: { width: '100%', height: '100%' },
             small: { width: '200px', height: '200px' }
           }}
         />
@@ -235,7 +243,7 @@ export function ProfileEditForm(props: Props) {
           Edit
         </ChangeImageButton>
         <FileSelector type='file' id='profile-select' accept='image/x-png,image/jpeg' onChange={(e) => selectImage(e)} />
-      </div>
+      </ImageContainer>
       <Form
         id='profile-form'
         onSubmit={async (event: React.FormEvent<HTMLFormElement>) => {

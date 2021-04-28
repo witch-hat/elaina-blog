@@ -13,6 +13,14 @@ import { Lang, trans } from 'src/resources/languages';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 
+const ImageContainer = styled.div({
+  poisition: 'relative',
+  display: 'flex',
+  width: '100%',
+  alignItems: 'center',
+  justifyContent: 'center'
+});
+
 const Name = styled.span({
   display: 'block',
   fontSize: '1.4rem',
@@ -104,7 +112,7 @@ export function ProfileViewer(props: Props) {
 
   return (
     <>
-      <div style={{ position: 'relative', width: '100%' }}>
+      <ImageContainer>
         <RoundImage
           src={props.profile.image}
           alt='Profile Image'
@@ -112,11 +120,11 @@ export function ProfileViewer(props: Props) {
             borderRadius: '50%',
             width: '280px',
             height: '280px',
-            medium: { width: '280px', height: '280px' },
+            medium: { width: '100%', height: '100%' },
             small: { width: '200px', height: '200px' }
           }}
         />
-      </div>
+      </ImageContainer>
       <Name>{props.profile.name}</Name>
       <ListWrapper>
         <Description>
