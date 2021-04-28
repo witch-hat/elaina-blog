@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
@@ -49,6 +49,7 @@ export function SearchMenu(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   const router = useRouter();
+  const SearchRef = useRef<HTMLInputElement>(null);
   const [searchKeyword, setSearchKeyWord] = useState('');
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -60,11 +61,13 @@ export function SearchMenu(props: Props) {
     }
 
     router.push({ pathname: '/search', query: { word: searchKeyword } });
+    SearchRef.current && (SearchRef.current.value = '');
   }
 
   return (
     <SearchForm onSubmit={(e: React.FormEvent<HTMLFormElement>) => handleSubmit(e)}>
       <InputBox
+        ref={SearchRef}
         type='text'
         placeholder={trans(Lang.Search)}
         id='search'
