@@ -111,29 +111,34 @@ export const postResolver = {
         }
 
         const posts: Post[] = await PostModel.find({}, {}, { sort: { _id: -1 } });
-        const ignoreCaseRegex = RegExp(args.keyword, 'i');
+        const keyword = RegExp(args.keyword, 'i');
 
         const searchResult: { post: Post; content: string }[] = [];
 
         posts.forEach((post) => {
-          // filter images, bar ...etc
-          const ignore = new RegExp(/^(!|\[|--|==)/);
+          // filter images,  bar ...etc
+          const ignore = new RegExp(/!\[[^\]]*\]\((.*?)\s*("(?:.*[^"])")?\s*\)/);
 
-          if (post.title.match(ignoreCaseRegex)) {
+          if (post.title.match(keyword)) {
             const content = post.article
               .split('\n')
               .filter((sentence) => {
                 return !sentence.trim().match(ignore);
               })
               .join(' ');
+
             return searchResult.push({ post, content });
           }
 
-          if (post.article.match(ignoreCaseRegex)) {
-            // TODO...Highlighting
-            const keywordIncludedPart = '';
+          if (post.article.match(keyword)) {
+            const content = post.article
+              .split('\n')
+              .filter((sentence) => {
+                return !sentence.trim().match(ignore);
+              })
+              .join(' ');
 
-            return searchResult.push({ post, content: post.article });
+            return searchResult.push({ post, content });
           }
         });
 
