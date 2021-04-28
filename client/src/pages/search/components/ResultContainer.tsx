@@ -18,7 +18,15 @@ export function ResultContainer(props: Props) {
     <Container>
       {props.searchResults.map((result) => {
         const createdAt = new Date(result.post.createdAt);
-        return <ResultItem key={`${result.post._id}`} title={result.post.title} createdAt={createdAt} article={result.content} />;
+        return (
+          <ResultItem
+            key={`${result.post._id}`}
+            id={result.post._id}
+            title={result.post.title}
+            createdAt={createdAt}
+            article={result.content}
+          />
+        );
       })}
     </Container>
   );

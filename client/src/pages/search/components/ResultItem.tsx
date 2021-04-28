@@ -45,7 +45,7 @@ const Article = styled.div(
 );
 
 interface Props {
-  key: string;
+  id: number;
   title: string;
   createdAt: Date;
   article: string;
@@ -53,7 +53,7 @@ interface Props {
 
 export function ResultItem(props: Props) {
   return (
-    <Link key={props.key} href={`/post/${props.key}`} passHref>
+    <Link href={`/post/${props.id}`} passHref>
       <a style={{ width: '100%' }}>
         <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
           <Content>
