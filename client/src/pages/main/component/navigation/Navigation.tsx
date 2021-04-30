@@ -33,7 +33,7 @@ function NavigationIcon(props: IconProps) {
 
 interface Props {}
 
-export function CategoryNavigation(props: Props) {
+export function Navigation(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   const router = useRouter();

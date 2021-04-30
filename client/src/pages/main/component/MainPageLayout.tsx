@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { CategoryNavigation } from './CategoryNavigation';
+import { Navigation } from './navigation/Navigation';
 import { ProfileContainer } from './profile/ProfileContainer';
 
 const Container = styled.div({
@@ -43,7 +43,7 @@ export function MainPageLayout(props: Props) {
     <Container>
       <ProfileContainer profile={props.profile} isLogin={props.isLogin} />
       <Wrapper>
-        <CategoryNavigation />
+        <Navigation />
         {props.children}
       </Wrapper>
     </Container>
