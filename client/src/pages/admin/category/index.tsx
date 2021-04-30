@@ -1,24 +1,16 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { NextPageContext } from 'next';
 import { useSelector } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGripVertical, faPen, faTrash, faSave, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
-import { useMutation } from '@apollo/client';
-import cloneDeep from 'lodash/cloneDeep';
 
-import { BorderBox, AlertBox, AlertStateType } from 'src/components';
 import { theme } from 'src/styles';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
-import { CircleRippleWrapper } from 'src/components/common/wrapper/CircleRippleWrapper';
 import { initApolloClient } from 'src/apollo/withApollo';
 import { appCommponProps, AppCommonProps } from 'src/pages/_app';
 import { CategoryDetails, GET_CATEGORY, ORDER_CATEGORY, UPDATE_CATEGORY } from 'src/query/category';
 
 import { AdminPageLayout } from '../component/AdminPageLayout';
-import { DeleteCategoryModal } from './component/DeleteCategoryModal';
-import { AddCategoryModal } from './component/AddCategoryModal';
 import { CategoryContainer } from './component/CategoryContainer';
 
 const Container = styled.div({
