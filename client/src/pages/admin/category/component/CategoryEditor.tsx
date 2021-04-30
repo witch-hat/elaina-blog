@@ -19,6 +19,20 @@ const Container = styled.div({
   alignItems: 'center'
 });
 
+const MenuContainer = styled.div({
+  display: 'flex',
+  padding: '4px 8px 0px 8px',
+  flex: 1,
+  flexDirection: 'row',
+  justifyContent: 'flex-end'
+});
+
+const Wrapper = styled.div({
+  display: 'flex',
+  flexDirection: 'column',
+  flex: 1
+});
+
 const Content = styled.div({
   display: 'flex',
   justifyContent: 'center',
@@ -121,8 +135,8 @@ export function CategoryEditor(props: Props) {
   return (
     <Container key={props.categories[props.index].title}>
       <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', padding: '4px 8px 0px 8px' }}>
+        <Wrapper>
+          <MenuContainer>
             <CircleRippleWrapper onClick={save}>
               <FontAwesomeIcon icon={faSave} style={{ fontSize: '1.25rem' }} />
             </CircleRippleWrapper>
@@ -133,7 +147,7 @@ export function CategoryEditor(props: Props) {
             >
               <FontAwesomeIcon icon={faTimesCircle} style={{ fontSize: '1.25rem' }} />
             </CircleRippleWrapper>
-          </div>
+          </MenuContainer>
           <Content>
             <PreviewTextWrapper>
               <Input type='text' ref={titleEditInput} themeMode={themeMode} defaultValue={props.categories[props.index].title} />
@@ -146,7 +160,7 @@ export function CategoryEditor(props: Props) {
             </PreviewTextWrapper>
             <PreviewImage src={props.categories[props.index].previewImage} alt='preview image' />
           </Content>
-        </div>
+        </Wrapper>
       </BorderBox>
     </Container>
   );

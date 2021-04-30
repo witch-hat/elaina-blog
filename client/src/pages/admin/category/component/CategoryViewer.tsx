@@ -17,6 +17,13 @@ const Container = styled.div({
   width: '100%',
   alignItems: 'center'
 });
+
+const Wrapper = styled.div({
+  display: 'flex',
+  flexDirection: 'column',
+  flex: 1
+});
+
 const Content = styled.div({
   display: 'flex',
   justifyContent: 'center',
@@ -24,6 +31,14 @@ const Content = styled.div({
   width: '100%',
   padding: '.8rem',
   height: '10rem'
+});
+
+const MenuContainer = styled.div({
+  display: 'flex',
+  padding: '4px 8px 0px 8px',
+  flex: 1,
+  flexDirection: 'row',
+  justifyContent: 'flex-end'
 });
 
 const PreviewImage = styled.img({
@@ -157,8 +172,8 @@ export function CategoryViewer(props: Props) {
       onDrop={(e: React.DragEvent<HTMLDivElement>) => props.grabbingCategoryIndex > -1 && onDrop(e)}
     >
       <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', padding: '4px 8px 0px 8px' }}>
+        <Wrapper>
+          <MenuContainer>
             <CircleRippleWrapper
               onClick={() => {
                 props.setEditingCategoryIndex(props.index);
@@ -192,7 +207,7 @@ export function CategoryViewer(props: Props) {
                 <FontAwesomeIcon icon={faGripVertical} style={{ fontSize: '1.25rem' }} />
               </CircleRippleWrapper>
             </GrabButtonContainer>
-          </div>
+          </MenuContainer>
           <Content>
             <PreviewTextWrapper>
               <PreviewTitle>{props.categories[props.index].title}</PreviewTitle>
@@ -200,7 +215,7 @@ export function CategoryViewer(props: Props) {
             </PreviewTextWrapper>
             <PreviewImage src={props.categories[props.index].previewImage} alt='preview image' />
           </Content>
-        </div>
+        </Wrapper>
       </BorderBox>
     </Container>
   );
