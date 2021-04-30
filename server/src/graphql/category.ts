@@ -142,7 +142,8 @@ export const categoryResolver = {
         }
 
         const categoryList: Category[] = await CategoryModel.find();
-        if (categoryList.find((category) => category.title === args.title)) throw new ValidationError('이미 존재하는 제목입니다.');
+        if (categoryList.find((category) => category._id !== args.id && category.title === args.title))
+          throw new ValidationError('이미 존재하는 제목입니다.');
 
         await CategoryModel.updateOne(
           {
