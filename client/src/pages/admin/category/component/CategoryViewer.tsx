@@ -85,7 +85,6 @@ const GrabButtonContainer = styled.div({
 
 interface Props {
   categories: CategoryDetails[];
-  category: CategoryDetails;
   index: number;
   grabbingCategoryIndex: number;
   grabbedElement: (EventTarget & HTMLDivElement) | null;
@@ -149,7 +148,7 @@ export function CategoryViewer(props: Props) {
 
   return (
     <Container
-      key={props.category.title}
+      key={props.categories[props.index].title}
       data-position={props.index}
       draggable={props.grabbingCategoryIndex === props.index}
       onDragOver={(e: React.DragEvent<HTMLDivElement>) => onDragOver(e)}
@@ -167,7 +166,7 @@ export function CategoryViewer(props: Props) {
             >
               <FontAwesomeIcon icon={faPen} style={{ fontSize: '1.25rem' }} />
             </CircleRippleWrapper>
-            {props.category._id > 0 && (
+            {props.categories[props.index]._id > 0 && (
               <CircleRippleWrapper
                 onClick={() => {
                   props.setDeletedCategory({ isModalOpen: true, index: props.index });
@@ -196,10 +195,10 @@ export function CategoryViewer(props: Props) {
           </div>
           <Content>
             <PreviewTextWrapper>
-              <PreviewTitle>{props.category.title}</PreviewTitle>
-              <PreviewContent>{props.category.description}</PreviewContent>
+              <PreviewTitle>{props.categories[props.index].title}</PreviewTitle>
+              <PreviewContent>{props.categories[props.index].description}</PreviewContent>
             </PreviewTextWrapper>
-            <PreviewImage src={props.category.previewImage} alt='preview image' />
+            <PreviewImage src={props.categories[props.index].previewImage} alt='preview image' />
           </Content>
         </div>
       </BorderBox>

@@ -47,7 +47,6 @@ export function CategoryContainer(props: Props) {
             return (
               <CategoryEditor
                 categories={categories}
-                category={category}
                 index={index}
                 initAlertState={initAlertState}
                 setAlertState={setAlertState}
@@ -59,7 +58,6 @@ export function CategoryContainer(props: Props) {
             return (
               <CategoryViewer
                 categories={categories}
-                category={category}
                 index={index}
                 grabbingCategoryIndex={grabbingCategoryIndex}
                 grabbedElement={grabbedElement}

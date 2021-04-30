@@ -64,7 +64,6 @@ const Input = styled.input<{ themeMode: ThemeMode }>((props) => ({
 
 interface Props {
   categories: CategoryDetails[];
-  category: CategoryDetails;
   index: number;
   initAlertState: AlertStateType;
   setCategories: React.Dispatch<React.SetStateAction<CategoryDetails[]>>;
@@ -87,7 +86,7 @@ export function CategoryEditor(props: Props) {
       if (titleEditInput.current && descriptionEditInput.current) {
         await updateCategory({
           variables: {
-            id: props.category._id,
+            id: props.categories[props.index]._id,
             title: titleEditInput.current?.value,
             description: descriptionEditInput.current?.value
           }
@@ -120,7 +119,7 @@ export function CategoryEditor(props: Props) {
   }
 
   return (
-    <Container key={props.category.title}>
+    <Container key={props.categories[props.index].title}>
       <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
           <div style={{ flex: 1, display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', padding: '4px 8px 0px 8px' }}>
@@ -137,10 +136,15 @@ export function CategoryEditor(props: Props) {
           </div>
           <Content>
             <PreviewTextWrapper>
-              <Input type='text' ref={titleEditInput} themeMode={themeMode} defaultValue={props.category.title} />
-              <Input type='text' ref={descriptionEditInput} themeMode={themeMode} defaultValue={props.category.description} />
+              <Input type='text' ref={titleEditInput} themeMode={themeMode} defaultValue={props.categories[props.index].title} />
+              <Input
+                type='text'
+                ref={descriptionEditInput}
+                themeMode={themeMode}
+                defaultValue={props.categories[props.index].description}
+              />
             </PreviewTextWrapper>
-            <PreviewImage src={props.category.previewImage} alt='preview image' />
+            <PreviewImage src={props.categories[props.index].previewImage} alt='preview image' />
           </Content>
         </div>
       </BorderBox>
