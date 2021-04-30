@@ -163,7 +163,6 @@ export function CategoryViewer(props: Props) {
 
   return (
     <Container
-      key={props.categories[props.index].title}
       data-position={props.index}
       draggable={props.grabbingCategoryIndex === props.index}
       onDragOver={(e: React.DragEvent<HTMLDivElement>) => onDragOver(e)}

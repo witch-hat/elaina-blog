@@ -133,7 +133,7 @@ export function CategoryEditor(props: Props) {
   }
 
   return (
-    <Container key={props.categories[props.index].title}>
+    <Container>
       <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
         <Wrapper>
           <MenuContainer>

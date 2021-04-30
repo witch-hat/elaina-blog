@@ -35,6 +35,7 @@ export function CategoryContainer(props: Props) {
           if (index === editingCategoryIndex) {
             return (
               <CategoryEditor
+                key={category.title}
                 categories={categories}
                 index={index}
                 initAlertState={initAlertState}
@@ -46,6 +47,7 @@ export function CategoryContainer(props: Props) {
           } else {
             return (
               <CategoryViewer
+                key={category.title}
                 categories={categories}
                 index={index}
                 grabbingCategoryIndex={grabbingCategoryIndex}
