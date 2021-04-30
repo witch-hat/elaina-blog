@@ -79,7 +79,7 @@ function UnlinkedCategory(props: Props) {
         <PreviewTextWrapper>
           <PreviewTitle>{props.category.title}</PreviewTitle>
           <PreviewContent>{props.category.description}</PreviewContent>
-          <ContentCategoryDetails count={props.category.postCount} />
+          <ContentCategoryDetails time={props.category.recentCreatedAt} count={props.category.postCount} />
         </PreviewTextWrapper>
         <PreviewImage src={props.category.previewImage} alt={`${props.category.title} preview image`} />
       </Content>

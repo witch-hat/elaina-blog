@@ -24,18 +24,16 @@ const PostCount = styled.span({
 });
 
 interface Props {
-  time?: string;
+  time: Date | null;
   count: number;
 }
 
 export function ContentCategoryDetails(props: Props) {
-  const latestCreatedTime = new Date(props.time as string);
-
   return (
     <Container>
       <LatestTime>
         <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
-        <p>{props.time ? FormatUnifier.getFullFormatDate(latestCreatedTime) : 'None'}</p>
+        <p>{props.time !== null ? FormatUnifier.getFullFormatDate(new Date(props.time)) : 'None'}</p>
       </LatestTime>
       <PostCount>
         <FontAwesomeIcon icon={faBook} style={{ marginRight: '5px' }} />
