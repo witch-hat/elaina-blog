@@ -137,7 +137,7 @@ export function PostCategory(props: Props) {
       <TitleContainer>
         {props.titles.map(({ title, _id }) => {
           return (
-            <TitleList key={title}>
+            <TitleList key={`${title}${_id}`}>
               <Link href={`/post/${_id}`} passHref>
                 <Title bold={props.currentPostId === _id}>{title}</Title>
               </Link>
