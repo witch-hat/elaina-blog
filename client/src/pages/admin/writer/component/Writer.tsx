@@ -8,7 +8,7 @@ import gfm from 'remark-gfm';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 
-import { InputBox, useWidth, FocusWrapper } from 'src/components';
+import { InputBox, useWidth, FocusWrapper, Loading } from 'src/components';
 import { theme } from 'src/styles';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
@@ -108,11 +108,12 @@ const ButtonContainer = styled.div({
   margin: '.5rem 0'
 });
 
-const WriteButton = styled.button<{ themeMode: ThemeMode }>((props) => ({
+const WriteButton = styled.button<{ themeMode: ThemeMode; available: boolean }>((props) => ({
   padding: '.5rem',
   borderRadius: '.5rem',
   backgroundColor: theme[props.themeMode].submitButtonColor,
-  color: '#f1f2f3'
+  color: '#f1f2f3',
+  cursor: props.available ? 'pointer' : 'not-allowed'
 }));
 
 function Text(props: { children?: string }) {
@@ -147,10 +148,11 @@ export function Writer(props: Props) {
   const [article, setArticle] = useState<string>('');
   const [isListOpen, setIsListOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(DEFAULT_CATEGORY);
+  const [visibleSubmitBtn, setVisibleSubmitBtn] = useState(true);
 
   const client = useApollo();
-  const [writePost] = useMutation(WRITE_POST);
-  const [editPost] = useMutation(EDIT_POST);
+  const [writePost, { loading: writeLoading }] = useMutation(WRITE_POST);
+  const [editPost, { loading: editLoading }] = useMutation(EDIT_POST);
 
   useEffect(() => {
     if (mode == Mode.write) {
@@ -204,6 +206,8 @@ export function Writer(props: Props) {
   }
 
   async function handleCreatePost() {
+    setVisibleSubmitBtn(false);
+
     if (selectedCategory === DEFAULT_CATEGORY) {
       window.scrollTo(0, 0);
       alert('카테고리를 선택해 주세요');
@@ -242,6 +246,8 @@ export function Writer(props: Props) {
         }
       });
 
+      setTitle('');
+      setArticle('');
       router.push(`/post/${mutateData.data.writePost._id}`);
     } catch (err) {
       alert(err.message);
@@ -249,6 +255,8 @@ export function Writer(props: Props) {
   }
 
   async function handleEditPost() {
+    setVisibleSubmitBtn(false);
+
     if (!title) {
       window.scrollTo(0, 0);
       titleRef.current?.focus();
@@ -279,6 +287,10 @@ export function Writer(props: Props) {
     } catch (err) {
       alert(err.message);
     }
+  }
+
+  if (writeLoading || editLoading) {
+    return <Loading />;
   }
 
   return (
@@ -336,7 +348,15 @@ export function Writer(props: Props) {
               <Text></Text>
             </Editor>
             <ButtonContainer>
-              <WriteButton themeMode={themeMode} onClick={props.isEdit ? () => handleEditPost() : () => handleCreatePost()}>
+              <WriteButton
+                themeMode={themeMode}
+                available={visibleSubmitBtn}
+                onClick={() => {
+                  if (visibleSubmitBtn) {
+                    props.isEdit ? handleEditPost() : handleCreatePost();
+                  }
+                }}
+              >
                 {props.isEdit ? '수정' : '글쓰기'}
               </WriteButton>
             </ButtonContainer>

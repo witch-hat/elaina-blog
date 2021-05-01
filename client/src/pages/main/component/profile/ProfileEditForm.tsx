@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBuilding, faCamera, faEnvelope, faLink, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
-import { RoundImage, AlertStateType } from 'src/components';
+import { RoundImage, AlertStateType, Loading } from 'src/components';
 import { theme } from 'src/styles';
 import { ProfileType, UPDATE_PROFILE } from 'src/query/profile';
 import { Lang, trans } from 'src/resources/languages';
@@ -149,7 +149,7 @@ export function ProfileEditForm(props: Props) {
 
   const client = useApollo();
   const [uploadFile] = useMutation<{ uploadFile: FileType }>(UPLOAD_FILE);
-  const [updateProfile] = useMutation<{ updateProfile: ProfileType }>(UPDATE_PROFILE);
+  const [updateProfile, { loading: updateLoading }] = useMutation<{ updateProfile: ProfileType }>(UPDATE_PROFILE);
 
   function selectImage(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files) {
@@ -222,6 +222,10 @@ export function ProfileEditForm(props: Props) {
       props.setEditMode(false);
       setEditingProfile(props.profile);
     }
+  }
+
+  if (updateLoading) {
+    return <Loading />;
   }
 
   return (

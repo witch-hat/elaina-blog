@@ -17,6 +17,7 @@ declare module 'styled-components' {
       dangerButtonColor: string;
       adminCommentColor: string;
       adminReplyColor: string;
+      loadingBackground: string;
       // Text Color
       blogName: string;
       mainText: string;

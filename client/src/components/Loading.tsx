@@ -1,18 +1,24 @@
 import React from 'react';
 import styled, { keyframes, css } from 'styled-components';
+import { useSelector } from 'react-redux';
 
-const Container = styled.div({
+import { theme } from 'src/styles';
+import { RootState } from 'src/redux/rootReducer';
+import { ThemeMode } from 'src/redux/common/type';
+
+const Container = styled.div<{ themeMode: ThemeMode }>((props) => ({
   position: 'fixed',
+  display: 'flex',
   top: '0',
   left: '0',
   bottom: '0',
   right: '0',
   width: '100vw',
   height: '100vh',
-  display: 'flex',
+  backgroundColor: theme[props.themeMode].loadingBackground,
   justifyContent: 'center',
   alignItems: 'center'
-});
+}));
 
 const RotateAnimation = keyframes({
   from: {
@@ -36,8 +42,10 @@ const RotatingIcon = styled.span(
 );
 
 export function Loading() {
+  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+
   return (
-    <Container>
+    <Container themeMode={themeMode}>
       <RotatingIcon>
         <i className='fas fa-spinner'></i>
       </RotatingIcon>
