@@ -72,7 +72,7 @@ export const postResolver = {
     async findPostByUrl(_: any, args: { requestUrl: string }, context: ContextType) {
       try {
         const parsedUrl = Number.parseInt(args.requestUrl);
-        const findedPost = PostModel.findOne({ _id: parsedUrl });
+        const findedPost = await PostModel.findOne({ _id: parsedUrl });
         return findedPost;
       } catch (err) {
         throw err;
@@ -81,11 +81,11 @@ export const postResolver = {
 
     async findSameCategoryPosts(_: any, args: { categoryId: number }, context: ContextType) {
       try {
-        const sameCategoryPosts: Post[] = PostModel.find({ categoryId: args.categoryId });
-        const categoryFindResult = CategoryModel.findById(args.categoryId);
+        const sameCategoryPosts: Post[] = await PostModel.find({ categoryId: args.categoryId });
+        const categoryFindResult = await CategoryModel.findById(args.categoryId);
 
         return {
-          post: sameCategoryPosts,
+          post: sameCategoryPosts.reverse(),
           category: categoryFindResult
         };
       } catch (err) {
@@ -164,7 +164,7 @@ export const postResolver = {
 
         CommentModel.create({ _id });
 
-        const result = PostModel.create({ _id, title: args.title, createdAt: args.createdAt, categoryId, article: args.article });
+        const result = await PostModel.create({ _id, title: args.title, createdAt: args.createdAt, categoryId, article: args.article });
         return result;
       } catch (err) {
         throw err;
