@@ -211,6 +211,7 @@ export function Writer(props: Props) {
     if (selectedCategory === DEFAULT_CATEGORY) {
       window.scrollTo(0, 0);
       alert('카테고리를 선택해 주세요');
+      setVisibleSubmitBtn(true);
       return;
     }
 
@@ -218,12 +219,14 @@ export function Writer(props: Props) {
       window.scrollTo(0, 0);
       titleRef.current?.focus();
       alert('제목을 입력해주세요');
+      setVisibleSubmitBtn(true);
       return;
     }
 
     if (!article) {
       editor.current?.focus();
       alert('본문을 1글자 이상 써주세요');
+      setVisibleSubmitBtn(true);
       return;
     }
 
@@ -246,8 +249,6 @@ export function Writer(props: Props) {
         }
       });
 
-      setTitle('');
-      setArticle('');
       router.push(`/post/${mutateData.data.writePost._id}`);
     } catch (err) {
       alert(err.message);

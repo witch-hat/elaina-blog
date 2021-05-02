@@ -15,7 +15,7 @@ const Container = styled.main({
   maxWidth: '1300px',
   minHeight: 'calc(100vh - 4rem)',
   padding: '20px 0 0',
-  margin: '5rem auto 0',
+  margin: '4rem auto 0',
   '@media screen and (max-width: 1380px)': {
     width: '100%',
     padding: '20px 10px 0'
