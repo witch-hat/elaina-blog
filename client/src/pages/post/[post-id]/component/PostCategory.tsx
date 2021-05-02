@@ -101,8 +101,8 @@ const TitleContainer = styled.ul({
 const TitleList = styled.li<{ currentNav: boolean }>((props) => ({
   width: '100%',
   padding: '.5rem',
-  borderRadius: '0 .5rem .5rem 0',
   borderLeft: props.currentNav ? '2px solid #867dff' : 'none',
+  borderBottom: '1px solid #eee',
   cursor: 'pointer',
   listStyle: 'none',
   fontWeight: props.currentNav ? 'bold' : 'normal',
