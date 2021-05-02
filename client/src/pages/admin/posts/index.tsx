@@ -108,9 +108,8 @@ export default function PostProps(props: Props) {
               
                 return (
                   <PostContainer
-                    key={post.title}
+                    key={`${post.title}${post._id}`}
                     data-position={index}
-                
                   >
                     <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
                       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
