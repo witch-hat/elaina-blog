@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { NextPageContext } from 'next';
+// import { NextPageContext } from 'next';
+import { InferGetServerSidePropsType, NextPageContext } from 'next';
+
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGripVertical, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { useMutation } from '@apollo/client';
 
 import { BorderBox, AlertBox, AlertStateType } from 'src/components';
 import { theme } from 'src/styles';
@@ -13,13 +14,8 @@ import { ThemeMode } from 'src/redux/common/type';
 import { CircleRippleWrapper } from 'src/components/common/wrapper/CircleRippleWrapper';
 import { initApolloClient } from 'src/apollo/withApollo';
 import { appCommponProps, AppCommonProps } from 'src/pages/_app';
-import { CategoryDetails, GET_CATEGORY, ORDER_CATEGORY } from 'src/query/category';
-
-import { GET_POSTS } from 'src/query/post';
-
-
+import { Post, GET_POSTS } from 'src/query/post';
 import { AdminPageLayout } from '../component/AdminPageLayout';
-import { DeleteCategoryModal } from './component/DeleteCategoryModal';
 
 const Container = styled.div({
   width: '100%',
@@ -35,7 +31,7 @@ const AddButton = styled.button<{ themeMode: ThemeMode }>((props) => ({
   color: '#f1f2f3'
 }));
 
-const CategoryContainer = styled.div({
+const PostContainer = styled.div({
   width: '100%',
   display: 'flex',
   alignItems: 'center'
@@ -109,22 +105,45 @@ const Input = styled.input<{ themeMode: ThemeMode }>((props) => ({
   backgroundColor: theme[props.themeMode].inputBackground
 }));
 
+
+
+
+
+
+const ContentContainer = styled.div<{ themeMode: ThemeMode }>((props) => ({
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  borderRadius: '.5rem',
+  backgroundColor: theme[props.themeMode].articleBackground,
+  '@media screen and (max-width: 1380px)': {
+    width: '72%'
+  },
+  '@media screen and (max-width: 767px)': {
+    width: '100%'
+  }
+}));
+
+
+
 interface Props extends AppCommonProps {
-  categories: CategoryDetails[];
+  posts: Post[];
+  author: InferGetServerSidePropsType<typeof getServerSideProps>;
+
 }
 
-export default function Category(props: Props) {
+export default function PostProps(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const initAlertState: AlertStateType = { msg: '', isPop: false, isError: false };
 
   const [grabbedElement, setGrabbedElement] = useState<(EventTarget & HTMLDivElement) | null>(null);
-  const [grabbingCategoryIndex, setGrabbingCategoryIndex] = useState<number>(-1);
-  const [categories, setCategories] = useState<CategoryDetails[]>(props.categories);
-  const [deletedCategory, setDeletedCategory] = useState<{ isModalOpen: boolean; index?: number }>({ isModalOpen: false });
+  const [grabbingPostIndex, setGrabbingCPostIndex] = useState<number>(-1);
+  const [posts, setPosts] = useState<Post[]>(props.posts);
+  const [deletedCategory, setDeletedPost] = useState<{ isModalOpen: boolean; index?: number }>({ isModalOpen: false });
 
   const [alertState, setAlertState] = useState<AlertStateType>(initAlertState);
 
-  const [orderCategory] = useMutation(ORDER_CATEGORY);
+  const author: string = props.author;
 
 
   function onDragStart(e: React.DragEvent<HTMLDivElement>) {
@@ -147,22 +166,18 @@ export default function Category(props: Props) {
     let dropPosition = Number(e.currentTarget.dataset.position);
 
     try {
-      const newCategories = [...categories];
+      const newCategories = [...posts];
       newCategories[grabPosition] = newCategories.splice(dropPosition, 1, newCategories[grabPosition])[0];
 
       setAlertState(initAlertState);
 
-      orderCategory({
-        variables: {
-          ids: newCategories.map((category) => category._id)
-        }
-      });
-      setCategories(newCategories);
-      setGrabbingCategoryIndex(-1);
-    } catch (err) {
-      const backUpCategories = [...categories];
 
-      setCategories(backUpCategories);
+      setPosts(newCategories);
+      setGrabbingCPostIndex(-1);
+    } catch (err) {
+      const backUpCategories = [...posts];
+
+      setPosts(backUpCategories);
       setAlertState({
         msg: err.message,
         isPop: true,
@@ -185,17 +200,17 @@ export default function Category(props: Props) {
                           }
           </div>
           <Container>
-            {categories.map((category, index) => {
+            {posts.map((post, index) => {
               
                 return (
-                  <CategoryContainer
-                    key={category.title}
+                  <PostContainer
+                    key={post.title}
                     data-position={index}
-                    draggable={grabbingCategoryIndex === index}
+                    draggable={grabbingPostIndex === index}
                     onDragOver={(e: React.DragEvent<HTMLDivElement>) => onDragOver(e)}
-                    onDragStart={(e: React.DragEvent<HTMLDivElement>) => grabbingCategoryIndex > -1 && onDragStart(e)}
-                    onDragEnd={(e: React.DragEvent<HTMLDivElement>) => grabbingCategoryIndex > -1 && onDragEnd(e)}
-                    onDrop={(e: React.DragEvent<HTMLDivElement>) => grabbingCategoryIndex > -1 && onDrop(e)}
+                    onDragStart={(e: React.DragEvent<HTMLDivElement>) => grabbingPostIndex > -1 && onDragStart(e)}
+                    onDragEnd={(e: React.DragEvent<HTMLDivElement>) => grabbingPostIndex > -1 && onDragEnd(e)}
+                    onDrop={(e: React.DragEvent<HTMLDivElement>) => grabbingPostIndex > -1 && onDrop(e)}
                   >
                     <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
                       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
@@ -203,10 +218,10 @@ export default function Category(props: Props) {
                           style={{ flex: 1, display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', padding: '4px 8px 0px 8px' }}
                         >
 
-                          {category._id > 0 && (
+                          {post._id > 0 && (
                             <CircleRippleWrapper
                               onClick={() => {
-                                setDeletedCategory({ isModalOpen: true, index });
+                                setDeletedPost({ isModalOpen: true, index });
                               }}
                             >
                               <FontAwesomeIcon icon={faTrash} style={{ fontSize: '1.25rem' }} />
@@ -215,15 +230,15 @@ export default function Category(props: Props) {
                           <GrabButtonContainer
                             onMouseDown={(e: React.MouseEvent<HTMLDivElement>) => {
                               if (e.button === 0) {
-                                setGrabbingCategoryIndex(index);
+                                setGrabbingCPostIndex(index);
                               } else {
-                                setGrabbingCategoryIndex(-1);
+                                setGrabbingCPostIndex(-1);
                               }
                             }}
                             onMouseUp={() => {
-                              setGrabbingCategoryIndex(-1);
+                              setGrabbingCPostIndex(-1);
                             }}
-                            onTouchStart={() => setGrabbingCategoryIndex(index)}
+                            onTouchStart={() => setGrabbingCPostIndex(index)}
                           >
                             <CircleRippleWrapper onClick={() => {}}>
                               <FontAwesomeIcon icon={faGripVertical} style={{ fontSize: '1.25rem' }} />
@@ -232,27 +247,34 @@ export default function Category(props: Props) {
                         </div>
                         <Content>
                           <PreviewTextWrapper>
-                            <PreviewTitle>{category.title}</PreviewTitle>
-                            <PreviewContent>{category.description}</PreviewContent>
+                            <PreviewTitle>{post.title}</PreviewTitle>
+                            <PreviewContent>{post.article}</PreviewContent>
                           </PreviewTextWrapper>
                         </Content>
                       </div>
                     </BorderBox>
-                  </CategoryContainer>
+
+               
+
+                  </PostContainer>
+
+
+
                 );
-              
+
+
             })}
+
+
+
           </Container>
-          <DeleteCategoryModal
-            isDeleteModalOpen={deletedCategory.isModalOpen}
-            setDeletedCategory={setDeletedCategory}
-            index={deletedCategory.index}
-            defaultCategoryTitle={categories.filter((category) => category._id === 0)[0].title}
-            categories={categories}
-            setCategories={setCategories}
-            initAlertState={initAlertState}
-            setAlertState={setAlertState}
-          />
+
+    
+
+
+
+
+
      
         </div>
         {alertState.isPop && (
@@ -282,18 +304,14 @@ export async function getServerSideProps(context: NextPageContext) {
   const client = initApolloClient({}, context);
 
 
-  const { data } = await client.query({ query: GET_CATEGORY });
-  const categories = data.categories;
 
-
-
-  // const { data2 } = await client.query({ query: GET_POSTS });
-  // const posts = data2.posts;
+  const { data } = await client.query({ query: GET_POSTS });
+  const posts = data.posts;
 
 
   return {
     props: {
-      categories
+      posts
       
     }
   };
