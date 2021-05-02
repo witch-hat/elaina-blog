@@ -89,7 +89,7 @@ interface Props extends AppCommonProps {
 
 export default function PostProps(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
-  const [posts] = useState<Post[]>(props.posts);
+  const [posts] = useState<Post[]>(props.posts.reverse());
 
   return (
     <AdminPageLayout>
@@ -104,13 +104,10 @@ export default function PostProps(props: Props) {
                           }
           </div>
           <Container>
-            {posts.map((post, index) => {
+            {posts.map((post) => {
               
                 return (
-                  <PostContainer
-                    key={`${post.title}${post._id}`}
-                    data-position={index}
-                  >
+                  <PostContainer key={`${post.title}${post._id}`}>
                     <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
                       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
                         <div
