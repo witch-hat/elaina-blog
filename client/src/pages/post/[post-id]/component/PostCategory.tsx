@@ -33,8 +33,6 @@ const Container = styled.nav<{ themeMode: ThemeMode }>(
     justifyContent: 'flex-start',
     height: 'calc(100vh - 4rem - 20px)',
     marginRight: '.5rem',
-    borderRadius: '0 .5rem .5rem 0',
-    backgroundColor: '#dbf2ff',
     overflowY: 'auto',
     '&::-webkit-scrollbar': {
       width: '0'
@@ -68,8 +66,6 @@ const FlexWrapper = styled.div({
   height: '3rem',
   padding: '.5rem',
   alignItems: 'center',
-  backgroundColor: '#9cdbff',
-  borderRadius: '0 0 1rem 0',
   justifyContent: 'space-between'
 });
 
@@ -94,6 +90,8 @@ const WriteButton = styled.button({
 const TitleContainer = styled.ul({
   width: '100%',
   margin: '0',
+  borderRadius: '0 .5rem 0 0',
+  backgroundColor: '#dbf2ff',
   overflowY: 'auto',
   '&::-webkit-scrollbar': {
     display: 'none'
@@ -149,7 +147,7 @@ export function PostCategory(props: Props) {
         )}
       </FlexWrapper>
       <TitleContainer>
-        {props.titles.reverse().map(({ title, _id }) => {
+        {props.titles.map(({ title, _id }) => {
           return (
             <TitleList key={`${title}${_id}`} currentNav={props.currentPostId === _id}>
               <Link href={`/post/${_id}`} passHref>
