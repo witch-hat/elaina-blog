@@ -90,8 +90,8 @@ const WriteButton = styled.button({
 const TitleContainer = styled.ul({
   width: '100%',
   margin: '0',
+  padding: '0 .5rem',
   borderRadius: '0 .5rem 0 0',
-  backgroundColor: '#dbf2ff',
   overflowY: 'auto',
   '&::-webkit-scrollbar': {
     display: 'none'
@@ -102,12 +102,16 @@ const TitleList = styled.li<{ currentNav: boolean }>((props) => ({
   width: '100%',
   padding: '.5rem',
   borderRadius: '0 .5rem .5rem 0',
-  backgroundColor: props.currentNav ? '#fff' : 'inherit',
+  borderLeft: props.currentNav ? '2px solid #867dff' : 'none',
   cursor: 'pointer',
   listStyle: 'none',
   fontWeight: props.currentNav ? 'bold' : 'normal',
+  color: props.currentNav ? '#867dff' : 'inherit',
+  textDecoration: props.currentNav ? 'underline' : 'none',
   '&:hover': {
-    backgroundColor: '#fff',
+    transition: '.2s all',
+    marginLeft: '.35rem',
+    borderLeft: '2px solid #000',
     fontWeight: 'bolder',
     textDecoration: 'underline'
   }
