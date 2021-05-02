@@ -4,7 +4,7 @@ import { InferGetServerSidePropsType, NextPageContext } from 'next';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import { BorderBox} from 'src/components';
+import { BorderBox } from 'src/components';
 import { theme } from 'src/styles';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
@@ -89,57 +89,50 @@ interface Props extends AppCommonProps {
 
 export default function PostProps(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+
   const [posts] = useState<Post[]>(props.posts.reverse());
 
   return (
     <AdminPageLayout>
-        <div style={{ width: '100%', padding: '0 5%' }}>
-          <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
-            {          
-                  <a href="/admin/writer">
-              <AddButton themeMode={themeMode}>
-                      Add
-              </AddButton>
-                  </a>
-                          }
-          </div>
-          <Container>
-            {posts.map((post) => {
-              
-                return (
-                  <PostContainer key={`${post.title}${post._id}`}>
-                    <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
-                      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                        <div
-                          style={{ flex: 1, display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', padding: '4px 8px 0px 8px' }}
-                        >
-
-                          {post._id > 0 && (
-                            <CircleRippleWrapper
-                              onClick={() => {
-                                // setDeletedPost({ isModalOpen: true, index });
-                                alert("준비중")
-                              }}
-                            >
-                              <FontAwesomeIcon icon={faTrash} style={{ fontSize: '1.25rem' }} />
-                            </CircleRippleWrapper>
-                          )}
-                      
-                        </div>
-                        <Content>
-                          <PreviewTextWrapper>
-                            <PreviewTitle>{post.title}</PreviewTitle>
-                            <PreviewContent>{post.article}</PreviewContent>
-                          </PreviewTextWrapper>
-                        </Content>
-                      </div>
-                    </BorderBox>
-                  </PostContainer>
-                );
-            })}
-          </Container>
+      <div style={{ width: '100%', padding: '0 5%' }}>
+        <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
+          {
+            <a href='/admin/writer'>
+              <AddButton themeMode={themeMode}>Add</AddButton>
+            </a>
+          }
         </div>
-
+        <Container>
+          {posts.map((post) => {
+            return (
+              <PostContainer key={`${post.title}${post._id}`}>
+                <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
+                  <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                    <div style={{ flex: 1, display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', padding: '4px 8px 0px 8px' }}>
+                      {post._id > 0 && (
+                        <CircleRippleWrapper
+                          onClick={() => {
+                            // setDeletedPost({ isModalOpen: true, index });
+                            alert('준비중');
+                          }}
+                        >
+                          <FontAwesomeIcon icon={faTrash} style={{ fontSize: '1.25rem' }} />
+                        </CircleRippleWrapper>
+                      )}
+                    </div>
+                    <Content>
+                      <PreviewTextWrapper>
+                        <PreviewTitle>{post.title}</PreviewTitle>
+                        <PreviewContent>{post.article}</PreviewContent>
+                      </PreviewTextWrapper>
+                    </Content>
+                  </div>
+                </BorderBox>
+              </PostContainer>
+            );
+          })}
+        </Container>
+      </div>
     </AdminPageLayout>
   );
 }
@@ -153,6 +146,7 @@ export async function getServerSideProps(context: NextPageContext) {
       }
     };
   }
+
   const client = initApolloClient({}, context);
   const { data } = await client.query({ query: GET_POSTS });
   const posts = data.posts;
