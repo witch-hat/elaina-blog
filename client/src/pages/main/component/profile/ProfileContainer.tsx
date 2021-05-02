@@ -15,7 +15,7 @@ const Container = styled.aside({
   flexDirection: 'column',
   justifyContent: 'flex-start',
   alignItems: 'center',
-  padding: '10px',
+  padding: '0 1rem',
   minHeight: 'calc(90vh - 40px)',
   alignSelf: 'stretch',
   '@media screen and (max-width: 1380px)': {

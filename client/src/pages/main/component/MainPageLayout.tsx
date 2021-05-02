@@ -8,7 +8,8 @@ const Container = styled.div({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'flex-start',
-  width: '100%',
+  maxWidth: '1300px',
+  margin: '0 auto',
   '@media screen and (max-width: 767px)': {
     flexDirection: 'column'
   }
@@ -19,6 +20,7 @@ const Wrapper = styled.div({
   flexDirection: 'column',
   width: '850px',
   marginLeft: '50px',
+  padding: '0 .5rem',
   alignItems: 'center',
   justifyContent: 'flex-start',
   '@media screen and (max-width: 1380px)': {

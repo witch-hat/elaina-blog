@@ -12,10 +12,10 @@ import { AppCommonProps } from 'src/pages/_app';
 const Container = styled.main({
   display: 'flex',
   position: 'relative',
-  maxWidth: '1300px',
+  width: '100%',
   minHeight: 'calc(100vh - 4rem)',
   padding: '20px 0 0',
-  margin: '4rem auto 0',
+  margin: '4rem 0 0',
   '@media screen and (max-width: 1380px)': {
     width: '100%',
     padding: '20px 10px 0'
