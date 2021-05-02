@@ -25,13 +25,16 @@ const Container = styled.nav<{ themeMode: ThemeMode }>(
   (props) => ({
     width: '250px',
     display: 'flex',
+    flex: 1,
     flexDirection: 'column',
     position: 'sticky',
-    top: 'calc(5rem + 20px)',
+    top: 'calc(4rem + 20px)',
     alignItems: 'stretch',
     justifyContent: 'flex-start',
-    height: 'calc(100vh - 5rem - 20px)',
-    padding: '.5rem',
+    height: 'calc(100vh - 4rem - 20px)',
+    marginRight: '.5rem',
+    borderRadius: '0 .5rem .5rem 0',
+    backgroundColor: '#dbf2ff',
     overflowY: 'auto',
     '&::-webkit-scrollbar': {
       width: '0'
@@ -61,7 +64,12 @@ const Container = styled.nav<{ themeMode: ThemeMode }>(
 
 const FlexWrapper = styled.div({
   display: 'flex',
+  width: '100%',
+  height: '3rem',
+  padding: '.5rem',
   alignItems: 'center',
+  backgroundColor: '#9cdbff',
+  borderRadius: '0 0 1rem 0',
   justifyContent: 'space-between'
 });
 
@@ -84,29 +92,35 @@ const WriteButton = styled.button({
 });
 
 const TitleContainer = styled.ul({
-  marginTop: '.5rem',
-  padding: '0 .75rem',
-  width: '100%'
-});
-
-const TitleList = styled.li({
   width: '100%',
-  padding: '.2rem 0',
-  margin: '.4rem 0',
-  cursor: 'pointer',
-  '&:hover': {
-    fontWeight: 'bolder',
-    textDecoration: 'underline'
+  margin: '0',
+  overflowY: 'auto',
+  '&::-webkit-scrollbar': {
+    display: 'none'
   }
 });
 
-const Title = styled.span<{ bold: boolean }>((props) => ({
+const TitleList = styled.li<{ currentNav: boolean }>((props) => ({
+  width: '100%',
+  padding: '.5rem',
+  borderRadius: '0 .5rem .5rem 0',
+  backgroundColor: props.currentNav ? '#fff' : 'inherit',
+  cursor: 'pointer',
+  listStyle: 'none',
+  fontWeight: props.currentNav ? 'bold' : 'normal',
+  '&:hover': {
+    backgroundColor: '#fff',
+    fontWeight: 'bolder',
+    textDecoration: 'underline'
+  }
+}));
+
+const Title = styled.span({
   overflow: 'hidden',
   display: '-webkit-box',
   WebkitLineClamp: 1,
-  WebkitBoxOrient: 'vertical',
-  fontWeight: props.bold ? 'bold' : 'normal'
-}));
+  WebkitBoxOrient: 'vertical'
+});
 
 interface Props {
   titles: [{ title: string; _id: number }];
@@ -135,11 +149,11 @@ export function PostCategory(props: Props) {
         )}
       </FlexWrapper>
       <TitleContainer>
-        {props.titles.map(({ title, _id }) => {
+        {props.titles.reverse().map(({ title, _id }) => {
           return (
-            <TitleList key={`${title}${_id}`}>
+            <TitleList key={`${title}${_id}`} currentNav={props.currentPostId === _id}>
               <Link href={`/post/${_id}`} passHref>
-                <Title bold={props.currentPostId === _id}>{title}</Title>
+                <Title>{title}</Title>
               </Link>
             </TitleList>
           );

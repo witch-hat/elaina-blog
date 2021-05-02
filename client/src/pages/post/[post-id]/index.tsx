@@ -35,7 +35,9 @@ const Container = styled.div({
   }
 });
 
-const ContentContainer = styled.div<{ themeMode: ThemeMode }>((props) => ({
+const ContentContainer = styled.section<{ themeMode: ThemeMode }>((props) => ({
+  display: 'flex',
+  flex: 3,
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',

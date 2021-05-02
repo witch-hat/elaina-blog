@@ -53,7 +53,7 @@ export const postResolver = {
   Query: {
     async posts() {
       try {
-        const postList = await PostModel.find();
+        const postList: Post[] = await PostModel.find();
         return postList;
       } catch (err) {
         throw err;
@@ -81,7 +81,7 @@ export const postResolver = {
 
     async findSameCategoryPosts(_: any, args: { categoryId: number }, context: ContextType) {
       try {
-        const sameCategoryPosts = PostModel.find({ categoryId: args.categoryId });
+        const sameCategoryPosts: Post[] = PostModel.find({ categoryId: args.categoryId });
         const categoryFindResult = CategoryModel.findById(args.categoryId);
 
         return {
