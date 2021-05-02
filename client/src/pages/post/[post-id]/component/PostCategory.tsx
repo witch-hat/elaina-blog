@@ -98,20 +98,21 @@ const TitleContainer = styled.ul({
   }
 });
 
-const TitleList = styled.li<{ currentNav: boolean }>((props) => ({
+const TitleList = styled.li<{ currentNav: boolean; themeMode: ThemeMode }>((props) => ({
   width: '100%',
   padding: '.5rem',
   borderLeft: props.currentNav ? '2px solid #867dff' : 'none',
-  borderBottom: '1px solid #eee',
+  borderBottom: `1px solid ${theme[props.themeMode].borderColor}`,
   cursor: 'pointer',
   listStyle: 'none',
   fontWeight: props.currentNav ? 'bold' : 'normal',
   color: props.currentNav ? '#867dff' : 'inherit',
   textDecoration: props.currentNav ? 'underline' : 'none',
+  transition: '.2s all',
   '&:hover': {
-    transition: '.2s all',
+    color: theme[props.themeMode].mainText,
     marginLeft: '.35rem',
-    borderLeft: '2px solid #000',
+    borderLeft: `2px solid ${theme[props.themeMode].hoverBorderColor}`,
     fontWeight: 'bolder',
     textDecoration: 'underline'
   }
@@ -153,7 +154,7 @@ export function PostCategory(props: Props) {
       <TitleContainer>
         {props.titles.map(({ title, _id }) => {
           return (
-            <TitleList key={`${title}${_id}`} currentNav={props.currentPostId === _id}>
+            <TitleList key={`${title}${_id}`} currentNav={props.currentPostId === _id} themeMode={themeMode}>
               <Link href={`/post/${_id}`} passHref>
                 <Title>{title}</Title>
               </Link>
