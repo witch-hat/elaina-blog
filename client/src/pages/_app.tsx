@@ -9,7 +9,7 @@ import '@fortawesome/fontawesome-svg-core/styles.css';
 import setCookie from 'set-cookie-parser';
 import { useTranslation } from 'react-i18next';
 
-import Layout from 'src/components/Layout';
+import { Layout } from 'src/components/Layout';
 import { store, persistor } from 'src/redux';
 import { IS_AUTH } from 'src/query/user';
 
@@ -36,13 +36,16 @@ const FONT = `
   }
 `;
 
-function ElainaBlog({ Component, pageProps, apolloClient, cookies }: any) {
-  if (typeof window !== 'undefined') {
-    if (cookies[0] && cookies[1]) {
-      document.cookie = cookies[0];
-      document.cookie = cookies[1];
-    }
-  }
+function ElainaBlog({ Component, pageProps, apolloClient }: any) {
+  // if (typeof window !== 'undefined') {
+  //   if (cookies[0] && cookies[1]) {
+  //     console.log(cookies[1]);
+  //     console.log(cookies[0]);
+  //     document.cookie = cookies[0];
+  //     document.cookie = cookies[1];
+  //   }
+  // }
+  // console.log(cookies);
 
   useTranslation();
 
@@ -86,9 +89,6 @@ ElainaBlog.getInitialProps = async (context: AppContext) => {
   const { ctx, Component } = context;
   const client = initApolloClient({}, ctx);
   const { data } = await client.query({ query: IS_AUTH });
-
-  const combinedCookieHeader = data.isAuth.cookie;
-  const cookies = setCookie.splitCookiesString(combinedCookieHeader || '');
   const isLogin = data.isAuth.isAuth;
 
   let pageProps: AppCommonProps = {
@@ -103,7 +103,7 @@ ElainaBlog.getInitialProps = async (context: AppContext) => {
 
   Object.assign(appCommponProps, pageProps);
 
-  return { pageProps, cookies };
+  return { pageProps };
 };
 
 export default withApollo(ElainaBlog);

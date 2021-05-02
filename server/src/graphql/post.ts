@@ -53,7 +53,7 @@ export const postResolver = {
   Query: {
     async posts() {
       try {
-        const postList = await PostModel.find();
+        const postList: Post[] = await PostModel.find();
         return postList;
       } catch (err) {
         throw err;
@@ -72,7 +72,7 @@ export const postResolver = {
     async findPostByUrl(_: any, args: { requestUrl: string }, context: ContextType) {
       try {
         const parsedUrl = Number.parseInt(args.requestUrl);
-        const findedPost = PostModel.findOne({ _id: parsedUrl });
+        const findedPost = await PostModel.findOne({ _id: parsedUrl });
         return findedPost;
       } catch (err) {
         throw err;
@@ -81,11 +81,11 @@ export const postResolver = {
 
     async findSameCategoryPosts(_: any, args: { categoryId: number }, context: ContextType) {
       try {
-        const sameCategoryPosts = PostModel.find({ categoryId: args.categoryId });
-        const categoryFindResult = CategoryModel.findById(args.categoryId);
+        const sameCategoryPosts: Post[] = await PostModel.find({ categoryId: args.categoryId });
+        const categoryFindResult = await CategoryModel.findById(args.categoryId);
 
         return {
-          post: sameCategoryPosts,
+          post: sameCategoryPosts.reverse(),
           category: categoryFindResult
         };
       } catch (err) {
@@ -111,29 +111,34 @@ export const postResolver = {
         }
 
         const posts: Post[] = await PostModel.find({}, {}, { sort: { _id: -1 } });
-        const ignoreCaseRegex = RegExp(args.keyword, 'i');
+        const keyword = RegExp(args.keyword, 'i');
 
         const searchResult: { post: Post; content: string }[] = [];
 
         posts.forEach((post) => {
-          // filter images, bar ...etc
-          const ignore = new RegExp(/^(!|\[|--|==)/);
+          // filter images,  bar ...etc
+          const ignore = new RegExp(/!\[[^\]]*\]\((.*?)\s*("(?:.*[^"])")?\s*\)/);
 
-          if (post.title.match(ignoreCaseRegex)) {
+          if (post.title.match(keyword)) {
             const content = post.article
               .split('\n')
               .filter((sentence) => {
                 return !sentence.trim().match(ignore);
               })
               .join(' ');
+
             return searchResult.push({ post, content });
           }
 
-          if (post.article.match(ignoreCaseRegex)) {
-            // TODO...Highlighting
-            const keywordIncludedPart = '';
+          if (post.article.match(keyword)) {
+            const content = post.article
+              .split('\n')
+              .filter((sentence) => {
+                return !sentence.trim().match(ignore);
+              })
+              .join(' ');
 
-            return searchResult.push({ post, content: post.article });
+            return searchResult.push({ post, content });
           }
         });
 
@@ -159,7 +164,7 @@ export const postResolver = {
 
         CommentModel.create({ _id });
 
-        const result = PostModel.create({ _id, title: args.title, createdAt: args.createdAt, categoryId, article: args.article });
+        const result = await PostModel.create({ _id, title: args.title, createdAt: args.createdAt, categoryId, article: args.article });
         return result;
       } catch (err) {
         throw err;

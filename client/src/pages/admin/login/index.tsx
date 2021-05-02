@@ -88,6 +88,8 @@ export default function Login(props: Props) {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const emailInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
+  const [isEamilInputValid, setIsEamilInputValid] = useState(true);
+  const [isPasswordInputValid, setIsPasswordInputValid] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
   const [login] = useMutation(LOGIN, {
@@ -99,7 +101,7 @@ export default function Login(props: Props) {
       }
     },
     onError: (err: Error) => {
-      handleError(err.message);
+      handleSubmitError(err.message);
     }
   });
 
@@ -116,23 +118,30 @@ export default function Login(props: Props) {
     }
   }
 
-  function handleError(message: string) {
+  function handleSubmitError(message: string) {
     if (passwordInputRef.current) {
       passwordInputRef.current.value = '';
     }
     passwordInputRef.current?.focus();
+    setIsPasswordInputValid(false);
     setErrorMessage(message);
   }
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
     if (emailInputRef.current && passwordInputRef.current) {
-      login({
-        variables: {
-          emailId: emailInputRef.current.value,
-          password: passwordInputRef.current.value
-        }
-      });
+      if (emailInputRef.current.value.length < 1) {
+        emailInputRef.current.focus();
+        setIsEamilInputValid(false);
+        setErrorMessage('Please Input Email');
+      } else {
+        login({
+          variables: {
+            emailId: emailInputRef.current.value,
+            password: passwordInputRef.current.value
+          }
+        });
+      }
     }
   }
 
@@ -150,12 +159,17 @@ export default function Login(props: Props) {
             placeholder='Email'
             styles={{ margin: '8px 0 0 0', width: '100%' }}
             onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => {
+              if (!isEamilInputValid) {
+                setIsEamilInputValid(true);
+              }
+
               if (e.nativeEvent.key === 'Enter') {
                 if (emailInputRef.current && passwordInputRef.current) {
                   controlEnterKey(e, emailInputRef.current, passwordInputRef.current);
                 }
               }
             }}
+            isValid={isEamilInputValid}
           />
         </InputWrapper>
         <InputWrapper>
@@ -169,13 +183,17 @@ export default function Login(props: Props) {
             placeholder='암호'
             styles={{ margin: '8px 0 0 0', width: '100%' }}
             onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => {
+              if (!isPasswordInputValid) {
+                setIsPasswordInputValid(true);
+              }
+
               if (e.nativeEvent.key === 'Enter') {
                 if (emailInputRef.current && passwordInputRef.current) {
                   controlEnterKey(e, passwordInputRef.current, emailInputRef.current);
                 }
               }
             }}
-            isValid={errorMessage.length === 0}
+            isValid={isPasswordInputValid}
           />
         </InputWrapper>
         <MessageBox>

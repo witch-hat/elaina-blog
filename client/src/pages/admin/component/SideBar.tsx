@@ -17,32 +17,13 @@ const Container = styled.div({
   width: '100%'
 });
 
-const TitleWrapper = styled.div({
-  display: 'flex',
-  alignItems: 'center',
-  marginBottom: '.5rem'
-});
-
-const Icon = styled.span({
-  display: 'inline-flex',
-  width: '1.5rem',
-  height: '1.5rem',
-  justifyContent: 'flex-start',
-  alignItems: 'center'
-});
-
-const Title = styled.p({
+const MenuTitle = styled.p({
   width: '100%',
   fontSize: '1.25rem',
   fontWeight: 'bold'
 });
 
-const ListContainer = styled.ul({
-  width: '100%',
-  marginTop: '0'
-});
-
-const List = styled.li({
+const MenuItem = styled.li({
   width: '100%',
   listStyle: 'none',
   paddingLeft: '1rem',
@@ -51,6 +32,12 @@ const List = styled.li({
   '&:hover': {
     textDecoration: 'underline'
   }
+});
+
+const MenuContainer = styled.div({
+  display: 'flex',
+  alignItems: 'center',
+  padding: '.1rem'
 });
 
 const Button = styled.button({
@@ -82,39 +69,45 @@ export function SideBar(props: Props) {
       <Link href='/admin/writer'>
         <Button>{trans(Lang.Write)}</Button>
       </Link>
-      <TitleWrapper>
+      <MenuContainer>
         <SideBarIcon icon={faBookmark} />
-        <Title>{trans(Lang.Content)}</Title>
-      </TitleWrapper>
-      <ListContainer>
+        <MenuTitle>{trans(Lang.Content)}</MenuTitle>
+      </MenuContainer>
+      <MenuContainer>
         <Link href='/admin/category' passHref>
-          <a>
-            <List>{trans(Lang.CategoryManage)}</List>
-          </a>
+          <MenuItem>{trans(Lang.CategoryManage)}</MenuItem>
         </Link>
+      </MenuContainer>
 
-        <Link href='/admin/posts' passHref>
-          <a>
-          <List>{trans(Lang.BoardManage)}</List>
-          </a>
-        </Link>
 
-        <List>{trans(Lang.CommentManage)}</List>
-      </ListContainer>
-      <TitleWrapper>
+      <MenuContainer>
+      <Link href='/admin/posts' passHref>
+        <a>
+        <MenuItem>{trans(Lang.BoardManage)}</MenuItem>
+        </a>
+      </Link>
+      </MenuContainer>
+
+
+      <MenuContainer>
+        <MenuItem>{trans(Lang.CommentManage)}</MenuItem>
+      </MenuContainer>
+
+
+      <MenuContainer>
         <SideBarIcon icon={faUsersCog} />
-        <Title>{trans(Lang.Setting)}</Title>
-      </TitleWrapper>
-      <ListContainer>
-        <List
+        <MenuTitle>{trans(Lang.Setting)}</MenuTitle>
+      </MenuContainer>
+      <MenuContainer>
+        <MenuItem
           onClick={() => {
             logout();
             router.push('/admin/login');
           }}
         >
           {trans(Lang.Logout)}
-        </List>
-      </ListContainer>
+        </MenuItem>
+      </MenuContainer>
     </Container>
   );
 }

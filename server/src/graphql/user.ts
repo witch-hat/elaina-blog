@@ -7,8 +7,9 @@ import { config } from '../util/config';
 import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 import Cookies from 'cookies';
-import macaddress from 'macaddress';
 import UAParser from 'ua-parser-js';
+import os from 'os';
+import defaultGateway, { Gateway } from 'default-gateway';
 
 const saltRounds = 10;
 
@@ -83,16 +84,15 @@ export const userResolver = {
 
     async isAuth(_: any, args: any, context: ContextType) {
       // create device + browser unique id string
-      const macList: MACList = await macaddress.all();
-      const mac = Object.values(macList)[0];
+      const networkInterfaces = os.networkInterfaces();
+      const gateway: Gateway = await defaultGateway.v4();
+      const userEthernetInterfaceName = gateway.interface;
+      const userEthernetInterface = networkInterfaces[userEthernetInterfaceName];
+      const userIPv4Interface = userEthernetInterface?.find((eInterface) => eInterface.family === 'IPv4');
+
       const ua = new UAParser(context.req.headers['user-agent']);
       const browserName = ua.getBrowser().name;
-      const userUniqueId = mac.mac + mac.ipv4 + browserName;
-
-      // browser name undefined error
-      if (browserName === 'undefined') {
-        throw new Error('browser name undefined');
-      }
+      const userUniqueId = userIPv4Interface?.mac! + userIPv4Interface?.address! + browserName;
 
       const cookies = new Cookies(context.req, context.res);
       const accessToken = cookies.get('a_access');
@@ -137,14 +137,18 @@ export const userResolver = {
 
               const hashedRefreshToken = await bcrypt.hash(refreshToken, saltRounds);
               cookies.set('a_refresh', hashedRefreshToken, {
-                httpOnly: false
+                httpOnly: true,
+                sameSite: 'strict',
+                secure: false
               });
 
               me.auth[authIndex].refreshToken = refreshToken;
               me.save();
 
               cookies.set('a_access', accessToken, {
-                httpOnly: false
+                httpOnly: true,
+                sameSite: 'strict',
+                secure: false
               });
 
               // context.res.getHeader('set-cookie') return Array<string> type
@@ -192,11 +196,19 @@ export const userResolver = {
         throw new UserInputError('이메일을 입력해 주세요');
       }
 
-      const macList: MACList = await macaddress.all();
-      const mac = Object.values(macList)[0];
+      const networkInterfaces = os.networkInterfaces();
+      const gateway: Gateway = await defaultGateway.v4();
+      const userEthernetInterfaceName = gateway.interface;
+      const userEthernetInterface = networkInterfaces[userEthernetInterfaceName];
+      const userIPv4Interface = userEthernetInterface?.find((eInterface) => eInterface.family === 'IPv4');
+
       const ua = new UAParser(context.req.headers['user-agent']);
-      const browserName = ua.getBrowser().name;
-      const userUniqueId = mac.mac + mac.ipv4 + browserName;
+      let browserName = ua.getBrowser().name;
+
+      // Need to fix
+      if (browserName === undefined) browserName = 'Firefox';
+
+      const userUniqueId = userIPv4Interface?.mac! + userIPv4Interface?.address! + browserName;
 
       const cookies = new Cookies(context.req, context.res);
       try {
@@ -229,14 +241,16 @@ export const userResolver = {
               .hash(refreshToken, saltRounds)
               .then((hashedRefreshToken) => {
                 cookies.set('a_refresh', hashedRefreshToken, {
-                  httpOnly: false,
+                  httpOnly: true,
+                  sameSite: 'strict',
                   secure: false
                 });
               })
               .catch((err) => console.error(err));
 
             cookies.set('a_access', accessToken, {
-              httpOnly: false,
+              httpOnly: true,
+              sameSite: 'strict',
               secure: false
             });
 
@@ -253,11 +267,15 @@ export const userResolver = {
     },
 
     async logout(_: any, args: any, context: ContextType) {
-      const macList: MACList = await macaddress.all();
-      const mac = Object.values(macList)[0];
+      const networkInterfaces = os.networkInterfaces();
+      const gateway: Gateway = await defaultGateway.v4();
+      const userEthernetInterfaceName = gateway.interface;
+      const userEthernetInterface = networkInterfaces[userEthernetInterfaceName];
+      const userIPv4Interface = userEthernetInterface?.find((eInterface) => eInterface.family === 'IPv4');
+
       const ua = new UAParser(context.req.headers['user-agent']);
       const browserName = ua.getBrowser().name;
-      const userUniqueId = mac.mac + mac.ipv4 + browserName;
+      const userUniqueId = userIPv4Interface?.mac! + userIPv4Interface?.address! + browserName;
 
       const cookies = new Cookies(context.req, context.res);
 

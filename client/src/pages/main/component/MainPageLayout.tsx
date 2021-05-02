@@ -1,14 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { CategoryNavigation } from './CategoryNavigation';
+import { Navigation } from './navigation/Navigation';
 import { ProfileContainer } from './profile/ProfileContainer';
 
 const Container = styled.div({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'flex-start',
-  width: '100%',
+  width: '1200px',
+  margin: '0 auto',
   '@media screen and (max-width: 767px)': {
     flexDirection: 'column'
   }
@@ -19,6 +20,7 @@ const Wrapper = styled.div({
   flexDirection: 'column',
   width: '850px',
   marginLeft: '50px',
+  padding: '0 .5rem',
   alignItems: 'center',
   justifyContent: 'flex-start',
   '@media screen and (max-width: 1380px)': {
@@ -43,7 +45,7 @@ export function MainPageLayout(props: Props) {
     <Container>
       <ProfileContainer profile={props.profile} isLogin={props.isLogin} />
       <Wrapper>
-        <CategoryNavigation />
+        <Navigation />
         {props.children}
       </Wrapper>
     </Container>

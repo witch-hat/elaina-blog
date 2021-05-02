@@ -10,7 +10,7 @@ import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { useRouter } from 'next/router';
 
-const FadeIn = keyframes({
+const Move = keyframes({
   from: {
     opacity: 0,
     transform: 'translateX(-1rem)'
@@ -25,13 +25,15 @@ const Container = styled.nav<{ themeMode: ThemeMode }>(
   (props) => ({
     width: '250px',
     display: 'flex',
+    flex: 1,
     flexDirection: 'column',
     position: 'sticky',
-    top: 'calc(5rem + 20px)',
+    paddingLeft: '1rem',
+    top: 'calc(4rem + 20px)',
     alignItems: 'stretch',
     justifyContent: 'flex-start',
-    height: 'calc(100vh - 5rem - 20px)',
-    padding: '.5rem',
+    height: 'calc(100vh - 4rem - 20px)',
+    marginRight: '.5rem',
     overflowY: 'auto',
     '&::-webkit-scrollbar': {
       width: '0'
@@ -49,18 +51,21 @@ const Container = styled.nav<{ themeMode: ThemeMode }>(
       height: 'calc(100vh - 5rem)',
       backgroundColor: theme[props.themeMode].secondaryContentBackground,
       borderRadius: '0 .5rem .5rem 0',
-      boxShadow: `5px 0 4px ${theme[props.themeMode].shadowColor}`
+      boxShadow: `6px 0 6px -6px ${theme[props.themeMode].shadowColor}`
     }
   }),
   css`
     @media screen and (max-width: 767px) {
-      animation: 0.4s ${FadeIn} forwards;
+      animation: 0.4s ${Move} forwards;
     }
   `
 );
 
 const FlexWrapper = styled.div({
   display: 'flex',
+  width: '100%',
+  height: '3rem',
+  padding: '.5rem',
   alignItems: 'center',
   justifyContent: 'space-between'
 });
@@ -84,29 +89,42 @@ const WriteButton = styled.button({
 });
 
 const TitleContainer = styled.ul({
-  marginTop: '.5rem',
-  padding: '0 .75rem',
-  width: '100%'
-});
-
-const TitleList = styled.li({
   width: '100%',
-  padding: '.2rem 0',
-  margin: '.4rem 0',
-  cursor: 'pointer',
-  '&:hover': {
-    fontWeight: 'bolder',
-    textDecoration: 'underline'
+  margin: '0',
+  padding: '0 .5rem',
+  borderRadius: '0 .5rem 0 0',
+  overflowY: 'auto',
+  '&::-webkit-scrollbar': {
+    display: 'none'
   }
 });
 
-const Title = styled.span<{ bold: boolean }>((props) => ({
+const TitleList = styled.li<{ currentNav: boolean; themeMode: ThemeMode }>((props) => ({
+  width: '100%',
+  padding: '.5rem',
+  borderLeft: props.currentNav ? '2px solid #867dff' : 'none',
+  borderBottom: `1px solid ${theme[props.themeMode].borderColor}`,
+  cursor: 'pointer',
+  listStyle: 'none',
+  fontWeight: props.currentNav ? 'bold' : 'normal',
+  color: props.currentNav ? '#867dff' : 'inherit',
+  textDecoration: props.currentNav ? 'underline' : 'none',
+  transition: '.2s all',
+  '&:hover': {
+    color: theme[props.themeMode].mainText,
+    marginLeft: '.35rem',
+    borderLeft: `2px solid ${theme[props.themeMode].hoverBorderColor}`,
+    fontWeight: 'bolder',
+    textDecoration: 'underline'
+  }
+}));
+
+const Title = styled.span({
   overflow: 'hidden',
   display: '-webkit-box',
   WebkitLineClamp: 1,
-  WebkitBoxOrient: 'vertical',
-  fontWeight: props.bold ? 'bold' : 'normal'
-}));
+  WebkitBoxOrient: 'vertical'
+});
 
 interface Props {
   titles: [{ title: string; _id: number }];
@@ -137,9 +155,9 @@ export function PostCategory(props: Props) {
       <TitleContainer>
         {props.titles.map(({ title, _id }) => {
           return (
-            <TitleList key={title}>
+            <TitleList key={`${title}${_id}`} currentNav={props.currentPostId === _id} themeMode={themeMode}>
               <Link href={`/post/${_id}`} passHref>
-                <Title bold={props.currentPostId === _id}>{title}</Title>
+                <Title>{title}</Title>
               </Link>
             </TitleList>
           );

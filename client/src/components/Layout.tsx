@@ -1,3 +1,4 @@
+import React from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 
@@ -11,10 +12,10 @@ import { AppCommonProps } from 'src/pages/_app';
 const Container = styled.main({
   display: 'flex',
   position: 'relative',
-  maxWidth: '1300px',
-  minHeight: 'calc(100vh - 5rem)',
+  width: '100%',
+  minHeight: 'calc(100vh - 4rem)',
   padding: '20px 0 0',
-  margin: '5rem auto 0',
+  margin: '4rem 0 0',
   '@media screen and (max-width: 1380px)': {
     width: '100%',
     padding: '20px 10px 0'
@@ -25,7 +26,7 @@ interface Props extends AppCommonProps {
   children: JSX.Element | JSX.Element[];
 }
 
-export default function Layout(props: Props) {
+export function Layout(props: Props) {
   const theme: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   return (

@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 
 import { theme } from 'src/styles';
-import { InputBox } from 'src/components';
+import { InputBox, Loading } from 'src/components';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { Reply, WRITE_COMMENT, Comment, WRITE_REPLY } from 'src/query/comment';
@@ -104,8 +104,8 @@ export function CommentWriter(props: Props) {
   const editor = useRef<HTMLPreElement>(null);
 
   const client = useApollo();
-  const [writeComment] = useMutation(WRITE_COMMENT);
-  const [writeReply] = useMutation(WRITE_REPLY);
+  const [writeComment, { loading: writeCommentLoading }] = useMutation(WRITE_COMMENT);
+  const [writeReply, { loading: writeReplyLoading }] = useMutation(WRITE_REPLY);
 
   function reset() {
     if (usernameRef.current && passwordRef.current) {
@@ -258,6 +258,10 @@ export function CommentWriter(props: Props) {
     }
 
     reset();
+  }
+
+  if (writeCommentLoading || writeReplyLoading) {
+    return <Loading />;
   }
 
   return (

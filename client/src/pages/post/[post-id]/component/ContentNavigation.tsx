@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 const Container = styled.nav({
   display: 'flex',
+  flex: 1,
   position: 'sticky',
   top: 'calc(5rem + 20px)',
   padding: '.5rem',

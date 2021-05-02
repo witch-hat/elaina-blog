@@ -11,7 +11,7 @@ import { GET_ABOUT } from 'src/query/about';
 import { AppCommonProps } from './_app';
 import { MainPageLayout } from './main/component/MainPageLayout';
 import { AboutPage } from './main/about/About';
-import { ContentCategory } from './main/component/ContentCategory';
+import { ContentCategory } from './main/component/category/ContentCategory';
 
 interface Props extends AppCommonProps {
   latestPosts: InferGetServerSidePropsType<typeof getServerSideProps>;

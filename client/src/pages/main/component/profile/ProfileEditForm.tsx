@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBuilding, faCamera, faEnvelope, faLink, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
-import { RoundImage, AlertStateType } from 'src/components';
+import { RoundImage, AlertStateType, Loading } from 'src/components';
 import { theme } from 'src/styles';
 import { ProfileType, UPDATE_PROFILE } from 'src/query/profile';
 import { Lang, trans } from 'src/resources/languages';
@@ -16,7 +16,15 @@ import { FileType, UPLOAD_FILE } from 'src/query/file';
 import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';
 
-import { ProfileImageCropper } from '../ProfileImageCropper';
+import { ProfileImageCropper } from './ProfileImageCropper';
+
+const ImageContainer = styled.div({
+  poisition: 'relative',
+  display: 'flex',
+  width: '100%',
+  alignItems: 'center',
+  justifyContent: 'center'
+});
 
 const ChangeImageButton = styled.label<{ themeMode: ThemeMode }>((props) => ({
   display: 'flex',
@@ -141,7 +149,7 @@ export function ProfileEditForm(props: Props) {
 
   const client = useApollo();
   const [uploadFile] = useMutation<{ uploadFile: FileType }>(UPLOAD_FILE);
-  const [updateProfile] = useMutation<{ updateProfile: ProfileType }>(UPDATE_PROFILE);
+  const [updateProfile, { loading: updateLoading }] = useMutation<{ updateProfile: ProfileType }>(UPDATE_PROFILE);
 
   function selectImage(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files) {
@@ -216,9 +224,13 @@ export function ProfileEditForm(props: Props) {
     }
   }
 
+  if (updateLoading) {
+    return <Loading />;
+  }
+
   return (
     <>
-      <div style={{ position: 'relative', width: '100%' }}>
+      <ImageContainer>
         <RoundImage
           src={editingProfile.image}
           alt='Profile Image'
@@ -226,7 +238,7 @@ export function ProfileEditForm(props: Props) {
             borderRadius: '50%',
             width: '280px',
             height: '280px',
-            medium: { width: '280px', height: '280px' },
+            medium: { width: '100%', height: '100%' },
             small: { width: '200px', height: '200px' }
           }}
         />
@@ -235,7 +247,7 @@ export function ProfileEditForm(props: Props) {
           Edit
         </ChangeImageButton>
         <FileSelector type='file' id='profile-select' accept='image/x-png,image/jpeg' onChange={(e) => selectImage(e)} />
-      </div>
+      </ImageContainer>
       <Form
         id='profile-form'
         onSubmit={async (event: React.FormEvent<HTMLFormElement>) => {
