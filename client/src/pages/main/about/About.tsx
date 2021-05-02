@@ -12,9 +12,10 @@ import { FormatUnifier } from 'src/utils';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 
-const Container = styled.div({
+const Container = styled.section({
   marginTop: '2rem',
-  width: '100%'
+  width: '100%',
+  minHeight: '100vh'
 });
 
 const ContentInfoWrapper = styled.div({

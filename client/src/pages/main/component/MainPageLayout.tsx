@@ -8,7 +8,7 @@ const Container = styled.div({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'flex-start',
-  maxWidth: '1300px',
+  width: '1200px',
   margin: '0 auto',
   '@media screen and (max-width: 767px)': {
     flexDirection: 'column'
