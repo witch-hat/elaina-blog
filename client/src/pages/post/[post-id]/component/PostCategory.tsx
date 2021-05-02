@@ -28,6 +28,7 @@ const Container = styled.nav<{ themeMode: ThemeMode }>(
     flex: 1,
     flexDirection: 'column',
     position: 'sticky',
+    paddingLeft: '1rem',
     top: 'calc(4rem + 20px)',
     alignItems: 'stretch',
     justifyContent: 'flex-start',

@@ -38,6 +38,7 @@ const Container = styled.div({
 const ContentContainer = styled.section<{ themeMode: ThemeMode }>((props) => ({
   display: 'flex',
   flex: 3,
+  margin: '0 2.5rem',
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
