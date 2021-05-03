@@ -78,22 +78,14 @@ export function SideBar(props: Props) {
           <MenuItem>{trans(Lang.CategoryManage)}</MenuItem>
         </Link>
       </MenuContainer>
-
-
       <MenuContainer>
       <Link href='/admin/posts' passHref>
-        <a>
         <MenuItem>{trans(Lang.BoardManage)}</MenuItem>
-        </a>
       </Link>
       </MenuContainer>
-
-
       <MenuContainer>
         <MenuItem>{trans(Lang.CommentManage)}</MenuItem>
       </MenuContainer>
-
-
       <MenuContainer>
         <SideBarIcon icon={faUsersCog} />
         <MenuTitle>{trans(Lang.Setting)}</MenuTitle>
