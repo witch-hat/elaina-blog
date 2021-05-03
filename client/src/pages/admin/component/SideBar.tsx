@@ -1,50 +1,50 @@
-import React from 'react';
-import styled from 'styled-components';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useMutation } from '@apollo/client';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUsersCog, faBookmark } from '@fortawesome/free-solid-svg-icons';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import React from "react";
+import styled from "styled-components";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useMutation } from "@apollo/client";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUsersCog, faBookmark } from "@fortawesome/free-solid-svg-icons";
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
 
-import { Lang, trans } from 'src/resources/languages';
+import { Lang, trans } from "src/resources/languages";
 
-import { LOGOUT } from '../../../query/user';
+import { LOGOUT } from "../../../query/user";
 
 interface Props {}
 
 const Container = styled.div({
-  width: '100%'
+  width: "100%",
 });
 
 const MenuTitle = styled.p({
-  width: '100%',
-  fontSize: '1.25rem',
-  fontWeight: 'bold'
+  width: "100%",
+  fontSize: "1.25rem",
+  fontWeight: "bold",
 });
 
 const MenuItem = styled.li({
-  width: '100%',
-  listStyle: 'none',
-  paddingLeft: '1rem',
-  cursor: 'pointer',
-  margin: '.125rem 0',
-  '&:hover': {
-    textDecoration: 'underline'
-  }
+  width: "100%",
+  listStyle: "none",
+  paddingLeft: "1rem",
+  cursor: "pointer",
+  margin: ".125rem 0",
+  "&:hover": {
+    textDecoration: "underline",
+  },
 });
 
 const MenuContainer = styled.div({
-  display: 'flex',
-  alignItems: 'center',
-  padding: '.1rem'
+  display: "flex",
+  alignItems: "center",
+  padding: ".1rem",
 });
 
 const Button = styled.button({
-  width: '100%',
-  padding: '.625rem',
-  borderRadius: '.5rem',
-  marginBottom: '1rem'
+  width: "100%",
+  padding: ".625rem",
+  borderRadius: ".5rem",
+  marginBottom: "1rem",
 });
 
 interface SideBarIconProps {
@@ -52,7 +52,7 @@ interface SideBarIconProps {
 }
 
 function SideBarIcon(props: SideBarIconProps) {
-  return <FontAwesomeIcon icon={props.icon} style={{ marginRight: '8px' }} />;
+  return <FontAwesomeIcon icon={props.icon} style={{ marginRight: "8px" }} />;
 }
 
 interface Props {
@@ -66,7 +66,7 @@ export function SideBar(props: Props) {
 
   return (
     <Container>
-      <Link href='/admin/writer'>
+      <Link href="/admin/writer">
         <Button>{trans(Lang.Write)}</Button>
       </Link>
       <MenuContainer>
@@ -74,17 +74,13 @@ export function SideBar(props: Props) {
         <MenuTitle>{trans(Lang.Content)}</MenuTitle>
       </MenuContainer>
       <MenuContainer>
-        <Link href='/admin/category' passHref>
-          <a>
-            <MenuItem>{trans(Lang.CategoryManage)}</MenuItem>
-          </a>
+        <Link href="/admin/category" passHref>
+          <MenuItem>{trans(Lang.CategoryManage)}</MenuItem>
         </Link>
       </MenuContainer>
       <MenuContainer>
-        <Link href='/admin/posts' passHref>
-          <a>
-            <MenuItem>{trans(Lang.BoardManage)}</MenuItem>
-          </a>
+        <Link href="/admin/posts" passHref>
+          <MenuItem>{trans(Lang.BoardManage)}</MenuItem>
         </Link>
       </MenuContainer>
       <MenuContainer>
@@ -98,7 +94,7 @@ export function SideBar(props: Props) {
         <MenuItem
           onClick={() => {
             logout();
-            router.push('/admin/login');
+            router.push("/admin/login");
           }}
         >
           {trans(Lang.Logout)}
