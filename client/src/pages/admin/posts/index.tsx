@@ -41,15 +41,13 @@ const Content = styled.div({
   alignItems: 'center',
   width: '100%',
   padding: '.8rem',
-  height: '10rem'
+  height: '5rem'
 });
 
 const PreviewTextWrapper = styled.div({
   width: '100%',
   display: 'flex',
-  height: '8.4rem',
-  flexDirection: 'column',
-  alignItems: 'flex-start'
+  height: '100%'
 });
 
 const PreviewTitle = styled.span({
@@ -67,20 +65,6 @@ const PreviewTitle = styled.span({
   '@media screen and (max-width: 1380px)': {
     wordBreak: 'break-all'
   }
-});
-
-const PreviewContent = styled.span({
-  flexShrink: 0,
-  width: '100%',
-  height: '4.5rem',
-  fontSize: '1.1rem',
-  margin: '.25rem 0 0',
-  wordBreak: 'keep-all',
-  textAlign: 'left',
-  overflow: 'hidden',
-  display: '-webkit-box',
-  WebkitLineClamp: 3,
-  WebkitBoxOrient: 'vertical'
 });
 
 interface Props extends AppCommonProps {
@@ -136,7 +120,6 @@ export default function PostProps(props: Props) {
                     <Content>
                       <PreviewTextWrapper>
                         <PreviewTitle>{post.title}</PreviewTitle>
-                        <PreviewContent>{post.article}</PreviewContent>
                       </PreviewTextWrapper>
                     </Content>
                   </div>
