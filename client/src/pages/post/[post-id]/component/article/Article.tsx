@@ -18,16 +18,13 @@ import { RootState } from 'src/redux/rootReducer';
 import { ContentMenu } from './ArticleMenu';
 
 const Container = styled.section({
-  width: '800px',
+  width: '100%',
   display: 'flex',
   padding: '.5rem 1.5rem',
   flexDirection: 'column',
   jusitfyContent: 'flex-start',
   alignItems: 'center',
   minHeight: 'calc(100vh - 5rem - 40px)',
-  '@media screen and (max-width: 1380px)': {
-    width: '100%'
-  },
   '@media screen and (max-width: 767px)': {
     padding: '.5rem'
   }
