@@ -14,6 +14,10 @@ export const GlobalStyles = createGlobalStyle<{ themeMode: ThemeMode }>`
 	}
 	p {
 		margin: 0;
+		cursor: text;
+	}
+	article {
+		cursor: text;
 	}
 	pre[contentEditable] {
 		margin: 0;

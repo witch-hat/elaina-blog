@@ -80,7 +80,13 @@ const EditButton = styled.div({
 
 const ParagraphLink = styled.a({
   display: 'block',
-  width: '100%'
+  width: '100%',
+  '& > p': {
+    cursor: 'pointer'
+  },
+  '& > p:hover': {
+    textDecoration: 'underline'
+  }
 });
 
 const Paragraph = styled.p({
