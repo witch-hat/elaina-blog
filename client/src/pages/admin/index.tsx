@@ -1,48 +1,48 @@
-import React from "react";
-import Link from "next/link";
-import styled from "styled-components";
-import { NextPageContext } from "next";
+import React from 'react';
+import Link from 'next/link';
+import styled from 'styled-components';
+import { NextPageContext } from 'next';
 
-import { AdminPageLayout } from "./component/AdminPageLayout";
-import { AppCommonProps, appCommponProps } from "../_app";
+import { AdminPageLayout } from './component/AdminPageLayout';
+import { AppCommonProps, appCommponProps } from '../_app';
 
 interface Props extends AppCommonProps {}
 
 const Container = styled.div({
-  display: "flex",
-  width: "100%",
-  height: "100%",
-  padding: ".9rem 0",
-  flexDirection: "column",
-  "& > div:nth-child(1)": {
-    margin: "0 0 .8rem !important",
-  },
+  display: 'flex',
+  width: '100%',
+  height: '100%',
+  padding: '.9rem 0',
+  flexDirection: 'column',
+  '& > div:nth-child(1)': {
+    margin: '0 0 .8rem !important'
+  }
 });
 
 const Context = styled.div({
-  display: "flex",
-  width: "700px",
-  height: "7rem",
-  padding: ".8rem",
-  justifyContent: "left",
-  border: "2px solid #666",
-  borderRadius: "12px",
-  float: "left",
-  marginTop: "5px",
-  marginBottom: "20px",
-  flexDirection: "column",
+  display: 'flex',
+  width: '700px',
+  height: '7rem',
+  padding: '.8rem',
+  justifyContent: 'left',
+  border: '2px solid #666',
+  borderRadius: '12px',
+  float: 'left',
+  marginTop: '5px',
+  marginBottom: '20px',
+  flexDirection: 'column'
 });
 
 const UserImage = styled.img({
-  display: "block",
-  float: "left",
-  width: "40px",
-  height: "40px",
-  objectFit: "cover",
-  marginRight: "5px",
-  "@media screen and (max-width: 1380px)": {
-    width: "40px",
-  },
+  display: 'block',
+  float: 'left',
+  width: '40px',
+  height: '40px',
+  objectFit: 'cover',
+  marginRight: '5px',
+  '@media screen and (max-width: 1380px)': {
+    width: '40px'
+  }
 });
 
 export default function Admin(props: Props) {
@@ -51,9 +51,9 @@ export default function Admin(props: Props) {
       <Container>
         <div>Admin log</div>
         <div>
-          <UserImage src="/public/images/FakeProfile.png"></UserImage>
+          <UserImage src='/public/images/FakeProfile.png'></UserImage>
           <div>user Upload 1 Month ago</div>
-          <Link href="./post/1">
+          <Link href='./post/1'>
             <Context>
               <p>Styled component</p>
               Preview context
@@ -62,9 +62,9 @@ export default function Admin(props: Props) {
           </Link>
         </div>
         <div>
-          <UserImage src="/public/images/FakeProfile.png"></UserImage>
+          <UserImage src='/public/images/FakeProfile.png'></UserImage>
           <div>user Upload 1 Month ago</div>
-          <Link href="./post/1">
+          <Link href='./post/1'>
             <Context>
               <p>Styled component</p>
               Comment
@@ -73,9 +73,9 @@ export default function Admin(props: Props) {
           </Link>
         </div>
         <div>
-          <UserImage src="/public/images/FakeProfile.png"></UserImage>
+          <UserImage src='/public/images/FakeProfile.png'></UserImage>
           <div>user Upload 1 Month ago</div>
-          <Link href="./post/1">
+          <Link href='./post/1'>
             <Context>
               <p>Styled component</p>
               New Category
@@ -84,9 +84,9 @@ export default function Admin(props: Props) {
           </Link>
         </div>
         <div>
-          <UserImage src="/public/images/FakeProfile.png"></UserImage>
+          <UserImage src='/public/images/FakeProfile.png'></UserImage>
           <div>user Upload 1 Month ago</div>
-          <Link href="./post/1">
+          <Link href='./post/1'>
             <Context>
               <p>Styled component</p>
               Delete Category
@@ -104,12 +104,12 @@ export async function getServerSideProps(context: NextPageContext) {
     return {
       redirect: {
         permanent: false,
-        destination: "/admin/login",
-      },
+        destination: '/admin/login'
+      }
     };
   }
 
   return {
-    props: {},
+    props: {}
   };
 }
