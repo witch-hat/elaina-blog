@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import Link from 'next/link';
 import { InferGetServerSidePropsType, NextPageContext } from 'next';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -40,15 +41,13 @@ const Content = styled.div({
   alignItems: 'center',
   width: '100%',
   padding: '.8rem',
-  height: '10rem'
+  height: '5rem'
 });
 
 const PreviewTextWrapper = styled.div({
   width: '100%',
   display: 'flex',
-  height: '8.4rem',
-  flexDirection: 'column',
-  alignItems: 'flex-start'
+  height: '100%'
 });
 
 const PreviewTitle = styled.span({
@@ -68,20 +67,6 @@ const PreviewTitle = styled.span({
   }
 });
 
-const PreviewContent = styled.span({
-  flexShrink: 0,
-  width: '100%',
-  height: '4.5rem',
-  fontSize: '1.1rem',
-  margin: '.25rem 0 0',
-  wordBreak: 'keep-all',
-  textAlign: 'left',
-  overflow: 'hidden',
-  display: '-webkit-box',
-  WebkitLineClamp: 3,
-  WebkitBoxOrient: 'vertical'
-});
-
 interface Props extends AppCommonProps {
   posts: Post[];
   author: InferGetServerSidePropsType<typeof getServerSideProps>;
@@ -96,19 +81,31 @@ export default function PostProps(props: Props) {
     <AdminPageLayout>
       <div style={{ width: '100%', padding: '0 5%' }}>
         <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
-          {
-            <a href='/admin/writer'>
-              <AddButton themeMode={themeMode}>Add</AddButton>
-            </a>
-          }
+          <Link href='/admin/writer' passHref>
+            <AddButton themeMode={themeMode}>Add</AddButton>
+          </Link>
         </div>
         <Container>
           {posts.map((post) => {
             return (
               <PostContainer key={`${post.title}${post._id}`}>
                 <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
-                  <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                    <div style={{ flex: 1, display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', padding: '4px 8px 0px 8px' }}>
+                  <div
+                    style={{
+                      flex: 1,
+                      display: 'flex',
+                      flexDirection: 'column'
+                    }}
+                  >
+                    <div
+                      style={{
+                        flex: 1,
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'flex-end',
+                        padding: '4px 8px 0px 8px'
+                      }}
+                    >
                       {post._id > 0 && (
                         <CircleRippleWrapper
                           onClick={() => {
@@ -123,7 +120,6 @@ export default function PostProps(props: Props) {
                     <Content>
                       <PreviewTextWrapper>
                         <PreviewTitle>{post.title}</PreviewTitle>
-                        <PreviewContent>{post.article}</PreviewContent>
                       </PreviewTextWrapper>
                     </Content>
                   </div>
