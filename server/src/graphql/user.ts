@@ -11,7 +11,7 @@ import UAParser from 'ua-parser-js';
 import os from 'os';
 import defaultGateway, { Gateway } from 'default-gateway';
 
-const saltRounds = 10;
+const SALT = 10;
 
 interface MACList {
   [str: string]: {
@@ -51,7 +51,7 @@ export const userTypeDef = gql`
   }
 
   extend type Mutation {
-    updatePassword(emailId: String, password: String): User
+    updatePassword(old: String!, new: String!): Void
     login(emailId: String!, password: String!): LoginResponse
     logout: Void
     refreshUserToken(userId: ID!): User
@@ -65,19 +65,10 @@ export const userResolver = {
   Query: {
     async me() {
       try {
-        const user = await UserModel.find();
-        return user[user.length - 1];
-      } catch (err) {
-        console.log(err);
-        throw err;
-      }
-    },
-
-    async findMeById(id: string) {
-      try {
-        const user = await UserModel.findById(id);
+        const user: User = await UserModel.findById(1);
         return user;
       } catch (err) {
+        console.log(err);
         throw err;
       }
     },
@@ -135,9 +126,9 @@ export const userResolver = {
               const accessToken = getToken(payload, FIVE_MINUTE);
               const refreshToken = getToken(payload, MONTH);
 
-              const hashedRefreshToken = await bcrypt.hash(refreshToken, saltRounds);
+              const hashedRefreshToken = await bcrypt.hash(refreshToken, SALT);
               cookies.set('a_refresh', hashedRefreshToken, {
-                httpOnly: true,
+                httpOnly: false,
                 sameSite: 'strict',
                 secure: false
               });
@@ -146,7 +137,7 @@ export const userResolver = {
               me.save();
 
               cookies.set('a_access', accessToken, {
-                httpOnly: true,
+                httpOnly: false,
                 sameSite: 'strict',
                 secure: false
               });
@@ -175,13 +166,21 @@ export const userResolver = {
     }
   },
   Mutation: {
-    async updatePassword(_: any, args: any) {
+    async updatePassword(_: any, args: { old: string; new: string }) {
       try {
-        const result = await UserModel.create({
-          emailId: args.emailId,
-          password: args.password
-        });
-        return result;
+        const user: User = await UserModel.findById(1);
+
+        const isMatch = await comparePassword(args.old, user.password);
+
+        if (isMatch) {
+          user.password = args.new;
+          user.auth = [];
+          user.save();
+        } else {
+          throw new AuthenticationError('패스워드 정보가 일치하지 않습니다.');
+        }
+
+        return;
       } catch (err) {
         throw err;
       }
@@ -212,7 +211,7 @@ export const userResolver = {
 
       const cookies = new Cookies(context.req, context.res);
       try {
-        const me: User = await UserModel.findOne({}, {}, { sort: { _id: -1 } });
+        const me: User = await UserModel.findById(1);
         const authList = me.auth;
 
         if (args.emailId === me.emailId) {
@@ -238,10 +237,10 @@ export const userResolver = {
             }
 
             await bcrypt
-              .hash(refreshToken, saltRounds)
+              .hash(refreshToken, SALT)
               .then((hashedRefreshToken) => {
                 cookies.set('a_refresh', hashedRefreshToken, {
-                  httpOnly: true,
+                  httpOnly: false,
                   sameSite: 'strict',
                   secure: false
                 });
@@ -249,7 +248,7 @@ export const userResolver = {
               .catch((err) => console.error(err));
 
             cookies.set('a_access', accessToken, {
-              httpOnly: true,
+              httpOnly: false,
               sameSite: 'strict',
               secure: false
             });
@@ -280,7 +279,7 @@ export const userResolver = {
       const cookies = new Cookies(context.req, context.res);
 
       try {
-        const me: User = await UserModel.findOne({}, {}, { sort: { _id: -1 } });
+        const me: User = await UserModel.findById(1);
         const deleteResultAuth = me.auth.filter((authInfo) => {
           return authInfo.userUniqueId !== userUniqueId;
         });

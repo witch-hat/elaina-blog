@@ -28,6 +28,10 @@ const authSchema = new Schema({
 
 export const userSchema = new Schema<User>(
   {
+    _id: {
+      type: Number,
+      required: true
+    },
     emailId: {
       type: String,
       required: true
