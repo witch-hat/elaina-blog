@@ -26,5 +26,6 @@ export enum Lang {
   Comments = 'Comments',
   WriteComments = 'WriteComments',
   Reply = 'Reply',
-  WriteReply = 'WriteReply'
+  WriteReply = 'WriteReply',
+  ChangePassword = 'ChangePassword'
 }
