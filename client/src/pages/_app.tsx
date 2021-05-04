@@ -36,16 +36,15 @@ const FONT = `
   }
 `;
 
-function ElainaBlog({ Component, pageProps, apolloClient }: any) {
-  // if (typeof window !== 'undefined') {
-  //   if (cookies[0] && cookies[1]) {
-  //     console.log(cookies[1]);
-  //     console.log(cookies[0]);
-  //     document.cookie = cookies[0];
-  //     document.cookie = cookies[1];
-  //   }
-  // }
-  // console.log(cookies);
+function ElainaBlog({ Component, pageProps, apolloClient, cookies }: any) {
+  if (typeof window !== 'undefined') {
+    if (cookies[0] && cookies[1]) {
+      console.log(cookies[1]);
+      console.log(cookies[0]);
+      document.cookie = cookies[0];
+      document.cookie = cookies[1];
+    }
+  }
 
   useTranslation();
 
@@ -91,6 +90,9 @@ ElainaBlog.getInitialProps = async (context: AppContext) => {
   const { data } = await client.query({ query: IS_AUTH });
   const isLogin = data.isAuth.isAuth;
 
+  const combinedCookieHeader = data.isAuth.cookie;
+  const cookies = setCookie.splitCookiesString(combinedCookieHeader || '');
+
   let pageProps: AppCommonProps = {
     app: {
       isLogin
@@ -103,7 +105,7 @@ ElainaBlog.getInitialProps = async (context: AppContext) => {
 
   Object.assign(appCommponProps, pageProps);
 
-  return { pageProps };
+  return { pageProps, cookies };
 };
 
 export default withApollo(ElainaBlog);
