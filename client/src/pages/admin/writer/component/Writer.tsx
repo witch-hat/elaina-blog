@@ -261,7 +261,9 @@ export function Writer(props: Props) {
     if (!title) {
       window.scrollTo(0, 0);
       titleRef.current?.focus();
-      return alert('제목을 입력해주세요');
+      alert('제목을 입력해주세요');
+      setVisibleSubmitBtn(true);
+      return;
     }
 
     const { data } = await client.query({ query: IS_AUTH });
