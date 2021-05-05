@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import styled from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 import { useMutation } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBuilding, faEnvelope, faLink, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
@@ -13,26 +13,49 @@ import { Lang, trans } from 'src/resources/languages';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 
-const ImageContainer = styled.div({
-  poisition: 'relative',
-  display: 'flex',
-  width: '100%',
-  alignItems: 'center',
-  justifyContent: 'center'
-});
-
-const Name = styled.span({
-  display: 'block',
-  fontSize: '1.4rem',
-  fontWeight: 'bold',
-  width: '100%',
-  margin: '8px 0 0 0',
-  wordBreak: 'keep-all',
-  '@media screen and (max-width: 767px)': {
-    margin: '10px 0',
-    textAlign: 'center'
+const MoveRight = keyframes({
+  from: {
+    opacity: '0',
+    transform: 'translateX(-1.5rem)'
+  },
+  to: {
+    opacity: '1',
+    transform: 'translateX(0)'
   }
 });
+
+const ImageContainer = styled.div(
+  {
+    poisition: 'relative',
+    display: 'flex',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  css`
+    animation: ${MoveRight} 0.4s ease-out forwards;
+  `
+);
+
+const Name = styled.span(
+  {
+    display: 'block',
+    width: '100%',
+    margin: '8px 0 0 0',
+    fontSize: '1.4rem',
+    fontWeight: 'bold',
+    wordBreak: 'keep-all',
+    opacity: '0',
+    '@media screen and (max-width: 767px)': {
+      margin: '10px 0',
+      textAlign: 'center'
+    }
+  },
+  css<{ index: number }>`
+    animation: ${MoveRight} 0.4s ease-out forwards;
+    animation-delay: ${(props) => props.index * 0.2}s;
+  `
+);
 
 const ListWrapper = styled.ul({
   display: 'flex',
@@ -48,14 +71,21 @@ const ListWrapper = styled.ul({
   }
 });
 
-const Description = styled.li({
-  display: 'flex',
-  alignItems: 'center',
-  width: '100%',
-  fontSize: '1.1rem',
-  wordBreak: 'keep-all',
-  margin: '.4rem 0'
-});
+const Description = styled.li(
+  {
+    display: 'flex',
+    width: '100%',
+    margin: '.4rem 0',
+    fontSize: '1.1rem',
+    alignItems: 'center',
+    wordBreak: 'keep-all',
+    opacity: '0'
+  },
+  css<{ index: number }>`
+    animation: ${MoveRight} 0.4s ease-out forwards;
+    animation-delay: ${(props) => props.index * 0.2}s;
+  `
+);
 
 const ButtonContainer = styled.div({
   width: '100%',
@@ -115,6 +145,7 @@ interface Props {
 
 export function ProfileViewer(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  let descIndex = 1;
 
   return (
     <>
@@ -131,13 +162,13 @@ export function ProfileViewer(props: Props) {
           }}
         />
       </ImageContainer>
-      <Name>{props.profile.name}</Name>
+      <Name index={descIndex++}>{props.profile.name}</Name>
       <ListWrapper>
-        <Description>
+        <Description index={descIndex++}>
           <Paragraph>{props.profile.introduce}</Paragraph>
         </Description>
         {props.profile.link && (
-          <Description>
+          <Description index={descIndex++}>
             <ProfileIcon icon={faLink} />
             <ParagraphLink href={props.profile.link} target='_blank' rel='noopener noreferer nofollow'>
               <Paragraph>{props.profile.link}</Paragraph>
@@ -145,19 +176,19 @@ export function ProfileViewer(props: Props) {
           </Description>
         )}
         {props.profile.company && (
-          <Description>
+          <Description index={descIndex++}>
             <ProfileIcon icon={faBuilding} />
             <Paragraph>{props.profile.company}</Paragraph>
           </Description>
         )}
         {props.profile.location && (
-          <Description>
+          <Description index={descIndex++}>
             <ProfileIcon icon={faMapMarkerAlt} />
             <Paragraph>{props.profile.location}</Paragraph>
           </Description>
         )}
         {props.profile.email && (
-          <Description>
+          <Description index={descIndex++}>
             <ProfileIcon icon={faEnvelope} />
             <ParagraphLink href={`mailto:${props.profile.email}`}>
               <Paragraph>{props.profile.email}</Paragraph>
