@@ -24,6 +24,15 @@ const MoveRight = keyframes({
   }
 });
 
+const FadeIn = keyframes({
+  from: {
+    opacity: '0'
+  },
+  to: {
+    opacity: '1'
+  }
+});
+
 const ImageContainer = styled.div(
   {
     poisition: 'relative',
@@ -51,9 +60,9 @@ const Name = styled.span(
       textAlign: 'center'
     }
   },
-  css<{ index: number }>`
+  css<{ delay: number }>`
     animation: ${MoveRight} 0.4s ease-out forwards;
-    animation-delay: ${(props) => props.index * 0.2}s;
+    animation-delay: ${(props) => props.delay * 0.2}s;
   `
 );
 
@@ -81,18 +90,25 @@ const Description = styled.li(
     wordBreak: 'keep-all',
     opacity: '0'
   },
-  css<{ index: number }>`
+  css<{ delay: number }>`
     animation: ${MoveRight} 0.4s ease-out forwards;
-    animation-delay: ${(props) => props.index * 0.2}s;
+    animation-delay: ${(props) => props.delay * 0.2}s;
   `
 );
 
-const ButtonContainer = styled.div({
-  width: '100%',
-  marginTop: '.5rem',
-  display: 'flex',
-  justifyContent: 'center'
-});
+const ButtonContainer = styled.div(
+  {
+    width: '100%',
+    marginTop: '.5rem',
+    display: 'flex',
+    justifyContent: 'center',
+    opacity: '0'
+  },
+  css<{ delay: number }>`
+    animation: ${FadeIn} 0.4s ease-out forwards;
+    animation-delay: ${(props) => props.delay * 0.2}s;
+  `
+);
 
 const EditButton = styled.div({
   width: '100%',
@@ -145,7 +161,7 @@ interface Props {
 
 export function ProfileViewer(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
-  let descIndex = 1;
+  let animationDelay = 1;
 
   return (
     <>
@@ -162,13 +178,13 @@ export function ProfileViewer(props: Props) {
           }}
         />
       </ImageContainer>
-      <Name index={descIndex++}>{props.profile.name}</Name>
+      <Name delay={animationDelay++}>{props.profile.name}</Name>
       <ListWrapper>
-        <Description index={descIndex++}>
+        <Description delay={animationDelay++}>
           <Paragraph>{props.profile.introduce}</Paragraph>
         </Description>
         {props.profile.link && (
-          <Description index={descIndex++}>
+          <Description delay={animationDelay++}>
             <ProfileIcon icon={faLink} />
             <ParagraphLink href={props.profile.link} target='_blank' rel='noopener noreferer nofollow'>
               <Paragraph>{props.profile.link}</Paragraph>
@@ -176,19 +192,19 @@ export function ProfileViewer(props: Props) {
           </Description>
         )}
         {props.profile.company && (
-          <Description index={descIndex++}>
+          <Description delay={animationDelay++}>
             <ProfileIcon icon={faBuilding} />
             <Paragraph>{props.profile.company}</Paragraph>
           </Description>
         )}
         {props.profile.location && (
-          <Description index={descIndex++}>
+          <Description delay={animationDelay++}>
             <ProfileIcon icon={faMapMarkerAlt} />
             <Paragraph>{props.profile.location}</Paragraph>
           </Description>
         )}
         {props.profile.email && (
-          <Description index={descIndex++}>
+          <Description delay={animationDelay++}>
             <ProfileIcon icon={faEnvelope} />
             <ParagraphLink href={`mailto:${props.profile.email}`}>
               <Paragraph>{props.profile.email}</Paragraph>
@@ -197,7 +213,7 @@ export function ProfileViewer(props: Props) {
         )}
       </ListWrapper>
       {props.isLogin && (
-        <ButtonContainer>
+        <ButtonContainer delay={animationDelay++}>
           <EditButton onClick={() => props.setEditMode(true)}>{trans(Lang.EditProfile)}</EditButton>
         </ButtonContainer>
       )}
