@@ -70,11 +70,12 @@ const PreviewContent = styled.span({
 
 interface Props {
   category: CategoryDetails;
+  isEmpty?: boolean;
 }
 
-function UnlinkedCategory(props: Props) {
+function ContentCategoryItem(props: Props) {
   return (
-    <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
+    <BorderBox isTransform={props.isEmpty ? false : true} styles={{ width: '100%', margin: '.8rem 0' }}>
       <Content>
         <PreviewTextWrapper>
           <PreviewTitle>{props.category.title}</PreviewTitle>
@@ -87,4 +88,4 @@ function UnlinkedCategory(props: Props) {
   );
 }
 
-export default React.memo(UnlinkedCategory);
+export default React.memo(ContentCategoryItem);
