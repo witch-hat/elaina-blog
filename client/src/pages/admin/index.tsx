@@ -1,10 +1,12 @@
 import React from 'react';
 import Link from 'next/link';
-import styled from 'styled-components';
 import { NextPageContext } from 'next';
 
 import { AdminPageLayout } from './component/AdminPageLayout';
 import { AppCommonProps, appCommponProps } from '../_app';
+import styled from 'styled-components';
+import { faTemperatureLow } from '@fortawesome/free-solid-svg-icons';
+import { Router } from 'next/router';
 
 interface Props extends AppCommonProps {}
 
