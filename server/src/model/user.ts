@@ -1,5 +1,6 @@
 import { Schema, model, Document, Model } from 'mongoose';
 import bcrypt from 'bcrypt';
+
 const saltRounds = 10;
 
 export interface Auth {

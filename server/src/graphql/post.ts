@@ -1,4 +1,5 @@
 import { ApolloError, gql, UserInputError } from 'apollo-server';
+
 import { PostModel, Post } from '../model/post';
 import { ContextType } from '../types/context';
 import { CategoryModel, Category } from '../model/category';

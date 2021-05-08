@@ -1,4 +1,5 @@
 import { gql } from 'apollo-server';
+
 import { About, AboutModel } from '../model/about';
 
 export const aboutTypeDef = gql`

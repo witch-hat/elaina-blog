@@ -1,4 +1,5 @@
 import { ApolloError, AuthenticationError, gql, UserInputError } from 'apollo-server';
+
 import { CommentModel, Comments, Comment, Reply } from '../model/comment';
 import { ContextType } from '../types/context';
 import { comparePassword } from '../util/auth';

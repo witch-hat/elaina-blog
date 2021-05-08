@@ -1,4 +1,5 @@
 import { gql, ApolloError, UserInputError } from 'apollo-server';
+
 import { ProfileModel } from '../model/profile';
 import { ContextType } from '../types/context';
 

@@ -1,5 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
-import { profileSchema, Profile } from './profile';
+
+import { profileSchema } from './profile';
 import { userSchema, User } from './user';
 import { categorySchema } from './category';
 

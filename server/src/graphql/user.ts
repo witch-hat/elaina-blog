@@ -1,6 +1,4 @@
 import { gql, AuthenticationError, UserInputError, ApolloError } from 'apollo-server';
-import { UserModel, User, Auth } from '../model/user';
-import { comparePassword, getToken, verifyToken } from '../util/auth';
 import { ContextType } from '../types/context';
 import jwt, { TokenExpiredError } from 'jsonwebtoken';
 import { config } from '../util/config';
@@ -10,6 +8,9 @@ import Cookies from 'cookies';
 import UAParser from 'ua-parser-js';
 import os from 'os';
 import defaultGateway, { Gateway } from 'default-gateway';
+
+import { UserModel, User, Auth } from '../model/user';
+import { comparePassword, getToken, verifyToken } from '../util/auth';
 
 const SALT = 10;
 

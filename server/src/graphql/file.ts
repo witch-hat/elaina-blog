@@ -1,7 +1,8 @@
 import { gql } from 'apollo-server-express';
-import { ContextType } from '../types/context';
 import path from 'path';
 import fs from 'fs';
+
+import { ContextType } from '../types/context';
 import { random } from '../util/random';
 import { FileModel } from '../model/file';
 
