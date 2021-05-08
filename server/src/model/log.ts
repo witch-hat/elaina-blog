@@ -4,7 +4,7 @@ export enum Event {
   newCategory,
   newPost,
   newComment,
-  deleteCategory,
+  newReply,
   movePost
 }
 
@@ -13,6 +13,9 @@ export interface Log extends Document {
   time: Date;
   event: Event;
   categoryId: number;
+  postId: number | null;
+  commentIndex: number | null;
+  replyIndex: number | null;
 }
 
 export const logSchema = new Schema<Log>(
@@ -32,6 +35,15 @@ export const logSchema = new Schema<Log>(
     categoryId: {
       type: Number,
       required: true
+    },
+    postId: {
+      type: Number
+    },
+    commentIndex: {
+      type: Number
+    },
+    replyIndex: {
+      type: Number
     }
   },
   {
