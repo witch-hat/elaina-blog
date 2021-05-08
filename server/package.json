@@ -12,7 +12,6 @@
     "@types/jsonwebtoken": "^8.5.0",
     "@types/lodash": "^4.14.167",
     "@types/mongoose": "^5.10.3",
-    "@types/ua-parser-js": "^0.7.35",
     "apollo-server": "^2.19.1",
     "apollo-server-express": "^2.19.2",
     "bcrypt": "^5.0.0",
@@ -32,7 +31,6 @@
     "ts-node": "^9.1.1",
     "typeorm": "^0.2.31",
     "typescript": "4.0.3",
-    "ua-parser-js": "^0.7.24",
     "uuid": "^8.3.2"
   },
   "scripts": {
@@ -49,7 +47,9 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@types/ua-parser-js": "^0.7.35",
     "@types/uuid": "^8.3.0",
-    "dotenv": "^8.2.0"
+    "dotenv": "^8.2.0",
+    "ua-parser-js": "^0.7.28"
   }
 }
