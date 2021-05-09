@@ -14,19 +14,19 @@ export const commentLogTypeDef = gql`
   }
 
   extend type Query {
-    logs: [CommentLog]
+    commentLogs: [CommentLog]
   }
 
   extend type Mutation {
-    pushLog(time: DateTime!, event: Int!, categoryId: Int!, postId: Int!, commentIndex: Int!, replyIndex: Int): Void
-    deleteLog(postId: Int!, commentIndex: Int!, replyIndex: Int): Void
-    deletePostAllLog(postId: Int!): Void
+    pushCommentLog(time: DateTime!, event: Int!, categoryId: Int!, postId: Int!, commentIndex: Int!, replyIndex: Int): Void
+    deleteCommentLog(postId: Int!, commentIndex: Int!, replyIndex: Int): Void
+    deletePostAllCommentLog(postId: Int!): Void
   }
 `;
 
 export const commentLogResolver = {
   Query: {
-    async logs() {
+    async commentLogs() {
       try {
         const logList: CommentLog[] = await CommentLogModel.find();
         return logList;
@@ -37,7 +37,7 @@ export const commentLogResolver = {
   },
 
   Mutation: {
-    async pushLog(
+    async pushCommentLog(
       _: any,
       args: {
         time: Date;
@@ -68,7 +68,11 @@ export const commentLogResolver = {
       }
     },
 
-    async deleteLog(_: any, args: { categoryId: number; postId: number; commentIndex: number; replyIndex?: number }, context: ContextType) {
+    async deleteCommentLog(
+      _: any,
+      args: { categoryId: number; postId: number; commentIndex: number; replyIndex?: number },
+      context: ContextType
+    ) {
       try {
         const deletedLog: CommentLog = await CommentLogModel.findOne({
           postId: args.postId,
@@ -87,7 +91,7 @@ export const commentLogResolver = {
       }
     },
 
-    async deletePostAllLog(_: any, args: { postId: number }, context: ContextType) {
+    async deletePostAllCommentLog(_: any, args: { postId: number }, context: ContextType) {
       try {
         await CommentLogModel.deleteMany({ postId: args.postId });
         return;

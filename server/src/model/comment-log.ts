@@ -46,7 +46,7 @@ export const commentLogSchema = new Schema<CommentLog>(
     }
   },
   {
-    collection: 'logs'
+    collection: 'comment-logs'
   }
 );
 

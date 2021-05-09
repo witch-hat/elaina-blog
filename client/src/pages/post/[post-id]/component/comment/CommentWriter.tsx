@@ -12,7 +12,7 @@ import { Reply, WRITE_COMMENT, Comment, WRITE_REPLY } from 'src/query/comment';
 import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';
 import { Lang, trans } from 'src/resources/languages';
-import { PUSH_LOG, CommentEvent, CommentLog } from 'src/query/comment-log';
+import { PUSH_COMMENT_LOG, CommentEvent, CommentLog } from 'src/query/comment-log';
 
 const EditorContainer = styled.form({
   width: '100%',
@@ -110,7 +110,7 @@ export function CommentWriter(props: Props) {
   const client = useApollo();
   const [writeComment, { loading: writeCommentLoading }] = useMutation(WRITE_COMMENT);
   const [writeReply, { loading: writeReplyLoading }] = useMutation(WRITE_REPLY);
-  const [pushLog] = useMutation(PUSH_LOG);
+  const [pushCommentLog] = useMutation(PUSH_COMMENT_LOG);
 
   function reset() {
     if (usernameRef.current && passwordRef.current) {
@@ -187,7 +187,7 @@ export function CommentWriter(props: Props) {
           });
         }
 
-        await pushLog({
+        await pushCommentLog({
           variables: {
             time: new Date(createdAt),
             event: CommentEvent.newComment,
@@ -268,7 +268,7 @@ export function CommentWriter(props: Props) {
           });
         }
 
-        await pushLog({
+        await pushCommentLog({
           variables: {
             time: new Date(createdAt),
             event: CommentEvent.newReply,

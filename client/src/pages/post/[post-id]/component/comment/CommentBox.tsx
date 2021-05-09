@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 
 import { DropDownMenu, ModalWrapper, InputBox } from 'src/components';
 import { Comment, DELETE_COMMENT, DELETE_REPLY, EDIT_COMMENT, EDIT_REPLY, Reply } from 'src/query/comment';
-import { DELETE_LOG } from 'src/query/comment-log';
+import { DELETE_COMMENT_LOG } from 'src/query/comment-log';
 import { FormatUnifier } from 'src/utils';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
@@ -174,7 +174,7 @@ export function CommentBox(props: Props) {
   const [deleteComment] = useMutation(DELETE_COMMENT);
   const [editComment] = useMutation(EDIT_COMMENT);
   const [editReply] = useMutation(EDIT_REPLY);
-  const [deleteLog] = useMutation(DELETE_LOG);
+  const [deleteCommentLog] = useMutation(DELETE_COMMENT_LOG);
 
   useEffect(() => {
     setCommentContent(props.comment.comment);
@@ -218,7 +218,7 @@ export function CommentBox(props: Props) {
     }
 
     try {
-      deleteLog({
+      deleteCommentLog({
         variables: {
           postId: props.postId,
           commentIndex: props.commentIndex + 1
@@ -269,7 +269,7 @@ export function CommentBox(props: Props) {
     }
 
     try {
-      deleteLog({
+      deleteCommentLog({
         variables: {
           postId: props.postId,
           commentIndex: props.commentIndex + 1,

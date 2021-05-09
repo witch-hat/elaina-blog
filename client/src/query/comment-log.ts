@@ -15,9 +15,9 @@ export interface CommentLog {
   replyIndex: number | null;
 }
 
-export const GET_LOGS = gql`
+export const GET_COMMENT_LOGS = gql`
   query {
-    logs {
+    commentLogs {
       _id
       time
       event
@@ -29,20 +29,27 @@ export const GET_LOGS = gql`
   }
 `;
 
-export const PUSH_LOG = gql`
+export const PUSH_COMMENT_LOG = gql`
   mutation($time: DateTime!, $event: Int!, $categoryId: Int!, $postId: Int!, $commentIndex: Int!, $replyIndex: Int) {
-    pushLog(time: $time, event: $event, categoryId: $categoryId, postId: $postId, commentIndex: $commentIndex, replyIndex: $replyIndex)
+    pushCommentLog(
+      time: $time
+      event: $event
+      categoryId: $categoryId
+      postId: $postId
+      commentIndex: $commentIndex
+      replyIndex: $replyIndex
+    )
   }
 `;
 
-export const DELETE_LOG = gql`
+export const DELETE_COMMENT_LOG = gql`
   mutation($postId: Int!, $commentIndex: Int!, $replyIndex: Int) {
-    deleteLog(postId: $postId, commentIndex: $commentIndex, replyIndex: $replyIndex)
+    deleteCommentLog(postId: $postId, commentIndex: $commentIndex, replyIndex: $replyIndex)
   }
 `;
 
-export const DELETE_POST_ALL_LOG = gql`
+export const DELETE_POST_ALL_COMMENT_LOG = gql`
   mutation($postId: Int!) {
-    deletePostAllLog(postId: $postId)
+    deletePostAllCommentLog(postId: $postId)
   }
 `;
