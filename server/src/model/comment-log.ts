@@ -1,24 +1,21 @@
 import { Schema, model, Document } from 'mongoose';
 
-export enum Event {
-  newCategory,
-  newPost,
+export enum CommentEvent {
   newComment,
-  newReply,
-  movePost
+  newReply
 }
 
-export interface Log extends Document {
+export interface CommentLog extends Document {
   _id: number;
   time: Date;
-  event: Event;
+  commentEvent: CommentEvent;
   categoryId: number;
-  postId: number | null;
-  commentIndex: number | null;
+  postId: number;
+  commentIndex: number;
   replyIndex: number | null;
 }
 
-export const logSchema = new Schema<Log>(
+export const commentLogSchema = new Schema<CommentLog>(
   {
     _id: {
       type: Number,
@@ -28,7 +25,7 @@ export const logSchema = new Schema<Log>(
       type: Date,
       required: true
     },
-    event: {
+    commentEvent: {
       type: Number,
       required: true
     },
@@ -37,10 +34,12 @@ export const logSchema = new Schema<Log>(
       required: true
     },
     postId: {
-      type: Number
+      type: Number,
+      required: true
     },
     commentIndex: {
-      type: Number
+      type: Number,
+      required: true
     },
     replyIndex: {
       type: Number
@@ -51,4 +50,4 @@ export const logSchema = new Schema<Log>(
   }
 );
 
-export const LogModel = model<Log>('Log', logSchema);
+export const CommentLogModel = model<CommentLog>('Log', commentLogSchema);
