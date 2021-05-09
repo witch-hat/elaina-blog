@@ -6,7 +6,6 @@ export { Loading } from './Loading';
 // Box
 export { InputBox } from './common/box/InputBox';
 export { BorderBox } from './common/box/BorderBox';
-export { CommentBox } from './common/box/CommentBox';
 export { AlertBox } from './common/box/AlertBox';
 export type { AlertStateType } from './common/box/AlertBox';
 export { DropDownMenu } from './common/box/DropDownMenu';

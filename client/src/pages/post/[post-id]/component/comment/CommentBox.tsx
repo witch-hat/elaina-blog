@@ -6,9 +6,9 @@ import { faUser, faClock, faEllipsisV } from '@fortawesome/free-solid-svg-icons'
 import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
 
-import { DropDownMenu } from 'src/components';
+import { DropDownMenu, ModalWrapper, InputBox } from 'src/components';
 import { Comment, DELETE_COMMENT, DELETE_REPLY, EDIT_COMMENT, EDIT_REPLY, Reply } from 'src/query/comment';
-import { ModalWrapper } from 'src/components';
+import { DELETE_LOG } from 'src/query/comment-log';
 import { FormatUnifier } from 'src/utils';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
@@ -16,7 +16,6 @@ import { theme } from 'src/styles';
 import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';
 import { Lang, trans } from 'src/resources/languages';
-import { InputBox } from './InputBox';
 
 const Container = styled.div({
   width: '100%',
@@ -146,6 +145,7 @@ const EditButtonItem = styled.button({
 
 interface Props {
   isLogin: boolean;
+  postId: number;
   isCommentFromAdmin: boolean;
   comment: Comment | Reply;
   author: string;
@@ -174,6 +174,7 @@ export function CommentBox(props: Props) {
   const [deleteComment] = useMutation(DELETE_COMMENT);
   const [editComment] = useMutation(EDIT_COMMENT);
   const [editReply] = useMutation(EDIT_REPLY);
+  const [deleteLog] = useMutation(DELETE_LOG);
 
   useEffect(() => {
     setCommentContent(props.comment.comment);
@@ -215,6 +216,17 @@ export function CommentBox(props: Props) {
         alert(err.message);
       }
     }
+
+    try {
+      deleteLog({
+        variables: {
+          postId: props.postId,
+          commentIndex: props.commentIndex + 1
+        }
+      });
+    } catch (err) {
+      alert(err.message);
+    }
   }
 
   async function handleDeleteReply() {
@@ -254,6 +266,18 @@ export function CommentBox(props: Props) {
       } catch (err) {
         alert(err);
       }
+    }
+
+    try {
+      deleteLog({
+        variables: {
+          postId: props.postId,
+          commentIndex: props.commentIndex + 1,
+          replyIndex: props?.replyIndex! + 1
+        }
+      });
+    } catch (err) {
+      alert(err.message);
     }
   }
 
