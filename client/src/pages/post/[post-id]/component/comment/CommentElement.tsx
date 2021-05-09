@@ -2,14 +2,15 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 
-import { BorderBox, CommentBox } from 'src/components';
-import { CommentWriter } from 'src/pages/admin/writer/component/CommentWriter';
+import { BorderBox } from 'src/components';
 import { Reply, Comment, Comments } from 'src/query/comment';
 import { theme } from 'src/styles';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { trans, Lang } from 'src/resources/languages';
 
+import { CommentBox } from './CommentBox';
+import { CommentWriter } from './CommentWriter';
 import { ReplyElement } from './ReplyElement';
 
 const Container = styled.div<{ themeMode: ThemeMode; isAdmin: boolean }>((props) => ({
@@ -47,9 +48,11 @@ interface Props {
   isLogin: boolean;
   author: string;
   isCommentFromAdmin: boolean;
-  index: number;
   count: number;
   commentContainer: Comments;
+  categoryId: number;
+  postId: number;
+  commentIndex: number;
   setCommentContainer: React.Dispatch<React.SetStateAction<Comments>>;
   setDeletedIndex: React.Dispatch<React.SetStateAction<number>>;
 }
@@ -72,7 +75,7 @@ export function CommentElement(props: Props) {
     if (newReply) {
       setReplies([...replies, newReply]);
 
-      props.commentContainer.comments[props.index].replies.push(newReply);
+      props.commentContainer.comments[props.commentIndex].replies.push(newReply);
       const newComments = props.commentContainer.comments;
 
       props.setCommentContainer({ ...props.commentContainer, comments: newComments, count: props.count + 1 });
@@ -85,7 +88,7 @@ export function CommentElement(props: Props) {
     if (deletedReplyIndex > -1) {
       setReplies([...replies.filter((reply, index) => index !== deletedReplyIndex)]);
 
-      props.commentContainer.comments[props.index].replies.splice(deletedReplyIndex, 1);
+      props.commentContainer.comments[props.commentIndex].replies.splice(deletedReplyIndex, 1);
       const newComments = props.commentContainer.comments;
 
       props.setCommentContainer({ ...props.commentContainer, comments: newComments, count: props.count - 1 });
@@ -98,10 +101,11 @@ export function CommentElement(props: Props) {
       <BorderBox isTransform={false} styles={{ margin: '1rem 0 0', width: '100%' }}>
         <CommentBox
           isLogin={props.isLogin}
+          postId={props.postId}
           isCommentFromAdmin={props.isCommentFromAdmin}
           comment={props.comment}
           author={props.author}
-          commentIndex={props.index}
+          commentIndex={props.commentIndex}
           setDeletedIndex={props.setDeletedIndex}
         >
           <>
@@ -118,8 +122,11 @@ export function CommentElement(props: Props) {
                 isLogin={props.isLogin}
                 buttonText={trans(Lang.Save)}
                 setNewReply={setNewReply}
+                categoryId={props.categoryId}
+                postId={props.postId}
+                replyIndex={replies.length + 1}
                 isReply
-                commentIndex={props.index}
+                commentIndex={props.commentIndex}
               />
             )}
             <ReplyContainer>
@@ -128,9 +135,10 @@ export function CommentElement(props: Props) {
                     return (
                       <ReplyElement
                         key={index}
+                        postId={props.postId}
                         isLogin={props.isLogin}
                         author={props.author}
-                        commentIndex={props.index}
+                        commentIndex={props.commentIndex}
                         reply={reply}
                         replyIndex={index}
                         setDeletedReplyIndex={setDeletedReplyIndex}

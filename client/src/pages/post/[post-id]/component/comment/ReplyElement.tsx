@@ -2,11 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 
-import { CommentBox } from 'src/components';
 import { Reply } from 'src/query/comment';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { theme } from 'src/styles';
+
+import { CommentBox } from './CommentBox';
 
 const ReplyContainer = styled.div<{ themeMode: ThemeMode; isAdmin: boolean }>((props) => ({
   width: '95%',
@@ -18,6 +19,7 @@ const ReplyContainer = styled.div<{ themeMode: ThemeMode; isAdmin: boolean }>((p
 
 interface Props {
   reply: Reply;
+  postId: number;
   isLogin: boolean;
   author: string;
   commentIndex: number;
@@ -33,6 +35,7 @@ export function ReplyElement(props: Props) {
     <ReplyContainer key={`${createdAt}`} themeMode={themeMode} isAdmin={props.reply.isAdmin}>
       <CommentBox
         isLogin={props.isLogin}
+        postId={props.postId}
         isCommentFromAdmin={props.reply.isAdmin}
         comment={props.reply}
         author={props.author}

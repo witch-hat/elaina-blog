@@ -16,6 +16,7 @@ import { theme } from 'src/styles';
 import { RootState } from 'src/redux/rootReducer';
 
 import { ContentMenu } from './ArticleMenu';
+import { DELETE_POST_ALL_LOG } from 'src/query/comment-log';
 
 const Container = styled.section({
   width: '100%',
@@ -89,6 +90,7 @@ export function Article(props: Props) {
 
   const client = useApollo();
   const [deletePost] = useMutation(DELETE_POST);
+  const [deletePostAllLog] = useMutation(DELETE_POST_ALL_LOG);
 
   const id = router.query['post-id'];
 
@@ -114,6 +116,12 @@ export function Article(props: Props) {
           const lastPostId = data.findSameCategoryPosts.post[data.findSameCategoryPosts.post.length - 1]._id;
           router.push(`/post/${lastPostId}`);
         }
+
+        await deletePostAllLog({
+          variables: {
+            postId: +id
+          }
+        });
       } catch (err) {
         alert(err.message);
       }

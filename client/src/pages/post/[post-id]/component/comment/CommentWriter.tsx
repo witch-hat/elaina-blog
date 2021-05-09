@@ -12,6 +12,7 @@ import { Reply, WRITE_COMMENT, Comment, WRITE_REPLY } from 'src/query/comment';
 import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';
 import { Lang, trans } from 'src/resources/languages';
+import { PUSH_LOG, CommentEvent, CommentLog } from 'src/query/comment-log';
 
 const EditorContainer = styled.form({
   width: '100%',
@@ -87,7 +88,10 @@ interface Props {
   isLogin: boolean;
   buttonText: string;
   isReply?: boolean;
-  commentIndex?: number;
+  categoryId: number;
+  postId: number;
+  commentIndex: number;
+  replyIndex?: number;
   setNewComment?: React.Dispatch<React.SetStateAction<Comment | undefined>>;
   setNewReply?: React.Dispatch<React.SetStateAction<Reply | undefined>>;
 }
@@ -106,6 +110,7 @@ export function CommentWriter(props: Props) {
   const client = useApollo();
   const [writeComment, { loading: writeCommentLoading }] = useMutation(WRITE_COMMENT);
   const [writeReply, { loading: writeReplyLoading }] = useMutation(WRITE_REPLY);
+  const [pushLog] = useMutation(PUSH_LOG);
 
   function reset() {
     if (usernameRef.current && passwordRef.current) {
@@ -181,6 +186,16 @@ export function CommentWriter(props: Props) {
             replies: []
           });
         }
+
+        await pushLog({
+          variables: {
+            time: new Date(createdAt),
+            event: CommentEvent.newComment,
+            categoryId: props.categoryId,
+            postId: props.postId,
+            commentIndex: props.commentIndex
+          }
+        });
       } catch (err) {
         alert(err.message);
       }
@@ -252,6 +267,17 @@ export function CommentWriter(props: Props) {
             isAdmin
           });
         }
+
+        await pushLog({
+          variables: {
+            time: new Date(createdAt),
+            event: CommentEvent.newReply,
+            categoryId: props.categoryId,
+            postId: props.postId,
+            commentIndex: props.commentIndex + 1,
+            replyIndex: props.replyIndex
+          }
+        });
       } catch (err) {
         alert(err);
       }

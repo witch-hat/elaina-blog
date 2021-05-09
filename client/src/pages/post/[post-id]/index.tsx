@@ -80,6 +80,7 @@ const PostCategoryMobileButton = styled.button<{ themeMode: ThemeMode; holdingBu
 );
 
 interface Props extends AppCommonProps {
+  categoryId: InferGetServerSidePropsType<typeof getServerSideProps>;
   post: InferGetServerSidePropsType<typeof getServerSideProps>;
   comment: InferGetServerSidePropsType<typeof getServerSideProps>;
   sameCategoryTitles: InferGetServerSidePropsType<typeof getServerSideProps>;
@@ -94,6 +95,7 @@ export default function PostId(props: Props) {
   const titles: [{ title: string; _id: number }] = props.sameCategoryTitles;
   const category: { title: string } = props.category;
   const author: string = props.author;
+  const categoryId: number = props.categoryId;
   let touchStartX: number;
   let touchStartY: number;
   let touchEndX: number;
@@ -139,7 +141,7 @@ export default function PostId(props: Props) {
       )}
       <ContentContainer themeMode={themeMode}>
         <Article title={post.title} author={author} createdAt={post.createdAt} article={post.article} isLogin={props.app.isLogin} />
-        <CommentContainer comments={comments} isLogin={props.app.isLogin} author={author} />
+        <CommentContainer comments={comments} isLogin={props.app.isLogin} author={author} categoryId={categoryId} postId={post._id} />
       </ContentContainer>
       <ContentNavigation />
       {width <= 767 && !showPostCategory && (
@@ -182,6 +184,7 @@ export async function getServerSideProps(context: NextPageContext) {
 
     return {
       props: {
+        categoryId: findedPost.categoryId,
         post: findedPost,
         comment: findedComment,
         sameCategoryTitles: sameCategoryPostTitles.post,

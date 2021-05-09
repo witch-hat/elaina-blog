@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
-import { CommentWriter } from 'src/pages/admin/writer/component/CommentWriter';
 import { Comments, Comment } from 'src/query/comment';
 import { trans, Lang } from 'src/resources/languages';
 
+import { CommentWriter } from './CommentWriter';
 import { CommentElement } from './CommentElement';
 
 const Container = styled.section({
@@ -35,6 +35,8 @@ const Counter = styled.p({
 });
 
 interface Props {
+  categoryId: number;
+  postId: number;
   comments: Comments;
   isLogin: boolean;
   author: string;
@@ -75,7 +77,14 @@ export function CommentContainer(props: Props) {
   return (
     <Container>
       <Title>{trans(Lang.Comments)}</Title>
-      <CommentWriter isLogin={props.isLogin} buttonText={trans(Lang.Save)} setNewComment={setNewComment} />
+      <CommentWriter
+        isLogin={props.isLogin}
+        buttonText={trans(Lang.Save)}
+        setNewComment={setNewComment}
+        categoryId={props.categoryId}
+        postId={props.postId}
+        commentIndex={commentContainer.comments.length + 1}
+      />
       <div style={{ width: '100%' }}>
         <Counter>{`덧글 수: ${commentContainer.count}개`}</Counter>
         {commentContainer &&
@@ -87,7 +96,9 @@ export function CommentContainer(props: Props) {
                 isLogin={props.isLogin}
                 author={props.author}
                 isCommentFromAdmin={comment.isAdmin}
-                index={index}
+                categoryId={props.categoryId}
+                postId={props.postId}
+                commentIndex={index}
                 count={commentContainer.count}
                 commentContainer={commentContainer}
                 setCommentContainer={setCommentContainer}
