@@ -1,21 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Container = styled.nav({
-  display: 'flex',
-  flex: 1,
-  position: 'sticky',
-  top: 'calc(5rem + 20px)',
+const Container = styled.div({
+  width: '100%',
   padding: '.5rem',
-  flexDirection: 'column',
-  justifyContent: 'flex-start',
-  alignItems: 'center',
-  width: '250px',
-  height: 'calc(100vh - 5rem - 20px)',
-  overFlowY: 'auto',
-  '&::-webkit-scrollbar': {
-    width: '0'
-  },
+  marginBottom: '1rem',
   '@media screen and (max-width: 1380px)': {
     display: 'none',
     opacity: 0

@@ -18,7 +18,7 @@ import { AppCommonProps } from 'src/pages/_app';
 import { Article } from './component/article/Article';
 import { CommentContainer } from './component/comment/CommentContainer';
 import { PostCategory } from './component/PostCategory';
-import { ContentNavigation } from './component/ContentNavigation';
+import { RightSideContainer } from './component/rightside/RightSideContainer';
 
 // interface ContentContainerProps {
 //   isOpenList: boolean;
@@ -27,9 +27,14 @@ import { ContentNavigation } from './component/ContentNavigation';
 
 const Container = styled.div({
   width: '100%',
+  maxWidth: '1480px',
   display: 'flex',
-  justifyContent: 'center',
+  justifyContent: 'stretch',
+  margin: '0 auto',
   alignItems: 'flex-start',
+  '@media screen and (max-width: 1380px)': {
+    width: '100%'
+  },
   '@media screen and (max-width: 767px)': {
     overflowX: 'hidden'
   }
@@ -48,7 +53,8 @@ const ContentContainer = styled.section<{ themeMode: ThemeMode }>((props) => ({
     width: '72%'
   },
   '@media screen and (max-width: 767px)': {
-    width: '100%'
+    width: '100%',
+    margin: '0'
   }
 }));
 
@@ -143,7 +149,7 @@ export default function PostId(props: Props) {
         <Article title={post.title} author={author} createdAt={post.createdAt} article={post.article} isLogin={props.app.isLogin} />
         <CommentContainer comments={comments} isLogin={props.app.isLogin} author={author} categoryId={categoryId} postId={post._id} />
       </ContentContainer>
-      <ContentNavigation />
+      <RightSideContainer />
       {width <= 767 && !showPostCategory && (
         <PostCategoryMobileButton
           themeMode={themeMode}
