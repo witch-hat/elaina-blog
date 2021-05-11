@@ -35,14 +35,17 @@ const StyledHr = styled.hr({
   boxSizing: 'border-box'
 });
 
-interface Props {}
+interface Props {
+  commentsCount: number;
+  scrollToComment: Function;
+}
 
-export function RightSideContainer() {
+export function RightSideContainer(props: Props) {
   return (
     <Container>
       <ContentNavigation />
       <StyledHr />
-      <ClapBox />
+      <ClapBox commentsCount={props.commentsCount} scrollToComment={props.scrollToComment} />
     </Container>
   );
 }

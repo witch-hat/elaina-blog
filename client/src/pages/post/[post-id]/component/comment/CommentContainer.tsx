@@ -7,7 +7,7 @@ import { trans, Lang } from 'src/resources/languages';
 import { CommentWriter } from './CommentWriter';
 import { CommentElement } from './CommentElement';
 
-const Container = styled.section({
+const Container = styled.div({
   display: 'flex',
   width: '100%',
   margin: '20px 0',

@@ -58,6 +58,10 @@ const ContentContainer = styled.section<{ themeMode: ThemeMode }>((props) => ({
   }
 }));
 
+const Comment = styled.section({
+  width: '100%'
+});
+
 const Rotate = keyframes({
   from: {
     transform: 'rotate(25deg)'
@@ -109,6 +113,7 @@ export default function PostId(props: Props) {
 
   const width = useWidth();
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const commentRef = useRef<HTMLElement>(null);
   const [showPostCategory, setShowPostCategory] = useState(false);
   const [isHoldingButton, setIsHoldingButton] = useState(false);
 
@@ -133,6 +138,10 @@ export default function PostId(props: Props) {
     }
   }
 
+  function scrollToComment() {
+    window.scrollTo(0, commentRef.current?.offsetTop!);
+  }
+
   return (
     <Container
     // onTouchStart={(event: React.TouchEvent) => handleTouchStart(event)}
@@ -147,9 +156,11 @@ export default function PostId(props: Props) {
       )}
       <ContentContainer themeMode={themeMode}>
         <Article title={post.title} author={author} createdAt={post.createdAt} article={post.article} isLogin={props.app.isLogin} />
-        <CommentContainer comments={comments} isLogin={props.app.isLogin} author={author} categoryId={categoryId} postId={post._id} />
+        <Comment ref={commentRef}>
+          <CommentContainer comments={comments} isLogin={props.app.isLogin} author={author} categoryId={categoryId} postId={post._id} />
+        </Comment>
       </ContentContainer>
-      <RightSideContainer />
+      <RightSideContainer commentsCount={comments.count} scrollToComment={scrollToComment} />
       {width <= 767 && !showPostCategory && (
         <PostCategoryMobileButton
           themeMode={themeMode}

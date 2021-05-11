@@ -22,7 +22,8 @@ const Box = styled.div({
 const FlexWrapper = styled.div({
   display: 'flex',
   width: '100%',
-  alignItems: 'center'
+  alignItems: 'center',
+  justifyContent: 'center'
 });
 
 const Icon = styled.span({
@@ -35,11 +36,15 @@ const Icon = styled.span({
 });
 
 const Number = styled.p({
+  display: 'inline-block',
   fontSize: '.9rem',
-  marginLeft: '.125rem'
+  marginLeft: '.5rem'
 });
 
-interface Props {}
+interface Props {
+  commentsCount: number;
+  scrollToComment: Function;
+}
 
 export function ClapBox(props: Props) {
   return (
@@ -51,8 +56,8 @@ export function ClapBox(props: Props) {
             <Number>14</Number>
           </Icon>
           <Icon>
-            <FontAwesomeIcon icon={faComments} />
-            <Number>14</Number>
+            <FontAwesomeIcon icon={faComments} onClick={() => props.scrollToComment()} />
+            <Number>{props.commentsCount}</Number>
           </Icon>
         </FlexWrapper>
       </Box>

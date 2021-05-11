@@ -18,7 +18,7 @@ import { RootState } from 'src/redux/rootReducer';
 import { ContentMenu } from './ArticleMenu';
 import { DELETE_POST_ALL_COMMENT_LOG } from 'src/query/comment-log';
 
-const Container = styled.section({
+const Container = styled.main({
   width: '100%',
   display: 'flex',
   padding: '.5rem 1.5rem',
@@ -31,7 +31,8 @@ const Container = styled.section({
   }
 });
 
-const Title = styled.header({
+const Title = styled.title({
+  display: 'block',
   width: '100%',
   fontSize: '2.5rem',
   fontWeight: 'bold',
