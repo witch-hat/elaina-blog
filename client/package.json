@@ -46,6 +46,7 @@
     "typescript": "4.0.3"
   },
   "devDependencies": {
+    "@fortawesome/free-regular-svg-icons": "^5.15.3",
     "@types/apollo-upload-client": "^14.1.0",
     "@types/bcryptjs": "^2.4.2",
     "@types/cookie": "^0.4.0",
