@@ -24,6 +24,7 @@
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
     "next": "^10.0.3",
+    "next-auth": "^3.21.1",
     "next-with-apollo": "^5.1.1",
     "normalize.css": "^8.0.1",
     "react": "^16.13.1",
