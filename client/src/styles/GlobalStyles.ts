@@ -5,6 +5,23 @@ import { theme } from 'src/styles/theme';
 import { ThemeMode } from 'src/redux/common/type';
 
 export const GlobalStyles = createGlobalStyle<{ themeMode: ThemeMode }>`
+	html {
+		scroll-behavior: smooth;
+		font-size: 16px;
+		font-family: "Nanum Gothic", sans-serif;
+		vertical-align: baseline;
+		@media screen and (max-width: 1380px) {
+			font-size: 16px;
+		}
+		@media screen and (max-width: 767px) {
+			font-size: 15px;
+		}
+	}
+	body {
+		background-color: ${(props) => theme[props.themeMode].mainBackground};
+		color: ${(props) => theme[props.themeMode].mainText};
+		line-height: 1.4;
+	}
 	* {
 		box-sizing: border-box;
 	}
@@ -35,21 +52,5 @@ export const GlobalStyles = createGlobalStyle<{ themeMode: ThemeMode }>`
 	}
 	ul {
 		padding: 0;
-	}
-	body {
-    background-color: ${(props) => theme[props.themeMode].mainBackground};
-    color: ${(props) => theme[props.themeMode].mainText};
-		line-height: 1.4;
-	}
-	html {
-		font-size: 16px;
-		font-family: "Nanum Gothic", sans-serif;
-		vertical-align: baseline;
-		@media screen and (max-width: 1380px) {
-			font-size: 16px;
-		}
-		@media screen and (max-width: 767px) {
-			font-size: 15px;
-		}
 	}
 `;
