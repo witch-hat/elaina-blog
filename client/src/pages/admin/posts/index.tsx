@@ -9,6 +9,7 @@ import { initApolloClient } from 'src/apollo/withApollo';
 import { appCommponProps, AppCommonProps } from 'src/pages/_app';
 import { Post, GET_POSTS } from 'src/query/post';
 import { AdminPageLayout } from '../component/AdminPageLayout';
+import Link from 'next/link';
 
 const Container = styled.div({
   width: '100%',
@@ -89,30 +90,32 @@ export default function PostProps(props: Props) {
         <Container>
           {posts.map((post) => {
             return (
-              <PostContainer key={`${post.title}${post._id}`}>
-                <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
-                  <Wrapper>
-                    <MenuContainer>
-                      {post._id > 0 && (
-                        <CircleRippleWrapper
-                          onClick={() => {
-                            // setDeletedPost({ isModalOpen: true, index });
-                            alert('준비중');
-                          }}
-                        >
-                          <FontAwesomeIcon icon={faTrash} style={{ fontSize: '1.25rem' }} />
-                        </CircleRippleWrapper>
-                      )}
-                    </MenuContainer>
+              <Link href={`/post/${post._id}`} passHref>
+                <PostContainer key={`${post.title}${post._id}`}>
+                  <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
+                    <Wrapper>
+                      <MenuContainer>
+                        {post._id > 0 && (
+                          <CircleRippleWrapper
+                            onClick={() => {
+                              // setDeletedPost({ isModalOpen: true, index });
+                              alert('준비중');
+                            }}
+                          >
+                            <FontAwesomeIcon icon={faTrash} style={{ fontSize: '1.25rem' }} />
+                          </CircleRippleWrapper>
+                        )}
+                      </MenuContainer>
 
-                    <Content>
-                      <PreviewTextWrapper>
-                        <PreviewTitle>{post.title}</PreviewTitle>
-                      </PreviewTextWrapper>
-                    </Content>
-                  </Wrapper>
-                </BorderBox>
-              </PostContainer>
+                      <Content>
+                        <PreviewTextWrapper>
+                          <PreviewTitle>{post.title}</PreviewTitle>
+                        </PreviewTextWrapper>
+                      </Content>
+                    </Wrapper>
+                  </BorderBox>
+                </PostContainer>
+              </Link>
             );
           })}
         </Container>
