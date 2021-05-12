@@ -6,12 +6,12 @@ import { ContextType } from '../types/context';
 
 export const commentLogTypeDef = gql`
   type CommentLog {
-    _id: Int!
-    time: DateTime!
-    event: Int!
-    categoryId: Int!
-    postId: Int!
-    commentIndex: Int!
+    _id: Int
+    time: DateTime
+    event: Int
+    categoryId: Int
+    postId: Int
+    commentIndex: Int
     replyIndex: Int
   }
 
