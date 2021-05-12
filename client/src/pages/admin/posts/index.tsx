@@ -1,14 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import Link from 'next/link';
-import { GetServerSideProps, InferGetServerSidePropsType, NextPageContext } from 'next';
-import { useSelector } from 'react-redux';
+import { GetServerSideProps } from 'next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { BorderBox } from 'src/components';
-import { theme } from 'src/styles';
-import { RootState } from 'src/redux/rootReducer';
-import { ThemeMode } from 'src/redux/common/type';
 import { CircleRippleWrapper } from 'src/components/common/wrapper/CircleRippleWrapper';
 import { initApolloClient } from 'src/apollo/withApollo';
 import { appCommponProps, AppCommonProps } from 'src/pages/_app';
@@ -22,17 +17,29 @@ const Container = styled.div({
   alignItems: 'center'
 });
 
-const AddButton = styled.button<{ themeMode: ThemeMode }>((props) => ({
-  padding: '.5rem',
-  borderRadius: '.5rem',
-  backgroundColor: theme[props.themeMode].submitButtonColor,
-  color: '#f1f2f3'
-}));
+const PostListContainer = styled.div({
+  width: '100%',
+  padding: '.5rem'
+});
 
 const PostContainer = styled.div({
   width: '100%',
   display: 'flex',
   alignItems: 'center'
+});
+
+const Wrapper = styled.div({
+  display: 'flex',
+  flexDirection: 'column',
+  flex: 1
+});
+
+const MenuContainer = styled.div({
+  flex: 1,
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: 'flex-end',
+  padding: '.8rem'
 });
 
 const Content = styled.div({
@@ -74,39 +81,18 @@ interface ServerSideProps {
 interface Props extends AppCommonProps, ServerSideProps {}
 
 export default function PostProps(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
-
   const [posts] = useState<Post[]>(props.posts.reverse());
 
   return (
     <AdminPageLayout>
-      <div style={{ width: '100%', padding: '0 5%' }}>
-        <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
-          <Link href='/admin/writer' passHref>
-            <AddButton themeMode={themeMode}>Add</AddButton>
-          </Link>
-        </div>
+      <PostListContainer>
         <Container>
           {posts.map((post) => {
             return (
               <PostContainer key={`${post.title}${post._id}`}>
                 <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
-                  <div
-                    style={{
-                      flex: 1,
-                      display: 'flex',
-                      flexDirection: 'column'
-                    }}
-                  >
-                    <div
-                      style={{
-                        flex: 1,
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'flex-end',
-                        padding: '4px 8px 0px 8px'
-                      }}
-                    >
+                  <Wrapper>
+                    <MenuContainer>
                       {post._id > 0 && (
                         <CircleRippleWrapper
                           onClick={() => {
@@ -117,19 +103,20 @@ export default function PostProps(props: Props) {
                           <FontAwesomeIcon icon={faTrash} style={{ fontSize: '1.25rem' }} />
                         </CircleRippleWrapper>
                       )}
-                    </div>
+                    </MenuContainer>
+
                     <Content>
                       <PreviewTextWrapper>
                         <PreviewTitle>{post.title}</PreviewTitle>
                       </PreviewTextWrapper>
                     </Content>
-                  </div>
+                  </Wrapper>
                 </BorderBox>
               </PostContainer>
             );
           })}
         </Container>
-      </div>
+      </PostListContainer>
     </AdminPageLayout>
   );
 }
