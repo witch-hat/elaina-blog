@@ -54,7 +54,7 @@ export const postResolver = {
   Query: {
     async posts() {
       try {
-        const postList: Post[] = await PostModel.find();
+        const postList: Post[] = await PostModel.find({}, {}, { sort: { _id: -1 } });
         return postList;
       } catch (err) {
         throw err;
