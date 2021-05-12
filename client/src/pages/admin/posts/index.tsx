@@ -90,21 +90,19 @@ export default function PostProps(props: Props) {
         <Container>
           {posts.map((post) => {
             return (
-              <Link href={`/post/${post._id}`} passHref>
-                <PostContainer key={`${post.title}${post._id}`}>
+              <Link href={`/post/${post._id}`} passHref key={`${post.title}${post._id}`}>
+                <PostContainer>
                   <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
                     <Wrapper>
                       <MenuContainer>
-                        {post._id > 0 && (
-                          <CircleRippleWrapper
-                            onClick={() => {
-                              // setDeletedPost({ isModalOpen: true, index });
-                              alert('준비중');
-                            }}
-                          >
-                            <FontAwesomeIcon icon={faTrash} style={{ fontSize: '1.25rem' }} />
-                          </CircleRippleWrapper>
-                        )}
+                        <CircleRippleWrapper
+                          onClick={() => {
+                            // setDeletedPost({ isModalOpen: true, index });
+                            alert('준비중');
+                          }}
+                        >
+                          <FontAwesomeIcon icon={faTrash} style={{ fontSize: '1.25rem' }} />
+                        </CircleRippleWrapper>
                       </MenuContainer>
 
                       <Content>
