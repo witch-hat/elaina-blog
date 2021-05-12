@@ -17,10 +17,29 @@ const Container = styled.div({
   alignItems: 'center'
 });
 
+const PostListContainer = styled.div({
+  width: '100%',
+  padding: '.5rem'
+});
+
 const PostContainer = styled.div({
   width: '100%',
   display: 'flex',
   alignItems: 'center'
+});
+
+const Wrapper = styled.div({
+  display: 'flex',
+  flexDirection: 'column',
+  flex: 1
+});
+
+const MenuContainer = styled.div({
+  flex: 1,
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: 'flex-end',
+  padding: '.8rem'
 });
 
 const Content = styled.div({
@@ -66,28 +85,14 @@ export default function PostProps(props: Props) {
 
   return (
     <AdminPageLayout>
-      <div style={{ width: '100%', padding: '0 5%' }}>
+      <PostListContainer>
         <Container>
           {posts.map((post) => {
             return (
               <PostContainer key={`${post.title}${post._id}`}>
                 <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
-                  <div
-                    style={{
-                      flex: 1,
-                      display: 'flex',
-                      flexDirection: 'column'
-                    }}
-                  >
-                    <div
-                      style={{
-                        flex: 1,
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'flex-end',
-                        padding: '4px 8px 0px 8px'
-                      }}
-                    >
+                  <Wrapper>
+                    <MenuContainer>
                       {post._id > 0 && (
                         <CircleRippleWrapper
                           onClick={() => {
@@ -98,19 +103,20 @@ export default function PostProps(props: Props) {
                           <FontAwesomeIcon icon={faTrash} style={{ fontSize: '1.25rem' }} />
                         </CircleRippleWrapper>
                       )}
-                    </div>
+                    </MenuContainer>
+
                     <Content>
                       <PreviewTextWrapper>
                         <PreviewTitle>{post.title}</PreviewTitle>
                       </PreviewTextWrapper>
                     </Content>
-                  </div>
+                  </Wrapper>
                 </BorderBox>
               </PostContainer>
             );
           })}
         </Container>
-      </div>
+      </PostListContainer>
     </AdminPageLayout>
   );
 }
