@@ -5,7 +5,7 @@ import { IconDefinition } from '@fortawesome/free-solid-svg-icons';
 
 const TitleContainer = styled.div({
   display: 'flex',
-  padding: '.5rem',
+  padding: '.5rem .5rem .5rem 0',
   marginBottom: '.5rem',
   alignItems: 'center'
 });
