@@ -1,7 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 import { ApolloClient, NormalizedCacheObject, InMemoryCache, ApolloLink } from '@apollo/client';
-import { NextPageContext } from 'next';
+import { GetServerSidePropsContext, NextPageContext } from 'next';
 import { createUploadLink } from 'apollo-upload-client';
 import { onError } from 'apollo-link-error';
 
@@ -78,7 +78,7 @@ export function withApollo(PageComponent: any, { ssr = true } = {}) {
   return WithApollo;
 }
 
-export function initApolloClient(initialState: NormalizedCacheObject = {}, ctx: NextPageContext | null = null) {
+export function initApolloClient(initialState: NormalizedCacheObject = {}, ctx: NextPageContext | GetServerSidePropsContext | null = null) {
   if (typeof window === 'undefined') {
     return createApolloClient(initialState, ctx);
   }
@@ -92,7 +92,7 @@ export function initApolloClient(initialState: NormalizedCacheObject = {}, ctx: 
 
 function createApolloClient(
   initialState: NormalizedCacheObject = {},
-  ctx: NextPageContext | null = null
+  ctx: NextPageContext | GetServerSidePropsContext | null = null
 ): ApolloClient<NormalizedCacheObject> {
   const enhancedFetch = (url: string, init: any) => {
     return fetch(url, {
