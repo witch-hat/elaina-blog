@@ -90,7 +90,7 @@ export default function PostProps(props: Props) {
           {posts.map((post) => {
             return (
               <PostContainer key={`${post.title}${post._id}`}>
-                <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
+                <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
                   <Wrapper>
                     <MenuContainer>
                       {post._id > 0 && (
