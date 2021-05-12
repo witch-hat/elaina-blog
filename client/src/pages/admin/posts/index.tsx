@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import Link from 'next/link';
-import { GetServerSideProps, InferGetServerSidePropsType, NextPageContext } from 'next';
+import { GetServerSideProps } from 'next';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { BorderBox } from 'src/components';
-import { theme } from 'src/styles';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { CircleRippleWrapper } from 'src/components/common/wrapper/CircleRippleWrapper';
@@ -21,13 +19,6 @@ const Container = styled.div({
   flexDirection: 'column',
   alignItems: 'center'
 });
-
-const AddButton = styled.button<{ themeMode: ThemeMode }>((props) => ({
-  padding: '.5rem',
-  borderRadius: '.5rem',
-  backgroundColor: theme[props.themeMode].submitButtonColor,
-  color: '#f1f2f3'
-}));
 
 const PostContainer = styled.div({
   width: '100%',
@@ -81,11 +72,6 @@ export default function PostProps(props: Props) {
   return (
     <AdminPageLayout>
       <div style={{ width: '100%', padding: '0 5%' }}>
-        <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
-          <Link href='/admin/writer' passHref>
-            <AddButton themeMode={themeMode}>Add</AddButton>
-          </Link>
-        </div>
         <Container>
           {posts.map((post) => {
             return (
