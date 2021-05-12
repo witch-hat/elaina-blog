@@ -84,7 +84,7 @@ interface ServerSideProps {
 interface Props extends AppCommonProps, ServerSideProps {}
 
 export default function PostProps(props: Props) {
-  const [posts] = useState<Post[]>(props.posts.reverse());
+  const [posts] = useState<Post[]>(props.posts);
 
   return (
     <AdminPageLayout>
@@ -98,7 +98,8 @@ export default function PostProps(props: Props) {
                     <Wrapper>
                       <MenuContainer>
                         <CircleRippleWrapper
-                          onClick={() => {
+                          onClick={(event) => {
+                            event.stopPropagation();
                             // setDeletedPost({ isModalOpen: true, index });
                             alert('준비중');
                           }}

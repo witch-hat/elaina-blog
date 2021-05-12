@@ -42,7 +42,7 @@ const Ripple = styled.div(
 
 interface Props {
   children: JSX.Element;
-  onClick: () => void;
+  onClick: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
 
 export function CircleRippleWrapper(props: Props) {
