@@ -22,5 +22,6 @@
   "WriteComments": "덧글 쓰기",
   "Reply": "대댓글",
   "WriteReply": "대댓글 쓰기",
-  "ChangePassword": "비밀번호 변경"
+  "ChangePassword": "비밀번호 변경",
+  "AdminHome": "관리자 홈"
 }
