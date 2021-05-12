@@ -1,7 +1,13 @@
 import React, { useState, useRef } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import { useSelector } from 'react-redux';
-import { InferGetServerSidePropsType, NextPageContext } from 'next';
+import {
+  InferGetServerSidePropsType,
+  NextPageContext,
+  GetServerSideProps,
+  GetServerSidePropsContext,
+  GetServerSidePropsResult
+} from 'next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSwatchbook } from '@fortawesome/free-solid-svg-icons';
 
@@ -89,14 +95,16 @@ const PostCategoryMobileButton = styled.button<{ themeMode: ThemeMode; holdingBu
   `
 );
 
-interface Props extends AppCommonProps {
-  categoryId: InferGetServerSidePropsType<typeof getServerSideProps>;
-  post: InferGetServerSidePropsType<typeof getServerSideProps>;
-  comment: InferGetServerSidePropsType<typeof getServerSideProps>;
-  sameCategoryTitles: InferGetServerSidePropsType<typeof getServerSideProps>;
-  category: InferGetServerSidePropsType<typeof getServerSideProps>;
-  author: InferGetServerSidePropsType<typeof getServerSideProps>;
+interface ServerSideProps {
+  categoryId: number;
+  post: Post;
+  comment: Comments;
+  sameCategoryTitles: [{ title: string; _id: number }];
+  category: { title: string };
+  author: string;
 }
+
+interface Props extends AppCommonProps, ServerSideProps {}
 
 export default function PostId(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
@@ -179,7 +187,7 @@ export default function PostId(props: Props) {
   );
 }
 
-export async function getServerSideProps(context: NextPageContext) {
+export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (context: GetServerSidePropsContext) => {
   const requestUrl = context.query['post-id'];
   try {
     const client = initApolloClient({}, context);
@@ -218,4 +226,4 @@ export async function getServerSideProps(context: NextPageContext) {
       }
     };
   }
-}
+};
