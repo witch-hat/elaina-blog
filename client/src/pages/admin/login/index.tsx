@@ -210,7 +210,7 @@ export default function Login(props: Props) {
   );
 }
 
-const getServerSideProps: GetServerSideProps<ServerSideProps> = async (context) => {
+export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (context) => {
   if (appCommponProps.app.isLogin) {
     return {
       redirect: {

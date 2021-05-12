@@ -103,11 +103,12 @@ export default function Admin(props: Props) {
   );
 }
 
-const getServerSideProps: GetServerSideProps<ServerSideProps> = async (context) => {
+export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (context) => {
+  console.log('hi');
   if (!appCommponProps.app.isLogin) {
     return {
       redirect: {
-        permanent: false,
+        permanent: true,
         destination: '/admin/login'
       }
     };

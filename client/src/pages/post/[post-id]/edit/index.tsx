@@ -30,7 +30,7 @@ export default function PostEdit(props: Props) {
   );
 }
 
-const getServerSideProps: GetServerSideProps<ServerSideProps> = async (context) => {
+export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (context) => {
   const postId = context.query['post-id'];
   const client = initApolloClient({}, context);
 

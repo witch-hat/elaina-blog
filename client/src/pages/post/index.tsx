@@ -14,7 +14,7 @@ export default function Post(props: Props) {
   return <div></div>;
 }
 
-const getServerSideProps: GetServerSideProps<ServerSideProps> = async (context) => {
+export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (context) => {
   const client = initApolloClient({}, context);
   const { data } = await client.query({ query: GET_LAST_POST });
 

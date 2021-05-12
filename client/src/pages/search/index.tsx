@@ -66,7 +66,7 @@ export default function SearchPage(props: Props) {
   );
 }
 
-const getServerSideProps: GetServerSideProps<ServerSideProps> = async (context) => {
+export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (context) => {
   const keyword = context.query['word'];
   const client = initApolloClient({}, context);
 
