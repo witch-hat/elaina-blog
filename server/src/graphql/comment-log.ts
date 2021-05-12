@@ -11,6 +11,9 @@ export const commentLogTypeDef = gql`
     event: Int!
     description: String!
     categoryId: Int!
+    postId: Int!
+    commentIndex: Int!
+    replyIndex: Int
   }
 
   extend type Query {
