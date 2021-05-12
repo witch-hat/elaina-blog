@@ -9,7 +9,6 @@ export const commentLogTypeDef = gql`
     _id: Int!
     time: DateTime!
     event: Int!
-    description: String!
     categoryId: Int!
     postId: Int!
     commentIndex: Int!
