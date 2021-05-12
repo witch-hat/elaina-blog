@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { GetServerSideProps } from 'next';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import Link from 'next/link';
+
 import { BorderBox } from 'src/components';
 import { CircleRippleWrapper } from 'src/components/common/wrapper/CircleRippleWrapper';
 import { initApolloClient } from 'src/apollo/withApollo';
 import { appCommponProps, AppCommonProps } from 'src/pages/_app';
 import { Post, GET_POSTS } from 'src/query/post';
-import { AdminPageLayout } from '../component/AdminPageLayout';
-import Link from 'next/link';
+import { AdminPageLayout } from 'src/pages/admin/component/AdminPageLayout';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 const Container = styled.div({
   width: '100%',
