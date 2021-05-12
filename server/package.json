@@ -9,6 +9,7 @@
     "@types/bcrypt": "^3.0.0",
     "@types/cookies": "^0.7.6",
     "@types/default-gateway": "^3.0.1",
+    "@types/graphql-upload": "^8.0.4",
     "@types/jsonwebtoken": "^8.5.0",
     "@types/lodash": "^4.14.167",
     "@types/mongoose": "^5.10.3",
