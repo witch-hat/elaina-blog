@@ -1,12 +1,19 @@
 import React from 'react';
-import Link from 'next/link';
+import styled from 'styled-components';
 import { GetServerSideProps } from 'next';
+
+import { initApolloClient } from 'src/apollo/withApollo';
+import { CommentLog, GET_COMMENT_LOGS } from 'src/query/comment-log';
+import CommnetLogBox from 'src/pages/admin/component/CommentLogItem/CommentLogBox';
 
 import { AdminPageLayout } from './component/AdminPageLayout';
 import { AppCommonProps, appCommponProps } from '../_app';
-import styled from 'styled-components';
-import { faTemperatureLow } from '@fortawesome/free-solid-svg-icons';
-import { Router } from 'next/router';
+
+interface ServerSideProps {
+  logs: CommentLog[];
+}
+
+interface Props extends AppCommonProps, ServerSideProps {}
 
 const Container = styled.div({
   display: 'flex',
@@ -19,102 +26,36 @@ const Container = styled.div({
   }
 });
 
-const Context = styled.div({
-  display: 'flex',
-  width: '700px',
-  height: '7rem',
-  padding: '.8rem',
-  justifyContent: 'left',
-  border: '2px solid #666',
-  borderRadius: '12px',
-  float: 'left',
-  marginTop: '5px',
-  marginBottom: '20px',
-  flexDirection: 'column'
-});
-
-const UserImage = styled.img({
-  display: 'block',
-  float: 'left',
-  width: '40px',
-  height: '40px',
-  objectFit: 'cover',
-  marginRight: '5px',
-  '@media screen and (max-width: 1380px)': {
-    width: '40px'
-  }
-});
-
-interface ServerSideProps {}
-
-interface Props extends AppCommonProps, ServerSideProps {}
-
 export default function Admin(props: Props) {
   return (
     <AdminPageLayout>
       <Container>
-        <div>Admin log</div>
-        <div>
-          <UserImage src='/public/images/FakeProfile.png'></UserImage>
-          <div>user Upload 1 Month ago</div>
-          <Link href='./post/1'>
-            <Context>
-              <p>Styled component</p>
-              Preview context
-              <h6>time</h6>
-            </Context>
-          </Link>
-        </div>
-        <div>
-          <UserImage src='/public/images/FakeProfile.png'></UserImage>
-          <div>user Upload 1 Month ago</div>
-          <Link href='./post/1'>
-            <Context>
-              <p>Styled component</p>
-              Comment
-              <h6>time</h6>
-            </Context>
-          </Link>
-        </div>
-        <div>
-          <UserImage src='/public/images/FakeProfile.png'></UserImage>
-          <div>user Upload 1 Month ago</div>
-          <Link href='./post/1'>
-            <Context>
-              <p>Styled component</p>
-              New Category
-              <h6>time</h6>
-            </Context>
-          </Link>
-        </div>
-        <div>
-          <UserImage src='/public/images/FakeProfile.png'></UserImage>
-          <div>user Upload 1 Month ago</div>
-          <Link href='./post/1'>
-            <Context>
-              <p>Styled component</p>
-              Delete Category
-              <h6>time</h6>
-            </Context>
-          </Link>
-        </div>
+        {props.logs.map((log, index) => {
+          return (
+            <CommnetLogBox key={`${log._id}`} _id={log._id} time={log.time} postId={log.postId} CategoryId={log.categoryId}></CommnetLogBox>
+          );
+        })}
       </Container>
     </AdminPageLayout>
   );
 }
 
 export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (context) => {
-  console.log('hi');
   if (!appCommponProps.app.isLogin) {
     return {
       redirect: {
-        permanent: true,
+        permanent: false,
         destination: '/admin/login'
       }
     };
   }
 
+  const client = initApolloClient({}, context);
+  const { data } = await client.query({ query: GET_COMMENT_LOGS });
+  const logs = data.commentLogs;
   return {
-    props: {}
+    props: {
+      logs
+    }
   };
 };
