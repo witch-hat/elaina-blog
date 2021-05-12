@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { NextPageContext } from 'next';
+import { GetServerSideProps } from 'next';
 import { useSelector } from 'react-redux';
 
 import { theme } from 'src/styles';
@@ -31,7 +31,9 @@ const AddButton = styled.button<{ themeMode: ThemeMode }>((props) => ({
   color: '#f1f2f3'
 }));
 
-interface Props extends AppCommonProps {
+interface ServerSideProps {}
+
+interface Props extends AppCommonProps, ServerSideProps {
   categories: CategoryDetails[];
 }
 
@@ -54,7 +56,7 @@ export default function Category(props: Props) {
   );
 }
 
-export async function getServerSideProps(context: NextPageContext) {
+const getServerSideProps: GetServerSideProps<ServerSideProps> = async (context) => {
   if (!appCommponProps.app.isLogin) {
     return {
       redirect: {
@@ -74,4 +76,4 @@ export async function getServerSideProps(context: NextPageContext) {
       categories
     }
   };
-}
+};

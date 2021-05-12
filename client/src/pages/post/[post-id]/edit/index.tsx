@@ -1,19 +1,21 @@
 import React from 'react';
-import { InferGetServerSidePropsType, NextPageContext } from 'next';
+import { InferGetServerSidePropsType, GetServerSideProps } from 'next';
 
 import { initApolloClient } from 'src/apollo/withApollo';
 import { Writer } from 'src/pages/admin/writer/component/Writer';
 import { GET_PROFILE } from 'src/query/profile';
 import { FIND_POST_BY_URL } from 'src/query/post';
-import { FIND_CATEGORY_BY_ID, GET_CATEGORY } from 'src/query/category';
+import { CategoryDetails, FIND_CATEGORY_BY_ID, GET_CATEGORY } from 'src/query/category';
 
-interface Props {
-  author: InferGetServerSidePropsType<typeof getServerSideProps>;
-  categories: InferGetServerSidePropsType<typeof getServerSideProps>;
-  category: InferGetServerSidePropsType<typeof getServerSideProps>;
-  title: InferGetServerSidePropsType<typeof getServerSideProps>;
-  article: InferGetServerSidePropsType<typeof getServerSideProps>;
+interface ServerSideProps {
+  author: string;
+  categories: CategoryDetails[];
+  category: string | undefined;
+  title: string | undefined;
+  article: string | undefined;
 }
+
+interface Props extends ServerSideProps {}
 
 export default function PostEdit(props: Props) {
   return (
@@ -28,7 +30,7 @@ export default function PostEdit(props: Props) {
   );
 }
 
-export async function getServerSideProps(context: NextPageContext) {
+const getServerSideProps: GetServerSideProps<ServerSideProps> = async (context) => {
   const postId = context.query['post-id'];
   const client = initApolloClient({}, context);
 
@@ -55,4 +57,4 @@ export async function getServerSideProps(context: NextPageContext) {
       categories
     }
   };
-}
+};

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { InferGetServerSidePropsType, NextPageContext } from 'next';
+import { InferGetServerSidePropsType, GetServerSideProps } from 'next';
 
 import { Post, SEARCH } from 'src/query/post';
 import { initApolloClient } from 'src/apollo/withApollo';
@@ -37,9 +37,11 @@ const Count = styled.p({
   marginBottom: '.5rem'
 });
 
-interface Props {
-  searchResult: InferGetServerSidePropsType<typeof getServerSideProps>;
+interface ServerSideProps {
+  searchResult: { post: Post; content: string }[];
 }
+
+interface Props extends ServerSideProps {}
 
 export default function SearchPage(props: Props) {
   const searchResults: { post: Post; content: string }[] = props.searchResult;
@@ -64,7 +66,7 @@ export default function SearchPage(props: Props) {
   );
 }
 
-export async function getServerSideProps(context: NextPageContext) {
+const getServerSideProps: GetServerSideProps<ServerSideProps> = async (context) => {
   const keyword = context.query['word'];
   const client = initApolloClient({}, context);
 
@@ -77,4 +79,4 @@ export async function getServerSideProps(context: NextPageContext) {
       searchResult
     }
   };
-}
+};

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
-import { InferGetServerSidePropsType, NextPageContext } from 'next';
+import { GetServerSideProps, InferGetServerSidePropsType, NextPageContext } from 'next';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -67,10 +67,11 @@ const PreviewTitle = styled.span({
   }
 });
 
-interface Props extends AppCommonProps {
+interface ServerSideProps {
   posts: Post[];
-  author: InferGetServerSidePropsType<typeof getServerSideProps>;
 }
+
+interface Props extends AppCommonProps, ServerSideProps {}
 
 export default function PostProps(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
@@ -133,7 +134,7 @@ export default function PostProps(props: Props) {
   );
 }
 
-export async function getServerSideProps(context: NextPageContext) {
+const getServerSideProps: GetServerSideProps<ServerSideProps> = async (context) => {
   if (!appCommponProps.app.isLogin) {
     return {
       redirect: {
@@ -152,4 +153,4 @@ export async function getServerSideProps(context: NextPageContext) {
       posts
     }
   };
-}
+};

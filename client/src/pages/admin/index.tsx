@@ -1,14 +1,12 @@
 import React from 'react';
 import Link from 'next/link';
-import { NextPageContext } from 'next';
+import { GetServerSideProps } from 'next';
 
 import { AdminPageLayout } from './component/AdminPageLayout';
 import { AppCommonProps, appCommponProps } from '../_app';
 import styled from 'styled-components';
 import { faTemperatureLow } from '@fortawesome/free-solid-svg-icons';
 import { Router } from 'next/router';
-
-interface Props extends AppCommonProps {}
 
 const Container = styled.div({
   display: 'flex',
@@ -46,6 +44,10 @@ const UserImage = styled.img({
     width: '40px'
   }
 });
+
+interface ServerSideProps {}
+
+interface Props extends AppCommonProps, ServerSideProps {}
 
 export default function Admin(props: Props) {
   return (
@@ -101,7 +103,7 @@ export default function Admin(props: Props) {
   );
 }
 
-export async function getServerSideProps(context: NextPageContext) {
+const getServerSideProps: GetServerSideProps<ServerSideProps> = async (context) => {
   if (!appCommponProps.app.isLogin) {
     return {
       redirect: {
@@ -114,4 +116,4 @@ export async function getServerSideProps(context: NextPageContext) {
   return {
     props: {}
   };
-}
+};

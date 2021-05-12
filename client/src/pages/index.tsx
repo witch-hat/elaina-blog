@@ -1,24 +1,26 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { NextPageContext, InferGetServerSidePropsType } from 'next';
+import { NextPageContext, InferGetServerSidePropsType, GetServerSideProps } from 'next';
 
 import { initApolloClient } from 'src/apollo/withApollo';
 import { GET_LASTEST_POSTS } from 'src/query/post';
 import { GET_CATEGORIES_WITH_DETAILS, CategoryDetails } from 'src/query/category';
 import { GET_PROFILE, ProfileType } from 'src/query/profile';
-import { GET_ABOUT } from 'src/query/about';
+import { About, GET_ABOUT } from 'src/query/about';
 
 import { AppCommonProps } from './_app';
 import { MainPageLayout } from './main/component/MainPageLayout';
 import { AboutPage } from './main/about/About';
 import { ContentCategory } from './main/component/category/ContentCategory';
 
-interface Props extends AppCommonProps {
-  latestPosts: InferGetServerSidePropsType<typeof getServerSideProps>;
-  profile: InferGetServerSidePropsType<typeof getServerSideProps>;
-  categories: InferGetServerSidePropsType<typeof getServerSideProps>;
-  about: InferGetServerSidePropsType<typeof getServerSideProps>;
+interface ServerSideProps {
+  latestPosts: [{ _id: number }];
+  profile: ProfileType;
+  categories: CategoryDetails[];
+  about: About;
 }
+
+interface Props extends AppCommonProps, ServerSideProps {}
 
 export default function Index(props: Props) {
   const router = useRouter();
@@ -38,7 +40,7 @@ export default function Index(props: Props) {
   );
 }
 
-export async function getServerSideProps(context: NextPageContext) {
+const getServerSideProps: GetServerSideProps<ServerSideProps> = async (context) => {
   const apolloClient = initApolloClient({}, context);
   const profileQueryResult = await apolloClient.query({ query: GET_PROFILE });
   const categoryQueryResult = await apolloClient.query({ query: GET_CATEGORIES_WITH_DETAILS });
@@ -58,4 +60,4 @@ export async function getServerSideProps(context: NextPageContext) {
       about
     }
   };
-}
+};

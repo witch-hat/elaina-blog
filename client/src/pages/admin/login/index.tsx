@@ -2,7 +2,7 @@ import React, { useRef, useState, FormEvent } from 'react';
 import styled from 'styled-components';
 import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
-import { NextPageContext } from 'next';
+import { GetServerSideProps } from 'next';
 import { useSelector } from 'react-redux';
 
 import { InputBox } from 'src/components';
@@ -77,7 +77,9 @@ const MessageBox = styled.div({
   marginTop: '16px'
 });
 
-interface Props {
+interface ServerSideProps {}
+
+interface Props extends ServerSideProps {
   cookie?: string;
 }
 
@@ -208,7 +210,7 @@ export default function Login(props: Props) {
   );
 }
 
-export async function getServerSideProps(context: NextPageContext) {
+const getServerSideProps: GetServerSideProps<ServerSideProps> = async (context) => {
   if (appCommponProps.app.isLogin) {
     return {
       redirect: {
@@ -221,4 +223,4 @@ export async function getServerSideProps(context: NextPageContext) {
   return {
     props: {}
   };
-}
+};
