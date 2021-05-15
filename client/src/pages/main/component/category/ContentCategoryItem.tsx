@@ -9,7 +9,6 @@ import { ContentCategoryDetails } from './ContentCategoryDetails';
 const Content = styled.div({
   display: 'flex',
   width: '100%',
-  height: '10rem',
   padding: '.8rem',
   justifyContent: 'center',
   alignItems: 'center'
@@ -22,6 +21,7 @@ const PreviewImage = styled.img({
   height: '8.4rem',
   marginLeft: '1rem',
   objectFit: 'cover',
+  overflow: 'hidden',
   '@media screen and (max-width: 1380px)': {
     width: '32%',
     marginLeft: '3%'
@@ -41,17 +41,15 @@ const PreviewTitle = styled.span({
   display: '-webkit-box',
   flexShrink: 0,
   width: '100%',
-  height: '2rem',
+  height: '1.8rem',
   textAlign: 'left',
   fontSize: '1.2rem',
   fontWeight: 'bold',
-  wordBreak: 'keep-all',
+  wordBreak: 'break-all',
   overflow: 'hidden',
   WebkitLineClamp: 1,
   WebkitBoxOrient: 'vertical',
-  '@media screen and (max-width: 1380px)': {
-    wordBreak: 'break-all'
-  }
+  '@media screen and (max-width: 1380px)': {}
 });
 
 const PreviewContent = styled.span({
