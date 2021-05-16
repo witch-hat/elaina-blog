@@ -36,6 +36,7 @@ declare module 'styled-components' {
       navUnderBar: string;
       navHoverUnderBar: string;
       shadowColor: string;
+      inputOutline: string;
     };
   }
 }

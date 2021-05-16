@@ -34,7 +34,8 @@ export const theme: DefaultTheme = {
     // Others
     navUnderBar: '#888',
     navHoverUnderBar: '#ddd',
-    shadowColor: 'rgba(0, 0, 0, 0.9)'
+    shadowColor: 'rgba(0, 0, 0, 0.9)',
+    inputOutline: 'rgba(134, 125, 255, .7)'
   },
   light: {
     themeColor: '#2a9df4',
@@ -69,6 +70,7 @@ export const theme: DefaultTheme = {
     // Others
     navUnderBar: '#555',
     navHoverUnderBar: '#888',
-    shadowColor: 'rgba(38, 38, 38, 0.4)'
+    shadowColor: 'rgba(38, 38, 38, 0.4)',
+    inputOutline: 'rgba(134, 125, 255, .7)'
   }
 };
