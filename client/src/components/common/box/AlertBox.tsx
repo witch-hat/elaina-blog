@@ -49,6 +49,12 @@ interface Props {
   onCloseButtonClick: Function;
 }
 
+export interface AlertStateType {
+  msg: string;
+  isPop: boolean;
+  isError: boolean;
+}
+
 export function AlertBox(props: Props) {
   return (
     <Container isError={props.isError}>
@@ -62,8 +68,4 @@ export function AlertBox(props: Props) {
   );
 }
 
-export interface AlertStateType {
-  msg: string;
-  isPop: boolean;
-  isError: boolean;
-}
+export const initAlert: AlertStateType = { isError: false, isPop: false, msg: '' };
