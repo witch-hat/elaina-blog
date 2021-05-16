@@ -10,9 +10,10 @@ const Container = styled.div({
 });
 
 const Side = styled.aside({
-  width: '300px',
   position: 'sticky',
-  height: 'calc(100vh - 5rem - 20px)',
+  width: '300px',
+  height: 'calc(100vh - 4rem - 20px)',
+  padding: '1rem 0',
   top: 'calc(5rem + 20px)'
 });
 

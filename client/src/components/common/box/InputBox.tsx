@@ -37,7 +37,7 @@ const Input = styled.input<InputProps>((props) => {
       outline: 'none',
       padding: '1px',
       borderWidth: '2px',
-      borderColor: props.isValid ? theme[props.themeMode].focusBorder : theme[props.themeMode].invalidBorder
+      borderColor: props.isValid ? theme[props.themeMode].inputOutline : theme[props.themeMode].invalidBorder
     },
     '&::placeholder': {
       color: theme[props.themeMode].placeholderText
@@ -50,10 +50,10 @@ const Input = styled.input<InputProps>((props) => {
 });
 
 interface Props {
-  id: string;
   type: string;
   minLength: number;
   maxLength: number;
+  id?: string;
   onFocus?: Function;
   onBlur?: Function;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
