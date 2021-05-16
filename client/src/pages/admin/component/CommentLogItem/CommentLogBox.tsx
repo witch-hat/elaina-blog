@@ -1,17 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
-
-const Container = styled.div({
-  display: 'flex',
-  width: '100%',
-  height: '100%',
-  padding: '.9rem 0',
-  flexDirection: 'column',
-  '& > div:nth-child(1)': {
-    margin: '0 0 .8rem !important'
-  }
-});
+import { spawn } from 'child_process';
 
 const Context = styled.div({
   display: 'flex',
@@ -19,12 +9,24 @@ const Context = styled.div({
   height: '7rem',
   padding: '.8rem',
   justifyContent: 'left',
-  border: '2px solid #666',
-  borderRadius: '12px',
   float: 'left',
   marginTop: '5px',
   marginBottom: '20px',
   flexDirection: 'column'
+});
+
+const CategoryTitle = styled.p({
+  fontSize: '25px',
+  fontWeight: 'bold',
+  paddingBottom: '0.5rem'
+});
+
+const PostTitle = styled.p({
+  fontSize: '18px'
+});
+
+const EventAndDate = styled.p({
+  opacity: '0.5'
 });
 
 const UserImage = styled.img({
@@ -41,23 +43,39 @@ const UserImage = styled.img({
 
 interface Props {
   time: Date;
-  CategoryId: number;
+  categoryTitle: string;
   postId: number;
-  _id: number;
+  postTitle: string;
+  isEvent: number;
+}
+
+function CalculateDate(date: number) {
+  let DateDiff = ``;
+  if (date >= 3600000) {
+    DateDiff = `${(date / 3600000).toFixed()} Hours a go`;
+  } else if (date >= 86400000) {
+    DateDiff = `${(date / 86400000).toFixed()} Days a go`;
+  } else if (date >= 31536000000) {
+    DateDiff = `${(date / 31536000000).toFixed()} Years a go`;
+  } else if (date >= 60000) {
+    DateDiff = `${(date / 60000).toFixed()} Minutes a go`;
+  }
+  console.log(date);
+  return DateDiff;
 }
 
 export default function CommentLogBox(props: Props) {
-  const now = new Date();
+  const now = new Date().getTime();
+  const DateDifferent = CalculateDate(now - new Date(props.time).getTime());
+  const event = props.isEvent === 0 ? `User upload new comment ${DateDifferent}` : `User upload new reply ${DateDifferent}`;
   return (
     <div>
       {/* <UserImage src='/public/images/FakeProfile.png'></UserImage> */}
-      <div>
-        {props._id}
-        {props.time}
-      </div>
       <Link href={`post/${props.postId}`}>
         <Context>
-          <p>{props.CategoryId}</p>
+          <CategoryTitle>{props.categoryTitle}</CategoryTitle>
+          <PostTitle>{props.postTitle}</PostTitle>
+          <EventAndDate>{event}</EventAndDate>
         </Context>
       </Link>
     </div>

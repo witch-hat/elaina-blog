@@ -3,14 +3,20 @@ import styled from 'styled-components';
 import { GetServerSideProps } from 'next';
 
 import { initApolloClient } from 'src/apollo/withApollo';
-import { CommentLog, GET_COMMENT_LOGS } from 'src/query/comment-log';
+import { CommentEvent, CommentLog, GET_COMMENT_LOGS } from 'src/query/comment-log';
 import CommnetLogBox from 'src/pages/admin/component/CommentLogItem/CommentLogBox';
+import { GET_CATEGORIES_WITH_DETAILS, CategoryDetails } from 'src/query/category';
+import { BorderBox } from 'src/components/common/box/BorderBox';
+import { Post, GET_POSTS } from 'src/query/post';
 
 import { AdminPageLayout } from './component/AdminPageLayout';
 import { AppCommonProps, appCommponProps } from '../_app';
+import { title } from 'process';
 
 interface ServerSideProps {
   logs: CommentLog[];
+  categoriesDetail: CategoryDetails[];
+  posts: Post[];
 }
 
 interface Props extends AppCommonProps, ServerSideProps {}
@@ -20,10 +26,7 @@ const Container = styled.div({
   width: '100%',
   height: '100%',
   padding: '.9rem 0',
-  flexDirection: 'column',
-  '& > div:nth-child(1)': {
-    margin: '0 0 .8rem !important'
-  }
+  flexDirection: 'column'
 });
 
 export default function Admin(props: Props) {
@@ -31,8 +34,19 @@ export default function Admin(props: Props) {
     <AdminPageLayout>
       <Container>
         {props.logs.map((log, index) => {
+          /*category title 찾아주기*/
+          const findCategoryTitle = props.categoriesDetail.find((category) => category._id === log.categoryId)?.title!;
+          const findPostTitle = props.posts.find((post) => post._id === log._id)?.title!;
           return (
-            <CommnetLogBox key={`${log._id}`} _id={log._id} time={log.time} postId={log.postId} CategoryId={log.categoryId}></CommnetLogBox>
+            <BorderBox isTransform={true} key={`${log._id}`}>
+              <CommnetLogBox
+                isEvent={log.event}
+                time={log.time}
+                postId={log.postId}
+                categoryTitle={findCategoryTitle}
+                postTitle={findPostTitle}
+              />
+            </BorderBox>
           );
         })}
       </Container>
@@ -51,11 +65,17 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
   }
 
   const client = initApolloClient({}, context);
-  const { data } = await client.query({ query: GET_COMMENT_LOGS });
-  const logs = data.commentLogs;
+  const { data: CommentData } = await client.query({ query: GET_COMMENT_LOGS });
+  const { data: CategoryData } = await client.query({ query: GET_CATEGORIES_WITH_DETAILS });
+  const { data: PostTitle } = await client.query({ query: GET_POSTS });
+  const logs: CommentLog[] = CommentData.commentLogs;
+  const categoriesDetail = CategoryData.categoriesWithDetails;
+  const posts = PostTitle.posts;
   return {
     props: {
-      logs
+      logs,
+      categoriesDetail,
+      posts
     }
   };
 };
