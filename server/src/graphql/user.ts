@@ -174,6 +174,8 @@ export const userResolver = {
         const isMatch = await comparePassword(args.old, user.password);
 
         if (isMatch) {
+          if (args.old === args.new) throw new UserInputError('이전과 동일한 비밀번호 입니다.');
+
           user.password = args.new;
           user.auth = [];
           user.save();
@@ -188,7 +190,8 @@ export const userResolver = {
     },
 
     async login(_: any, args: { emailId: string; password: string }, context: ContextType) {
-      const emailRegExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      const emailRegExp =
+        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
       if (args.emailId.length < 4 || args.password.length < 4) {
         throw new UserInputError('4자 이상 입력해주세요.');
