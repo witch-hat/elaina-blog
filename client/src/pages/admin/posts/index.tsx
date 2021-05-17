@@ -32,31 +32,29 @@ const PostContainer = styled.div({
 });
 
 const Wrapper = styled.div({
+  position: 'relative',
   display: 'flex',
   flexDirection: 'column',
   flex: 1
 });
 
 const MenuContainer = styled.div({
-  flex: 1,
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'flex-end',
-  padding: '.8rem'
+  position: 'absolute',
+  right: '1rem'
 });
 
 const Content = styled.div({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
-  width: '100%',
   padding: '.8rem',
+  width: '100%',
   height: '5rem'
 });
 
 const PreviewTextWrapper = styled.div({
-  width: '100%',
   display: 'flex',
+  width: '100%',
   height: '100%'
 });
 
@@ -85,6 +83,8 @@ interface Props extends AppCommonProps, ServerSideProps {}
 
 export default function PostProps(props: Props) {
   const [posts] = useState<Post[]>(props.posts);
+
+  // const [isShown, setIsShown] = useState(false);
 
   return (
     <AdminPageLayout>
