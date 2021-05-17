@@ -9,6 +9,8 @@ import { initApolloClient } from 'src/apollo/withApollo';
 import { appCommponProps, AppCommonProps } from 'src/pages/_app';
 import { Post, GET_POSTS } from 'src/query/post';
 import { AdminPageLayout } from 'src/pages/admin/component/AdminPageLayout';
+// import { theme } from 'src/styles';
+// import { ThemeMode } from 'src/redux/common/type';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -26,9 +28,9 @@ const PostListContainer = styled.div({
 });
 
 const PostContainer = styled.div({
-  width: '100%',
-  display: 'flex',
-  alignItems: 'center'
+  width: '100%'
+  // display: 'flex',
+  // alignItems: 'center'
 });
 
 const Wrapper = styled.div({
@@ -38,9 +40,21 @@ const Wrapper = styled.div({
   flex: 1
 });
 
+// const DeleteButtonWrapper = styled.div<{ themeMode: ThemeMode }>((props) => ({
+//   position: 'absolute',
+//   right: '1rem',
+//   '&:hover': {
+//     transform: 'translateY(-1px)',
+//     boxShadow: `1px 8px 5px -3px ${theme[props.themeMode].shadowColor}`
+//   }
+// }));
+
 const DeleteButtonWrapper = styled.div({
   position: 'absolute',
+  top: '.2rem',
   right: '1rem',
+  zIndex: 1,
+
   '&:hover': {
     transform: 'translateY(-1px)',
     boxShadow: '1px 8px 5px -3px gray'
@@ -48,16 +62,17 @@ const DeleteButtonWrapper = styled.div({
 });
 
 const Content = styled.div({
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
+  // display: 'flex',
+  // justifyContent: 'center',
+  // alignItems: 'center',
   padding: '.8rem',
   width: '100%',
-  height: '5rem'
+  height: '7rem'
 });
 
 const PreviewTextWrapper = styled.div({
-  display: 'flex',
+  // display: 'flex',
+  // flexDirection: 'column',
   width: '100%',
   height: '100%'
 });
@@ -79,6 +94,19 @@ const PreviewTitle = styled.span({
   }
 });
 
+const PreviewContent = styled.span({
+  flexShrink: 0,
+  width: '100%',
+  fontSize: '1rem',
+  margin: '.8rem 0 0',
+  wordBreak: 'keep-all',
+  textAlign: 'left',
+  display: '-webkit-box',
+  WebkitLineClamp: 1,
+  WebkitBoxOrient: 'vertical',
+  overflow: 'hidden'
+});
+
 interface ServerSideProps {
   posts: Post[];
 }
@@ -87,8 +115,6 @@ interface Props extends AppCommonProps, ServerSideProps {}
 
 export default function PostProps(props: Props) {
   const [posts] = useState<Post[]>(props.posts);
-
-  // const [isShown, setIsShown] = useState(false);
 
   return (
     <AdminPageLayout>
@@ -115,6 +141,7 @@ export default function PostProps(props: Props) {
                       <Content>
                         <PreviewTextWrapper>
                           <PreviewTitle>{post.title}</PreviewTitle>
+                          <PreviewContent>{post.article}</PreviewContent>
                         </PreviewTextWrapper>
                       </Content>
                     </Wrapper>
