@@ -29,14 +29,10 @@ const PostListContainer = styled.div({
 
 const PostContainer = styled.div({
   width: '100%'
-  // display: 'flex',
-  // alignItems: 'center'
 });
 
 const Wrapper = styled.div({
   position: 'relative',
-  display: 'flex',
-  flexDirection: 'column',
   flex: 1
 });
 
@@ -62,17 +58,12 @@ const DeleteButtonWrapper = styled.div({
 });
 
 const Content = styled.div({
-  // display: 'flex',
-  // justifyContent: 'center',
-  // alignItems: 'center',
   padding: '.8rem',
   width: '100%',
   height: '7rem'
 });
 
 const PreviewTextWrapper = styled.div({
-  // display: 'flex',
-  // flexDirection: 'column',
   width: '100%',
   height: '100%'
 });
