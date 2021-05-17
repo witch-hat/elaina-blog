@@ -38,9 +38,13 @@ const Wrapper = styled.div({
   flex: 1
 });
 
-const MenuContainer = styled.div({
+const DeleteButtonWrapper = styled.div({
   position: 'absolute',
-  right: '1rem'
+  right: '1rem',
+  '&:hover': {
+    transform: 'translateY(-1px)',
+    boxShadow: '1px 8px 5px -3px gray'
+  }
 });
 
 const Content = styled.div({
@@ -96,7 +100,7 @@ export default function PostProps(props: Props) {
                 <PostContainer>
                   <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
                     <Wrapper>
-                      <MenuContainer>
+                      <DeleteButtonWrapper>
                         <CircleRippleWrapper
                           onClick={(event) => {
                             event.stopPropagation();
@@ -106,7 +110,7 @@ export default function PostProps(props: Props) {
                         >
                           <FontAwesomeIcon icon={faTrash} style={{ fontSize: '1.25rem' }} />
                         </CircleRippleWrapper>
-                      </MenuContainer>
+                      </DeleteButtonWrapper>
 
                       <Content>
                         <PreviewTextWrapper>
