@@ -167,8 +167,28 @@ export const userResolver = {
     }
   },
   Mutation: {
-    async updatePassword(_: any, args: { old: string; new: string }) {
+    async updatePassword(_: any, args: { old: string; new: string }, context: ContextType) {
+      const networkInterfaces = os.networkInterfaces();
+      const gateway: Gateway = await defaultGateway.v4();
+      const userEthernetInterfaceName = gateway.interface;
+      const userEthernetInterface = networkInterfaces[userEthernetInterfaceName];
+      const userIPv4Interface = userEthernetInterface?.find((eInterface) => eInterface.family === 'IPv4');
+
+      const ua = new UAParser(context.req.headers['user-agent']);
+      const browserName = ua.getBrowser().name;
+      const userUniqueId = userIPv4Interface?.mac! + userIPv4Interface?.address! + browserName;
+
+      const newPasswordRegex = new RegExp('^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,20})');
+
       try {
+        if (args.old.length > 20 || args.old.length < 8 || args.new.length > 20 || args.new.length < 8) {
+          throw new UserInputError('잘못된 비밀번호 길이입니다.');
+        }
+
+        if (args.new.match(newPasswordRegex) === null) {
+          throw new UserInputError('잘못된 비밀번호 양식입니다.');
+        }
+
         const user: User = await UserModel.findById(1);
 
         const isMatch = await comparePassword(args.old, user.password);
@@ -177,7 +197,7 @@ export const userResolver = {
           if (args.old === args.new) throw new UserInputError('이전과 동일한 비밀번호 입니다.');
 
           user.password = args.new;
-          user.auth = [];
+          user.auth = user.auth.filter((auth) => auth.userUniqueId === userUniqueId);
           user.save();
         } else {
           throw new AuthenticationError('패스워드 정보가 일치하지 않습니다.');
@@ -193,8 +213,8 @@ export const userResolver = {
       const emailRegExp =
         /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-      if (args.emailId.length < 4 || args.password.length < 4) {
-        throw new UserInputError('4자 이상 입력해주세요.');
+      if (args.password.length < 8 || args.password.length > 20) {
+        throw new UserInputError('비밀번호 8 ~ 20자 입력해주세요');
       } else if (args.emailId.match(emailRegExp) === null) {
         throw new UserInputError('이메일을 입력해 주세요');
       }

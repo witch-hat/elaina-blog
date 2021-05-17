@@ -62,8 +62,10 @@ const SubmitButton = styled.button({
 const ForgotPassword = styled.p({
   marginTop: '.25rem',
   fontSize: '.9rem',
-  textDecoration: 'underline',
-  cursor: 'pointer'
+  cursor: 'pointer',
+  '&:hover': {
+    textDecoration: 'underline'
+  }
 });
 
 interface ServerSideProps {}
@@ -84,8 +86,8 @@ export default function ChangePassword(props: Props) {
 
   const [changePassword] = useMutation(UPDATE_PASSWORD, {
     variables: {
-      old: currentPasswordInput.current?.value,
-      new: confirmPasswordInput.current?.value
+      old: currentPassword,
+      new: newPassword
     }
   });
 
@@ -104,8 +106,8 @@ export default function ChangePassword(props: Props) {
       return;
     }
 
-    if (newPassword.length < 4 || newPassword.length > 12) {
-      alert('Password length between 4 to 12');
+    if (newPassword.length < 8 || newPassword.length > 20) {
+      alert('Password length between 8 to 20');
       return;
     }
 
@@ -119,9 +121,11 @@ export default function ChangePassword(props: Props) {
         msg: 'Successfully change password'
       });
 
-      currentPasswordInput.current.value = '';
-      newPasswordInput.current.value = '';
-      confirmPasswordInput.current.value = '';
+      if (currentPasswordInput.current && newPasswordInput.current && confirmPasswordInput.current) {
+        currentPasswordInput.current.value = '';
+        newPasswordInput.current.value = '';
+        confirmPasswordInput.current.value = '';
+      }
 
       setCurrentPassword('');
       setNewPassword('');
@@ -145,8 +149,8 @@ export default function ChangePassword(props: Props) {
             <InputBox
               ref={currentPasswordInput}
               type='password'
-              minLength={4}
-              maxLength={12}
+              minLength={8}
+              maxLength={20}
               placeholder='Current password'
               styles={{ width: '400px' }}
               onChange={(e) => setCurrentPassword(e.target.value)}
@@ -159,8 +163,8 @@ export default function ChangePassword(props: Props) {
             <InputBox
               ref={newPasswordInput}
               type='password'
-              minLength={4}
-              maxLength={12}
+              minLength={8}
+              maxLength={20}
               placeholder='New password'
               styles={{ width: '400px' }}
               onChange={(e) => setNewPassword(e.target.value)}
@@ -169,7 +173,7 @@ export default function ChangePassword(props: Props) {
         </InputContainer>
         <InputContainer>
           <Description>Confirm new password</Description>
-          {newPassword.length >= 4 &&
+          {confirmPasswordInput.current?.value.length! >= 4 &&
             (isConfirmed ? (
               <ConfirmMsg isConfirmed={true}>Password is same</ConfirmMsg>
             ) : (
@@ -179,8 +183,8 @@ export default function ChangePassword(props: Props) {
             <InputBox
               ref={confirmPasswordInput}
               type='password'
-              minLength={4}
-              maxLength={12}
+              minLength={8}
+              maxLength={20}
               placeholder='Confirm new password'
               styles={{ width: '400px' }}
               onChange={(event) => onChangeConrfirmPassword(event)}

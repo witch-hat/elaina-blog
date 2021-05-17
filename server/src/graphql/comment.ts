@@ -68,6 +68,8 @@ export const commentResolver = {
       args: { _id: number; username: string; password: string; comment: string; createdAt: Date; isAdmin: boolean },
       context: ContextType
     ) {
+      const passwordRegex = new RegExp('^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,20})');
+
       try {
         if (!args.comment) {
           throw new UserInputError('내용을 입력해 주세요.');
@@ -83,8 +85,12 @@ export const commentResolver = {
             isAdmin: args.isAdmin
           };
         } else {
-          if (args.password.length < 4 || args.password.length > 12 || args.username.length < 2 || args.username.length > 10) {
-            throw new UserInputError('username: 2~10 자 이내, password: 4~12자 이내로 입력해주세요');
+          if (args.password.length < 8 || args.password.length > 20 || args.username.length < 2 || args.username.length > 10) {
+            throw new UserInputError('username: 2~10 자 이내, password: 8~20자 이내로 입력해주세요');
+          }
+
+          if (args.password.match(passwordRegex) === null) {
+            throw new UserInputError('비밀번호: 영문자, 숫자, 특수문자 조합');
           }
 
           newComment = {
@@ -115,8 +121,8 @@ export const commentResolver = {
         }
 
         if (args.password) {
-          if (args.password.length < 4 || args.password.length > 12) {
-            throw new UserInputError('password: 4~12자 이내로 입력해주세요');
+          if (args.password.length < 8 || args.password.length > 20) {
+            throw new UserInputError('password: 8~20자 이내로 입력해주세요');
           }
         }
 
@@ -143,6 +149,10 @@ export const commentResolver = {
         const commentContainer: Comments = await CommentModel.findById(args._id);
 
         if (args.password) {
+          if (args.password.length > 20 || args.password.length < 8) {
+            throw new UserInputError('비밀번호 8~20자 이내로 입력해주세요.');
+          }
+
           const hash = commentContainer.comments[args.index].password;
           const isMatch = await comparePassword(args.password, hash || '');
 
@@ -167,6 +177,8 @@ export const commentResolver = {
       args: { _id: number; commentIndex: number; username: string; password: string; comment: string; createdAt: Date; isAdmin: boolean },
       context: ContextType
     ) {
+      const passwordRegex = new RegExp('^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,20})');
+
       try {
         const commentContainer: Comments = await CommentModel.findById(args._id);
 
@@ -179,8 +191,12 @@ export const commentResolver = {
             isAdmin: args.isAdmin
           };
         } else {
-          if (args.password.length < 4 || args.password.length > 12 || args.username.length < 2 || args.username.length > 10) {
-            throw new UserInputError('username: 2~10 자 이내, password: 4~12자 이내로 입력해주세요');
+          if (args.password.length < 8 || args.password.length > 20 || args.username.length < 2 || args.username.length > 10) {
+            throw new UserInputError('username: 2~10 자 이내, password: 8~20자 이내로 입력해주세요');
+          }
+
+          if (args.password.match(passwordRegex) === null) {
+            throw new UserInputError('비밀번호: 영문자, 숫자, 특수문자 조합');
           }
 
           newReply = {
@@ -214,8 +230,8 @@ export const commentResolver = {
         }
 
         if (args.password) {
-          if (args.password.length < 4 || args.password.length > 12) {
-            throw new UserInputError('password: 4~12자 이내로 입력해주세요');
+          if (args.password.length < 8 || args.password.length > 20) {
+            throw new UserInputError('password: 8~20자 이내로 입력해주세요');
           }
         }
 

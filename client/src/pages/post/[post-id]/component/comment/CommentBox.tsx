@@ -434,7 +434,7 @@ export function CommentBox(props: Props) {
           </CommentEditor>
           <EditMenuContainer>
             {props.isCommentFromAdmin || (
-              <input placeholder='password' type='password' minLength={4} maxLength={12} onChange={(e) => setPassword(e.target.value)} />
+              <input placeholder='password' type='password' minLength={8} maxLength={20} onChange={(e) => setPassword(e.target.value)} />
             )}
             <EditButtonItem
               onClick={() => {
@@ -472,8 +472,8 @@ export function CommentBox(props: Props) {
                 id='comment-pw-auth'
                 type='password'
                 placeholder='Password'
-                maxLength={12}
-                minLength={4}
+                maxLength={20}
+                minLength={8}
                 styles={{ width: '100%' }}
                 onChange={(e) => setPassword(e.currentTarget.value)}
               />

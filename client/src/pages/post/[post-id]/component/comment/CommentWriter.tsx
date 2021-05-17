@@ -159,8 +159,8 @@ export function CommentWriter(props: Props) {
         alert(err.msg);
       }
     } else {
-      if (username.length < 2 || password.length < 4) {
-        alert('username: 2자 이상, password: 4자 이상 입력해주세요');
+      if (username.length < 2 || password.length < 8) {
+        alert('username: 2자 이상, password: 8자 이상 입력해주세요');
         return;
       }
 
@@ -313,8 +313,8 @@ export function CommentWriter(props: Props) {
               id='comment-pw'
               ref={passwordRef}
               type='password'
-              maxLength={12}
-              minLength={4}
+              maxLength={20}
+              minLength={8}
               placeholder='Password'
               styles={{ width: '100px', height: '2rem', small: { width: '100px', height: '2rem' } }}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
