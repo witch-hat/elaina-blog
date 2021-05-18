@@ -52,7 +52,7 @@ export const userTypeDef = gql`
   }
 
   extend type Mutation {
-    updatePassword(old: String!, new: String!): Void
+    updatePassword(old: String!, new: String!, confirm: String!): Void
     login(emailId: String!, password: String!): LoginResponse
     logout: Void
     refreshUserToken(userId: ID!): User
@@ -167,7 +167,7 @@ export const userResolver = {
     }
   },
   Mutation: {
-    async updatePassword(_: any, args: { old: string; new: string }, context: ContextType) {
+    async updatePassword(_: any, args: { old: string; new: string; confirm: string }, context: ContextType) {
       const networkInterfaces = os.networkInterfaces();
       const gateway: Gateway = await defaultGateway.v4();
       const userEthernetInterfaceName = gateway.interface;
@@ -181,8 +181,8 @@ export const userResolver = {
       const newPasswordRegex = new RegExp('^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,20})');
 
       try {
-        if (args.old.length > 20 || args.old.length < 8 || args.new.length > 20 || args.new.length < 8) {
-          throw new UserInputError('잘못된 비밀번호 길이입니다.');
+        if (args.new !== args.confirm) {
+          throw new UserInputError('새 비밀번호가 일치하지 않습니다.');
         }
 
         if (args.new.match(newPasswordRegex) === null) {
