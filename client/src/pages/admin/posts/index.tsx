@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 import { BorderBox } from 'src/components';
 import { CircleRippleWrapper } from 'src/components/common/wrapper/CircleRippleWrapper';
@@ -9,11 +11,6 @@ import { initApolloClient } from 'src/apollo/withApollo';
 import { appCommponProps, AppCommonProps } from 'src/pages/_app';
 import { Post, GET_POSTS } from 'src/query/post';
 import { AdminPageLayout } from 'src/pages/admin/component/AdminPageLayout';
-// import { theme } from 'src/styles';
-// import { ThemeMode } from 'src/redux/common/type';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 const Container = styled.div({
   width: '100%',
@@ -35,15 +32,6 @@ const Wrapper = styled.div({
   position: 'relative',
   flex: 1
 });
-
-// const DeleteButtonWrapper = styled.div<{ themeMode: ThemeMode }>((props) => ({
-//   position: 'absolute',
-//   right: '1rem',
-//   '&:hover': {
-//     transform: 'translateY(-1px)',
-//     boxShadow: `1px 8px 5px -3px ${theme[props.themeMode].shadowColor}`
-//   }
-// }));
 
 const DeleteButtonWrapper = styled.div({
   position: 'absolute',
@@ -88,7 +76,6 @@ const PreviewTitle = styled.span({
 const PreviewContent = styled.span({
   flexShrink: 0,
   width: '100%',
-  fontSize: '1rem',
   margin: '.8rem 0 0',
   wordBreak: 'keep-all',
   textAlign: 'left',
@@ -105,7 +92,7 @@ interface ServerSideProps {
 interface Props extends AppCommonProps, ServerSideProps {}
 
 export default function PostProps(props: Props) {
-  const [posts] = useState<Post[]>(props.posts);
+  const [posts, setPosts] = useState<Post[]>(props.posts);
 
   return (
     <AdminPageLayout>
@@ -113,7 +100,7 @@ export default function PostProps(props: Props) {
         <Container>
           {posts.map((post) => {
             return (
-              <Link href={`/post/${post._id}`} passHref key={`${post.title}${post._id}`}>
+              <Link key={post.title + post._id} href={`/post/${post._id}`} passHref>
                 <PostContainer>
                   <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
                     <Wrapper>
@@ -128,7 +115,6 @@ export default function PostProps(props: Props) {
                           <FontAwesomeIcon icon={faTrash} style={{ fontSize: '1.25rem' }} />
                         </CircleRippleWrapper>
                       </DeleteButtonWrapper>
-
                       <Content>
                         <PreviewTextWrapper>
                           <PreviewTitle>{post.title}</PreviewTitle>
