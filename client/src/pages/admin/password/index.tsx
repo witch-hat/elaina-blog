@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { GetServerSideProps } from 'next';
 import { useMutation } from '@apollo/client';
@@ -13,6 +13,7 @@ import { AppCommonProps } from 'src/pages/_app';
 import { AdminPageLayout } from '../component/AdminPageLayout';
 import { UPDATE_PASSWORD } from 'src/query/user';
 import { faTemperatureLow } from '@fortawesome/free-solid-svg-icons';
+import { PasswordInput } from './component/PasswordInput';
 
 const Container = styled.div({
   width: '100%',
@@ -31,24 +32,6 @@ const StyledHr = styled.hr({
   border: 'none',
   borderBottom: '1px solid #666'
 });
-
-const InputContainer = styled.div({
-  width: '100%',
-  padding: '1rem'
-});
-
-const Description = styled.p({
-  display: 'inline-block',
-  marginBottom: '.5rem',
-  fontWeight: 'bold'
-});
-
-const ConfirmMsg = styled.p<{ isConfirmed: boolean }>((props) => ({
-  display: 'inline-block',
-  marginLeft: '.5rem',
-  fontSize: '.9rem',
-  color: props.isConfirmed ? '#4de350' : 'red'
-}));
 
 const ButtonContainer = styled.div({
   padding: '1rem'
@@ -74,11 +57,14 @@ interface Props extends AppCommonProps {}
 
 export default function ChangePassword(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  const newPasswordRegex = new RegExp('^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,20})');
 
   const [alertState, setAlertState] = useState<AlertStateType>(initAlert);
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [isConfirmed, setIsConfirmed] = useState(false);
+  const [isValidPassword, setIsValidPassword] = useState(false);
 
   const currentPasswordInput = useRef<HTMLInputElement>(null);
   const newPasswordInput = useRef<HTMLInputElement>(null);
@@ -87,17 +73,30 @@ export default function ChangePassword(props: Props) {
   const [changePassword] = useMutation(UPDATE_PASSWORD, {
     variables: {
       old: currentPassword,
-      new: newPassword
+      new: newPassword,
+      confirm: confirmPassword
     }
   });
 
-  function onChangeConrfirmPassword(event: React.ChangeEvent<HTMLInputElement>) {
-    if (event.target.value === newPassword) {
-      setIsConfirmed(true);
+  useEffect(() => {
+    if (newPassword.match(newPasswordRegex) === null) {
+      setIsValidPassword(false);
+    } else {
+      setIsValidPassword(true);
+    }
+  }, [newPassword]);
+
+  useEffect(() => {
+    if (confirmPassword.length > 8) {
+      if (newPassword === confirmPassword) {
+        setIsConfirmed(true);
+      } else {
+        setIsConfirmed(false);
+      }
     } else {
       setIsConfirmed(false);
     }
-  }
+  }, [confirmPassword]);
 
   async function handleSubmitClick() {
     // check new password
@@ -106,8 +105,8 @@ export default function ChangePassword(props: Props) {
       return;
     }
 
-    if (newPassword.length < 8 || newPassword.length > 20) {
-      alert('Password length between 8 to 20');
+    if (newPassword.match(newPasswordRegex) === null) {
+      alert('Password: aphabet, number, special character with 8~20 length');
       return;
     }
 
@@ -129,6 +128,7 @@ export default function ChangePassword(props: Props) {
 
       setCurrentPassword('');
       setNewPassword('');
+      setConfirmPassword('');
     } catch (err) {
       setAlertState({
         isPop: true,
@@ -143,54 +143,26 @@ export default function ChangePassword(props: Props) {
       <Container>
         <Title>Change Password</Title>
         <StyledHr />
-        <InputContainer>
-          <Description>Current Password</Description>
-          <div>
-            <InputBox
-              ref={currentPasswordInput}
-              type='password'
-              minLength={8}
-              maxLength={20}
-              placeholder='Current password'
-              styles={{ width: '400px' }}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-            />
-          </div>
-        </InputContainer>
-        <InputContainer>
-          <Description>New Password</Description>
-          <div>
-            <InputBox
-              ref={newPasswordInput}
-              type='password'
-              minLength={8}
-              maxLength={20}
-              placeholder='New password'
-              styles={{ width: '400px' }}
-              onChange={(e) => setNewPassword(e.target.value)}
-            />
-          </div>
-        </InputContainer>
-        <InputContainer>
-          <Description>Confirm new password</Description>
-          {confirmPasswordInput.current?.value.length! >= 4 &&
-            (isConfirmed ? (
-              <ConfirmMsg isConfirmed={true}>Password is same</ConfirmMsg>
-            ) : (
-              <ConfirmMsg isConfirmed={false}>Password is not same</ConfirmMsg>
-            ))}
-          <div>
-            <InputBox
-              ref={confirmPasswordInput}
-              type='password'
-              minLength={8}
-              maxLength={20}
-              placeholder='Confirm new password'
-              styles={{ width: '400px' }}
-              onChange={(event) => onChangeConrfirmPassword(event)}
-            />
-          </div>
-        </InputContainer>
+        <PasswordInput
+          ref={currentPasswordInput}
+          description='Current Password'
+          placeholder='Current password'
+          onChange={setCurrentPassword}
+        />
+        <PasswordInput
+          ref={newPasswordInput}
+          description='New Password'
+          placeholder='New password'
+          onChange={setNewPassword}
+          isValid={newPassword.length ? isValidPassword : undefined}
+        />
+        <PasswordInput
+          ref={confirmPasswordInput}
+          description='Confirm New Password'
+          placeholder='Confirm password'
+          onChange={setConfirmPassword}
+          isValid={confirmPassword.length ? isConfirmed : undefined}
+        />
         <ButtonContainer>
           <SubmitButton onClick={() => handleSubmitClick()}>Change Password</SubmitButton>
           <ForgotPassword>Forgot password?</ForgotPassword>
