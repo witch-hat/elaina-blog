@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { useMutation } from '@apollo/client';
 
 import { BorderBox, ModalWrapper } from 'src/components';
 import { CircleRippleWrapper } from 'src/components/common/wrapper/CircleRippleWrapper';
@@ -15,6 +17,10 @@ import { AdminPageLayout } from 'src/pages/admin/component/AdminPageLayout';
 import { ThemeMode } from 'src/redux/common/type';
 import { theme } from 'src/styles';
 import { RootState } from 'src/redux/rootReducer';
+import { useApollo } from 'src/apollo/apolloClient';
+import { IS_AUTH } from 'src/query/user';
+import { DELETE_POST, FIND_SAME_CATEGORY_POSTS } from 'src/query/post';
+import { DELETE_POST_ALL_COMMENT_LOG } from 'src/query/comment-log';
 
 const Container = styled.div({
   width: '100%',
@@ -126,7 +132,57 @@ interface Props extends AppCommonProps, ServerSideProps {
 export default function PostProps(props: Props) {
   const [posts, setPosts] = useState<Post[]>(props.posts);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [deletePostID, setDeletePostID] = useState(0);
+
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+
+  const router = useRouter();
+  const client = useApollo();
+
+  const [deletePost] = useMutation(DELETE_POST);
+  const [deletePostAllCommentLog] = useMutation(DELETE_POST_ALL_COMMENT_LOG);
+
+  const id = deletePostID;
+  console.log('const id = router.query[post-id];');
+  console.log(id);
+  console.log(props);
+
+  async function handleDeleteButtonClick() {
+    const authResponse = await client.query({ query: IS_AUTH });
+
+    const isAdmin = authResponse.data.isAuth.isAuth;
+
+    if (isAdmin) {
+      // try {
+      const deleteResponse = await deletePost({
+        variables: {
+          id: +id
+        }
+      });
+
+      const categoryId = deleteResponse.data.deletePost.categoryId;
+
+      // const { data } = await client.query({ query: FIND_SAME_CATEGORY_POSTS, variables: { categoryId } });
+      // if (data.findSameCategoryPosts.post.length === 0) {
+      //   router.push('/');
+      // } else {
+      //   const lastPostId = data.findSameCategoryPosts.post[data.findSameCategoryPosts.post.length - 1]._id;
+      //   router.push(`/post/${lastPostId}`);
+      // }
+
+      await deletePostAllCommentLog({
+        variables: {
+          postId: +id
+        }
+      });
+      // } catch (err) {
+      //   alert(err.message);
+      // }
+    } else {
+      return alert('Invalid User');
+    }
+  }
 
   return (
     <AdminPageLayout>
@@ -146,6 +202,7 @@ export default function PostProps(props: Props) {
                             // alert('준비중');
 
                             setIsModalOpen(true);
+                            setDeletePostID(post._id);
                           }}
                         >
                           <FontAwesomeIcon icon={faTrash} style={{ fontSize: '1.25rem' }} />
@@ -171,7 +228,7 @@ export default function PostProps(props: Props) {
                 <ModalButton
                   onClick={() => {
                     setIsModalOpen(false);
-                    // handleDeleteButtonClick();
+                    handleDeleteButtonClick();
                   }}
                   themeMode={themeMode}
                 >
