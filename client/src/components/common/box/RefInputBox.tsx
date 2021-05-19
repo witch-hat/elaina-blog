@@ -63,7 +63,7 @@ interface Props {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export const InputBox = React.forwardRef<HTMLInputElement, Props>((props, forwardedRef) => {
+export const RefInputBox = React.forwardRef<HTMLInputElement, Props>((props, forwardedRef) => {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   return (
@@ -95,6 +95,6 @@ export const InputBox = React.forwardRef<HTMLInputElement, Props>((props, forwar
   );
 });
 
-InputBox.defaultProps = {
+RefInputBox.defaultProps = {
   isValid: true
 };
