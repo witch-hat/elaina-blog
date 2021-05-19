@@ -4,7 +4,8 @@ export { Loading } from './Loading';
 // Common
 
 // Box
-export { InputBox } from './common/box/InputBox';
+export { RefInputBox } from './common/box/RefInputBox';
+export { NoRefInputBox } from './common/box/NoRefInputBox';
 export { BorderBox } from './common/box/BorderBox';
 export { AlertBox, initAlert } from './common/box/AlertBox';
 export type { AlertStateType } from './common/box/AlertBox';

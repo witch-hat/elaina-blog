@@ -7,13 +7,13 @@ import { useSelector } from 'react-redux';
 import { theme } from 'src/styles';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
-import { InputBox, AlertStateType, initAlert, AlertBox } from 'src/components';
+import { AlertStateType, initAlert, AlertBox } from 'src/components';
 import { AppCommonProps } from 'src/pages/_app';
 
 import { AdminPageLayout } from '../component/AdminPageLayout';
 import { UPDATE_PASSWORD } from 'src/query/user';
 import { faTemperatureLow } from '@fortawesome/free-solid-svg-icons';
-import { PasswordInput } from './component/PasswordInput';
+import PasswordInput from './component/PasswordInput';
 
 const Container = styled.div({
   width: '100%',
@@ -66,10 +66,6 @@ export default function ChangePassword(props: Props) {
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [isValidPassword, setIsValidPassword] = useState(false);
 
-  const currentPasswordInput = useRef<HTMLInputElement>(null);
-  const newPasswordInput = useRef<HTMLInputElement>(null);
-  const confirmPasswordInput = useRef<HTMLInputElement>(null);
-
   const [changePassword] = useMutation(UPDATE_PASSWORD, {
     variables: {
       old: currentPassword,
@@ -120,12 +116,6 @@ export default function ChangePassword(props: Props) {
         msg: 'Successfully change password'
       });
 
-      if (currentPasswordInput.current && newPasswordInput.current && confirmPasswordInput.current) {
-        currentPasswordInput.current.value = '';
-        newPasswordInput.current.value = '';
-        confirmPasswordInput.current.value = '';
-      }
-
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
@@ -144,23 +134,32 @@ export default function ChangePassword(props: Props) {
         <Title>Change Password</Title>
         <StyledHr />
         <PasswordInput
-          ref={currentPasswordInput}
           description='Current Password'
           placeholder='Current password'
-          onChange={setCurrentPassword}
+          value={currentPassword}
+          onChange={(e) => {
+            e.preventDefault();
+            setCurrentPassword(e.target.value);
+          }}
         />
         <PasswordInput
-          ref={newPasswordInput}
           description='New Password'
           placeholder='New password'
-          onChange={setNewPassword}
+          value={newPassword}
+          onChange={(e) => {
+            e.preventDefault();
+            setNewPassword(e.target.value);
+          }}
           isValid={newPassword.length ? isValidPassword : undefined}
         />
         <PasswordInput
-          ref={confirmPasswordInput}
           description='Confirm New Password'
           placeholder='Confirm password'
-          onChange={setConfirmPassword}
+          value={confirmPassword}
+          onChange={(e) => {
+            e.preventDefault();
+            setConfirmPassword(e.target.value);
+          }}
           isValid={confirmPassword.length ? isConfirmed : undefined}
         />
         <ButtonContainer>

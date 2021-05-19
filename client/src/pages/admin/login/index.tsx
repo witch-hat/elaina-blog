@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 import { useSelector } from 'react-redux';
 
-import { InputBox } from 'src/components';
+import { RefInputBox } from 'src/components';
 import { theme } from 'src/styles';
 import { LOGIN } from 'src/query/user';
 import { RootState } from 'src/redux/rootReducer';
@@ -152,7 +152,7 @@ export default function Login(props: Props) {
       <LogInForm onSubmit={(event: FormEvent) => handleSubmit(event)}>
         <InputWrapper>
           <Label isBold={true}>Email</Label>
-          <InputBox
+          <RefInputBox
             ref={emailInputRef}
             id='admin-id'
             type='email'
@@ -176,7 +176,7 @@ export default function Login(props: Props) {
         </InputWrapper>
         <InputWrapper>
           <Label isBold={true}>암호</Label>
-          <InputBox
+          <RefInputBox
             ref={passwordInputRef}
             id='admin-pw'
             type='password'

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -88,40 +88,62 @@ interface Props {
 export function CategoryEditor(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
-  const titleEditInput = useRef<HTMLInputElement>(null);
-  const descriptionEditInput = useRef<HTMLInputElement>(null);
+  const [categoryTitle, setCategoryTitle] = useState('');
+  const [categoryDescription, setCategoryDescription] = useState('');
 
   const [updateCategory] = useMutation(UPDATE_CATEGORY);
+
+  useEffect(() => {
+    setCategoryTitle(props.categories[props.index].title);
+    setCategoryDescription(props.categories[props.index].description);
+  }, []);
+
+  const onTitleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setCategoryTitle(e.target.value);
+    },
+    [categoryTitle]
+  );
+
+  const onDescriptionChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setCategoryDescription(e.target.value);
+    },
+    [categoryDescription]
+  );
 
   async function save() {
     props.setAlertState(props.initAlertState);
 
     try {
-      if (titleEditInput.current && descriptionEditInput.current) {
-        await updateCategory({
-          variables: {
-            id: props.categories[props.index]._id,
-            title: titleEditInput.current?.value,
-            description: descriptionEditInput.current?.value
-          }
-        });
-
-        const copiedCategories = cloneDeep(props.categories);
-        const editingCategory = copiedCategories[props.index];
-
-        if (editingCategory) {
-          editingCategory.title = titleEditInput.current.value;
-          editingCategory.description = descriptionEditInput.current.value;
-          props.setCategories(copiedCategories);
-        }
-
-        props.setEditingCategoryIndex(-1);
-        props.setAlertState({
-          msg: 'Update category successfully.',
-          isPop: true,
-          isError: false
-        });
+      if (!categoryTitle || !categoryDescription) {
+        alert('제목 또는 소개를 입력해주세요.');
+        return;
       }
+
+      await updateCategory({
+        variables: {
+          id: props.categories[props.index]._id,
+          title: categoryTitle,
+          description: categoryDescription
+        }
+      });
+
+      const copiedCategories = cloneDeep(props.categories);
+      const editingCategory = copiedCategories[props.index];
+
+      if (editingCategory) {
+        editingCategory.title = categoryTitle;
+        editingCategory.description = categoryDescription;
+        props.setCategories(copiedCategories);
+      }
+
+      props.setEditingCategoryIndex(-1);
+      props.setAlertState({
+        msg: 'Update category successfully.',
+        isPop: true,
+        isError: false
+      });
     } catch (err) {
       props.setEditingCategoryIndex(-1);
       props.setAlertState({
@@ -150,12 +172,19 @@ export function CategoryEditor(props: Props) {
           </MenuContainer>
           <Content>
             <PreviewTextWrapper>
-              <Input type='text' ref={titleEditInput} themeMode={themeMode} defaultValue={props.categories[props.index].title} />
               <Input
                 type='text'
-                ref={descriptionEditInput}
+                themeMode={themeMode}
+                defaultValue={props.categories[props.index].title}
+                value={categoryTitle}
+                onChange={(e) => onTitleChange(e)}
+              />
+              <Input
+                type='text'
                 themeMode={themeMode}
                 defaultValue={props.categories[props.index].description}
+                value={categoryDescription}
+                onChange={(e) => onDescriptionChange(e)}
               />
             </PreviewTextWrapper>
             <PreviewImage src={props.categories[props.index].previewImage} alt='preview image' />

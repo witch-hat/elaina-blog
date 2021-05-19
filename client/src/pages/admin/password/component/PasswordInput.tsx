@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { faCheck, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 
-import { InputBox } from 'src/components';
+import { NoRefInputBox } from 'src/components';
 
 const InputContainer = styled.div({
   width: '100%',
@@ -42,26 +42,29 @@ function ValidIcon(props: ValidIconProp) {
 interface Props {
   description: string;
   placeholder: string;
-  onChange: React.Dispatch<React.SetStateAction<string>>;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   isValid?: boolean;
 }
 
-export const PasswordInput = forwardRef<HTMLInputElement, Props>((props: Props, forwardedRef) => {
+function PasswordInput(props: Props) {
   return (
     <InputContainer>
       <Description>{props.description}</Description>
       <Flex>
-        <InputBox
-          ref={forwardedRef}
+        <NoRefInputBox
           type='password'
           minLength={8}
           maxLength={20}
+          value={props.value}
           placeholder={props.placeholder}
           styles={{ width: '400px' }}
-          onChange={(e) => props.onChange(e.target.value)}
+          onChange={(e) => props.onChange(e)}
         />
         {props.isValid !== undefined && <ValidIcon isValid={props.isValid} />}
       </Flex>
     </InputContainer>
   );
-});
+}
+
+export default React.memo(PasswordInput, (prev, next) => prev.value === next.value);

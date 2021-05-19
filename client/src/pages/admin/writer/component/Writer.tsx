@@ -8,7 +8,7 @@ import gfm from 'remark-gfm';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 
-import { InputBox, useWidth, FocusWrapper, Loading } from 'src/components';
+import { RefInputBox, useWidth, FocusWrapper, Loading } from 'src/components';
 import { theme } from 'src/styles';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
@@ -325,7 +325,7 @@ export function Writer(props: Props) {
               </FocusWrapper>
             </CategoryContainer>
             <Title>
-              <InputBox
+              <RefInputBox
                 ref={titleRef}
                 id='post-title'
                 type='text'

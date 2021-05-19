@@ -137,6 +137,7 @@ export function AddCategoryModal(props: Props) {
         recentCreatedAt: new Date(),
         order: props.categories.length
       });
+
       props.setAlertState({
         msg: 'New category added successfully.',
         isPop: true,
@@ -154,16 +155,23 @@ export function AddCategoryModal(props: Props) {
   return (
     <ModalWrapper visible={props.isAddModalOpen}>
       <ModalContainer width='720px'>
-        <ModalParagraph>{'새 카테고리를 만듭니다.'}</ModalParagraph>
+        <ModalParagraph>새 카테고리를 만듭니다.</ModalParagraph>
         <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
           <Content>
             <PreviewTextWrapper>
-              <Input type='text' themeMode={themeMode} placeholder='Title' onChange={(e) => setTitle(e.target.value)} />
-              <Input type='text' themeMode={themeMode} placeholder='Description' onChange={(e) => setDescription(e.target.value)} />
+              <Input type='text' themeMode={themeMode} placeholder='Title' value={title} onChange={(e) => setTitle(e.target.value)} />
+              <Input
+                type='text'
+                themeMode={themeMode}
+                placeholder='Description'
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
             </PreviewTextWrapper>
             <SelectedImage>
               <label htmlFor='category-image-select'>
-                <FontAwesomeIcon icon={faCamera} /> Choose
+                <FontAwesomeIcon icon={faCamera} />
+                &nbsp;Choose
               </label>
               <span hidden>
                 <Input
