@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 
 import { theme } from 'src/styles';
-import { InputBox, Loading } from 'src/components';
+import { NoRefInputBox, Loading } from 'src/components';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { Reply, WRITE_COMMENT, Comment, WRITE_REPLY } from 'src/query/comment';
@@ -103,9 +103,6 @@ export function CommentWriter(props: Props) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [comment, setComment] = useState('');
-  const usernameRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
-  const editor = useRef<HTMLPreElement>(null);
 
   const client = useApollo();
   const [writeComment, { loading: writeCommentLoading }] = useMutation(WRITE_COMMENT);
@@ -113,13 +110,6 @@ export function CommentWriter(props: Props) {
   const [pushCommentLog] = useMutation(PUSH_COMMENT_LOG);
 
   function reset() {
-    if (usernameRef.current && passwordRef.current) {
-      usernameRef.current.value = '';
-      passwordRef.current.value = '';
-    }
-    if (editor.current) {
-      editor.current.innerText = '';
-    }
     setUsername('');
     setPassword('');
     setComment('');
@@ -296,26 +286,24 @@ export function CommentWriter(props: Props) {
         <InputWrapper>
           <UserInput>
             ID:&nbsp;
-            <InputBox
-              id='comment-id'
-              ref={usernameRef}
+            <NoRefInputBox
               type='text'
               maxLength={10}
               minLength={2}
               placeholder='ID'
+              value={username}
               styles={{ width: '100px', height: '2rem', small: { width: '100px', height: '2rem' } }}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
             />
           </UserInput>
           <UserInput>
             PW:&nbsp;
-            <InputBox
-              id='comment-pw'
-              ref={passwordRef}
+            <NoRefInputBox
               type='password'
               maxLength={20}
               minLength={8}
               placeholder='Password'
+              value={password}
               styles={{ width: '100px', height: '2rem', small: { width: '100px', height: '2rem' } }}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
             />
@@ -326,7 +314,6 @@ export function CommentWriter(props: Props) {
         role='textbox'
         themeMode={themeMode}
         contentEditable
-        ref={editor}
         onInput={(e: React.KeyboardEvent<HTMLPreElement>) => setComment(e.currentTarget.textContent || '')}
       />
       <SubmitButton

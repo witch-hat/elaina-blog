@@ -6,7 +6,7 @@ import { faUser, faClock, faEllipsisV } from '@fortawesome/free-solid-svg-icons'
 import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
 
-import { DropDownMenu, ModalWrapper, InputBox } from 'src/components';
+import { DropDownMenu, ModalWrapper, NoRefInputBox } from 'src/components';
 import { Comment, DELETE_COMMENT, DELETE_REPLY, EDIT_COMMENT, EDIT_REPLY, Reply } from 'src/query/comment';
 import { DELETE_COMMENT_LOG } from 'src/query/comment-log';
 import { FormatUnifier } from 'src/utils';
@@ -468,13 +468,14 @@ export function CommentBox(props: Props) {
           <ModalParagraph>{props.isLogin ? '정말 삭제하시겠습니까?' : '비밀번호를 입력해주세요'}</ModalParagraph>
           {props.isLogin || (
             <Password>
-              <InputBox
+              <NoRefInputBox
                 id='comment-pw-auth'
                 type='password'
                 placeholder='Password'
                 maxLength={20}
                 minLength={8}
                 styles={{ width: '100%' }}
+                value={password}
                 onChange={(e) => setPassword(e.currentTarget.value)}
               />
             </Password>
