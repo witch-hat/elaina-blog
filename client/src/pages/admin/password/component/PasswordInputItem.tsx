@@ -1,7 +1,6 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { faCheck, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 
 import { NoRefInputBox } from 'src/components';
@@ -47,7 +46,7 @@ interface Props {
   isValid?: boolean;
 }
 
-function PasswordInput(props: Props) {
+function PasswordInputItem(props: Props) {
   return (
     <InputContainer>
       <Description>{props.description}</Description>
@@ -67,4 +66,4 @@ function PasswordInput(props: Props) {
   );
 }
 
-export default React.memo(PasswordInput, (prev, next) => prev.value === next.value);
+export const MemoPasswordInputItem = React.memo(PasswordInputItem, (prev, next) => prev.isValid === next.isValid);

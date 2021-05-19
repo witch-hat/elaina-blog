@@ -19,6 +19,7 @@ const MenuContainer = styled.nav<{ currentNav: boolean; themeMode: ThemeMode }>(
   color: props.currentNav ? '#867dff' : 'inherit',
   textDecoration: props.currentNav ? 'underline' : 'none',
   transition: '.2s all',
+  userSelect: 'none',
   '&:hover': {
     color: theme[props.themeMode].mainText,
     marginLeft: '.35rem',

@@ -19,16 +19,16 @@ const Button = styled.button({
 
 interface Props {}
 
-export function AdminSideBar(props: Props) {
+function AdminSideBar(props: Props) {
   const router = useRouter();
-
-  const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] = useState(false);
 
   return (
     <Container>
       <Button onClick={() => router.push('/admin/writer')}>{trans(Lang.Write)}</Button>
       <ContentMenuContainer />
-      <SettingMenuContainer setIsChangePasswordModalOpen={setIsChangePasswordModalOpen} />
+      <SettingMenuContainer />
     </Container>
   );
 }
+
+export const MemoizedAdminSideBar = React.memo(AdminSideBar);

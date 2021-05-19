@@ -15,9 +15,7 @@ const Container = styled.div({
   marginTop: '1rem'
 });
 
-interface Props {
-  setIsChangePasswordModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
+interface Props {}
 
 export function SettingMenuContainer(props: Props) {
   const router = useRouter();
