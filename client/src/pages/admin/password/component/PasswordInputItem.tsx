@@ -46,7 +46,7 @@ interface Props {
   isValid?: boolean;
 }
 
-function PasswordInputItem(props: Props) {
+export function PasswordInputItem(props: Props) {
   return (
     <InputContainer>
       <Description>{props.description}</Description>
@@ -65,5 +65,3 @@ function PasswordInputItem(props: Props) {
     </InputContainer>
   );
 }
-
-export const MemoPasswordInputItem = React.memo(PasswordInputItem, (prev, next) => prev.isValid === next.isValid);

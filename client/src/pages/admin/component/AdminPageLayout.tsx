@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { MemoizedAdminSideBar } from './sidebar/AdminSideBar';
+import { AdminSideBar } from './sidebar/AdminSideBar';
 
 const Container = styled.div({
   width: '100%',
@@ -30,7 +30,7 @@ export function AdminPageLayout(props: Props) {
   return (
     <Container>
       <Side>
-        <MemoizedAdminSideBar />
+        <AdminSideBar />
       </Side>
       <Section>{props.children}</Section>
     </Container>

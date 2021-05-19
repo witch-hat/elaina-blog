@@ -19,7 +19,7 @@ const Button = styled.button({
 
 interface Props {}
 
-function AdminSideBar(props: Props) {
+export function AdminSideBar(props: Props) {
   const router = useRouter();
 
   return (
@@ -30,5 +30,3 @@ function AdminSideBar(props: Props) {
     </Container>
   );
 }
-
-export const MemoizedAdminSideBar = React.memo(AdminSideBar);

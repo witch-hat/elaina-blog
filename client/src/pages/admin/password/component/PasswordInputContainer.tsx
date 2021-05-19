@@ -7,8 +7,9 @@ import { theme } from 'src/styles';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { UPDATE_PASSWORD } from 'src/query/user';
+import { trans, Lang } from 'src/resources/languages';
 
-import { MemoPasswordInputItem } from './PasswordInputItem';
+import { PasswordInputItem } from './PasswordInputItem';
 
 const Container = styled.div({
   width: '100%'
@@ -39,7 +40,7 @@ interface Props {
   setErrorAlert: (err: Error) => void;
 }
 
-function PassowordInputContainer(props: Props) {
+export function PassowordInputContainer(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const newPasswordRegex = new RegExp('^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,20})');
 
@@ -126,32 +127,30 @@ function PassowordInputContainer(props: Props) {
 
   return (
     <Container>
-      <MemoPasswordInputItem
-        description='Current Password'
+      <PasswordInputItem
+        description={trans(Lang.CurrentPassword)}
         placeholder='Current password'
         value={currentPassword}
         onChange={(e) => onCurrentPasswordChange(e)}
       />
-      <MemoPasswordInputItem
-        description='New Password'
+      <PasswordInputItem
+        description={trans(Lang.NewPassword)}
         placeholder='New password'
         value={newPassword}
         onChange={(e) => onNewPasswordChange(e)}
         isValid={newPassword.length ? isValidPassword : undefined}
       />
-      <MemoPasswordInputItem
-        description='Confirm New Password'
+      <PasswordInputItem
+        description={trans(Lang.ConfirmPassword)}
         placeholder='Confirm password'
         value={confirmPassword}
         onChange={(e) => onConfirmPasswordChange(e)}
         isValid={confirmPassword.length ? isConfirmed : undefined}
       />
       <ButtonContainer>
-        <SubmitButton onClick={() => handleSubmitClick()}>Change Password</SubmitButton>
-        <ForgotPassword>Forgot password?</ForgotPassword>
+        <SubmitButton onClick={() => handleSubmitClick()}>{trans(Lang.ChangePassword)}</SubmitButton>
+        <ForgotPassword>{trans(Lang.ForgotPassword)}</ForgotPassword>
       </ButtonContainer>
     </Container>
   );
 }
-
-export const MemoPassowordInputContainer = React.memo(PassowordInputContainer);
