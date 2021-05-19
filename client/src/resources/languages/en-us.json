@@ -22,6 +22,10 @@
   "WriteComments": "Write Comments",
   "Reply": "Reply",
   "WriteReply": "Write Reply",
+  "AdminHome": "Admin Home",
   "ChangePassword": "Change Password",
-  "AdminHome": "Admin Home"
+  "CurrentPassword": "Current Password",
+  "NewPassword": "New Password",
+  "ConfirmPassword": "Confirm New Password",
+  "ForgotPassword": "Forgot Password?"
 }
