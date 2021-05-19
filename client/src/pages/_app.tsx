@@ -39,8 +39,6 @@ const FONT = `
 function ElainaBlog({ Component, pageProps, apolloClient, cookies }: any) {
   if (typeof window !== 'undefined') {
     if (cookies[0] && cookies[1]) {
-      console.log(cookies[1]);
-      console.log(cookies[0]);
       document.cookie = cookies[0];
       document.cookie = cookies[1];
     }
