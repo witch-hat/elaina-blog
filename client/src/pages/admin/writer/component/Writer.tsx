@@ -288,7 +288,9 @@ export function Writer(props: Props) {
 
       router.push(`/post/${id}`);
     } catch (err) {
+      setVisibleSubmitBtn(true);
       alert(err.message);
+      return;
     }
   }
 
