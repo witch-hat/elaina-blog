@@ -144,9 +144,6 @@ export default function PostProps(props: Props) {
   const [deletePostAllCommentLog] = useMutation(DELETE_POST_ALL_COMMENT_LOG);
 
   const id = deletePostID;
-  console.log('const id = router.query[post-id];');
-  console.log(id);
-  console.log(props);
 
   async function handleDeleteButtonClick() {
     const authResponse = await client.query({ query: IS_AUTH });
@@ -154,6 +151,8 @@ export default function PostProps(props: Props) {
     const isAdmin = authResponse.data.isAuth.isAuth;
 
     if (isAdmin) {
+      alert(`(test) 글을 삭제합니다. [id: ${id}]`);
+
       // try {
       const deleteResponse = await deletePost({
         variables: {
@@ -163,13 +162,15 @@ export default function PostProps(props: Props) {
 
       const categoryId = deleteResponse.data.deletePost.categoryId;
 
-      // const { data } = await client.query({ query: FIND_SAME_CATEGORY_POSTS, variables: { categoryId } });
+      const { data } = await client.query({ query: FIND_SAME_CATEGORY_POSTS, variables: { categoryId } });
       // if (data.findSameCategoryPosts.post.length === 0) {
       //   router.push('/');
       // } else {
       //   const lastPostId = data.findSameCategoryPosts.post[data.findSameCategoryPosts.post.length - 1]._id;
       //   router.push(`/post/${lastPostId}`);
       // }
+
+      router.push('/admin/posts');
 
       await deletePostAllCommentLog({
         variables: {
@@ -180,7 +181,7 @@ export default function PostProps(props: Props) {
       //   alert(err.message);
       // }
     } else {
-      return alert('Invalid User');
+      return router.push('/admin/login');
     }
   }
 
