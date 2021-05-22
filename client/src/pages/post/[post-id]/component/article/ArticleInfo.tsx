@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faClock } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faClock, faBuilding, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 
 import { FormatUnifier } from 'src/utils';
 import { ProfileType } from 'src/query/profile';
@@ -47,6 +47,11 @@ const HoverBox = styled.div({
   }
 });
 
+const Flex = styled.div({
+  display: 'flex',
+  alignItems: 'center'
+});
+
 const Time = styled.span({
   display: 'flex',
   alignItems: 'center'
@@ -81,16 +86,20 @@ export function ArticleInfo(props: Props) {
         {props.profile.name!}
         {isHover && (
           <HoverBox>
-            <div>
+            <Flex>
               <p>{props.profile.introduce}</p>
-            </div>
-            <div>
-              <p>{props.profile.location}</p>
-            </div>
+            </Flex>
+            {props.profile.location && (
+              <Flex>
+                <FontAwesomeIcon icon={faMapMarkerAlt} />
+                <p>{props.profile.location}</p>
+              </Flex>
+            )}
             {props.profile.company && (
-              <div>
+              <Flex>
+                <FontAwesomeIcon icon={faBuilding} />
                 <p>{props.profile.company}</p>
-              </div>
+              </Flex>
             )}
           </HoverBox>
         )}
