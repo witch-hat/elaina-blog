@@ -6,6 +6,7 @@ import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 
 import { DropDownMenu } from 'src/components';
 import { trans, Lang } from 'src/resources/languages';
+import { ProfileType } from 'src/query/profile';
 
 import ArticleInfo from './ArticleInfo';
 
@@ -35,7 +36,7 @@ const MenuButton = styled.p<{ danger?: boolean }>((props) => ({
 interface Props {
   isLogin: boolean;
   time: Date;
-  author: string;
+  profile: ProfileType;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   id: string;
 }
@@ -45,7 +46,7 @@ export function ContentMenu(props: Props) {
 
   return (
     <Menu>
-      <ArticleInfo author={props.author} time={props.time} />
+      <ArticleInfo profile={props.profile} time={props.time} />
       {props.isLogin && (
         <DropDownMenu
           visible={isOpenMenu}
