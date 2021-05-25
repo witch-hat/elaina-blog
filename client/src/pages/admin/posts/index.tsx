@@ -138,7 +138,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
     return {
       redirect: {
         permanent: false,
-        destination: '/admin/login'
+        destination: '/admin/login?url=%2Fadmin%2Fposts'
       }
     };
   }
