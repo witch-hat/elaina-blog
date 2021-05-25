@@ -27,10 +27,10 @@ export function SettingMenuContainer(props: Props) {
       <SideMenuTitle icon={faUsersCog} title={trans(Lang.Setting)} />
       <SideMenuItem menu={trans(Lang.ChangePassword)} href='/admin/password' />
       <SideMenuItem
-        menu={trans(Lang.Logout)}
+        menu='모든 기기 로그아웃'
         onClick={() => {
-          logout();
-          router.push('/admin/login');
+          // logout();
+          // router.push('/admin/login');
         }}
       />
     </Container>
