@@ -151,35 +151,27 @@ export default function PostProps(props: Props) {
     const isAdmin = authResponse.data.isAuth.isAuth;
 
     if (isAdmin) {
-      alert(`(test) 글을 삭제합니다. [id: ${id}]`);
+      // alert(`(test) 글을 삭제합니다. [id: ${id}]`);
 
-      // try {
-      const deleteResponse = await deletePost({
-        variables: {
-          id: +id
-        }
-      });
+      try {
+        const deleteResponse = await deletePost({
+          variables: {
+            id: +id
+          }
+        });
 
-      const categoryId = deleteResponse.data.deletePost.categoryId;
+        1;
 
-      const { data } = await client.query({ query: FIND_SAME_CATEGORY_POSTS, variables: { categoryId } });
-      // if (data.findSameCategoryPosts.post.length === 0) {
-      //   router.push('/');
-      // } else {
-      //   const lastPostId = data.findSameCategoryPosts.post[data.findSameCategoryPosts.post.length - 1]._id;
-      //   router.push(`/post/${lastPostId}`);
-      // }
+        window.location.reload();
 
-      router.push('/admin/posts');
-
-      await deletePostAllCommentLog({
-        variables: {
-          postId: +id
-        }
-      });
-      // } catch (err) {
-      //   alert(err.message);
-      // }
+        await deletePostAllCommentLog({
+          variables: {
+            postId: +id
+          }
+        });
+      } catch (err) {
+        alert(err.message);
+      }
     } else {
       return router.push('/admin/login');
     }
