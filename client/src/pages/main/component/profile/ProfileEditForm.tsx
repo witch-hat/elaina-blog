@@ -28,12 +28,12 @@ const ImageContainer = styled.div({
 
 const ChangeImageButton = styled.label<{ themeMode: ThemeMode }>((props) => ({
   display: 'flex',
+  position: 'absolute',
   alignItems: 'center',
   justifyContent: 'center',
   width: '4.2rem',
   height: '2rem',
-  position: 'absolute',
-  bottom: 0,
+  top: '250px',
   left: '10%',
   margin: '0 0 .5rem .5rem',
   padding: '.5rem',

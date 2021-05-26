@@ -15,9 +15,7 @@ const Container = styled.div({
   marginTop: '1rem'
 });
 
-interface Props {
-  setIsChangePasswordModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
+interface Props {}
 
 export function SettingMenuContainer(props: Props) {
   const router = useRouter();
@@ -29,10 +27,10 @@ export function SettingMenuContainer(props: Props) {
       <SideMenuTitle icon={faUsersCog} title={trans(Lang.Setting)} />
       <SideMenuItem menu={trans(Lang.ChangePassword)} href='/admin/password' />
       <SideMenuItem
-        menu={trans(Lang.Logout)}
+        menu='모든 기기 로그아웃'
         onClick={() => {
-          logout();
-          router.push('/admin/login');
+          // logout();
+          // router.push('/admin/login');
         }}
       />
     </Container>

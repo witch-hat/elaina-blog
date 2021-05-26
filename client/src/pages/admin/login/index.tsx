@@ -96,11 +96,7 @@ export default function Login(props: Props) {
 
   const [login] = useMutation(LOGIN, {
     onCompleted: (data: any) => {
-      if (document.referrer === '') {
-        router.push('/');
-      } else {
-        router.back();
-      }
+      router.reload();
     },
     onError: (err: Error) => {
       handleSubmitError(err.message);
@@ -215,8 +211,9 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
     return {
       redirect: {
         permanent: false,
-        destination: '/'
-      }
+        destination: context.query.url || '/'
+      },
+      props: {}
     };
   }
 

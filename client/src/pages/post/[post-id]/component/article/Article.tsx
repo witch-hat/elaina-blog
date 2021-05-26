@@ -14,6 +14,7 @@ import { useApollo } from 'src/apollo/apolloClient';
 import { ThemeMode } from 'src/redux/common/type';
 import { theme } from 'src/styles';
 import { RootState } from 'src/redux/rootReducer';
+import { ProfileType } from 'src/query/profile';
 
 import { ContentMenu } from './ArticleMenu';
 import { DELETE_POST_ALL_COMMENT_LOG } from 'src/query/comment-log';
@@ -76,7 +77,7 @@ const ModalButton = styled.button<{ themeMode?: ThemeMode }>((props) => ({
 
 interface Props {
   title: string;
-  author: string;
+  profile: ProfileType;
   createdAt: string;
   article: string;
   isLogin: boolean;
@@ -134,7 +135,7 @@ export function Article(props: Props) {
   return (
     <Container>
       <Title>{props.title}</Title>
-      <ContentMenu isLogin={props.isLogin} time={time} author={props.author} id={id as string} setIsModalOpen={setIsModalOpen} />
+      <ContentMenu isLogin={props.isLogin} time={time} profile={props.profile} id={id as string} setIsModalOpen={setIsModalOpen} />
       <StyledArticle>
         <ReactMarkdown plugins={[gfm]} className={styles['markdown-body']}>
           {props.article}

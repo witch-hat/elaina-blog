@@ -176,14 +176,12 @@ export function CategoryEditor(props: Props) {
                 type='text'
                 themeMode={themeMode}
                 defaultValue={props.categories[props.index].title}
-                value={categoryTitle}
                 onChange={(e) => onTitleChange(e)}
               />
               <Input
                 type='text'
                 themeMode={themeMode}
                 defaultValue={props.categories[props.index].description}
-                value={categoryDescription}
                 onChange={(e) => onDescriptionChange(e)}
               />
             </PreviewTextWrapper>

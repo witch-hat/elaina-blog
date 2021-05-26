@@ -86,7 +86,7 @@ export function AdminMenu(props: Props) {
                 {trans(Lang.Logout)}
               </MenuItem>
             ) : (
-              <Link href='/admin/login'>
+              <Link href={{ pathname: '/admin/login', query: { url: router.asPath } }}>
                 <MenuItem themeMode={themeMode} onClick={() => setIsAdminMenuOpen(false)}>
                   {trans(Lang.Login)}
                 </MenuItem>
