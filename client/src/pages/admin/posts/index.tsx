@@ -16,15 +16,7 @@ import { trans, Lang } from 'src/resources/languages';
 import { PageTitle } from '../component/PageTitle';
 
 const Container = styled.div({
-  width: '100%',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center'
-});
-
-const PostListContainer = styled.div({
-  width: '100%',
-  padding: '.5rem'
+  width: '100%'
 });
 
 const PostContainer = styled.div({
@@ -99,40 +91,38 @@ export default function PostProps(props: Props) {
 
   return (
     <AdminPageLayout>
-      <PostListContainer>
-        <Container>
-          <PageTitle title={trans(Lang.BoardManage)} />
-          {posts.map((post) => {
-            return (
-              <Link key={post.title + post._id} href={`/post/${post._id}`} passHref>
-                <PostContainer>
-                  <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
-                    <Wrapper>
-                      <DeleteButtonWrapper>
-                        <CircleRippleWrapper
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            // setDeletedPost({ isModalOpen: true, index });
-                            alert('준비중');
-                          }}
-                        >
-                          <FontAwesomeIcon icon={faTrash} style={{ fontSize: '1.25rem' }} />
-                        </CircleRippleWrapper>
-                      </DeleteButtonWrapper>
-                      <Content>
-                        <PreviewTextWrapper>
-                          <PreviewTitle>{post.title}</PreviewTitle>
-                          <PreviewContent>{post.article}</PreviewContent>
-                        </PreviewTextWrapper>
-                      </Content>
-                    </Wrapper>
-                  </BorderBox>
-                </PostContainer>
-              </Link>
-            );
-          })}
-        </Container>
-      </PostListContainer>
+      <Container>
+        <PageTitle title={trans(Lang.BoardManage)} />
+        {posts.map((post) => {
+          return (
+            <Link key={post.title + post._id} href={`/post/${post._id}`} passHref>
+              <PostContainer>
+                <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
+                  <Wrapper>
+                    <DeleteButtonWrapper>
+                      <CircleRippleWrapper
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          // setDeletedPost({ isModalOpen: true, index });
+                          alert('준비중');
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faTrash} style={{ fontSize: '1.25rem' }} />
+                      </CircleRippleWrapper>
+                    </DeleteButtonWrapper>
+                    <Content>
+                      <PreviewTextWrapper>
+                        <PreviewTitle>{post.title}</PreviewTitle>
+                        <PreviewContent>{post.article}</PreviewContent>
+                      </PreviewTextWrapper>
+                    </Content>
+                  </Wrapper>
+                </BorderBox>
+              </PostContainer>
+            </Link>
+          );
+        })}
+      </Container>
     </AdminPageLayout>
   );
 }

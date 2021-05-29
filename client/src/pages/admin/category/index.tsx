@@ -16,8 +16,7 @@ import { CategoryContainer } from './component/CategoryContainer';
 import { PageTitle } from '../component/PageTitle';
 
 const Container = styled.div({
-  width: '100%',
-  padding: '0 5%'
+  width: '100%'
 });
 
 const ButtonWrapper = styled.div({

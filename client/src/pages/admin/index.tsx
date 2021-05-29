@@ -23,11 +23,7 @@ interface ServerSideProps {
 interface Props extends AppCommonProps, ServerSideProps {}
 
 const Container = styled.div({
-  display: 'flex',
-  width: '100%',
-  height: '100%',
-  padding: '.9rem 0',
-  flexDirection: 'column'
+  width: '100%'
 });
 
 export default function Admin(props: Props) {

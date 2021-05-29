@@ -15,8 +15,7 @@ import { PassowordInputContainer } from './component/PasswordInputContainer';
 import { PageTitle } from '../component/PageTitle';
 
 const Container = styled.div({
-  width: '100%',
-  padding: '1rem 0'
+  width: '100%'
 });
 
 interface ServerSideProps {}
