@@ -11,6 +11,9 @@ import { initApolloClient } from 'src/apollo/withApollo';
 import { appCommponProps, AppCommonProps } from 'src/pages/_app';
 import { Post, GET_POSTS } from 'src/query/post';
 import { AdminPageLayout } from 'src/pages/admin/component/AdminPageLayout';
+import { trans, Lang } from 'src/resources/languages';
+
+import { PageTitle } from '../component/PageTitle';
 
 const Container = styled.div({
   width: '100%',
@@ -98,6 +101,7 @@ export default function PostProps(props: Props) {
     <AdminPageLayout>
       <PostListContainer>
         <Container>
+          <PageTitle title={trans(Lang.BoardManage)} />
           {posts.map((post) => {
             return (
               <Link key={post.title + post._id} href={`/post/${post._id}`} passHref>
