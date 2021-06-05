@@ -27,5 +27,7 @@
   "CurrentPassword": "Current Password",
   "NewPassword": "New Password",
   "ConfirmPassword": "Confirm New Password",
-  "ForgotPassword": "Forgot Password?"
+  "ForgotPassword": "Forgot Password?",
+  "DeviceManage": "Device Manage",
+  "Activities": "Activities"
 }

@@ -27,5 +27,7 @@
   "CurrentPassword": "현재 비밀번호",
   "NewPassword": "새 비밀번호",
   "ConfirmPassword": "새 비밀번호 확인",
-  "ForgotPassword": "비밀번호 찾기"
+  "ForgotPassword": "비밀번호 찾기",
+  "DeviceManage": "로그인 기기 관리",
+  "Activities": "최근 활동"
 }

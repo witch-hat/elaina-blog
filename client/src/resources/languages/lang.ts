@@ -32,5 +32,7 @@ export enum Lang {
   CurrentPassword = 'CurrentPassword',
   NewPassword = 'NewPassword',
   ConfirmPassword = 'ConfirmPassword',
-  ForgotPassword = 'ForgotPassword'
+  ForgotPassword = 'ForgotPassword',
+  DeviceManage = 'DeviceManage',
+  Activities = 'Activities'
 }

@@ -30,7 +30,7 @@ export default function Admin(props: Props) {
   return (
     <AdminPageLayout>
       <Container>
-        <PageTitle title='Activities' />
+        <PageTitle title={trans(Lang.Activities)} />
         {props.logs.map((log, index) => {
           /*category title 찾아주기*/
           const findCategoryTitle = props.categoriesDetail.find((category) => category._id === log.categoryId)?.title!;
