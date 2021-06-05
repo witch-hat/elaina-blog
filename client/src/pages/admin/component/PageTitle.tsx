@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Title = styled.title({
+const Title = styled.p({
   display: 'block',
   fontSize: '1.5rem',
   fontWeight: 'bold'
