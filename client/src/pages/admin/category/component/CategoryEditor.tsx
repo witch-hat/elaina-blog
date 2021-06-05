@@ -29,25 +29,25 @@ const MenuContainer = styled.div({
 
 const Wrapper = styled.div({
   display: 'flex',
-  flexDirection: 'column',
-  flex: 1
+  flex: 1,
+  flexDirection: 'column'
 });
 
 const Content = styled.div({
   display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
   width: '100%',
+  height: '10rem',
   padding: '.8rem',
-  height: '10rem'
+  justifyContent: 'center',
+  alignItems: 'center'
 });
 
 const PreviewImage = styled.img({
-  width: '260px',
-  marginLeft: '1rem',
-  height: '8.4rem',
-  objectFit: 'cover',
   float: 'right',
+  width: '260px',
+  height: '8.4rem',
+  marginLeft: '1rem',
+  objectFit: 'cover',
   '@media screen and (max-width: 1380px)': {
     width: '32%',
     marginLeft: '3%'
@@ -55,8 +55,8 @@ const PreviewImage = styled.img({
 });
 
 const PreviewTextWrapper = styled.div({
-  width: '100%',
   display: 'flex',
+  width: '100%',
   height: '8.4rem',
   flexDirection: 'column',
   alignItems: 'flex-start'
@@ -66,14 +66,14 @@ const Input = styled.input<{ themeMode: ThemeMode }>((props) => ({
   display: 'inline-block',
   width: '100%',
   height: '2rem',
-  fontSize: '1.1rem',
   padding: '.2rem',
   outline: 'none',
-  fontWeight: 'normal',
   border: `1px solid ${theme[props.themeMode].inputBorder}`,
   borderRadius: '.5rem',
-  color: theme[props.themeMode].inputText,
-  backgroundColor: theme[props.themeMode].inputBackground
+  backgroundColor: theme[props.themeMode].inputBackground,
+  fontSize: '1.1rem',
+  fontWeight: 'normal',
+  color: theme[props.themeMode].inputText
 }));
 
 interface Props {

@@ -14,9 +14,9 @@ const Container = styled.div({
 const NavigationContainer = styled.div({
   width: '100%',
   padding: '.5rem',
+  boxShadow: 'inset 3px 0px #aaaaaa',
   fontSize: '.875rem',
-  color: '#777',
-  boxShadow: 'inset 3px 0px #aaaaaa;'
+  color: '#777'
 });
 
 export function ContentNavigation() {

@@ -19,8 +19,8 @@ import { IS_AUTH } from 'src/query/user';
 import { ProfileImageCropper } from './ProfileImageCropper';
 
 const ImageContainer = styled.div({
-  poisition: 'relative',
   display: 'flex',
+  poisition: 'relative',
   width: '100%',
   alignItems: 'center',
   justifyContent: 'center'
@@ -29,26 +29,26 @@ const ImageContainer = styled.div({
 const ChangeImageButton = styled.label<{ themeMode: ThemeMode }>((props) => ({
   display: 'flex',
   position: 'absolute',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: '4.2rem',
-  height: '2rem',
   top: '250px',
   left: '10%',
-  margin: '0 0 .5rem .5rem',
+  width: '4.2rem',
+  height: '2rem',
   padding: '.5rem',
-  backgroundColor: theme[props.themeMode].secondaryContentBackground,
+  margin: '0 0 .5rem .5rem',
   border: '1px solid #222',
+  borderRadius: '.5rem',
+  backgroundColor: theme[props.themeMode].secondaryContentBackground,
+  alignItems: 'center',
+  justifyContent: 'center',
   cursor: 'pointer',
-  userSelect: 'none',
-  borderRadius: '.5rem'
+  userSelect: 'none'
 }));
 
 const FileSelector = styled.input({
   width: '0px',
   height: '0px',
-  overflow: 'hidden',
-  border: 'none'
+  border: 'none',
+  overflow: 'hidden'
 });
 
 const Form = styled.form({
@@ -59,22 +59,22 @@ const Form = styled.form({
 const InputContainer = styled.div({
   display: 'flex',
   width: '100%',
-  alignItems: 'center',
-  margin: '.71rem 0'
+  margin: '.71rem 0',
+  alignItems: 'center'
 });
 
 const Input = styled.input<{ themeMode: ThemeMode }>((props) => ({
   display: 'inline-block',
   width: '100%',
   height: '2rem',
-  fontSize: '1.0rem',
   padding: '.2rem',
   outline: 'none',
-  fontWeight: 'normal',
   border: `1px solid ${theme[props.themeMode].inputBorder}`,
   borderRadius: '.5rem',
-  color: theme[props.themeMode].inputText,
-  backgroundColor: theme[props.themeMode].inputBackground
+  backgroundColor: theme[props.themeMode].inputBackground,
+  fontSize: '1.0rem',
+  fontWeight: 'normal',
+  color: theme[props.themeMode].inputText
 }));
 
 const Editor = styled.textarea<{ themeMode: ThemeMode }>((props) => ({
@@ -85,8 +85,8 @@ const Editor = styled.textarea<{ themeMode: ThemeMode }>((props) => ({
   outline: 'none',
   border: `1px solid ${theme[props.themeMode].inputBorder}`,
   borderRadius: '.5rem',
-  color: theme[props.themeMode].inputText,
   backgroundColor: theme[props.themeMode].inputBackground,
+  color: theme[props.themeMode].inputText,
   whiteSpace: 'pre-wrap',
   wordBreak: 'break-word',
   fontSize: '1.0rem',
@@ -101,23 +101,23 @@ const Editor = styled.textarea<{ themeMode: ThemeMode }>((props) => ({
 }));
 
 const ButtonContainer = styled.div({
+  display: 'flex',
   width: '100%',
   marginTop: '.5rem',
-  display: 'flex',
   justifyContent: 'center'
 });
 
 const Button = styled.button<{ themeMode: ThemeMode; isSubmit?: boolean }>((props) => ({
   display: 'flex',
   width: '47.5%',
-  marginRight: props.isSubmit ? '5%' : '0',
   padding: '.5rem',
+  marginRight: props.isSubmit ? '5%' : '0',
   borderRadius: '.5rem',
+  backgroundColor: props.isSubmit ? theme[props.themeMode].submitButtonColor : 'inherit',
   cursor: 'pointer',
   justifyContent: 'center',
   color: props.isSubmit ? '#f1f2f3' : theme[props.themeMode].mainText,
   userSelect: 'none',
-  backgroundColor: props.isSubmit ? theme[props.themeMode].submitButtonColor : 'inherit',
   '@media screen and (max-width: 767px)': {
     maxWidth: '150px'
   }

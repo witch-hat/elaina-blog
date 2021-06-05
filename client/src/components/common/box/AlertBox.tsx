@@ -12,15 +12,15 @@ const GoingDown = keyframes({
 
 const Container = styled.div<{ isError: boolean }>(
   (props) => ({
+    display: 'flex',
     position: 'fixed',
-    width: '100vw',
     top: '4rem',
     left: '0',
     right: '0',
-    backgroundColor: props.isError ? 'rgb(224, 103, 103)' : 'rgb(111, 178, 237)',
-    display: 'flex',
-    alignItems: 'center',
+    width: '100vw',
     padding: '.5rem',
+    backgroundColor: props.isError ? 'rgb(224, 103, 103)' : 'rgb(111, 178, 237)',
+    alignItems: 'center',
     justifyContent: 'space-between'
   }),
   css`

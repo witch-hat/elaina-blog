@@ -19,8 +19,8 @@ import { Lang, trans } from 'src/resources/languages';
 
 const Container = styled.div({
   width: '100%',
-  margin: '.5rem',
   padding: '.5rem',
+  margin: '.5rem',
   borderRadius: '.5rem'
 });
 
@@ -28,8 +28,8 @@ const DetailsContainer = styled.div({
   display: 'flex',
   width: '100%',
   height: 'max-content',
-  fontSize: '.8rem',
   justifyContent: 'space-between',
+  fontSize: '.8rem',
   '@media screen and (max-width: 767px)': {
     margin: '0 0 .2rem'
   }
@@ -37,8 +37,8 @@ const DetailsContainer = styled.div({
 
 const InformationContainer = styled.div({
   display: 'flex',
-  fontSize: '.8rem',
   alignItems: 'center',
+  fontSize: '.8rem',
   '@media screen and (max-width: 767px)': {
     flexDirection: 'column',
     alignItems: 'flex-start'
@@ -46,8 +46,8 @@ const InformationContainer = styled.div({
 });
 
 const Author = styled.div({
-  marginRight: '.7rem',
   display: 'flex',
+  marginRight: '.7rem',
   alignItems: 'center',
   '@media screen and (max-width: 767px)': {
     margin: '0 0 .2rem'
@@ -60,19 +60,19 @@ const Time = styled.span({
 });
 
 const CommentContent = styled.p({
-  margin: '2rem 0',
   display: 'flex',
-  alignItems: 'center',
-  width: '100%'
+  width: '100%',
+  margin: '2rem 0',
+  alignItems: 'center'
 });
 
 const MenuButton = styled.p<{ danger?: boolean }>((props) => ({
   display: 'block',
   padding: '.5rem',
+  borderRadius: '.5rem',
   textAlign: 'center',
   cursor: 'pointer',
   userSelect: 'none',
-  borderRadius: '.5rem',
   wordBreak: 'keep-all',
   color: props.danger ? '#dd0000' : 'inherit',
   '&:hover': {
@@ -90,8 +90,8 @@ const ModalParagraph = styled.p({
 });
 
 const Password = styled.div({
-  margin: '.5rem 0',
-  width: '60%'
+  width: '60%',
+  margin: '.5rem 0'
 });
 
 const ModalButtonContainer = styled.div({
@@ -105,8 +105,8 @@ const ModalButtonContainer = styled.div({
 const ModalButton = styled.button<{ themeMode?: ThemeMode }>((props) => ({
   width: '4.5rem',
   padding: '.5rem',
-  borderRadius: '.5rem',
   marginLeft: '.5rem',
+  borderRadius: '.5rem',
   backgroundColor: props.themeMode ? theme[props.themeMode].dangerButtonColor : 'inherit',
   color: props.themeMode ? theme[props.themeMode].dangerContentText : 'inherit'
 }));

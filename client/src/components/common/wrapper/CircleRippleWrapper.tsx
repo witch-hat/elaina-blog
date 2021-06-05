@@ -3,9 +3,9 @@ import styled, { keyframes, css } from 'styled-components';
 
 const Wrapper = styled.div({
   display: 'flex',
+  padding: '8px',
   alignContent: 'center',
   justifyContent: 'center',
-  padding: '8px',
   cursor: 'pointer'
 });
 
@@ -24,13 +24,13 @@ const Ripple = styled.div(
   (props) => ({
     display: 'block',
     position: 'absolute',
-    width: '100%',
-    height: '100%',
-    borderRadius: '50%',
     top: '0',
     left: '0',
     right: '0',
     bottom: '0',
+    width: '100%',
+    height: '100%',
+    borderRadius: '50%',
     backgroundColor: 'rgba(37, 37, 37, 0.1)'
   }),
   css`

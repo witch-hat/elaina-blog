@@ -3,32 +3,32 @@ import styled from 'styled-components';
 
 const Wrapper = styled.div((props) => {
   return {
-    width: '100%',
-    height: '100%',
+    display: 'flex',
     position: 'fixed',
-    overflowX: 'hidden',
-    zIndex: 1000,
     top: 0,
     right: 0,
-    display: 'flex',
-    tabIndex: -1,
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+    tabIndex: -1,
+    zIndex: 1000,
+    overflowX: 'hidden'
   };
 });
 
 const WrapperInner = styled.div({
-  position: 'relative',
   display: 'flex',
-  flexDirection: 'column',
-  boxShadow: '0px 0px 4px 4px rgba(0,0,0,0.25)',
-  padding: '16px',
+  position: 'relative',
   width: 'fit-content',
   height: 'fit-content',
+  padding: '16px',
   margin: '0 auto',
+  borderRadius: '.5rem',
+  boxShadow: '0px 0px 4px 4px rgba(0,0,0,0.25)',
   backgroundColor: '#fff',
-  borderRadius: '.5rem'
+  flexDirection: 'column'
 });
 
 // let ModalWrapperHashId = 0;

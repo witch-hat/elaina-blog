@@ -20,13 +20,13 @@ import { ContentMenu } from './ArticleMenu';
 import { DELETE_POST_ALL_COMMENT_LOG } from 'src/query/comment-log';
 
 const Container = styled.main({
-  width: '100%',
   display: 'flex',
+  width: '100%',
+  minHeight: 'calc(100vh - 5rem - 40px)',
   padding: '.5rem 1.5rem',
   flexDirection: 'column',
   jusitfyContent: 'flex-start',
   alignItems: 'center',
-  minHeight: 'calc(100vh - 5rem - 40px)',
   '@media screen and (max-width: 767px)': {
     padding: '.5rem'
   }
@@ -69,8 +69,8 @@ const ModalButtonContainer = styled.div({
 const ModalButton = styled.button<{ themeMode?: ThemeMode }>((props) => ({
   width: '4.5rem',
   padding: '.5rem',
-  borderRadius: '.5rem',
   marginLeft: '.5rem',
+  borderRadius: '.5rem',
   backgroundColor: props.themeMode ? theme[props.themeMode].dangerButtonColor : 'inherit',
   color: props.themeMode ? theme[props.themeMode].dangerContentText : 'inherit'
 }));

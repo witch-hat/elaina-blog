@@ -10,13 +10,13 @@ import { ProfileViewer } from './ProfileViewer';
 interface Props {}
 
 const Container = styled.aside({
-  width: '300px',
   display: 'flex',
+  width: '300px',
+  minHeight: 'calc(90vh - 40px)',
+  padding: '0 1rem',
   flexDirection: 'column',
   justifyContent: 'flex-start',
   alignItems: 'center',
-  padding: '0 1rem',
-  minHeight: 'calc(90vh - 40px)',
   alignSelf: 'stretch',
   '@media screen and (max-width: 1380px)': {
     width: '28%',
@@ -25,9 +25,9 @@ const Container = styled.aside({
   },
   '@media screen and (max-width: 767px)': {
     width: '100%',
+    maxWidth: '100%',
     minHeight: 'max-content',
-    marginBottom: '50px',
-    maxWidth: '100%'
+    marginBottom: '50px'
   }
 });
 

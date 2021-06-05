@@ -19,13 +19,13 @@ interface BoxProps {
 const Box = styled.div<BoxProps>((props) => {
   return {
     display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
     width: props.styles?.width || 'max-content',
     margin: props.styles?.margin || '10px',
     border: `1px solid ${theme[props.themeMode].borderColor}`,
     borderRadius: '.5rem',
     transition: '.2s all',
+    justifyContent: 'center',
+    alignItems: 'center',
     cursor: `${props.isTransform ? 'pointer' : 'default'}`,
     '&:hover': {
       transform: `${props.isTransform ? 'translateY(-10px)' : 'none'}`,

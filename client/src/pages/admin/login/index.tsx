@@ -21,13 +21,13 @@ const Container = styled.div({
 });
 
 const LogInForm = styled.form({
+  display: 'flex',
   width: '400px',
   height: '400px',
   padding: '.5rem',
-  display: 'flex',
-  flexDirection: 'column',
   border: '1px solid #ddd',
   borderRadius: '.5rem',
+  flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'center'
 });
@@ -35,15 +35,15 @@ const LogInForm = styled.form({
 const InputWrapper = styled.div({
   display: 'flex',
   width: '80%',
-  flexDirection: 'column',
-  margin: '10px 0'
+  margin: '10px 0',
+  flexDirection: 'column'
 });
 
 const HelpWrapper = styled.div({
   display: 'flex',
   width: '80%',
-  flexDirection: 'column',
-  margin: '10px 0'
+  margin: '10px 0',
+  flexDirection: 'column'
 });
 
 const Label = styled.label<{ color?: string; isBold?: boolean }>((props) => {

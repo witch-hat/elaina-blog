@@ -13,9 +13,9 @@ import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 
 const Container = styled.section({
-  marginTop: '2rem',
   width: '100%',
-  minHeight: '100vh'
+  minHeight: '100vh',
+  marginTop: '2rem'
 });
 
 const ContentInfoWrapper = styled.div({
@@ -23,8 +23,8 @@ const ContentInfoWrapper = styled.div({
 });
 
 const Author = styled.span({
-  marginRight: '1rem',
   display: 'flex',
+  marginRight: '1rem',
   alignItems: 'center'
 });
 

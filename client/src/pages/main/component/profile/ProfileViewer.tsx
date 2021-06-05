@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import styled, { keyframes, css } from 'styled-components';
-import { useMutation } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBuilding, faEnvelope, faLink, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 import { RoundImage } from 'src/components';
 import { theme } from 'src/styles';
-import { ProfileType, UPDATE_PROFILE } from 'src/query/profile';
+import { ProfileType } from 'src/query/profile';
 import { Lang, trans } from 'src/resources/languages';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
@@ -35,8 +34,8 @@ const FadeIn = keyframes({
 
 const ImageContainer = styled.div(
   {
-    poisition: 'relative',
     display: 'flex',
+    poisition: 'relative',
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center'
@@ -85,8 +84,8 @@ const Description = styled.li(
     display: 'flex',
     width: '100%',
     margin: '.4rem 0',
-    fontSize: '1.1rem',
     alignItems: 'center',
+    fontSize: '1.1rem',
     wordBreak: 'keep-all',
     opacity: '0'
   },
@@ -98,9 +97,9 @@ const Description = styled.li(
 
 const ButtonContainer = styled.div(
   {
+    display: 'flex',
     width: '100%',
     marginTop: '.5rem',
-    display: 'flex',
     justifyContent: 'center',
     opacity: '0'
   },
@@ -111,13 +110,13 @@ const ButtonContainer = styled.div(
 );
 
 const EditButton = styled.div({
+  display: 'flex',
   width: '100%',
   padding: '.5rem',
-  borderRadius: '.5rem',
   border: '1px solid #ddd',
-  cursor: 'pointer',
-  display: 'flex',
+  borderRadius: '.5rem',
   justifyContent: 'center',
+  cursor: 'pointer',
   userSelect: 'none',
   '@media screen and (max-width: 767px)': {
     width: '200px'
@@ -136,9 +135,9 @@ const ParagraphLink = styled.a({
 });
 
 const Paragraph = styled.p({
-  fontSize: '1.0rem',
   display: 'block',
   width: '100%',
+  fontSize: '1.0rem',
   overflow: 'hidden',
   wordBreak: 'break-all',
   textOverflow: 'ellipsis',

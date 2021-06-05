@@ -60,7 +60,7 @@ export async function getServerSideProps(context: NextPageContext) {
     return {
       redirect: {
         permanent: false,
-        destination: '/admin/login?url=%2writer'
+        destination: '/admin/login?url=%2Fadmin%2Fwriter'
       }
     };
   }

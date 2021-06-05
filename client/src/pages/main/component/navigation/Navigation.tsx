@@ -13,8 +13,8 @@ import { Lang, trans } from 'src/resources/languages';
 import { NavigationButton } from './NavigationButton';
 
 const Container = styled.nav({
-  width: '100%',
   display: 'flex',
+  width: '100%',
   alignItems: 'center'
 });
 

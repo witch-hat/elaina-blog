@@ -9,7 +9,6 @@ import 'react-image-crop/dist/ReactCrop.css';
 
 const Container = styled.div({
   width: '500px',
-  Height: '300px',
   '@media screen and (max-width: 767px)': {
     width: '100%'
   }
@@ -26,12 +25,12 @@ const ButtonContainer = styled.div({
 });
 
 const Button = styled.div({
-  padding: '.5rem',
   width: '7rem',
-  cursor: 'pointer',
+  padding: '.5rem',
   border: '1px solid #ddd',
-  textAlign: 'center',
-  borderRadius: '.5rem'
+  borderRadius: '.5rem',
+  cursor: 'pointer',
+  textAlign: 'center'
 });
 
 async function getCropImage(image: HTMLImageElement, imageName: string, imageType: string, crop: Crop): Promise<Blob> {
