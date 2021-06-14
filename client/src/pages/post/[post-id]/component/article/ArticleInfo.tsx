@@ -11,9 +11,9 @@ const ContentInfoWrapper = styled.div({
 });
 
 const Author = styled.div({
+  display: 'flex',
   position: 'relative',
   marginRight: '1rem',
-  display: 'flex',
   alignItems: 'center',
   transition: '.2s all',
   '&:hover': {
@@ -34,16 +34,16 @@ const HoverBox = styled.div({
   zIndex: 1,
   color: '#121314',
   '&::after': {
-    content: "''",
     position: 'absolute',
+    top: '-.8rem',
+    left: '20%',
     width: '0',
     height: '0',
     border: '.8rem solid transparent',
     borderBottomColor: '#ddd',
     borderTop: '0',
     borderLeft: '0',
-    top: '-.8rem',
-    left: '20%'
+    content: "''"
   }
 });
 

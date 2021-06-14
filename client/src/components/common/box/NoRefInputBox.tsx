@@ -27,17 +27,17 @@ const Input = styled.input<InputProps>((props) => {
   return {
     width: props.styles?.width || '100px',
     height: props.styles?.height || '40px',
-    fontSize: props.styles?.fontSize || '1rem',
     margin: props.styles?.margin,
     border: `1px solid ${theme[props.themeMode].inputBorder}`,
     borderRadius: '.5rem',
-    color: theme[props.themeMode].inputText,
     backgroundColor: theme[props.themeMode].inputBackground,
+    fontSize: props.styles?.fontSize || '1rem',
+    color: theme[props.themeMode].inputText,
     '&:focus': {
-      outline: 'none',
       padding: '1px',
       borderWidth: '2px',
-      borderColor: props.isValid ? theme[props.themeMode].inputOutline : theme[props.themeMode].invalidBorder
+      borderColor: props.isValid ? theme[props.themeMode].inputOutline : theme[props.themeMode].invalidBorder,
+      outline: 'none'
     },
     '&::placeholder': {
       color: theme[props.themeMode].placeholderText

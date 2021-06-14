@@ -12,9 +12,9 @@ import ArticleInfo from './ArticleInfo';
 
 const Menu = styled.div({
   display: 'flex',
-  justifyContent: 'space-between',
   width: '100%',
   height: '2.2rem',
+  justifyContent: 'space-between',
   alignItems: 'center',
   fontSize: '.875rem'
 });
@@ -22,11 +22,11 @@ const Menu = styled.div({
 const MenuButton = styled.p<{ danger?: boolean }>((props) => ({
   display: 'block',
   padding: '.5rem',
+  borderRadius: '.5rem',
   textAlign: 'center',
   cursor: 'pointer',
   userSelect: 'none',
   wordBreak: 'keep-all',
-  borderRadius: '.5rem',
   color: props.danger ? '#dd0000' : 'inherit',
   '&:hover': {
     backgroundColor: '#ddd'

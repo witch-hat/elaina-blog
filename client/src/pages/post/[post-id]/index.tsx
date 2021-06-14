@@ -32,11 +32,11 @@ import { RightSideContainer } from './component/rightside/RightSideContainer';
 // }
 
 const Container = styled.div({
+  display: 'flex',
   width: '100%',
   maxWidth: '1480px',
-  display: 'flex',
-  justifyContent: 'stretch',
   margin: '0 auto',
+  justifyContent: 'stretch',
   alignItems: 'flex-start',
   '@media screen and (max-width: 1380px)': {
     width: '100%'

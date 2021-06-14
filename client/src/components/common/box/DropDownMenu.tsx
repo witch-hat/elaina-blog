@@ -12,24 +12,24 @@ const MenuContainer = styled.div({
 });
 
 const MenuListWrapper = styled.div({
-  minWidth: '100%',
   position: 'absolute',
   top: '.5rem',
   right: '0',
+  minWidth: '100%',
   zIndex: 1
 });
 
 const MenuList = styled.div<{ themeMode: ThemeMode }>((props) => ({
   display: 'flex',
-  flexDirection: 'column',
   backgroundColor: theme[props.themeMode].secondaryContentBackground,
-  borderRadius: '.5rem'
+  borderRadius: '.5rem',
+  flexDirection: 'column'
 }));
 
 const MainButton = styled.div<{ themeMode: ThemeMode }>((props) => ({
   padding: '.5rem .8rem',
-  cursor: 'pointer',
   borderRadius: '.5rem',
+  cursor: 'pointer',
   '&:hover': {
     backgroundColor: theme[props.themeMode].hoverBackground
   }

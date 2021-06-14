@@ -7,9 +7,9 @@ import { initApolloClient } from 'src/apollo/withApollo';
 import { ResultContainer } from './components/ResultContainer';
 
 const Container = styled.div<{ isEmptyResult?: boolean }>((props) => ({
+  display: 'flex',
   width: '100%',
   height: props.isEmptyResult ? 'calc(100vh - 5rem - 20px)' : 'auto',
-  display: 'flex',
   flexDirection: 'column',
   alignItems: props.isEmptyResult ? 'center' : 'flex-start',
   justifyContent: props.isEmptyResult ? 'center' : 'flex-start',
@@ -19,12 +19,12 @@ const Container = styled.div<{ isEmptyResult?: boolean }>((props) => ({
 }));
 
 const Wrapper = styled.div({
+  display: 'flex',
   width: '100%',
   padding: '0 15%',
-  display: 'flex',
+  margin: '1rem 0',
   flexDirection: 'column',
-  alignItems: 'center',
-  margin: '1rem 0'
+  alignItems: 'center'
 });
 
 const CountContainer = styled.div({
@@ -32,9 +32,9 @@ const CountContainer = styled.div({
 });
 
 const Count = styled.p({
+  marginBottom: '.5rem',
   fontSize: '1.3rem',
-  fontWeight: 'bold',
-  marginBottom: '.5rem'
+  fontWeight: 'bold'
 });
 
 interface ServerSideProps {

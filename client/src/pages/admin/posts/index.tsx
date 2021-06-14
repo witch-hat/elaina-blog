@@ -22,17 +22,17 @@ import { IS_AUTH } from 'src/query/user';
 import { DELETE_POST, FIND_SAME_CATEGORY_POSTS } from 'src/query/post';
 import { DELETE_POST_ALL_COMMENT_LOG } from 'src/query/comment-log';
 
+
+
 const Container = styled.div({
-  width: '100%',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center'
+  width: '100%'
 });
 
 const PostListContainer = styled.div({
   width: '100%',
   padding: '.5rem'
 });
+
 
 const PostContainer = styled.div({
   width: '100%'
@@ -179,6 +179,7 @@ export default function PostProps(props: Props) {
 
   return (
     <AdminPageLayout>
+
       <PostListContainer>
         <Container>
           {posts.map((post) => {
@@ -233,6 +234,7 @@ export default function PostProps(props: Props) {
           </ModalWrapper>
         </Container>
       </PostListContainer>
+
     </AdminPageLayout>
   );
 }

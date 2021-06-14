@@ -9,12 +9,12 @@ import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 
 const MenuContainer = styled.nav<{ currentNav: boolean; themeMode: ThemeMode }>((props) => ({
+  listStyle: 'none',
   width: '100%',
   padding: '.5rem',
   borderLeft: props.currentNav ? '2px solid #867dff' : 'none',
   borderBottom: `1px solid ${theme[props.themeMode].borderColor}`,
   cursor: 'pointer',
-  listStyle: 'none',
   fontWeight: props.currentNav ? 'bold' : 'normal',
   color: props.currentNav ? '#867dff' : 'inherit',
   textDecoration: props.currentNav ? 'underline' : 'none',
@@ -30,8 +30,8 @@ const MenuContainer = styled.nav<{ currentNav: boolean; themeMode: ThemeMode }>(
 }));
 
 const Menu = styled.p({
-  width: '100%',
   listStyle: 'none',
+  width: '100%',
   cursor: 'pointer',
   '&:hover': {
     textDecoration: 'underline'

@@ -19,9 +19,9 @@ const SearchButton = styled.button<{ themeMode: ThemeMode }>((props) => ({
   border: 'none',
   borderRadius: '50%',
   backgroundColor: theme[props.themeMode].headerBackground,
-  fontSize: '1.2rem',
   alignItems: 'center',
   justifyContent: 'center',
+  fontSize: '1.2rem',
   cursor: 'pointer',
   '&:focus': {
     outline: 'none'

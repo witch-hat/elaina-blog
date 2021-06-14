@@ -19,8 +19,8 @@ const Container = styled.div<{ themeMode: ThemeMode; isAdmin: boolean }>((props)
 }));
 
 const ReplyButtonContainer = styled.div({
-  width: '100%',
   display: 'flex',
+  width: '100%',
   justifyContent: 'space-between',
   alignItems: 'center'
 });
@@ -37,8 +37,8 @@ const ReplyButton = styled.span({
 });
 
 const ReplyContainer = styled.div({
-  width: '100%',
   display: 'flex',
+  width: '100%',
   flexDirection: 'column',
   alignItems: 'center'
 });

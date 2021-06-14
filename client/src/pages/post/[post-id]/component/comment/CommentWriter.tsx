@@ -32,8 +32,8 @@ const InputWrapper = styled.div({
 
 const UserInput = styled.div({
   display: 'flex',
-  alignItems: 'center',
   marginRight: '1rem',
+  alignItems: 'center',
   '@media screen and (max-width: 400px)': {
     margin: '0 0 .5rem'
   }
@@ -42,17 +42,17 @@ const UserInput = styled.div({
 const Editor = styled.pre<{ themeMode: ThemeMode }>(
   (props) => ({
     display: 'block',
-    fontFamily: '"Nanum Gothic", sans-serif',
     width: '100%',
     minHeight: '5rem',
-    overflowY: 'hidden',
-    outline: 'none',
     padding: '.5rem',
-    resize: 'none',
     border: `1px solid ${theme[props.themeMode].inputBorder}`,
     borderRadius: '.5rem',
-    wordBreak: 'keep-all',
+    outline: 'none',
     backgroundColor: theme[props.themeMode].inputBackground,
+    fontFamily: '"Nanum Gothic", sans-serif',
+    overflowY: 'hidden',
+    resize: 'none',
+    wordBreak: 'keep-all',
     color: theme[props.themeMode].inputText
   }),
   // Cannot use &[contenteditable]:empty::before in styled-object...
@@ -68,16 +68,16 @@ const Editor = styled.pre<{ themeMode: ThemeMode }>(
 );
 
 const SubmitButton = styled.button<{ themeMode: ThemeMode }>((props) => ({
+  display: 'flex',
   width: '8rem',
-  margin: '1rem 0 0',
   height: '3rem',
   padding: '.5rem',
-  display: 'flex',
+  margin: '1rem 0 0',
   border: '1px solid #ddd',
-  cursor: 'pointer',
+  borderRadius: '.5rem',
   alignItems: 'center',
   justifyContent: 'center',
-  borderRadius: '.5rem',
+  cursor: 'pointer',
   userSelect: 'none',
   '&:hover': {
     backgroundColor: theme[props.themeMode].hoverBackground

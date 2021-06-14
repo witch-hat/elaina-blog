@@ -12,23 +12,10 @@ import { trans, Lang } from 'src/resources/languages';
 
 import { AdminPageLayout } from '../component/AdminPageLayout';
 import { PassowordInputContainer } from './component/PasswordInputContainer';
+import { PageTitle } from '../component/PageTitle';
 
 const Container = styled.div({
-  width: '100%',
-  padding: '1rem 0'
-});
-
-const Title = styled.title({
-  display: 'block',
-  fontSize: '1.5rem',
-  fontWeight: 'bold'
-});
-
-const StyledHr = styled.hr({
-  width: '100%',
-  margin: '1rem 0',
-  border: 'none',
-  borderBottom: '1px solid #666'
+  width: '100%'
 });
 
 interface ServerSideProps {}
@@ -63,8 +50,7 @@ export default function ChangePassword(props: Props) {
   return (
     <AdminPageLayout>
       <Container>
-        <Title>{trans(Lang.ChangePassword)}</Title>
-        <StyledHr />
+        <PageTitle title={trans(Lang.ChangePassword)} />
         <PassowordInputContainer resetAlert={resetAlert} setSuccessAlert={setSuccessAlert} setErrorAlert={setErrorAlert} />
         {alertState.isPop && (
           <AlertBox msg={alertState.msg} isError={alertState.isError} onCloseButtonClick={() => resetAlert()}></AlertBox>

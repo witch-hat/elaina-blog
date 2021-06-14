@@ -8,10 +8,11 @@ import CommnetLogBox from 'src/pages/admin/component/CommentLogItem/CommentLogBo
 import { GET_CATEGORIES_WITH_DETAILS, CategoryDetails } from 'src/query/category';
 import { BorderBox } from 'src/components/common/box/BorderBox';
 import { Post, GET_POSTS } from 'src/query/post';
+import { trans, Lang } from 'src/resources/languages';
 
 import { AdminPageLayout } from './component/AdminPageLayout';
+import { PageTitle } from './component/PageTitle';
 import { AppCommonProps, appCommponProps } from '../_app';
-import { title } from 'process';
 
 interface ServerSideProps {
   logs: CommentLog[];
@@ -22,17 +23,14 @@ interface ServerSideProps {
 interface Props extends AppCommonProps, ServerSideProps {}
 
 const Container = styled.div({
-  display: 'flex',
-  width: '100%',
-  height: '100%',
-  padding: '.9rem 0',
-  flexDirection: 'column'
+  width: '100%'
 });
 
 export default function Admin(props: Props) {
   return (
     <AdminPageLayout>
       <Container>
+        <PageTitle title={trans(Lang.Activities)} />
         {props.logs.map((log, index) => {
           /*category title 찾아주기*/
           const findCategoryTitle = props.categoriesDetail.find((category) => category._id === log.categoryId)?.title!;

@@ -10,10 +10,10 @@ import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 
 const Container = styled.div<{ themeMode: ThemeMode }>((props) => ({
+  display: 'flex',
   marginTop: '.4rem',
   color: theme[props.themeMode].detailText,
-  fontSize: '.8rem',
-  display: 'flex'
+  fontSize: '.8rem'
 }));
 
 const LatestTime = styled.span({
