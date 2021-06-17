@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import { useSelector } from 'react-redux';
 import {
@@ -124,6 +124,10 @@ export default function PostId(props: Props) {
   const commentRef = useRef<HTMLElement>(null);
   const [showPostCategory, setShowPostCategory] = useState(false);
   const [isHoldingButton, setIsHoldingButton] = useState(false);
+
+  useEffect(() => {
+    window.scroll(0, 0);
+  }, []);
 
   function handleTouchStart(event: React.TouchEvent<HTMLButtonElement>) {
     event.preventDefault();
