@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { useRouter } from 'next/router';
+import { useSelector } from 'react-redux';
 import { useMutation } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBuilding, faCamera, faEnvelope, faLink, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
-import { RoundImage, AlertStateType, Loading } from 'src/components';
+import { RoundImage, AlertStateType, Loading, useRefresh } from 'src/components';
 import { theme } from 'src/styles';
 import { ProfileType, UPDATE_PROFILE } from 'src/query/profile';
 import { Lang, trans } from 'src/resources/languages';
@@ -135,7 +136,6 @@ interface Props {
   profile: ProfileType;
   alertState: AlertStateType;
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
-  setProfile: React.Dispatch<React.SetStateAction<ProfileType>>;
   setAlertState: React.Dispatch<React.SetStateAction<AlertStateType>>;
 }
 
@@ -146,6 +146,7 @@ export function ProfileEditForm(props: Props) {
   const [croppedImageFile, setCroppedImageFile] = useState<Blob>();
   const [selectedImageFile, setSelectedImageFile] = useState<File>();
   const [editingProfile, setEditingProfile] = useState<ProfileType>(props.profile);
+  const refreshData = useRefresh();
 
   const client = useApollo();
   const [uploadFile] = useMutation<{ uploadFile: FileType }>(UPLOAD_FILE);
@@ -206,7 +207,7 @@ export function ProfileEditForm(props: Props) {
         }
       });
 
-      props.setProfile({ ...editingProfile, image: uploadedImagePath ? uploadedImagePath : props.profile.image });
+      refreshData();
       props.setEditMode(false);
       props.setAlertState({
         msg: 'Profile changed successfully',
