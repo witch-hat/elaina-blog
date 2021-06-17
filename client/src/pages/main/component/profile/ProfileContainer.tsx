@@ -27,7 +27,7 @@ const Container = styled.aside({
     width: '100%',
     maxWidth: '100%',
     minHeight: 'max-content',
-    marginBottom: '50px'
+    marginBottom: '2rem'
   }
 });
 

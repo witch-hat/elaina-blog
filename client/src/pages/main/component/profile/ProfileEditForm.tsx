@@ -21,7 +21,7 @@ import { ProfileImageCropper } from './ProfileImageCropper';
 
 const ImageContainer = styled.div({
   display: 'flex',
-  poisition: 'relative',
+  position: 'relative',
   width: '100%',
   alignItems: 'center',
   justifyContent: 'center'
@@ -42,7 +42,11 @@ const ChangeImageButton = styled.label<{ themeMode: ThemeMode }>((props) => ({
   alignItems: 'center',
   justifyContent: 'center',
   cursor: 'pointer',
-  userSelect: 'none'
+  userSelect: 'none',
+  '@media screen and (max-width: 767px)': {
+    top: '170px',
+    left: 'calc(50% - 40px)'
+  }
 }));
 
 const FileSelector = styled.input({

@@ -32,6 +32,9 @@ const MainButton = styled.div<{ themeMode: ThemeMode }>((props) => ({
   cursor: 'pointer',
   '&:hover': {
     backgroundColor: theme[props.themeMode].hoverBackground
+  },
+  '@media screen and (max-width: 767px)': {
+    padding: '.5rem'
   }
 }));
 
