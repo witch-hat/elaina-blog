@@ -40,14 +40,25 @@ export function ProfileContainer(props: Props) {
   const initAlertState: AlertStateType = { msg: '', isPop: false, isError: false };
 
   const [isEditMode, setIsEditMode] = useState(false);
+  const [profile, setProfile] = useState<ProfileType>(props.profile);
   const [alertState, setAlertState] = useState<AlertStateType>(initAlertState);
+
+  function applyUpdatedProfile(profile: ProfileType) {
+    setProfile(profile);
+  }
 
   return (
     <Container>
       {isEditMode ? (
-        <ProfileEditForm profile={props.profile} alertState={alertState} setEditMode={setIsEditMode} setAlertState={setAlertState} />
+        <ProfileEditForm
+          profile={profile}
+          alertState={alertState}
+          setEditMode={setIsEditMode}
+          setAlertState={setAlertState}
+          updateProfile={applyUpdatedProfile}
+        />
       ) : (
-        <ProfileViewer profile={props.profile} isLogin={props.isLogin} setEditMode={setIsEditMode} />
+        <ProfileViewer profile={profile} isLogin={props.isLogin} setEditMode={setIsEditMode} />
       )}
       {alertState.isPop && (
         <AlertBox

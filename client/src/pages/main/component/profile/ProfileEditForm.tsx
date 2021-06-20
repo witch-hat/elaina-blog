@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
-import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
+import styled from 'styled-components';
 import { useMutation } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBuilding, faCamera, faEnvelope, faLink, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
-import { RoundImage, AlertStateType, Loading, useRefresh } from 'src/components';
+import { RoundImage, AlertStateType, Loading } from 'src/components';
 import { theme } from 'src/styles';
 import { ProfileType, UPDATE_PROFILE } from 'src/query/profile';
 import { Lang, trans } from 'src/resources/languages';
@@ -21,7 +20,7 @@ import { ProfileImageCropper } from './ProfileImageCropper';
 
 const ImageContainer = styled.div({
   display: 'flex',
-  position: 'relative',
+  poisition: 'relative',
   width: '100%',
   alignItems: 'center',
   justifyContent: 'center'
@@ -42,11 +41,7 @@ const ChangeImageButton = styled.label<{ themeMode: ThemeMode }>((props) => ({
   alignItems: 'center',
   justifyContent: 'center',
   cursor: 'pointer',
-  userSelect: 'none',
-  '@media screen and (max-width: 767px)': {
-    top: '170px',
-    left: 'calc(50% - 40px)'
-  }
+  userSelect: 'none'
 }));
 
 const FileSelector = styled.input({
@@ -141,6 +136,7 @@ interface Props {
   alertState: AlertStateType;
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
   setAlertState: React.Dispatch<React.SetStateAction<AlertStateType>>;
+  updateProfile: (profile: ProfileType) => void;
 }
 
 export function ProfileEditForm(props: Props) {
@@ -150,7 +146,6 @@ export function ProfileEditForm(props: Props) {
   const [croppedImageFile, setCroppedImageFile] = useState<Blob>();
   const [selectedImageFile, setSelectedImageFile] = useState<File>();
   const [editingProfile, setEditingProfile] = useState<ProfileType>(props.profile);
-  const refreshData = useRefresh();
 
   const client = useApollo();
   const [uploadFile] = useMutation<{ uploadFile: FileType }>(UPLOAD_FILE);
@@ -198,7 +193,7 @@ export function ProfileEditForm(props: Props) {
     }
 
     try {
-      await updateProfile({
+      const { data } = await updateProfile({
         variables: {
           id: editingProfile._id,
           image: uploadedImagePath ? uploadedImagePath : props.profile.image,
@@ -211,7 +206,7 @@ export function ProfileEditForm(props: Props) {
         }
       });
 
-      refreshData();
+      props.updateProfile(data?.updateProfile!);
       props.setEditMode(false);
       props.setAlertState({
         msg: 'Profile changed successfully',
