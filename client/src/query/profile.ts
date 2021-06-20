@@ -36,6 +36,7 @@ export const UPDATE_PROFILE = gql`
       location: $location
       email: $email
     ) {
+      _id
       image
       name
       introduce
