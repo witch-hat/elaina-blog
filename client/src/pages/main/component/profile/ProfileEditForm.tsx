@@ -17,6 +17,7 @@ import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';
 
 import { ProfileImageCropper } from './ProfileImageCropper';
+import { ProfileInput } from './ProfileInput';
 
 const ImageContainer = styled.div({
   display: 'flex',
@@ -62,20 +63,6 @@ const InputContainer = styled.div({
   margin: '.71rem 0',
   alignItems: 'center'
 });
-
-const Input = styled.input<{ themeMode: ThemeMode }>((props) => ({
-  display: 'inline-block',
-  width: '100%',
-  height: '2rem',
-  padding: '.2rem',
-  outline: 'none',
-  border: `1px solid ${theme[props.themeMode].inputBorder}`,
-  borderRadius: '.5rem',
-  backgroundColor: theme[props.themeMode].inputBackground,
-  fontSize: '1.0rem',
-  fontWeight: 'normal',
-  color: theme[props.themeMode].inputText
-}));
 
 const Editor = styled.textarea<{ themeMode: ThemeMode }>((props) => ({
   display: 'block',
@@ -190,6 +177,7 @@ export function ProfileEditForm(props: Props) {
       }
     } catch (err) {
       alert(err.message);
+      return;
     }
 
     try {
@@ -222,6 +210,12 @@ export function ProfileEditForm(props: Props) {
       props.setEditMode(false);
       setEditingProfile(props.profile);
     }
+  }
+
+  function updateEditingProfile(profileProperty: string) {
+    return (event: React.ChangeEvent<HTMLInputElement>) => {
+      setEditingProfile({ ...editingProfile, [profileProperty]: event.target.value });
+    };
   }
 
   if (updateLoading) {
@@ -260,14 +254,10 @@ export function ProfileEditForm(props: Props) {
         }}
       >
         <InputContainer>
-          <Input
+          <ProfileInput
             placeholder='Username'
-            themeMode={themeMode}
-            type='text'
-            defaultValue={editingProfile.name}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setEditingProfile({ ...editingProfile, name: event.target.value });
-            }}
+            defaultValue={editingProfile.name || ''}
+            changeEditingProfile={updateEditingProfile('name')}
           />
         </InputContainer>
         <Editor
@@ -281,50 +271,30 @@ export function ProfileEditForm(props: Props) {
         />
         <InputContainer>
           <ProfileIcon icon={faLink} />
-          <Input
-            placeholder='Link'
-            themeMode={themeMode}
-            type='text'
-            defaultValue={editingProfile.link}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setEditingProfile({ ...editingProfile, link: event.target.value });
-            }}
-          />
+          <ProfileInput placeholder='Link' defaultValue={editingProfile.link || ''} changeEditingProfile={updateEditingProfile('link')} />
         </InputContainer>
         <InputContainer>
           <ProfileIcon icon={faBuilding} />
-          <Input
+          <ProfileInput
             placeholder='Company'
-            themeMode={themeMode}
-            type='text'
-            defaultValue={editingProfile.company}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setEditingProfile({ ...editingProfile, company: event.target.value });
-            }}
+            defaultValue={editingProfile.company || ''}
+            changeEditingProfile={updateEditingProfile('company')}
           />
         </InputContainer>
         <InputContainer>
           <ProfileIcon icon={faMapMarkerAlt} />
-          <Input
-            placeholder='Region'
-            themeMode={themeMode}
-            type='text'
-            defaultValue={editingProfile.location}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setEditingProfile({ ...editingProfile, location: event.target.value });
-            }}
+          <ProfileInput
+            placeholder='Location'
+            defaultValue={editingProfile.location || ''}
+            changeEditingProfile={updateEditingProfile('location')}
           />
         </InputContainer>
         <InputContainer>
           <ProfileIcon icon={faEnvelope} />
-          <Input
+          <ProfileInput
             placeholder='Email'
-            themeMode={themeMode}
-            type='text'
-            defaultValue={editingProfile.email}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setEditingProfile({ ...editingProfile, email: event.target.value });
-            }}
+            defaultValue={editingProfile.email || ''}
+            changeEditingProfile={updateEditingProfile('email')}
           />
         </InputContainer>
       </Form>
