@@ -21,6 +21,10 @@ import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';
 import { DELETE_POST, FIND_SAME_CATEGORY_POSTS } from 'src/query/post';
 import { DELETE_POST_ALL_COMMENT_LOG } from 'src/query/comment-log';
+import { trans, Lang } from 'src/resources/languages';
+
+import { PageTitle } from '../component/PageTitle';
+
 
 
 
@@ -182,6 +186,7 @@ export default function PostProps(props: Props) {
 
       <PostListContainer>
         <Container>
+        <PageTitle title={trans(Lang.BoardManage)} />
           {posts.map((post) => {
             return (
               <Link key={post.title + post._id} href={`/post/${post._id}`} passHref>
