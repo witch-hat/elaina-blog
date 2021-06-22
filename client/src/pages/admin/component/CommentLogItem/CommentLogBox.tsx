@@ -15,8 +15,8 @@ const Context = styled.div({
   borderRadius: '.4rem',
   justifyContent: 'left',
   flexDirection: 'column',
-  ':hover': {
-    backgroundColor: '#d3e7fa'
+  '&:hover > p': {
+    color: '#50a3f1'
   }
 });
 
@@ -55,7 +55,7 @@ interface Props {
 }
 
 export default function CommentLogBox(props: Props) {
-  const dateDifferent = FormatUnifier.calculateDate(new Date(props.time).getTime());
+  const dateDifferent = FormatUnifier.calculateDate(props.time);
   const event = props.isEvent === 0 ? `User upload new comment ${dateDifferent}` : `User upload new reply ${dateDifferent}`;
   return (
     <div>
