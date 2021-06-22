@@ -7,6 +7,7 @@ import { CommentEvent, CommentLog, GET_COMMENT_LOGS } from 'src/query/comment-lo
 import CommnetLogBox from 'src/pages/admin/component/CommentLogItem/CommentLogBox';
 import { GET_CATEGORIES_WITH_DETAILS, CategoryDetails } from 'src/query/category';
 import { Post, GET_POSTS } from 'src/query/post';
+import { BorderBox } from 'src/components/common/box/BorderBox';
 
 import { AdminPageLayout } from './component/AdminPageLayout';
 import { AppCommonProps, appCommponProps } from '../_app';
@@ -35,16 +36,6 @@ export default function Admin(props: Props) {
           const findCategoryTitle = props.categoriesDetail.find((category) => category._id === log.categoryId)?.title!;
           const findPostTitle = props.posts.find((post) => post._id === log._id)?.title!;
           return (
-<<<<<<< Updated upstream
-            <CommnetLogBox
-              key={`${log._id}`}
-              isEvent={log.replyIndex}
-              time={log.time}
-              postId={log.postId}
-              categoryTitle={findCategoryTitle}
-              postTitle={findPostTitle}
-            />
-=======
             <BorderBox isTransform={true} key={log._id}>
               <CommnetLogBox
                 isEvent={log.event}
@@ -54,7 +45,6 @@ export default function Admin(props: Props) {
                 postTitle={findPostTitle}
               />
             </BorderBox>
->>>>>>> Stashed changes
           );
         })}
       </Container>
