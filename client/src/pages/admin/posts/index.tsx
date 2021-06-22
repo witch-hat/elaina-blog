@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 import { BorderBox } from 'src/components';
 import { CircleRippleWrapper } from 'src/components/common/wrapper/CircleRippleWrapper';
@@ -9,54 +11,43 @@ import { initApolloClient } from 'src/apollo/withApollo';
 import { appCommponProps, AppCommonProps } from 'src/pages/_app';
 import { Post, GET_POSTS } from 'src/query/post';
 import { AdminPageLayout } from 'src/pages/admin/component/AdminPageLayout';
+import { trans, Lang } from 'src/resources/languages';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { PageTitle } from '../component/PageTitle';
 
 const Container = styled.div({
-  width: '100%',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center'
-});
-
-const PostListContainer = styled.div({
-  width: '100%',
-  padding: '.5rem'
+  width: '100%'
 });
 
 const PostContainer = styled.div({
-  width: '100%',
-  display: 'flex',
-  alignItems: 'center'
+  width: '100%'
 });
 
 const Wrapper = styled.div({
-  display: 'flex',
-  flexDirection: 'column',
+  position: 'relative',
   flex: 1
 });
 
-const MenuContainer = styled.div({
-  flex: 1,
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'flex-end',
-  padding: '.8rem'
+const DeleteButtonWrapper = styled.div({
+  position: 'absolute',
+  top: '.2rem',
+  right: '1rem',
+  zIndex: 1,
+
+  '&:hover': {
+    transform: 'translateY(-1px)',
+    boxShadow: '1px 8px 5px -3px gray'
+  }
 });
 
 const Content = styled.div({
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  width: '100%',
   padding: '.8rem',
-  height: '5rem'
+  width: '100%',
+  height: '7rem'
 });
 
 const PreviewTextWrapper = styled.div({
   width: '100%',
-  display: 'flex',
   height: '100%'
 });
 
@@ -77,6 +68,18 @@ const PreviewTitle = styled.span({
   }
 });
 
+const PreviewContent = styled.span({
+  flexShrink: 0,
+  width: '100%',
+  margin: '.8rem 0 0',
+  wordBreak: 'keep-all',
+  textAlign: 'left',
+  display: '-webkit-box',
+  WebkitLineClamp: 1,
+  WebkitBoxOrient: 'vertical',
+  overflow: 'hidden'
+});
+
 interface ServerSideProps {
   posts: Post[];
 }
@@ -84,43 +87,42 @@ interface ServerSideProps {
 interface Props extends AppCommonProps, ServerSideProps {}
 
 export default function PostProps(props: Props) {
-  const [posts] = useState<Post[]>(props.posts);
+  const [posts, setPosts] = useState<Post[]>(props.posts);
 
   return (
     <AdminPageLayout>
-      <PostListContainer>
-        <Container>
-          {posts.map((post) => {
-            return (
-              <Link href={`/post/${post._id}`} passHref key={`${post.title}${post._id}`}>
-                <PostContainer>
-                  <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
-                    <Wrapper>
-                      <MenuContainer>
-                        <CircleRippleWrapper
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            // setDeletedPost({ isModalOpen: true, index });
-                            alert('준비중');
-                          }}
-                        >
-                          <FontAwesomeIcon icon={faTrash} style={{ fontSize: '1.25rem' }} />
-                        </CircleRippleWrapper>
-                      </MenuContainer>
-
-                      <Content>
-                        <PreviewTextWrapper>
-                          <PreviewTitle>{post.title}</PreviewTitle>
-                        </PreviewTextWrapper>
-                      </Content>
-                    </Wrapper>
-                  </BorderBox>
-                </PostContainer>
-              </Link>
-            );
-          })}
-        </Container>
-      </PostListContainer>
+      <Container>
+        <PageTitle title={trans(Lang.BoardManage)} />
+        {posts.map((post) => {
+          return (
+            <Link key={post.title + post._id} href={`/post/${post._id}`} passHref>
+              <PostContainer>
+                <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
+                  <Wrapper>
+                    <DeleteButtonWrapper>
+                      <CircleRippleWrapper
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          // setDeletedPost({ isModalOpen: true, index });
+                          alert('준비중');
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faTrash} style={{ fontSize: '1.25rem' }} />
+                      </CircleRippleWrapper>
+                    </DeleteButtonWrapper>
+                    <Content>
+                      <PreviewTextWrapper>
+                        <PreviewTitle>{post.title}</PreviewTitle>
+                        <PreviewContent>{post.article}</PreviewContent>
+                      </PreviewTextWrapper>
+                    </Content>
+                  </Wrapper>
+                </BorderBox>
+              </PostContainer>
+            </Link>
+          );
+        })}
+      </Container>
     </AdminPageLayout>
   );
 }
@@ -130,7 +132,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
     return {
       redirect: {
         permanent: false,
-        destination: '/admin/login'
+        destination: '/admin/login?url=%2Fadmin%2Fposts'
       }
     };
   }

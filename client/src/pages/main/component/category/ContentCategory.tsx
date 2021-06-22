@@ -22,10 +22,10 @@ const MoveUp = keyframes({
 
 const Container = styled.div({
   display: 'flex',
-  flexDirection: 'column',
   width: '100%',
   height: '100%',
   padding: '.9rem 0',
+  flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'center'
 });

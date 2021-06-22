@@ -14,19 +14,19 @@ import { ADD_CATEGORY, CategoryDetails } from 'src/query/category';
 
 const Content = styled.div({
   display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
   width: '100%',
+  height: '10rem',
   padding: '.8rem',
-  height: '10rem'
+  justifyContent: 'center',
+  alignItems: 'center'
 });
 
 const PreviewImage = styled.img({
-  width: '260px',
-  marginLeft: '1rem',
-  height: '8.4rem',
-  objectFit: 'cover',
   float: 'right',
+  width: '260px',
+  height: '8.4rem',
+  marginLeft: '1rem',
+  objectFit: 'cover',
   '@media screen and (max-width: 1380px)': {
     width: '32%',
     marginLeft: '3%'
@@ -34,8 +34,8 @@ const PreviewImage = styled.img({
 });
 
 const PreviewTextWrapper = styled.div({
-  width: '100%',
   display: 'flex',
+  width: '100%',
   height: '8.4rem',
   flexDirection: 'column',
   alignItems: 'flex-start'
@@ -45,14 +45,14 @@ const Input = styled.input<{ themeMode: ThemeMode }>((props) => ({
   display: 'inline-block',
   width: '100%',
   height: '2rem',
-  fontSize: '1.1rem',
   padding: '.2rem',
   outline: 'none',
-  fontWeight: 'normal',
   border: `1px solid ${theme[props.themeMode].inputBorder}`,
+  backgroundColor: theme[props.themeMode].inputBackground,
   borderRadius: '.5rem',
-  color: theme[props.themeMode].inputText,
-  backgroundColor: theme[props.themeMode].inputBackground
+  fontSize: '1.1rem',
+  fontWeight: 'normal',
+  color: theme[props.themeMode].inputText
 }));
 
 const ModalContainer = styled.div<{ width: string }>((props) => ({
@@ -75,18 +75,18 @@ const ModalButtonContainer = styled.div({
 const ModalButton = styled.button<{ themeMode?: ThemeMode }>((props) => ({
   width: '4.5rem',
   padding: '.5rem',
-  borderRadius: '.5rem',
   marginLeft: '.5rem',
+  borderRadius: '.5rem',
   backgroundColor: props.themeMode ? theme[props.themeMode].dangerButtonColor : 'inherit',
   color: props.themeMode ? theme[props.themeMode].dangerContentText : 'inherit'
 }));
 
 const SelectedImage = styled.div({
-  width: '260px',
-  marginLeft: '1rem',
-  height: '8.4rem',
-  objectFit: 'cover',
   float: 'right',
+  width: '260px',
+  height: '8.4rem',
+  marginLeft: '1rem',
+  objectFit: 'cover',
   '@media screen and (max-width: 1380px)': {
     width: '32%',
     marginLeft: '3%'
@@ -137,6 +137,7 @@ export function AddCategoryModal(props: Props) {
         recentCreatedAt: new Date(),
         order: props.categories.length
       });
+
       props.setAlertState({
         msg: 'New category added successfully.',
         isPop: true,
@@ -154,16 +155,23 @@ export function AddCategoryModal(props: Props) {
   return (
     <ModalWrapper visible={props.isAddModalOpen}>
       <ModalContainer width='720px'>
-        <ModalParagraph>{'새 카테고리를 만듭니다.'}</ModalParagraph>
+        <ModalParagraph>새 카테고리를 만듭니다.</ModalParagraph>
         <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
           <Content>
             <PreviewTextWrapper>
-              <Input type='text' themeMode={themeMode} placeholder='Title' onChange={(e) => setTitle(e.target.value)} />
-              <Input type='text' themeMode={themeMode} placeholder='Description' onChange={(e) => setDescription(e.target.value)} />
+              <Input type='text' themeMode={themeMode} placeholder='Title' value={title} onChange={(e) => setTitle(e.target.value)} />
+              <Input
+                type='text'
+                themeMode={themeMode}
+                placeholder='Description'
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
             </PreviewTextWrapper>
             <SelectedImage>
               <label htmlFor='category-image-select'>
-                <FontAwesomeIcon icon={faCamera} /> Choose
+                <FontAwesomeIcon icon={faCamera} />
+                &nbsp;Choose
               </label>
               <span hidden>
                 <Input

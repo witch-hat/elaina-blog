@@ -16,26 +16,26 @@ const Content = styled.div({
 
 const PostTitle = styled.p({
   display: 'block',
+  marginBottom: '.5rem',
   fontSize: '1.125rem',
-  fontWeight: 'bold',
-  marginBottom: '.5rem'
+  fontWeight: 'bold'
 });
 
 const CreatedAt = styled.p({
   display: 'block',
-  fontSize: '.8rem',
-  marginBottom: '.5rem'
+  marginBottom: '.5rem',
+  fontSize: '.8rem'
 });
 
 const Article = styled.div(
   {
+    display: '-webkit-box',
     width: '100%',
     height: '3rem',
     fontSize: '1rem',
     wordBreak: 'keep-all',
     textAlign: 'left',
     overflow: 'hidden',
-    display: '-webkit-box',
     WebkitLineClamp: 2,
     WebkitBoxOrient: 'vertical'
   },

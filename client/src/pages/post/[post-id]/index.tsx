@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import { useSelector } from 'react-redux';
 import {
@@ -18,7 +18,7 @@ import { ThemeMode } from 'src/redux/common/type';
 import { initApolloClient } from 'src/apollo/withApollo';
 import { FIND_POST_BY_URL, FIND_SAME_CATEGORY_POSTS, Post } from 'src/query/post';
 import { GET_COMMENTS, Comments } from 'src/query/comment';
-import { GET_PROFILE } from 'src/query/profile';
+import { GET_PROFILE, ProfileType } from 'src/query/profile';
 import { AppCommonProps } from 'src/pages/_app';
 
 import { Article } from './component/article/Article';
@@ -32,11 +32,11 @@ import { RightSideContainer } from './component/rightside/RightSideContainer';
 // }
 
 const Container = styled.div({
+  display: 'flex',
   width: '100%',
   maxWidth: '1480px',
-  display: 'flex',
-  justifyContent: 'stretch',
   margin: '0 auto',
+  justifyContent: 'stretch',
   alignItems: 'flex-start',
   '@media screen and (max-width: 1380px)': {
     width: '100%'
@@ -101,7 +101,7 @@ interface ServerSideProps {
   comment: Comments;
   sameCategoryTitles: [{ title: string; _id: number }];
   category: { title: string };
-  author: string;
+  profile: ProfileType;
 }
 
 interface Props extends AppCommonProps, ServerSideProps {}
@@ -112,7 +112,7 @@ export default function PostId(props: Props) {
   const comments: Comments = props.comment;
   const titles: [{ title: string; _id: number }] = props.sameCategoryTitles;
   const category: { title: string } = props.category;
-  const author: string = props.author;
+  const profile: ProfileType = props.profile;
   const categoryId: number = props.categoryId;
   let touchStartX: number;
   let touchStartY: number;
@@ -124,6 +124,10 @@ export default function PostId(props: Props) {
   const commentRef = useRef<HTMLElement>(null);
   const [showPostCategory, setShowPostCategory] = useState(false);
   const [isHoldingButton, setIsHoldingButton] = useState(false);
+
+  useEffect(() => {
+    window.scroll(0, 0);
+  }, []);
 
   function handleTouchStart(event: React.TouchEvent<HTMLButtonElement>) {
     event.preventDefault();
@@ -163,9 +167,15 @@ export default function PostId(props: Props) {
         </FocusWrapper>
       )}
       <ContentContainer themeMode={themeMode}>
-        <Article title={post.title} author={author} createdAt={post.createdAt} article={post.article} isLogin={props.app.isLogin} />
+        <Article title={post.title} profile={profile} createdAt={post.createdAt} article={post.article} isLogin={props.app.isLogin} />
         <Comment ref={commentRef}>
-          <CommentContainer comments={comments} isLogin={props.app.isLogin} author={author} categoryId={categoryId} postId={post._id} />
+          <CommentContainer
+            comments={comments}
+            isLogin={props.app.isLogin}
+            author={profile.name!}
+            categoryId={categoryId}
+            postId={post._id}
+          />
         </Comment>
       </ContentContainer>
       <RightSideContainer commentsCount={comments.count} scrollToComment={scrollToComment} />
@@ -214,7 +224,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
         comment: findedComment,
         sameCategoryTitles: sameCategoryPostTitles.post,
         category: sameCategoryPostTitles.category,
-        author: profile.name
+        profile
       }
     };
   } catch (err) {

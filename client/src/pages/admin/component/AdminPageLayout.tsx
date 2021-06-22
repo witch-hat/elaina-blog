@@ -4,17 +4,17 @@ import styled from 'styled-components';
 import { AdminSideBar } from './sidebar/AdminSideBar';
 
 const Container = styled.div({
-  width: '100%',
   display: 'flex',
+  width: '100%',
+  padding: '.5rem 0',
   justifyContent: 'center'
 });
 
 const Side = styled.aside({
   position: 'sticky',
+  top: 'calc(4rem + 20px)',
   width: '300px',
-  height: 'calc(100vh - 4rem - 20px)',
-  padding: '1rem 0',
-  top: 'calc(5rem + 20px)'
+  height: 'calc(100vh - 4rem - 20px)'
 });
 
 const Section = styled.section({

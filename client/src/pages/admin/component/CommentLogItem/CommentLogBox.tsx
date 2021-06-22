@@ -5,20 +5,20 @@ import { FormatUnifier } from 'src/utils';
 
 const Context = styled.div({
   display: 'flex',
+  float: 'left',
   width: '700px',
   height: '7rem',
   padding: '.8rem',
-  justifyContent: 'left',
-  float: 'left',
   marginTop: '5px',
   marginBottom: '20px',
+  justifyContent: 'left',
   flexDirection: 'column'
 });
 
 const CategoryTitle = styled.p({
+  paddingBottom: '0.5rem',
   fontSize: '25px',
-  fontWeight: 'bold',
-  paddingBottom: '0.5rem'
+  fontWeight: 'bold'
 });
 
 const PostTitle = styled.p({
@@ -34,8 +34,8 @@ const UserImage = styled.img({
   float: 'left',
   width: '40px',
   height: '40px',
-  objectFit: 'cover',
   marginRight: '5px',
+  objectFit: 'cover',
   '@media screen and (max-width: 1380px)': {
     width: '40px'
   }

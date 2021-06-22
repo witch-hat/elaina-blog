@@ -35,7 +35,16 @@ export const UPDATE_PROFILE = gql`
       company: $company
       location: $location
       email: $email
-    )
+    ) {
+      _id
+      image
+      name
+      introduce
+      link
+      company
+      location
+      email
+    }
   }
 `;
 

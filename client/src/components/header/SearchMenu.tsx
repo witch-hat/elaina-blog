@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 import { theme } from 'src/styles';
-import { InputBox } from 'src/components';
+import { NoRefInputBox } from 'src/components';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { trans, Lang } from 'src/resources/languages';
@@ -19,9 +19,9 @@ const SearchButton = styled.button<{ themeMode: ThemeMode }>((props) => ({
   border: 'none',
   borderRadius: '50%',
   backgroundColor: theme[props.themeMode].headerBackground,
-  fontSize: '1.2rem',
   alignItems: 'center',
   justifyContent: 'center',
+  fontSize: '1.2rem',
   cursor: 'pointer',
   '&:focus': {
     outline: 'none'
@@ -49,7 +49,6 @@ export function SearchMenu(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   const router = useRouter();
-  const SearchRef = useRef<HTMLInputElement>(null);
   const [searchKeyword, setSearchKeyWord] = useState('');
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -61,18 +60,17 @@ export function SearchMenu(props: Props) {
     }
 
     router.push({ pathname: '/search', query: { word: searchKeyword } });
-    SearchRef.current && (SearchRef.current.value = '');
   }
 
   return (
     <SearchForm onSubmit={(e: React.FormEvent<HTMLFormElement>) => handleSubmit(e)}>
-      <InputBox
-        ref={SearchRef}
+      <NoRefInputBox
         type='text'
         placeholder={trans(Lang.Search)}
         id='search'
         minLength={2}
         maxLength={10}
+        value={searchKeyword}
         styles={{ width: '180px', small: { width: '120px', height: '32px' } }}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchKeyWord(e.currentTarget.value)}
       />

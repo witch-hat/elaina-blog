@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -29,25 +29,25 @@ const MenuContainer = styled.div({
 
 const Wrapper = styled.div({
   display: 'flex',
-  flexDirection: 'column',
-  flex: 1
+  flex: 1,
+  flexDirection: 'column'
 });
 
 const Content = styled.div({
   display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
   width: '100%',
+  height: '10rem',
   padding: '.8rem',
-  height: '10rem'
+  justifyContent: 'center',
+  alignItems: 'center'
 });
 
 const PreviewImage = styled.img({
-  width: '260px',
-  marginLeft: '1rem',
-  height: '8.4rem',
-  objectFit: 'cover',
   float: 'right',
+  width: '260px',
+  height: '8.4rem',
+  marginLeft: '1rem',
+  objectFit: 'cover',
   '@media screen and (max-width: 1380px)': {
     width: '32%',
     marginLeft: '3%'
@@ -55,8 +55,8 @@ const PreviewImage = styled.img({
 });
 
 const PreviewTextWrapper = styled.div({
-  width: '100%',
   display: 'flex',
+  width: '100%',
   height: '8.4rem',
   flexDirection: 'column',
   alignItems: 'flex-start'
@@ -66,14 +66,14 @@ const Input = styled.input<{ themeMode: ThemeMode }>((props) => ({
   display: 'inline-block',
   width: '100%',
   height: '2rem',
-  fontSize: '1.1rem',
   padding: '.2rem',
   outline: 'none',
-  fontWeight: 'normal',
   border: `1px solid ${theme[props.themeMode].inputBorder}`,
   borderRadius: '.5rem',
-  color: theme[props.themeMode].inputText,
-  backgroundColor: theme[props.themeMode].inputBackground
+  backgroundColor: theme[props.themeMode].inputBackground,
+  fontSize: '1.1rem',
+  fontWeight: 'normal',
+  color: theme[props.themeMode].inputText
 }));
 
 interface Props {
@@ -88,40 +88,62 @@ interface Props {
 export function CategoryEditor(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
-  const titleEditInput = useRef<HTMLInputElement>(null);
-  const descriptionEditInput = useRef<HTMLInputElement>(null);
+  const [categoryTitle, setCategoryTitle] = useState('');
+  const [categoryDescription, setCategoryDescription] = useState('');
 
   const [updateCategory] = useMutation(UPDATE_CATEGORY);
+
+  useEffect(() => {
+    setCategoryTitle(props.categories[props.index].title);
+    setCategoryDescription(props.categories[props.index].description);
+  }, []);
+
+  const onTitleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setCategoryTitle(e.target.value);
+    },
+    [categoryTitle]
+  );
+
+  const onDescriptionChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setCategoryDescription(e.target.value);
+    },
+    [categoryDescription]
+  );
 
   async function save() {
     props.setAlertState(props.initAlertState);
 
     try {
-      if (titleEditInput.current && descriptionEditInput.current) {
-        await updateCategory({
-          variables: {
-            id: props.categories[props.index]._id,
-            title: titleEditInput.current?.value,
-            description: descriptionEditInput.current?.value
-          }
-        });
-
-        const copiedCategories = cloneDeep(props.categories);
-        const editingCategory = copiedCategories[props.index];
-
-        if (editingCategory) {
-          editingCategory.title = titleEditInput.current.value;
-          editingCategory.description = descriptionEditInput.current.value;
-          props.setCategories(copiedCategories);
-        }
-
-        props.setEditingCategoryIndex(-1);
-        props.setAlertState({
-          msg: 'Update category successfully.',
-          isPop: true,
-          isError: false
-        });
+      if (!categoryTitle || !categoryDescription) {
+        alert('제목 또는 소개를 입력해주세요.');
+        return;
       }
+
+      await updateCategory({
+        variables: {
+          id: props.categories[props.index]._id,
+          title: categoryTitle,
+          description: categoryDescription
+        }
+      });
+
+      const copiedCategories = cloneDeep(props.categories);
+      const editingCategory = copiedCategories[props.index];
+
+      if (editingCategory) {
+        editingCategory.title = categoryTitle;
+        editingCategory.description = categoryDescription;
+        props.setCategories(copiedCategories);
+      }
+
+      props.setEditingCategoryIndex(-1);
+      props.setAlertState({
+        msg: 'Update category successfully.',
+        isPop: true,
+        isError: false
+      });
     } catch (err) {
       props.setEditingCategoryIndex(-1);
       props.setAlertState({
@@ -150,12 +172,17 @@ export function CategoryEditor(props: Props) {
           </MenuContainer>
           <Content>
             <PreviewTextWrapper>
-              <Input type='text' ref={titleEditInput} themeMode={themeMode} defaultValue={props.categories[props.index].title} />
               <Input
                 type='text'
-                ref={descriptionEditInput}
+                themeMode={themeMode}
+                defaultValue={props.categories[props.index].title}
+                onChange={(e) => onTitleChange(e)}
+              />
+              <Input
+                type='text'
                 themeMode={themeMode}
                 defaultValue={props.categories[props.index].description}
+                onChange={(e) => onDescriptionChange(e)}
               />
             </PreviewTextWrapper>
             <PreviewImage src={props.categories[props.index].previewImage} alt='preview image' />
