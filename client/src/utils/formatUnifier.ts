@@ -11,25 +11,4 @@ export namespace FormatUnifier {
 
     return formatDate;
   }
-
-  export function calculateDate(datetime: number) {
-    const date = new Date().getTime() - datetime;
-    let DateDiff = ``;
-    if (date >= 60000) {
-      DateDiff = `${(date / 60000).toFixed()} Minutes a go`;
-    }
-    if (date >= 3600000) {
-      DateDiff = `${(date / 3600000).toFixed()} Hours a go`;
-    }
-    if (date >= 86400000) {
-      DateDiff = `${(date / 86400000).toFixed()} Days a go`;
-    }
-    if (date >= 2592000000) {
-      DateDiff = `${(date / 2592000000).toFixed()} Months a go`;
-    }
-    if (date >= 31536000000) {
-      DateDiff = `${(date / 31536000000).toFixed()} Years a go`;
-    }
-    return DateDiff;
-  }
 }
