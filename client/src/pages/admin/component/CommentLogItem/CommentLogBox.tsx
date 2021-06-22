@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
-import { spawn } from 'child_process';
+import { FormatUnifier } from 'src/utils';
 
 const Context = styled.div({
   display: 'flex',
@@ -11,8 +11,13 @@ const Context = styled.div({
   padding: '.8rem',
   marginTop: '5px',
   marginBottom: '20px',
+  border: '1px solid',
+  borderRadius: '.4rem',
   justifyContent: 'left',
-  flexDirection: 'column'
+  flexDirection: 'column',
+  ':hover': {
+    backgroundColor: '#d3e7fa'
+  }
 });
 
 const CategoryTitle = styled.p({
@@ -49,24 +54,9 @@ interface Props {
   isEvent: number;
 }
 
-function CalculateDate(date: number) {
-  let DateDiff = ``;
-  if (date >= 3600000) {
-    DateDiff = `${(date / 3600000).toFixed()} Hours a go`;
-  } else if (date >= 86400000) {
-    DateDiff = `${(date / 86400000).toFixed()} Days a go`;
-  } else if (date >= 31536000000) {
-    DateDiff = `${(date / 31536000000).toFixed()} Years a go`;
-  } else if (date >= 60000) {
-    DateDiff = `${(date / 60000).toFixed()} Minutes a go`;
-  }
-  console.log(date);
-  return DateDiff;
-}
-
 export default function CommentLogBox(props: Props) {
-  const DateDifferent = FormatUnifier.calculateDate(new Date(props.time).getTime());
-  const event = props.isEvent === 0 ? `User upload new comment ${DateDifferent}` : `User upload new reply ${DateDifferent}`;
+  const dateDifferent = FormatUnifier.calculateDate(new Date(props.time).getTime());
+  const event = props.isEvent === 0 ? `User upload new comment ${dateDifferent}` : `User upload new reply ${dateDifferent}`;
   return (
     <div>
       {/* <UserImage src='/public/images/FakeProfile.png'></UserImage> */}
