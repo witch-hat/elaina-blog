@@ -6,8 +6,8 @@ import { initApolloClient } from 'src/apollo/withApollo';
 import { CommentEvent, CommentLog, GET_COMMENT_LOGS } from 'src/query/comment-log';
 import CommnetLogBox from 'src/pages/admin/component/CommentLogItem/CommentLogBox';
 import { GET_CATEGORIES_WITH_DETAILS, CategoryDetails } from 'src/query/category';
-import { Post, GET_POSTS } from 'src/query/post';
 import { BorderBox } from 'src/components/common/box/BorderBox';
+import { Post, GET_POSTS } from 'src/query/post';
 import { trans, Lang } from 'src/resources/languages';
 
 import { AdminPageLayout } from './component/AdminPageLayout';
@@ -32,10 +32,11 @@ export default function Admin(props: Props) {
       <Container>
         <PageTitle title={trans(Lang.Activities)} />
         {props.logs.map((log, index) => {
+          /*category title 찾아주기*/
           const findCategoryTitle = props.categoriesDetail.find((category) => category._id === log.categoryId)?.title!;
           const findPostTitle = props.posts.find((post) => post._id === log._id)?.title!;
           return (
-            <BorderBox isTransform={true} key={log._id}>
+            <BorderBox isTransform={true} key={`${log._id}`}>
               <CommnetLogBox
                 isEvent={log.event}
                 time={log.time}
