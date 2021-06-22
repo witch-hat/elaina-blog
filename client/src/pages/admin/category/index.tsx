@@ -9,13 +9,14 @@ import { ThemeMode } from 'src/redux/common/type';
 import { initApolloClient } from 'src/apollo/withApollo';
 import { appCommponProps, AppCommonProps } from 'src/pages/_app';
 import { CategoryDetails, GET_CATEGORY, ORDER_CATEGORY, UPDATE_CATEGORY } from 'src/query/category';
+import { trans, Lang } from 'src/resources/languages';
 
 import { AdminPageLayout } from '../component/AdminPageLayout';
 import { CategoryContainer } from './component/CategoryContainer';
+import { PageTitle } from '../component/PageTitle';
 
 const Container = styled.div({
-  width: '100%',
-  padding: '0 5%'
+  width: '100%'
 });
 
 const ButtonWrapper = styled.div({
@@ -45,6 +46,7 @@ export default function Category(props: Props) {
   return (
     <AdminPageLayout>
       <Container>
+        <PageTitle title={trans(Lang.CategoryManage)} />
         <ButtonWrapper>
           <AddButton themeMode={themeMode} onClick={() => setIsAddModalOpen(true)}>
             Add
@@ -61,7 +63,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
     return {
       redirect: {
         permanent: false,
-        destination: '/admin/login'
+        destination: '/admin/login?url=%2Fadmin%2Fcategory'
       }
     };
   }

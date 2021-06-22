@@ -20,17 +20,17 @@ const Container = styled.div({
 
 const Wrapper = styled.div({
   display: 'flex',
-  flexDirection: 'column',
-  flex: 1
+  flex: 1,
+  flexDirection: 'column'
 });
 
 const Content = styled.div({
   display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
   width: '100%',
+  height: '10rem',
   padding: '.8rem',
-  height: '10rem'
+  justifyContent: 'center',
+  alignItems: 'center'
 });
 
 const MenuContainer = styled.div({
@@ -42,11 +42,11 @@ const MenuContainer = styled.div({
 });
 
 const PreviewImage = styled.img({
-  width: '260px',
-  marginLeft: '1rem',
-  height: '8.4rem',
-  objectFit: 'cover',
   float: 'right',
+  width: '260px',
+  height: '8.4rem',
+  marginLeft: '1rem',
+  objectFit: 'cover',
   '@media screen and (max-width: 1380px)': {
     width: '32%',
     marginLeft: '3%'
@@ -54,23 +54,23 @@ const PreviewImage = styled.img({
 });
 
 const PreviewTextWrapper = styled.div({
-  width: '100%',
   display: 'flex',
+  width: '100%',
   height: '8.4rem',
   flexDirection: 'column',
   alignItems: 'flex-start'
 });
 
 const PreviewTitle = styled.span({
-  flexShrink: 0,
+  display: '-webkit-box',
   height: '2rem',
   width: '100%',
+  flexShrink: 0,
   fontSize: '1.4rem',
   fontWeight: 'bold',
   textAlign: 'left',
   wordBreak: 'break-all',
   overflow: 'hidden',
-  display: '-webkit-box',
   WebkitLineClamp: 1,
   WebkitBoxOrient: 'vertical',
   '@media screen and (max-width: 1380px)': {
@@ -79,15 +79,15 @@ const PreviewTitle = styled.span({
 });
 
 const PreviewContent = styled.span({
-  flexShrink: 0,
+  display: '-webkit-box',
   width: '100%',
   height: '4.5rem',
-  fontSize: '1.1rem',
   margin: '.25rem 0 0',
+  flexShrink: 0,
+  fontSize: '1.1rem',
   wordBreak: 'keep-all',
   textAlign: 'left',
   overflow: 'hidden',
-  display: '-webkit-box',
   WebkitLineClamp: 3,
   WebkitBoxOrient: 'vertical'
 });

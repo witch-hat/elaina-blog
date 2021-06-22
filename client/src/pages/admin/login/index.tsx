@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 import { useSelector } from 'react-redux';
 
-import { InputBox } from 'src/components';
+import { RefInputBox } from 'src/components';
 import { theme } from 'src/styles';
 import { LOGIN } from 'src/query/user';
 import { RootState } from 'src/redux/rootReducer';
@@ -21,13 +21,13 @@ const Container = styled.div({
 });
 
 const LogInForm = styled.form({
+  display: 'flex',
   width: '400px',
   height: '400px',
   padding: '.5rem',
-  display: 'flex',
-  flexDirection: 'column',
   border: '1px solid #ddd',
   borderRadius: '.5rem',
+  flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'center'
 });
@@ -35,15 +35,15 @@ const LogInForm = styled.form({
 const InputWrapper = styled.div({
   display: 'flex',
   width: '80%',
-  flexDirection: 'column',
-  margin: '10px 0'
+  margin: '10px 0',
+  flexDirection: 'column'
 });
 
 const HelpWrapper = styled.div({
   display: 'flex',
   width: '80%',
-  flexDirection: 'column',
-  margin: '10px 0'
+  margin: '10px 0',
+  flexDirection: 'column'
 });
 
 const Label = styled.label<{ color?: string; isBold?: boolean }>((props) => {
@@ -96,11 +96,7 @@ export default function Login(props: Props) {
 
   const [login] = useMutation(LOGIN, {
     onCompleted: (data: any) => {
-      if (document.referrer === '') {
-        router.push('/');
-      } else {
-        router.back();
-      }
+      router.reload();
     },
     onError: (err: Error) => {
       handleSubmitError(err.message);
@@ -152,14 +148,14 @@ export default function Login(props: Props) {
       <LogInForm onSubmit={(event: FormEvent) => handleSubmit(event)}>
         <InputWrapper>
           <Label isBold={true}>Email</Label>
-          <InputBox
+          <RefInputBox
             ref={emailInputRef}
             id='admin-id'
             type='email'
             minLength={4}
             maxLength={100}
             placeholder='Email'
-            styles={{ margin: '8px 0 0 0', width: '100%' }}
+            styles={{ margin: '8px 0 0 0', width: '100%', small: { width: '100%' } }}
             onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => {
               if (!isEamilInputValid) {
                 setIsEamilInputValid(true);
@@ -176,14 +172,14 @@ export default function Login(props: Props) {
         </InputWrapper>
         <InputWrapper>
           <Label isBold={true}>암호</Label>
-          <InputBox
+          <RefInputBox
             ref={passwordInputRef}
             id='admin-pw'
             type='password'
             minLength={8}
             maxLength={20}
             placeholder='암호'
-            styles={{ margin: '8px 0 0 0', width: '100%' }}
+            styles={{ margin: '8px 0 0 0', width: '100%', small: { width: '100%' } }}
             onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => {
               if (!isPasswordInputValid) {
                 setIsPasswordInputValid(true);
@@ -215,8 +211,9 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
     return {
       redirect: {
         permanent: false,
-        destination: '/'
-      }
+        destination: context.query.url || '/'
+      },
+      props: {}
     };
   }
 

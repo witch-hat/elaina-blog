@@ -15,13 +15,13 @@ interface ButtonProps {
 const NavButtons = styled.a<ButtonProps>((props) => {
   return {
     display: 'flex',
-    alignItems: 'center',
     padding: '.5rem 1rem',
+    boxShadow: props.isSelected ? `inset 0 -3px 0 ${theme[props.themeMode].navUnderBar}` : 'none',
+    alignItems: 'center',
     fontSize: '1.25rem',
     cursor: 'pointer',
     transition: '.2s all',
     userSelect: 'none',
-    boxShadow: props.isSelected ? `inset 0 -3px 0 ${theme[props.themeMode].navUnderBar}` : 'none',
     '&:hover': {
       boxShadow: props.isSelected
         ? `inset 0 -3px 0 ${theme[props.themeMode].navUnderBar}`

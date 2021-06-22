@@ -6,11 +6,11 @@ import Gfm from 'remark-gfm';
 import styles from 'src/styles/MarkdownStyles.module.css';
 
 const Container = styled.div({
-  width: '500px',
   display: 'flex',
-  flexDirection: 'column',
+  width: '500px',
   padding: '.5rem 1rem',
-  backgroundColor: '#efefef'
+  backgroundColor: '#efefef',
+  flexDirection: 'column'
 });
 
 const TabBar = styled.div({

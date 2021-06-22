@@ -30,15 +30,15 @@ const Icon = styled.span({
   display: 'inline-flex',
   padding: '.5rem',
   marginRight: '.75rem',
-  fontSize: '1.3rem',
   alignItems: 'center',
+  fontSize: '1.3rem',
   cursor: 'pointer'
 });
 
 const Number = styled.p({
   display: 'inline-block',
-  fontSize: '.9rem',
-  marginLeft: '.5rem'
+  marginLeft: '.5rem',
+  fontSize: '.9rem'
 });
 
 interface Props {

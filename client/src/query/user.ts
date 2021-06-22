@@ -19,8 +19,8 @@ export const IS_AUTH = gql`
 `;
 
 export const UPDATE_PASSWORD = gql`
-  mutation updatePassword($old: String!, $new: String!) {
-    updatePassword(old: $old, new: $new)
+  mutation updatePassword($old: String!, $new: String!, $confirm: String!) {
+    updatePassword(old: $old, new: $new, confirm: $confirm)
   }
 `;
 

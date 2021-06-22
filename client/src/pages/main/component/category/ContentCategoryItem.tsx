@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { BorderBox } from 'src/components';
+import { BorderBox, useWidth } from 'src/components';
 import { CategoryDetails } from 'src/query/category';
 
 import { ContentCategoryDetails } from './ContentCategoryDetails';
@@ -30,18 +30,18 @@ const PreviewImage = styled.img({
 
 const PreviewTextWrapper = styled.div({
   display: 'flex',
-  flexDirection: 'column',
   width: '100%',
   height: '8.4rem',
+  flexDirection: 'column',
   alignItems: 'flex-start',
   justifyContent: 'center'
 });
 
 const PreviewTitle = styled.span({
   display: '-webkit-box',
-  flexShrink: 0,
   width: '100%',
   height: '1.8rem',
+  flexShrink: 0,
   textAlign: 'left',
   fontSize: '1.2rem',
   fontWeight: 'bold',
@@ -54,9 +54,9 @@ const PreviewTitle = styled.span({
 
 const PreviewContent = styled.span({
   display: '-webkit-box',
-  flexShrink: 0,
   width: '100%',
   height: '4.5rem',
+  flexShrink: 0,
   fontSize: '1.0rem',
   margin: '.25rem 0 0',
   wordBreak: 'keep-all',
@@ -72,6 +72,8 @@ interface Props {
 }
 
 function ContentCategoryItem(props: Props) {
+  const width = useWidth();
+
   return (
     <BorderBox isTransform={props.isEmpty ? false : true} styles={{ width: '100%', margin: '.8rem 0' }}>
       <Content>
@@ -80,7 +82,7 @@ function ContentCategoryItem(props: Props) {
           <PreviewContent>{props.category.description}</PreviewContent>
           <ContentCategoryDetails time={props.category.recentCreatedAt} count={props.category.postCount} />
         </PreviewTextWrapper>
-        <PreviewImage src={props.category.previewImage} alt={`${props.category.title} preview image`} />
+        {!(width <= 767) && <PreviewImage src={props.category.previewImage} alt={`${props.category.title} preview image`} />}
       </Content>
     </BorderBox>
   );

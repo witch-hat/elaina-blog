@@ -32,8 +32,8 @@ const ModalButtonContainer = styled.div({
 const ModalButton = styled.button<{ themeMode?: ThemeMode }>((props) => ({
   width: '4.5rem',
   padding: '.5rem',
-  borderRadius: '.5rem',
   marginLeft: '.5rem',
+  borderRadius: '.5rem',
   backgroundColor: props.themeMode ? theme[props.themeMode].dangerButtonColor : 'inherit',
   color: props.themeMode ? theme[props.themeMode].dangerContentText : 'inherit'
 }));

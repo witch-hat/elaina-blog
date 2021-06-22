@@ -69,6 +69,7 @@ const rootTypeDef = gql`
 
 const resolvers = {
   DateTime: dateScalar,
+  Void: voidScalar,
   Upload: GraphQLUpload
 };
 

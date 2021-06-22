@@ -22,7 +22,10 @@ const RotateIcon = styled.span<{ isOpen: boolean }>((props) => {
 });
 
 const LanguageDropDown = styled.div({
-  margin: '0 .5rem'
+  margin: '0 .5rem',
+  '@media screen and (max-width: 767px)': {
+    margin: '0'
+  }
 });
 
 const LanguageItem = styled.p<{ themeMode: ThemeMode }>((props) => ({

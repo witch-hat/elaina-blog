@@ -6,14 +6,15 @@ import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 
 import { DropDownMenu } from 'src/components';
 import { trans, Lang } from 'src/resources/languages';
+import { ProfileType } from 'src/query/profile';
 
 import ArticleInfo from './ArticleInfo';
 
 const Menu = styled.div({
   display: 'flex',
-  justifyContent: 'space-between',
   width: '100%',
   height: '2.2rem',
+  justifyContent: 'space-between',
   alignItems: 'center',
   fontSize: '.875rem'
 });
@@ -21,11 +22,11 @@ const Menu = styled.div({
 const MenuButton = styled.p<{ danger?: boolean }>((props) => ({
   display: 'block',
   padding: '.5rem',
+  borderRadius: '.5rem',
   textAlign: 'center',
   cursor: 'pointer',
   userSelect: 'none',
   wordBreak: 'keep-all',
-  borderRadius: '.5rem',
   color: props.danger ? '#dd0000' : 'inherit',
   '&:hover': {
     backgroundColor: '#ddd'
@@ -35,7 +36,7 @@ const MenuButton = styled.p<{ danger?: boolean }>((props) => ({
 interface Props {
   isLogin: boolean;
   time: Date;
-  author: string;
+  profile: ProfileType;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   id: string;
 }
@@ -45,7 +46,7 @@ export function ContentMenu(props: Props) {
 
   return (
     <Menu>
-      <ArticleInfo author={props.author} time={props.time} />
+      <ArticleInfo profile={props.profile} time={props.time} />
       {props.isLogin && (
         <DropDownMenu
           visible={isOpenMenu}

@@ -6,15 +6,15 @@ import { ContentNavigation } from './ContentNavigation';
 
 const Container = styled.nav({
   display: 'flex',
-  flex: 1,
   position: 'sticky',
   top: 'calc(5rem + 20px)',
+  width: '100%',
+  height: 'calc(100vh - 5rem - 20px)',
   padding: '.5rem',
+  flex: 1,
   flexDirection: 'column',
   justifyContent: 'flex-start',
   alignItems: 'center',
-  width: '100%',
-  height: 'calc(100vh - 5rem - 20px)',
   overFlowY: 'auto',
   '&::-webkit-scrollbar': {
     width: '0'

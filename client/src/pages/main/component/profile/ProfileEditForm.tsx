@@ -17,10 +17,11 @@ import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';
 
 import { ProfileImageCropper } from './ProfileImageCropper';
+import { ProfileInput } from './ProfileInput';
 
 const ImageContainer = styled.div({
-  poisition: 'relative',
   display: 'flex',
+  poisition: 'relative',
   width: '100%',
   alignItems: 'center',
   justifyContent: 'center'
@@ -28,27 +29,27 @@ const ImageContainer = styled.div({
 
 const ChangeImageButton = styled.label<{ themeMode: ThemeMode }>((props) => ({
   display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
+  position: 'absolute',
+  top: '250px',
+  left: '10%',
   width: '4.2rem',
   height: '2rem',
-  position: 'absolute',
-  bottom: 0,
-  left: '10%',
-  margin: '0 0 .5rem .5rem',
   padding: '.5rem',
-  backgroundColor: theme[props.themeMode].secondaryContentBackground,
+  margin: '0 0 .5rem .5rem',
   border: '1px solid #222',
+  borderRadius: '.5rem',
+  backgroundColor: theme[props.themeMode].secondaryContentBackground,
+  alignItems: 'center',
+  justifyContent: 'center',
   cursor: 'pointer',
-  userSelect: 'none',
-  borderRadius: '.5rem'
+  userSelect: 'none'
 }));
 
 const FileSelector = styled.input({
   width: '0px',
   height: '0px',
-  overflow: 'hidden',
-  border: 'none'
+  border: 'none',
+  overflow: 'hidden'
 });
 
 const Form = styled.form({
@@ -59,23 +60,9 @@ const Form = styled.form({
 const InputContainer = styled.div({
   display: 'flex',
   width: '100%',
-  alignItems: 'center',
-  margin: '.71rem 0'
+  margin: '.71rem 0',
+  alignItems: 'center'
 });
-
-const Input = styled.input<{ themeMode: ThemeMode }>((props) => ({
-  display: 'inline-block',
-  width: '100%',
-  height: '2rem',
-  fontSize: '1.0rem',
-  padding: '.2rem',
-  outline: 'none',
-  fontWeight: 'normal',
-  border: `1px solid ${theme[props.themeMode].inputBorder}`,
-  borderRadius: '.5rem',
-  color: theme[props.themeMode].inputText,
-  backgroundColor: theme[props.themeMode].inputBackground
-}));
 
 const Editor = styled.textarea<{ themeMode: ThemeMode }>((props) => ({
   display: 'block',
@@ -85,8 +72,8 @@ const Editor = styled.textarea<{ themeMode: ThemeMode }>((props) => ({
   outline: 'none',
   border: `1px solid ${theme[props.themeMode].inputBorder}`,
   borderRadius: '.5rem',
-  color: theme[props.themeMode].inputText,
   backgroundColor: theme[props.themeMode].inputBackground,
+  color: theme[props.themeMode].inputText,
   whiteSpace: 'pre-wrap',
   wordBreak: 'break-word',
   fontSize: '1.0rem',
@@ -101,23 +88,23 @@ const Editor = styled.textarea<{ themeMode: ThemeMode }>((props) => ({
 }));
 
 const ButtonContainer = styled.div({
+  display: 'flex',
   width: '100%',
   marginTop: '.5rem',
-  display: 'flex',
   justifyContent: 'center'
 });
 
 const Button = styled.button<{ themeMode: ThemeMode; isSubmit?: boolean }>((props) => ({
   display: 'flex',
   width: '47.5%',
-  marginRight: props.isSubmit ? '5%' : '0',
   padding: '.5rem',
+  marginRight: props.isSubmit ? '5%' : '0',
   borderRadius: '.5rem',
+  backgroundColor: props.isSubmit ? theme[props.themeMode].submitButtonColor : 'inherit',
   cursor: 'pointer',
   justifyContent: 'center',
   color: props.isSubmit ? '#f1f2f3' : theme[props.themeMode].mainText,
   userSelect: 'none',
-  backgroundColor: props.isSubmit ? theme[props.themeMode].submitButtonColor : 'inherit',
   '@media screen and (max-width: 767px)': {
     maxWidth: '150px'
   }
@@ -135,8 +122,8 @@ interface Props {
   profile: ProfileType;
   alertState: AlertStateType;
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
-  setProfile: React.Dispatch<React.SetStateAction<ProfileType>>;
   setAlertState: React.Dispatch<React.SetStateAction<AlertStateType>>;
+  updateProfile: (profile: ProfileType) => void;
 }
 
 export function ProfileEditForm(props: Props) {
@@ -190,10 +177,11 @@ export function ProfileEditForm(props: Props) {
       }
     } catch (err) {
       alert(err.message);
+      return;
     }
 
     try {
-      await updateProfile({
+      const { data } = await updateProfile({
         variables: {
           id: editingProfile._id,
           image: uploadedImagePath ? uploadedImagePath : props.profile.image,
@@ -206,7 +194,7 @@ export function ProfileEditForm(props: Props) {
         }
       });
 
-      props.setProfile({ ...editingProfile, image: uploadedImagePath ? uploadedImagePath : props.profile.image });
+      props.updateProfile(data?.updateProfile!);
       props.setEditMode(false);
       props.setAlertState({
         msg: 'Profile changed successfully',
@@ -222,6 +210,12 @@ export function ProfileEditForm(props: Props) {
       props.setEditMode(false);
       setEditingProfile(props.profile);
     }
+  }
+
+  function updateEditingProfile(profileProperty: string) {
+    return (event: React.ChangeEvent<HTMLInputElement>) => {
+      setEditingProfile({ ...editingProfile, [profileProperty]: event.target.value });
+    };
   }
 
   if (updateLoading) {
@@ -260,14 +254,10 @@ export function ProfileEditForm(props: Props) {
         }}
       >
         <InputContainer>
-          <Input
+          <ProfileInput
             placeholder='Username'
-            themeMode={themeMode}
-            type='text'
-            defaultValue={editingProfile.name}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setEditingProfile({ ...editingProfile, name: event.target.value });
-            }}
+            defaultValue={editingProfile.name || ''}
+            changeEditingProfile={updateEditingProfile('name')}
           />
         </InputContainer>
         <Editor
@@ -281,50 +271,30 @@ export function ProfileEditForm(props: Props) {
         />
         <InputContainer>
           <ProfileIcon icon={faLink} />
-          <Input
-            placeholder='Link'
-            themeMode={themeMode}
-            type='text'
-            defaultValue={editingProfile.link}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setEditingProfile({ ...editingProfile, link: event.target.value });
-            }}
-          />
+          <ProfileInput placeholder='Link' defaultValue={editingProfile.link || ''} changeEditingProfile={updateEditingProfile('link')} />
         </InputContainer>
         <InputContainer>
           <ProfileIcon icon={faBuilding} />
-          <Input
+          <ProfileInput
             placeholder='Company'
-            themeMode={themeMode}
-            type='text'
-            defaultValue={editingProfile.company}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setEditingProfile({ ...editingProfile, company: event.target.value });
-            }}
+            defaultValue={editingProfile.company || ''}
+            changeEditingProfile={updateEditingProfile('company')}
           />
         </InputContainer>
         <InputContainer>
           <ProfileIcon icon={faMapMarkerAlt} />
-          <Input
-            placeholder='Region'
-            themeMode={themeMode}
-            type='text'
-            defaultValue={editingProfile.location}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setEditingProfile({ ...editingProfile, location: event.target.value });
-            }}
+          <ProfileInput
+            placeholder='Location'
+            defaultValue={editingProfile.location || ''}
+            changeEditingProfile={updateEditingProfile('location')}
           />
         </InputContainer>
         <InputContainer>
           <ProfileIcon icon={faEnvelope} />
-          <Input
+          <ProfileInput
             placeholder='Email'
-            themeMode={themeMode}
-            type='text'
-            defaultValue={editingProfile.email}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setEditingProfile({ ...editingProfile, email: event.target.value });
-            }}
+            defaultValue={editingProfile.email || ''}
+            changeEditingProfile={updateEditingProfile('email')}
           />
         </InputContainer>
       </Form>

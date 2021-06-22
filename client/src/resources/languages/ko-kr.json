@@ -22,6 +22,12 @@
   "WriteComments": "덧글 쓰기",
   "Reply": "대댓글",
   "WriteReply": "대댓글 쓰기",
+  "AdminHome": "관리자 홈",
   "ChangePassword": "비밀번호 변경",
-  "AdminHome": "관리자 홈"
+  "CurrentPassword": "현재 비밀번호",
+  "NewPassword": "새 비밀번호",
+  "ConfirmPassword": "새 비밀번호 확인",
+  "ForgotPassword": "비밀번호 찾기",
+  "DeviceManage": "로그인 기기 관리",
+  "Activities": "최근 활동"
 }

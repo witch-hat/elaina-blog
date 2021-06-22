@@ -23,17 +23,17 @@ const Move = keyframes({
 
 const Container = styled.nav<{ themeMode: ThemeMode }>(
   (props) => ({
-    width: '250px',
     display: 'flex',
+    position: 'sticky',
+    top: 'calc(4rem + 20px)',
+    width: '250px',
+    height: 'calc(100vh - 4rem - 20px)',
+    paddingLeft: '1rem',
+    marginRight: '.5rem',
     flex: 1,
     flexDirection: 'column',
-    position: 'sticky',
-    paddingLeft: '1rem',
-    top: 'calc(4rem + 20px)',
     alignItems: 'stretch',
     justifyContent: 'flex-start',
-    height: 'calc(100vh - 4rem - 20px)',
-    marginRight: '.5rem',
     overflowY: 'auto',
     '&::-webkit-scrollbar': {
       width: '0'
@@ -43,15 +43,16 @@ const Container = styled.nav<{ themeMode: ThemeMode }>(
       minWidth: '240px'
     },
     '@media screen and (max-width: 767px)': {
-      width: '50%',
-      minWidth: '250px',
       position: 'fixed',
       top: '5rem',
       left: 0,
+      width: '50%',
+      minWidth: '250px',
       height: 'calc(100vh - 5rem)',
       backgroundColor: theme[props.themeMode].secondaryContentBackground,
       borderRadius: '0 .5rem .5rem 0',
-      boxShadow: `6px 0 6px -6px ${theme[props.themeMode].shadowColor}`
+      boxShadow: `6px 0 6px -6px ${theme[props.themeMode].shadowColor}`,
+      zIndex: 1
     }
   }),
   css`

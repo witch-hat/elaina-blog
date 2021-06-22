@@ -7,8 +7,8 @@ import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 
 const Container = styled.div<{ themeMode: ThemeMode }>((props) => ({
-  position: 'fixed',
   display: 'flex',
+  position: 'fixed',
   top: '0',
   left: '0',
   bottom: '0',
@@ -31,10 +31,10 @@ const RotateAnimation = keyframes({
 
 const RotatingIcon = styled.span(
   {
-    width: '1.5rem',
     display: 'flex',
-    justifyContent: 'center',
-    marginRight: '.25rem'
+    width: '1.5rem',
+    marginRight: '.25rem',
+    justifyContent: 'center'
   },
   css`
     animation: ${RotateAnimation} 0.75s linear infinite;

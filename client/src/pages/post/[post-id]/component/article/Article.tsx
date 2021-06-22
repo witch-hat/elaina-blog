@@ -14,18 +14,19 @@ import { useApollo } from 'src/apollo/apolloClient';
 import { ThemeMode } from 'src/redux/common/type';
 import { theme } from 'src/styles';
 import { RootState } from 'src/redux/rootReducer';
+import { ProfileType } from 'src/query/profile';
 
 import { ContentMenu } from './ArticleMenu';
 import { DELETE_POST_ALL_COMMENT_LOG } from 'src/query/comment-log';
 
 const Container = styled.main({
-  width: '100%',
   display: 'flex',
+  width: '100%',
+  minHeight: 'calc(100vh - 5rem - 40px)',
   padding: '.5rem 1.5rem',
   flexDirection: 'column',
   jusitfyContent: 'flex-start',
   alignItems: 'center',
-  minHeight: 'calc(100vh - 5rem - 40px)',
   '@media screen and (max-width: 767px)': {
     padding: '.5rem'
   }
@@ -68,15 +69,15 @@ const ModalButtonContainer = styled.div({
 const ModalButton = styled.button<{ themeMode?: ThemeMode }>((props) => ({
   width: '4.5rem',
   padding: '.5rem',
-  borderRadius: '.5rem',
   marginLeft: '.5rem',
+  borderRadius: '.5rem',
   backgroundColor: props.themeMode ? theme[props.themeMode].dangerButtonColor : 'inherit',
   color: props.themeMode ? theme[props.themeMode].dangerContentText : 'inherit'
 }));
 
 interface Props {
   title: string;
-  author: string;
+  profile: ProfileType;
   createdAt: string;
   article: string;
   isLogin: boolean;
@@ -134,7 +135,7 @@ export function Article(props: Props) {
   return (
     <Container>
       <Title>{props.title}</Title>
-      <ContentMenu isLogin={props.isLogin} time={time} author={props.author} id={id as string} setIsModalOpen={setIsModalOpen} />
+      <ContentMenu isLogin={props.isLogin} time={time} profile={props.profile} id={id as string} setIsModalOpen={setIsModalOpen} />
       <StyledArticle>
         <ReactMarkdown plugins={[gfm]} className={styles['markdown-body']}>
           {props.article}

@@ -2,9 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Container = styled.div({
+  display: 'flex',
   width: '100%',
   height: 'calc(100vh - 5rem - 20px)',
-  display: 'flex',
   justifyContent: 'center',
   alignItems: 'center'
 });

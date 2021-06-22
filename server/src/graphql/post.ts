@@ -153,8 +153,14 @@ export const postResolver = {
   Mutation: {
     async writePost(_: any, args: { title: string; createdAt: Date; article: string; category: string }, context: ContextType) {
       try {
-        if (!args.article || args.title.length < 2 || !args.category) {
-          throw new UserInputError('카테고리, 제목 또는 본문을 입력해주세요');
+        if (!args.category) {
+          throw new UserInputError('카테고리를 설정해 주세요.');
+        }
+        if (!args.title) {
+          throw new UserInputError('글의 제목을 1자 이상 써주세요.');
+        }
+        if (!args.article) {
+          throw new UserInputError('글의 본문을 1자 이상 써주세요.');
         }
 
         const lastPost: Post = await PostModel.findOne({}, {}, { sort: { _id: -1 } });

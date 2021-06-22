@@ -22,13 +22,11 @@ interface Props {}
 export function AdminSideBar(props: Props) {
   const router = useRouter();
 
-  const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] = useState(false);
-
   return (
     <Container>
       <Button onClick={() => router.push('/admin/writer')}>{trans(Lang.Write)}</Button>
       <ContentMenuContainer />
-      <SettingMenuContainer setIsChangePasswordModalOpen={setIsChangePasswordModalOpen} />
+      <SettingMenuContainer />
     </Container>
   );
 }
