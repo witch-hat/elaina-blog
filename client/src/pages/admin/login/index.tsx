@@ -155,7 +155,7 @@ export default function Login(props: Props) {
             minLength={4}
             maxLength={100}
             placeholder='Email'
-            styles={{ margin: '8px 0 0 0', width: '100%' }}
+            styles={{ margin: '8px 0 0 0', width: '100%', small: { width: '100%' } }}
             onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => {
               if (!isEamilInputValid) {
                 setIsEamilInputValid(true);
@@ -179,7 +179,7 @@ export default function Login(props: Props) {
             minLength={8}
             maxLength={20}
             placeholder='암호'
-            styles={{ margin: '8px 0 0 0', width: '100%' }}
+            styles={{ margin: '8px 0 0 0', width: '100%', small: { width: '100%' } }}
             onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => {
               if (!isPasswordInputValid) {
                 setIsPasswordInputValid(true);

@@ -11,6 +11,7 @@ const Container = styled.div({
   justifyContent: 'center',
   alignItems: 'flex-start',
   '@media screen and (max-width: 767px)': {
+    width: '100%',
     flexDirection: 'column'
   }
 });

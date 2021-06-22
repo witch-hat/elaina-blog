@@ -51,7 +51,8 @@ const Container = styled.nav<{ themeMode: ThemeMode }>(
       height: 'calc(100vh - 5rem)',
       backgroundColor: theme[props.themeMode].secondaryContentBackground,
       borderRadius: '0 .5rem .5rem 0',
-      boxShadow: `6px 0 6px -6px ${theme[props.themeMode].shadowColor}`
+      boxShadow: `6px 0 6px -6px ${theme[props.themeMode].shadowColor}`,
+      zIndex: 1
     }
   }),
   css`

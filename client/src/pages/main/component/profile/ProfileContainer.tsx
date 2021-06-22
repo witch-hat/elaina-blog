@@ -27,7 +27,7 @@ const Container = styled.aside({
     width: '100%',
     maxWidth: '100%',
     minHeight: 'max-content',
-    marginBottom: '50px'
+    marginBottom: '2rem'
   }
 });
 
@@ -43,6 +43,10 @@ export function ProfileContainer(props: Props) {
   const [profile, setProfile] = useState<ProfileType>(props.profile);
   const [alertState, setAlertState] = useState<AlertStateType>(initAlertState);
 
+  function applyUpdatedProfile(profile: ProfileType) {
+    setProfile(profile);
+  }
+
   return (
     <Container>
       {isEditMode ? (
@@ -50,8 +54,8 @@ export function ProfileContainer(props: Props) {
           profile={profile}
           alertState={alertState}
           setEditMode={setIsEditMode}
-          setProfile={setProfile}
           setAlertState={setAlertState}
+          updateProfile={applyUpdatedProfile}
         />
       ) : (
         <ProfileViewer profile={profile} isLogin={props.isLogin} setEditMode={setIsEditMode} />

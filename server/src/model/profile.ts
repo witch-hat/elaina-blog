@@ -36,7 +36,7 @@ export const profileSchema = new Schema(
   }
 );
 
-interface Profile extends Document {
+export interface Profile {
   image: string;
   name: string;
   introduce: string;
@@ -46,4 +46,6 @@ interface Profile extends Document {
   email: string;
 }
 
-export const ProfileModel = model<Profile>('Profile', profileSchema);
+interface ProfileSchema extends Profile, Document {}
+
+export const ProfileModel = model<ProfileSchema>('Profile', profileSchema);

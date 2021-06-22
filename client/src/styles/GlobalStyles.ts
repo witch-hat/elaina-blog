@@ -6,7 +6,7 @@ import { ThemeMode } from 'src/redux/common/type';
 
 export const GlobalStyles = createGlobalStyle<{ themeMode: ThemeMode }>`
 	html {
-		scroll-behavior: smooth;
+		/* scroll-behavior: smooth; */
 		font-size: 16px;
 		font-family: "Nanum Gothic", sans-serif;
 		vertical-align: baseline;

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { BorderBox } from 'src/components';
+import { BorderBox, useWidth } from 'src/components';
 import { CategoryDetails } from 'src/query/category';
 
 import { ContentCategoryDetails } from './ContentCategoryDetails';
@@ -72,6 +72,8 @@ interface Props {
 }
 
 function ContentCategoryItem(props: Props) {
+  const width = useWidth();
+
   return (
     <BorderBox isTransform={props.isEmpty ? false : true} styles={{ width: '100%', margin: '.8rem 0' }}>
       <Content>
@@ -80,7 +82,7 @@ function ContentCategoryItem(props: Props) {
           <PreviewContent>{props.category.description}</PreviewContent>
           <ContentCategoryDetails time={props.category.recentCreatedAt} count={props.category.postCount} />
         </PreviewTextWrapper>
-        <PreviewImage src={props.category.previewImage} alt={`${props.category.title} preview image`} />
+        {!(width <= 767) && <PreviewImage src={props.category.previewImage} alt={`${props.category.title} preview image`} />}
       </Content>
     </BorderBox>
   );

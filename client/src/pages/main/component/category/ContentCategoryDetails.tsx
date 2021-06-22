@@ -18,7 +18,7 @@ const Container = styled.div<{ themeMode: ThemeMode }>((props) => ({
 
 const LatestTime = styled.span({
   display: 'flex',
-  marginRight: '.8rem',
+  marginRight: '.75rem',
   alignItems: 'center'
 });
 
