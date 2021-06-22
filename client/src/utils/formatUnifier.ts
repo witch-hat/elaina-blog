@@ -12,8 +12,8 @@ export namespace FormatUnifier {
     return formatDate;
   }
 
-  export function CalculateDate(datetime: number) {
-    const date = new Date().getTime() - datetime;
+  export function calculateDate(dateTime: number) {
+    const date = new Date().getTime() - dateTime;
     let DateDiff = ``;
     if (date >= 60000) {
       DateDiff = `${(date / 60000).toFixed()} Minutes a go`;
