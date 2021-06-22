@@ -25,9 +25,6 @@ import { trans, Lang } from 'src/resources/languages';
 
 import { PageTitle } from '../component/PageTitle';
 
-
-
-
 const Container = styled.div({
   width: '100%'
 });
@@ -36,7 +33,6 @@ const PostListContainer = styled.div({
   width: '100%',
   padding: '.5rem'
 });
-
 
 const PostContainer = styled.div({
   width: '100%'
@@ -116,6 +112,40 @@ const ModalButtonContainer = styled.div({
   justifyContent: 'flex-end'
 });
 
+const GridContainer = styled.div({
+  display: 'grid',
+  gridTemplateAreas: 'leftSidebar article rightSidebar',
+  gridTemplateColumns: '200px 1fr 320px',
+
+  // tablet
+  '@media screen and (max-width: 1024px)': {
+    display: 'grid',
+    gridTemplateAreas: 'leftSidebar article leftSidebar rightSidebar',
+    gridTemplateColumns: '200px 1fr'
+  },
+
+  // mobile
+  '@media screen and (max-width: 600px)': {
+    display: 'grid',
+    gridTemplateAreas: 'article rightSidebar',
+    gridTemplateColumns: '1fr'
+  }
+});
+
+const CheckGrid = styled.div({
+  gridArea: 'leftSidebar'
+});
+
+const TitleGrid = styled.div({
+  gridArea: 'article',
+  height: '50px'
+});
+
+const DateGrid = styled.div({
+  gridArea: 'rightSidebar',
+  minHeight: '50px'
+});
+
 const ModalButton = styled.button<{ themeMode?: ThemeMode }>((props) => ({
   width: '4.5rem',
   padding: '.5rem',
@@ -183,40 +213,47 @@ export default function PostProps(props: Props) {
 
   return (
     <AdminPageLayout>
-
       <PostListContainer>
         <Container>
-        <PageTitle title={trans(Lang.BoardManage)} />
+          <PageTitle title={trans(Lang.BoardManage)} />
           {posts.map((post) => {
             return (
-              <Link key={post.title + post._id} href={`/post/${post._id}`} passHref>
-                <PostContainer>
-                  <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
-                    <Wrapper>
-                      <DeleteButtonWrapper>
-                        <CircleRippleWrapper
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            // setDeletedPost({ isModalOpen: true, index });
-                            // alert('준비중');
+              <GridContainer key={post.title + post._id}>
+                <CheckGrid>
+                  <input type='checkbox' />
+                </CheckGrid>
+                <TitleGrid>{post.title} </TitleGrid>
+                <DateGrid></DateGrid>
+              </GridContainer>
+              // <Link href={`/post/${post._id}`} passHref>
 
-                            setIsModalOpen(true);
-                            setDeletePostID(post._id);
-                          }}
-                        >
-                          <FontAwesomeIcon icon={faTrash} style={{ fontSize: '1.25rem' }} />
-                        </CircleRippleWrapper>
-                      </DeleteButtonWrapper>
-                      <Content>
-                        <PreviewTextWrapper>
-                          <PreviewTitle>{post.title}</PreviewTitle>
-                          <PreviewContent>{post.article}</PreviewContent>
-                        </PreviewTextWrapper>
-                      </Content>
-                    </Wrapper>
-                  </BorderBox>
-                </PostContainer>
-              </Link>
+              //     <PostContainer>
+              //       <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
+              //         <Wrapper>
+              //           <DeleteButtonWrapper>
+              //             <CircleRippleWrapper
+              //               onClick={(event) => {
+              //                 event.stopPropagation();
+              //                 // setDeletedPost({ isModalOpen: true, index });
+              //                 // alert('준비중');
+
+              //                 setIsModalOpen(true);
+              //                 setDeletePostID(post._id);
+              //               }}
+              //             >
+              //               <FontAwesomeIcon icon={faTrash} style={{ fontSize: '1.25rem' }} />
+              //             </CircleRippleWrapper>
+              //           </DeleteButtonWrapper>
+              //           <Content>
+              //             <PreviewTextWrapper>
+              //               <PreviewTitle>{post.title}</PreviewTitle>
+              //               <PreviewContent>{post.article}</PreviewContent>
+              //             </PreviewTextWrapper>
+              //           </Content>
+              //         </Wrapper>
+              //       </BorderBox>
+              //     </PostContainer>
+              //   </Link>
             );
           })}
 
@@ -239,7 +276,6 @@ export default function PostProps(props: Props) {
           </ModalWrapper>
         </Container>
       </PostListContainer>
-
     </AdminPageLayout>
   );
 }
