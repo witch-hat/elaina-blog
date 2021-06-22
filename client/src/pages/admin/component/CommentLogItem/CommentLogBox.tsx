@@ -1,6 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
+<<<<<<< Updated upstream
+=======
+import { FormatUnifier } from 'src/utils';
+>>>>>>> Stashed changes
 
 const Context = styled.div({
   display: 'flex',
@@ -58,6 +62,7 @@ interface Props {
   isEvent: number;
 }
 
+<<<<<<< Updated upstream
 function calculateDate(date: number) {
   let DateDiff = ``;
   if (date >= 60000) {
@@ -79,6 +84,11 @@ export default function CommentLogBox(props: Props) {
   const now = new Date().getTime() - new Date(props.time).getTime();
   const DateDifferent = calculateDate(now);
   const event = props.isEvent === null ? `new comment` : `new reply`;
+=======
+export default function CommentLogBox(props: Props) {
+  const DateDifferent = FormatUnifier.calculateDate(new Date(props.time).getTime());
+  const event = props.isEvent === 0 ? `User upload new comment ${DateDifferent}` : `User upload new reply ${DateDifferent}`;
+>>>>>>> Stashed changes
   return (
     <div>
       {/* <UserImage src='/public/images/FakeProfile.png'></UserImage> */}

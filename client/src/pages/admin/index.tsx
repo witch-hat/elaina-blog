@@ -35,6 +35,7 @@ export default function Admin(props: Props) {
           const findCategoryTitle = props.categoriesDetail.find((category) => category._id === log.categoryId)?.title!;
           const findPostTitle = props.posts.find((post) => post._id === log._id)?.title!;
           return (
+<<<<<<< Updated upstream
             <CommnetLogBox
               key={`${log._id}`}
               isEvent={log.replyIndex}
@@ -43,6 +44,17 @@ export default function Admin(props: Props) {
               categoryTitle={findCategoryTitle}
               postTitle={findPostTitle}
             />
+=======
+            <BorderBox isTransform={true} key={log._id}>
+              <CommnetLogBox
+                isEvent={log.event}
+                time={log.time}
+                postId={log.postId}
+                categoryTitle={findCategoryTitle}
+                postTitle={findPostTitle}
+              />
+            </BorderBox>
+>>>>>>> Stashed changes
           );
         })}
       </Container>
