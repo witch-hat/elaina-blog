@@ -12,23 +12,23 @@ export namespace FormatUnifier {
     return formatDate;
   }
 
-  export function calculateDate(dateTime: number) {
-    const date = new Date().getTime() - dateTime;
+  export function calculateDate(dateTime: Date) {
+    const date = new Date().getTime() - new Date(dateTime).getTime();
     let dateDiff = ``;
     if (date >= 60000) {
-      dateDiff = `${(date / 60000).toFixed()} Minutes a go`;
+      dateDiff = `${Math.floor(date / 60000)} Minutes Ago`;
     }
     if (date >= 3600000) {
-      dateDiff = `${(date / 3600000).toFixed()} Hours a go`;
+      dateDiff = `${Math.floor(date / 3600000)} Hours Ago`;
     }
     if (date >= 86400000) {
-      dateDiff = `${(date / 86400000).toFixed()} Days a go`;
+      dateDiff = `${Math.floor(date / 86400000)} Days Ago`;
     }
     if (date >= 2592000000) {
-      dateDiff = `${(date / 2592000000).toFixed()} Months a go`;
+      dateDiff = `${Math.floor(date / 2592000000)} Months Ago`;
     }
     if (date >= 31536000000) {
-      dateDiff = `${(date / 31536000000).toFixed()} Years a go`;
+      dateDiff = `${Math.floor(date / 31536000000)} Years Ago`;
     }
     return dateDiff;
   }

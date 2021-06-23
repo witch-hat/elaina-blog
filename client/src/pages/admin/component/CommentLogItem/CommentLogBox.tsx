@@ -15,8 +15,8 @@ const Context = styled.div({
   borderRadius: '.4rem',
   justifyContent: 'left',
   flexDirection: 'column',
-  ':hover': {
-    backgroundColor: '#d3e7fa'
+  '&:hover > p': {
+    color: '#50a3f1'
   }
 });
 
@@ -51,12 +51,12 @@ interface Props {
   categoryTitle: string;
   postId: number;
   postTitle: string;
-  isEvent: number;
+  isEvent: number | null;
 }
 
 export default function CommentLogBox(props: Props) {
-  const dateDifferent = FormatUnifier.calculateDate(new Date(props.time).getTime());
-  const event = props.isEvent === 0 ? `User upload new comment ${dateDifferent}` : `User upload new reply ${dateDifferent}`;
+  const dateDifferent = FormatUnifier.calculateDate(props.time);
+  const event = props.isEvent === null ? `User upload new comment ${dateDifferent}` : `User upload new reply ${dateDifferent}`;
   return (
     <div>
       {/* <UserImage src='/public/images/FakeProfile.png'></UserImage> */}
