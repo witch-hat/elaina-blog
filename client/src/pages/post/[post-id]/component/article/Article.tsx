@@ -78,7 +78,7 @@ const ModalButton = styled.button<{ themeMode?: ThemeMode }>((props) => ({
 interface Props {
   title: string;
   profile: ProfileType;
-  createdAt: string;
+  createdAt: number;
   article: string;
   isLogin: boolean;
 }
