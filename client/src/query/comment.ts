@@ -11,7 +11,7 @@ export interface Reply {
 export interface Comment {
   username?: string;
   password?: string;
-  createdAt: Date;
+  createdAt: number;
   comment: string;
   replies: Reply[];
   isAdmin: boolean;

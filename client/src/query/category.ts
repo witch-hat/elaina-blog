@@ -5,7 +5,7 @@ export interface CategoryDetails {
   title: string;
   description: string;
   previewImage: string;
-  recentCreatedAt: Date;
+  recentCreatedAt: number;
   postCount: number;
   order: number;
 }
