@@ -7,7 +7,7 @@ export enum CommentEvent {
 
 export interface CommentLog {
   _id: number;
-  time: Date;
+  time: number;
   event: CommentEvent;
   categoryId: number;
   postId: number;
