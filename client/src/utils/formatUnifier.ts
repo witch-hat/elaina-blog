@@ -14,22 +14,21 @@ export namespace FormatUnifier {
 
   export function calculateDate(dateTime: Date) {
     const date = new Date().getTime() - new Date(dateTime).getTime();
-    //const date = new Date().getTime() - dateTime.getTime(); -> dateTime.getTime이 함수가 아니라는데.. 이유를 당최 몰르겟읍니다..
     let dateDiff = ``;
     if (date >= 60000) {
-      dateDiff = `${(date / 60000).toFixed()} Minutes Ago`;
+      dateDiff = `${Math.floor(date / 60000)} Minutes Ago`;
     }
     if (date >= 3600000) {
-      dateDiff = `${(date / 3600000).toFixed()} Hours Ago`;
+      dateDiff = `${Math.floor(date / 3600000)} Hours Ago`;
     }
     if (date >= 86400000) {
-      dateDiff = `${(date / 86400000).toFixed()} Days Ago`;
+      dateDiff = `${Math.floor(date / 86400000)} Days Ago`;
     }
     if (date >= 2592000000) {
-      dateDiff = `${(date / 2592000000).toFixed()} Months Ago`;
+      dateDiff = `${Math.floor(date / 2592000000)} Months Ago`;
     }
     if (date >= 31536000000) {
-      dateDiff = `${(date / 31536000000).toFixed()} Years Ago`;
+      dateDiff = `${Math.floor(date / 31536000000)} Years Ago`;
     }
     return dateDiff;
   }

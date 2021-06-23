@@ -31,14 +31,14 @@ export default function Admin(props: Props) {
     <AdminPageLayout>
       <Container>
         <PageTitle title={trans(Lang.Activities)} />
-        {props.logs.map((log, index) => {
+        {props.logs.map((log) => {
           /*category title 찾아주기*/
           const findCategoryTitle = props.categoriesDetail.find((category) => category._id === log.categoryId)?.title!;
           const findPostTitle = props.posts.find((post) => post._id === log._id)?.title!;
           return (
             <CommnetLogBox
               key={log._id}
-              isEvent={log.event}
+              isEvent={log.replyIndex}
               time={log.time}
               postId={log.postId}
               categoryTitle={findCategoryTitle}
