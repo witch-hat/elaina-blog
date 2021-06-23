@@ -22,14 +22,14 @@ const dateScalar = new GraphQLScalarType({
   name: 'DateTime',
   description: 'Date custom scalar type',
   serialize(value: Date) {
-    return value.toString();
+    return value.getTime();
   },
   parseValue(value: any) {
     return new Date(value);
   },
   parseLiteral(ast: ValueNode) {
-    if (ast.kind === Kind.STRING) {
-      return new Date(ast.value);
+    if (ast.kind === Kind.INT) {
+      return new Date(parseInt(ast.value, 10));
     }
     return null;
   }
