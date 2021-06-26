@@ -8,7 +8,7 @@ import gfm from 'remark-gfm';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 
-import { RefInputBox, useWidth, FocusWrapper, Loading } from 'src/components';
+import { RefInputBox, useWidth, Loading } from 'src/components';
 import { theme } from 'src/styles';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
@@ -18,33 +18,12 @@ import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';
 
 import { Menu } from './Menu';
+import { CategorySelector } from './CategorySelector';
 
 const Container = styled.div<{ themeMode: ThemeMode }>((props) => ({
   display: 'flex',
   width: '100%'
 }));
-
-const CategoryContainer = styled.div({
-  position: 'relative',
-  cursor: 'pointer',
-  padding: '.5rem 0',
-  border: '1px solid #1f1f1f',
-  borderRadius: '.5rem'
-});
-
-const CategoryList = styled.div<{ themeMode: ThemeMode }>((props) => ({
-  position: 'absolute',
-  top: '.5rem',
-  left: '-1px',
-  border: '1px solid #1f1f1f',
-  backgroundColor: theme[props.themeMode].secondaryContentBackground,
-  zIndex: 1,
-  borderRadius: '.5rem'
-}));
-
-const CategoryTitle = styled.div({
-  padding: '.5rem .2rem'
-});
 
 const Title = styled.div({
   width: '100%',
@@ -146,7 +125,6 @@ export function Writer(props: Props) {
   const [mode, setMode] = useState(Mode.write);
   const [title, setTitle] = useState('');
   const [article, setArticle] = useState<string>('');
-  const [isListOpen, setIsListOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(DEFAULT_CATEGORY);
   const [visibleSubmitBtn, setVisibleSubmitBtn] = useState(true);
 
@@ -203,6 +181,10 @@ export function Writer(props: Props) {
     } else {
       setMode(Mode.write);
     }
+  }
+
+  function changeCategory(newCategory: string) {
+    setSelectedCategory(newCategory);
   }
 
   async function handleCreatePost() {
@@ -304,28 +286,7 @@ export function Writer(props: Props) {
         <MoblieModeButton onClick={() => handleButtonClick()}>{mode === Mode.write ? Mode.preview : Mode.write}</MoblieModeButton>
         {((width <= 767 && mode === Mode.write) || width > 767) && (
           <>
-            <CategoryContainer>
-              <div onClick={() => setIsListOpen(!isListOpen)}>
-                <p style={{ padding: '.2rem' }}>{selectedCategory}</p>
-              </div>
-              <FocusWrapper visible={isListOpen} onClickOutside={() => setIsListOpen(false)}>
-                <CategoryList themeMode={themeMode}>
-                  {props.categories.map((category) => {
-                    return (
-                      <CategoryTitle
-                        key={category.title}
-                        onClick={() => {
-                          setSelectedCategory(category.title);
-                          setIsListOpen(false);
-                        }}
-                      >
-                        <p>{category.title}</p>
-                      </CategoryTitle>
-                    );
-                  })}
-                </CategoryList>
-              </FocusWrapper>
-            </CategoryContainer>
+            <CategorySelector categories={props.categories} selectedCategory={selectedCategory} changeCategory={changeCategory} />
             <Title>
               <RefInputBox
                 ref={titleRef}
