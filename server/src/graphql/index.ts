@@ -21,8 +21,8 @@ function loadAllFiles() {
 const dateScalar = new GraphQLScalarType({
   name: 'DateTime',
   description: 'Date custom scalar type',
-  serialize(value: Date) {
-    return value.getTime();
+  serialize(value: any) {
+    return new Date(value).getTime();
   },
   parseValue(value: any) {
     return new Date(value);
