@@ -28,7 +28,7 @@ const PostCount = styled.span({
 });
 
 interface Props {
-  time: Date | null;
+  time: number | null;
   count: number;
 }
 
