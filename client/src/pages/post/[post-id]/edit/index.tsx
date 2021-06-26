@@ -1,6 +1,7 @@
 import React from 'react';
 import { InferGetServerSidePropsType, GetServerSideProps } from 'next';
 
+import { appCommponProps } from 'src/pages/_app';
 import { initApolloClient } from 'src/apollo/withApollo';
 import { Writer } from 'src/pages/admin/writer/component/Writer';
 import { GET_PROFILE } from 'src/query/profile';
@@ -32,6 +33,16 @@ export default function PostEdit(props: Props) {
 
 export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (context) => {
   const postId = context.query['post-id'];
+
+  if (!appCommponProps.app.isLogin) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: `/post/${postId}`
+      }
+    };
+  }
+
   const client = initApolloClient({}, context);
 
   const profile = await client.query({ query: GET_PROFILE });
