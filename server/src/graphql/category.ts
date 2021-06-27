@@ -6,6 +6,14 @@ import { Post, PostModel } from '../model/post';
 import { ContextType } from '../types/context';
 
 export const categoryTypeDef = gql`
+  type Category {
+    _id: Int!
+    title: String!
+    description: String!
+    previewImage: String!
+    order: Int!
+  }
+
   type CategoryWithDetails {
     _id: Int!
     title: String!
