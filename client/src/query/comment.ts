@@ -24,7 +24,7 @@ export interface Comments {
 }
 
 export const GET_COMMENTS = gql`
-  query($_id: Int!) {
+  query ($_id: Int!) {
     comments(_id: $_id) {
       _id
       count
@@ -47,25 +47,25 @@ export const GET_COMMENTS = gql`
 `;
 
 export const WRITE_COMMENT = gql`
-  mutation($_id: Int!, $username: String, $password: String, $comment: String!, $createdAt: DateTime!, $isAdmin: Boolean!) {
+  mutation ($_id: Int!, $username: String, $password: String, $comment: String!, $createdAt: DateTime!, $isAdmin: Boolean!) {
     writeComment(_id: $_id, username: $username, password: $password, comment: $comment, createdAt: $createdAt, isAdmin: $isAdmin)
   }
 `;
 
 export const EDIT_COMMENT = gql`
-  mutation($_id: Int!, $index: Int!, $newComment: String!, $password: String) {
+  mutation ($_id: Int!, $index: Int!, $newComment: String!, $password: String) {
     editComment(_id: $_id, index: $index, newComment: $newComment, password: $password)
   }
 `;
 
 export const DELETE_COMMENT = gql`
-  mutation($_id: Int!, $index: Int!, $password: String) {
+  mutation ($_id: Int!, $index: Int!, $password: String) {
     deleteComment(_id: $_id, index: $index, password: $password)
   }
 `;
 
 export const WRITE_REPLY = gql`
-  mutation(
+  mutation (
     $_id: Int!
     $commentIndex: Int!
     $username: String
@@ -87,13 +87,13 @@ export const WRITE_REPLY = gql`
 `;
 
 export const EDIT_REPLY = gql`
-  mutation($_id: Int!, $commentIndex: Int!, $replyIndex: Int!, $newReply: String!, $password: String) {
+  mutation ($_id: Int!, $commentIndex: Int!, $replyIndex: Int!, $newReply: String!, $password: String) {
     editReply(_id: $_id, commentIndex: $commentIndex, replyIndex: $replyIndex, newReply: $newReply, password: $password)
   }
 `;
 
 export const DELETE_REPLY = gql`
-  mutation($_id: Int!, $commentIndex: Int!, $replyIndex: Int!, $password: String) {
+  mutation ($_id: Int!, $commentIndex: Int!, $replyIndex: Int!, $password: String) {
     deleteReply(_id: $_id, commentIndex: $commentIndex, replyIndex: $replyIndex, password: $password)
   }
 `;

@@ -8,7 +8,7 @@ export interface FileType {
 }
 
 export const UPLOAD_FILE = gql`
-  mutation($file: Upload!) {
+  mutation ($file: Upload!) {
     uploadFile(file: $file) {
       path
     }

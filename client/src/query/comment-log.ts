@@ -30,7 +30,7 @@ export const GET_COMMENT_LOGS = gql`
 `;
 
 export const PUSH_COMMENT_LOG = gql`
-  mutation($time: DateTime!, $event: Int!, $categoryId: Int!, $postId: Int!, $commentIndex: Int!, $replyIndex: Int) {
+  mutation ($time: DateTime!, $event: Int!, $categoryId: Int!, $postId: Int!, $commentIndex: Int!, $replyIndex: Int) {
     pushCommentLog(
       time: $time
       event: $event
@@ -43,13 +43,13 @@ export const PUSH_COMMENT_LOG = gql`
 `;
 
 export const DELETE_COMMENT_LOG = gql`
-  mutation($postId: Int!, $commentIndex: Int!, $replyIndex: Int) {
+  mutation ($postId: Int!, $commentIndex: Int!, $replyIndex: Int) {
     deleteCommentLog(postId: $postId, commentIndex: $commentIndex, replyIndex: $replyIndex)
   }
 `;
 
 export const DELETE_POST_ALL_COMMENT_LOG = gql`
-  mutation($postId: Int!) {
+  mutation ($postId: Int!) {
     deletePostAllCommentLog(postId: $postId)
   }
 `;

@@ -6,14 +6,6 @@ import { Post, PostModel } from '../model/post';
 import { ContextType } from '../types/context';
 
 export const categoryTypeDef = gql`
-  type Category {
-    _id: Int!
-    title: String!
-    description: String!
-    previewImage: String!
-    order: Int!
-  }
-
   type CategoryWithDetails {
     _id: Int!
     title: String!
@@ -45,15 +37,6 @@ export const categoryTypeDef = gql`
 
 export const categoryResolver = {
   Query: {
-    async categories() {
-      try {
-        const categoryList = await CategoryModel.find({}, {}, { sort: { order: 1 } });
-        return categoryList;
-      } catch (err) {
-        throw err;
-      }
-    },
-
     async categoriesWithDetails() {
       try {
         const categories = await CategoryModel.find({}, {}, { sort: { order: 1 } });

@@ -10,18 +10,6 @@ export interface CategoryDetails {
   order: number;
 }
 
-export const GET_CATEGORY = gql`
-  query categories {
-    categories {
-      _id
-      title
-      description
-      previewImage
-      order
-    }
-  }
-`;
-
 export const GET_CATEGORIES_WITH_DETAILS = gql`
   query {
     categoriesWithDetails {
@@ -37,7 +25,7 @@ export const GET_CATEGORIES_WITH_DETAILS = gql`
 `;
 
 export const FIND_CATEGORY_BY_ID = gql`
-  query($id: Int!) {
+  query ($id: Int!) {
     findCategoryById(id: $id) {
       title
       description
@@ -47,7 +35,7 @@ export const FIND_CATEGORY_BY_ID = gql`
 `;
 
 export const ADD_CATEGORY = gql`
-  mutation($title: String!, $description: String!, $previewImage: String!) {
+  mutation ($title: String!, $description: String!, $previewImage: String!) {
     addCategory(title: $title, description: $description, previewImage: $previewImage) {
       isSuccess
       _id
@@ -56,19 +44,19 @@ export const ADD_CATEGORY = gql`
 `;
 
 export const UPDATE_CATEGORY = gql`
-  mutation($id: Int, $title: String, $description: String) {
+  mutation ($id: Int, $title: String, $description: String) {
     updateCategory(id: $id, title: $title, description: $description)
   }
 `;
 
 export const DELETE_CATEGORY = gql`
-  mutation($index: Int!) {
+  mutation ($index: Int!) {
     deleteCategory(index: $index)
   }
 `;
 
 export const ORDER_CATEGORY = gql`
-  mutation($ids: [Int]) {
+  mutation ($ids: [Int]) {
     orderCategory(ids: $ids)
   }
 `;
