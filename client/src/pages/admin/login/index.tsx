@@ -96,7 +96,7 @@ export default function Login(props: Props) {
 
   const [login] = useMutation(LOGIN, {
     onCompleted: (data: any) => {
-      router.reload();
+      router.replace(router.asPath);
     },
     onError: (err: Error) => {
       handleSubmitError(err.message);

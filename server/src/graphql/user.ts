@@ -49,11 +49,12 @@ export const userTypeDef = gql`
     me: User
     findMeById: User
     isAuth: AuthResponse
+    # findDevice:
   }
 
   extend type Mutation {
     updatePassword(old: String!, new: String!, confirm: String!): Void
-    login(emailId: String!, password: String!): LoginResponse
+    login(emailId: String!, password: String!): MutationResponse
     logout: Void
     refreshUserToken(userId: ID!): User
   }
@@ -277,7 +278,7 @@ export const userResolver = {
               secure: false
             });
 
-            return { accessToken, me };
+            return { isSuccess: true };
           } else {
             throw new AuthenticationError('이메일 또는 비밀번호가 맞지 않습니다.');
           }

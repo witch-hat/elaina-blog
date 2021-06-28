@@ -27,11 +27,7 @@ export const UPDATE_PASSWORD = gql`
 export const LOGIN = gql`
   mutation Login($emailId: String!, $password: String!) {
     login(emailId: $emailId, password: $password) {
-      auth {
-        refreshToken
-        deviceList
-        id
-      }
+      isSuccess
     }
   }
 `;
