@@ -34,22 +34,16 @@ export const userTypeDef = gql`
     cookie: [String]
   }
 
-  type Auth {
-    deviceList: [String]
-    refreshToken: String
-    id: String
-  }
-
-  type LoginResponse {
-    auth: Auth
-    cookie: String
+  type LoginDevice {
+    userUniqueId: String
+    latestLogin: DateTime
   }
 
   extend type Query {
     me: User
     findMeById: User
     isAuth: AuthResponse
-    # findDevice:
+    findDevices: [LoginDevice]
   }
 
   extend type Mutation {
@@ -136,6 +130,7 @@ export const userResolver = {
               });
 
               me.auth[authIndex].refreshToken = refreshToken;
+              me.auth[authIndex].latestLogin = new Date();
               me.save();
 
               cookies.set('a_access', accessToken, {
@@ -165,8 +160,26 @@ export const userResolver = {
           // malformed error is prior than expired error
         }
       }
+    },
+
+    async findDevices(_: any, args: any, context: ContextType) {
+      try {
+        const user: User = await UserModel.findById(1);
+
+        const result = user.auth.map((device) => {
+          return {
+            userUniqueId: device.userUniqueId,
+            latestLogin: device.latestLogin
+          };
+        });
+
+        return result;
+      } catch (err) {
+        throw err;
+      }
     }
   },
+
   Mutation: {
     async updatePassword(_: any, args: { old: string; new: string; confirm: string }, context: ContextType) {
       const networkInterfaces = os.networkInterfaces();
@@ -252,14 +265,16 @@ export const userResolver = {
             const refreshToken = getToken(payload, MONTH);
 
             const authIndex = authList.findIndex((auth) => auth.userUniqueId === userUniqueId);
+            const latestLogin = new Date();
+
             if (authIndex === -1) {
-              me.auth.push({ userUniqueId, refreshToken, id });
-              me.save();
+              me.auth.push({ userUniqueId, refreshToken, id, latestLogin });
             } else {
               me.auth[authIndex].refreshToken = refreshToken;
               me.auth[authIndex].id = id;
-              me.save();
+              me.auth[authIndex].latestLogin = latestLogin;
             }
+            me.save();
 
             await bcrypt
               .hash(refreshToken, SALT)

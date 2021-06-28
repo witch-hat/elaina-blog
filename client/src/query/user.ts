@@ -1,5 +1,15 @@
 import { gql } from '@apollo/client';
 
+export interface User {
+  emailId?: string;
+  password?: string;
+}
+
+export interface LoginDevices {
+  userUniqueId: string;
+  latestTime: number;
+}
+
 export const GET_USER = gql`
   query Me {
     me {
@@ -14,6 +24,15 @@ export const IS_AUTH = gql`
     isAuth {
       isAuth
       cookie
+    }
+  }
+`;
+
+export const GET_DEVICES = gql`
+  query FindDevices {
+    findDevices {
+      userUniqueId
+      latestLogin
     }
   }
 `;
@@ -37,8 +56,3 @@ export const LOGOUT = gql`
     logout
   }
 `;
-
-export interface User {
-  emailId?: string;
-  password?: string;
-}
