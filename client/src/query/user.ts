@@ -5,9 +5,9 @@ export interface User {
   password?: string;
 }
 
-export interface LoginDevices {
+export interface LoginDevice {
   userUniqueId: string;
-  latestTime: number;
+  latestLogin: number;
 }
 
 export const GET_USER = gql`
