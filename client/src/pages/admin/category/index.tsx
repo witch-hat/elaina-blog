@@ -8,7 +8,7 @@ import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { initApolloClient } from 'src/apollo/withApollo';
 import { appCommponProps, AppCommonProps } from 'src/pages/_app';
-import { CategoryDetails, GET_CATEGORY, ORDER_CATEGORY, UPDATE_CATEGORY } from 'src/query/category';
+import { CategoryDetails, GET_CATEGORIES_WITH_DETAILS, ORDER_CATEGORY, UPDATE_CATEGORY } from 'src/query/category';
 import { trans, Lang } from 'src/resources/languages';
 
 import { AdminPageLayout } from '../component/AdminPageLayout';
@@ -69,9 +69,9 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
   }
 
   const client = initApolloClient({}, context);
-  const { data } = await client.query({ query: GET_CATEGORY });
+  const { data } = await client.query({ query: GET_CATEGORIES_WITH_DETAILS });
 
-  const categories = data.categories;
+  const categories = data.categoriesWithDetails;
 
   return {
     props: {
