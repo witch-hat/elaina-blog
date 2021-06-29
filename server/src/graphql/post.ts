@@ -97,10 +97,13 @@ export const postResolver = {
     async getLatestPostsEachCategory() {
       const categories = await CategoryModel.find({}, {}, { sort: { order: 1 } });
 
-      const posts: Post[] = categories.map(async (category: Category) => {
-        const post: Post = await PostModel.findOne({ categoryId: category._id }, {}, { sort: { _id: -1 } });
-        return post;
-      });
+      const posts: Post[] = [];
+      for (const category of categories) {
+        const post = await PostModel.findOne({ categoryId: category._id }, {}, { sort: { _id: -1 } });
+        if (post) {
+          posts.push(post);
+        }
+      }
 
       return posts;
     },
@@ -163,16 +166,20 @@ export const postResolver = {
           throw new UserInputError('글의 본문을 1자 이상 써주세요.');
         }
 
-        const lastPost: Post = await PostModel.findOne({}, {}, { sort: { _id: -1 } });
-        const _id = lastPost._id + 1;
+        const lastPost: Post | null = await PostModel.findOne({}, {}, { sort: { _id: -1 } });
+        if (lastPost) {
+          const _id = lastPost._id + 1;
 
-        const category = await CategoryModel.findOne({ title: args.category });
-        const categoryId = category._id;
+          const category: Category | null = await CategoryModel.findOne({ title: args.category });
+          if (category) {
+            const categoryId = category._id;
 
-        CommentModel.create({ _id });
+            CommentModel.create({ _id });
 
-        const result = await PostModel.create({ _id, title: args.title, createdAt: args.createdAt, categoryId, article: args.article });
-        return result;
+            const result = await PostModel.create({ _id, title: args.title, createdAt: args.createdAt, categoryId, article: args.article });
+            return result;
+          }
+        }
       } catch (err) {
         throw err;
       }
@@ -182,7 +189,11 @@ export const postResolver = {
       try {
         const deletedPost = await PostModel.findByIdAndDelete(args.id);
         await CommentModel.findByIdAndDelete(args.id);
-        return { isSuccess: true, categoryId: deletedPost.categoryId };
+        if (deletedPost) {
+          return { isSuccess: true, categoryId: deletedPost.categoryId };
+        } else {
+          return { isSuccess: false };
+        }
       } catch (err) {
         throw err;
       }
@@ -194,16 +205,13 @@ export const postResolver = {
           throw new UserInputError('카테고리, 제목 또는 본문을 입력해주세요');
         }
 
-        const editPost: Post = await PostModel.findById(args.id);
-        editPost.title = args.title;
-        editPost.article = args.article;
-
-        const category = await CategoryModel.findOne({ title: args.category });
-        const categoryId = category._id;
-
-        editPost.categoryId = categoryId;
-
-        editPost.save();
+        const [editPost, category] = await Promise.all([PostModel.findById(args.id), CategoryModel.findOne({ title: args.category })]);
+        if (editPost && category) {
+          editPost.title = args.title;
+          editPost.article = args.article;
+          editPost.categoryId = category._id;
+          editPost.save();
+        }
 
         return null;
       } catch (err) {

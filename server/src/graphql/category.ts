@@ -159,25 +159,27 @@ export const categoryResolver = {
           throw new ValidationError('잘못된 index값 입니다.');
         }
 
-        const deletedCategory: Category = await CategoryModel.findOne({ order: args.index });
+        const foundCategory: Category | null = await CategoryModel.findOne({ order: args.index });
 
-        if (deletedCategory._id === 0) {
-          throw new ValidationError('기본 카테고리는 삭제할 수 없습니다.');
-        }
-
-        await CategoryModel.deleteOne({ order: args.index });
-
-        // move posts to default category
-        const posts: Post[] = await PostModel.find({ categoryId: deletedCategory._id });
-        posts.forEach(async (post) => {
-          await PostModel.findByIdAndUpdate(post._id, { categoryId: 0 });
-        });
-        const categories: Category[] = await CategoryModel.find();
-        categories.forEach(async (category) => {
-          if (category.order > args.index) {
-            await CategoryModel.findByIdAndUpdate(category._id, { order: category.order - 1 });
+        if (foundCategory) {
+          if (foundCategory._id === 0) {
+            throw new ValidationError('기본 카테고리는 삭제할 수 없습니다.');
           }
-        });
+
+          await CategoryModel.deleteOne({ order: args.index });
+
+          // move posts to default category
+          const posts: Post[] = await PostModel.find({ categoryId: foundCategory._id });
+          posts.forEach(async (post) => {
+            await PostModel.findByIdAndUpdate(post._id, { categoryId: 0 });
+          });
+          const categories: Category[] = await CategoryModel.find();
+          categories.forEach(async (category) => {
+            if (category.order > args.index) {
+              await CategoryModel.findByIdAndUpdate(category._id, { order: category.order - 1 });
+            }
+          });
+        }
 
         return null;
       } catch (err) {

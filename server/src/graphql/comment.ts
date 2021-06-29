@@ -74,39 +74,40 @@ export const commentResolver = {
         if (!args.comment) {
           throw new UserInputError('내용을 입력해 주세요.');
         }
-        const existComments: Comments = await CommentModel.findById(args._id);
+        const comments: Comments | null = await CommentModel.findById(args._id);
+        if (comments) {
+          let newComment: Comment;
+          if (args.isAdmin) {
+            newComment = {
+              comment: args.comment,
+              createdAt: args.createdAt,
+              replies: [],
+              isAdmin: args.isAdmin
+            };
+          } else {
+            if (args.password.length < 8 || args.password.length > 20 || args.username.length < 2 || args.username.length > 10) {
+              throw new UserInputError('username: 2~10 자 이내, password: 8~20자 이내로 입력해주세요');
+            }
 
-        let newComment: Comment;
-        if (args.isAdmin) {
-          newComment = {
-            comment: args.comment,
-            createdAt: args.createdAt,
-            replies: [],
-            isAdmin: args.isAdmin
-          };
-        } else {
-          if (args.password.length < 8 || args.password.length > 20 || args.username.length < 2 || args.username.length > 10) {
-            throw new UserInputError('username: 2~10 자 이내, password: 8~20자 이내로 입력해주세요');
+            if (args.password.match(passwordRegex) === null) {
+              throw new UserInputError('비밀번호: 영문자, 숫자, 특수문자 조합');
+            }
+
+            newComment = {
+              username: args.username,
+              password: args.password,
+              comment: args.comment,
+              createdAt: args.createdAt,
+              replies: [],
+              isAdmin: args.isAdmin
+            };
           }
 
-          if (args.password.match(passwordRegex) === null) {
-            throw new UserInputError('비밀번호: 영문자, 숫자, 특수문자 조합');
-          }
+          comments.comments.push(newComment);
+          comments.count += 1;
 
-          newComment = {
-            username: args.username,
-            password: args.password,
-            comment: args.comment,
-            createdAt: args.createdAt,
-            replies: [],
-            isAdmin: args.isAdmin
-          };
+          comments.save();
         }
-
-        existComments.comments.push(newComment);
-        existComments.count += 1;
-
-        existComments.save();
 
         return null;
       } catch (err) {
@@ -126,17 +127,19 @@ export const commentResolver = {
           }
         }
 
-        const commentContainer: Comments = await CommentModel.findById(args._id);
+        const comments: Comments | null = await CommentModel.findById(args._id);
 
-        if (args.password) {
-          const hash = commentContainer.comments[args.index].password;
-          const isMatch = await comparePassword(args.password, hash || '');
+        if (comments) {
+          if (args.password) {
+            const hash = comments.comments[args.index].password;
+            const isMatch = await comparePassword(args.password, hash || '');
 
-          if (!isMatch) throw new AuthenticationError('비밀번호가 맞지 않습니다.');
+            if (!isMatch) throw new AuthenticationError('비밀번호가 맞지 않습니다.');
+          }
+
+          comments.comments[args.index].comment = args.newComment;
+          comments.save();
         }
-
-        commentContainer.comments[args.index].comment = args.newComment;
-        commentContainer.save();
 
         return null;
       } catch (err) {
@@ -146,25 +149,27 @@ export const commentResolver = {
 
     async deleteComment(_: any, args: { _id: number; index: number; password?: string }, context: ContextType) {
       try {
-        const commentContainer: Comments = await CommentModel.findById(args._id);
+        const comments: Comments | null = await CommentModel.findById(args._id);
 
-        if (args.password) {
-          if (args.password.length > 20 || args.password.length < 8) {
-            throw new UserInputError('비밀번호 8~20자 이내로 입력해주세요.');
+        if (comments) {
+          if (args.password) {
+            if (args.password.length > 20 || args.password.length < 8) {
+              throw new UserInputError('비밀번호 8~20자 이내로 입력해주세요.');
+            }
+
+            const hash = comments.comments[args.index].password;
+            const isMatch = await comparePassword(args.password, hash || '');
+
+            if (!isMatch) throw new AuthenticationError('비밀번호가 맞지 않습니다.');
           }
 
-          const hash = commentContainer.comments[args.index].password;
-          const isMatch = await comparePassword(args.password, hash || '');
+          const decreaseCount = comments.comments[args.index].replies.length + 1;
+          comments.comments.splice(args.index, 1);
 
-          if (!isMatch) throw new AuthenticationError('비밀번호가 맞지 않습니다.');
+          comments.count -= decreaseCount;
+
+          comments.save();
         }
-
-        const decreaseCount = commentContainer.comments[args.index].replies.length + 1;
-        commentContainer.comments.splice(args.index, 1);
-
-        commentContainer.count -= decreaseCount;
-
-        commentContainer.save();
 
         return null;
       } catch (err) {
@@ -180,38 +185,40 @@ export const commentResolver = {
       const passwordRegex = new RegExp('^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,20})');
 
       try {
-        const commentContainer: Comments = await CommentModel.findById(args._id);
+        const comments: Comments | null = await CommentModel.findById(args._id);
 
-        let newReply: Reply;
+        if (comments) {
+          let newReply: Reply;
 
-        if (args.isAdmin) {
-          newReply = {
-            comment: args.comment,
-            createdAt: args.createdAt,
-            isAdmin: args.isAdmin
-          };
-        } else {
-          if (args.password.length < 8 || args.password.length > 20 || args.username.length < 2 || args.username.length > 10) {
-            throw new UserInputError('username: 2~10 자 이내, password: 8~20자 이내로 입력해주세요');
+          if (args.isAdmin) {
+            newReply = {
+              comment: args.comment,
+              createdAt: args.createdAt,
+              isAdmin: args.isAdmin
+            };
+          } else {
+            if (args.password.length < 8 || args.password.length > 20 || args.username.length < 2 || args.username.length > 10) {
+              throw new UserInputError('username: 2~10 자 이내, password: 8~20자 이내로 입력해주세요');
+            }
+
+            if (args.password.match(passwordRegex) === null) {
+              throw new UserInputError('비밀번호: 영문자, 숫자, 특수문자 조합');
+            }
+
+            newReply = {
+              username: args.username,
+              password: args.password,
+              comment: args.comment,
+              createdAt: args.createdAt,
+              isAdmin: args.isAdmin
+            };
           }
 
-          if (args.password.match(passwordRegex) === null) {
-            throw new UserInputError('비밀번호: 영문자, 숫자, 특수문자 조합');
-          }
+          comments.comments[args.commentIndex].replies.push(newReply);
+          comments.count += 1;
 
-          newReply = {
-            username: args.username,
-            password: args.password,
-            comment: args.comment,
-            createdAt: args.createdAt,
-            isAdmin: args.isAdmin
-          };
+          comments.save();
         }
-
-        commentContainer.comments[args.commentIndex].replies.push(newReply);
-        commentContainer.count += 1;
-
-        commentContainer.save();
 
         return null;
       } catch (err) {
@@ -235,17 +242,19 @@ export const commentResolver = {
           }
         }
 
-        const commentContainer: Comments = await CommentModel.findById(args._id);
+        const comments: Comments | null = await CommentModel.findById(args._id);
 
-        if (args.password) {
-          const hash = commentContainer.comments[args.commentIndex].password;
-          const isMatch = await comparePassword(args.password, hash || '');
+        if (comments) {
+          if (args.password) {
+            const hash = comments.comments[args.commentIndex].password;
+            const isMatch = await comparePassword(args.password, hash || '');
 
-          if (!isMatch) throw new AuthenticationError('비밀번호가 맞지 않습니다.');
+            if (!isMatch) throw new AuthenticationError('비밀번호가 맞지 않습니다.');
+          }
+
+          comments.comments[args.commentIndex].replies[args.replyIndex].comment = args.newReply;
+          comments.save();
         }
-
-        commentContainer.comments[args.commentIndex].replies[args.replyIndex].comment = args.newReply;
-        commentContainer.save();
 
         return null;
       } catch (err) {
@@ -255,19 +264,21 @@ export const commentResolver = {
 
     async deleteReply(_: any, args: { _id: number; commentIndex: number; replyIndex: number; password?: string }, context: ContextType) {
       try {
-        const commentContainer: Comments = await CommentModel.findById(args._id);
+        const comments: Comments | null = await CommentModel.findById(args._id);
 
-        if (args.password) {
-          const hash = commentContainer.comments[args.commentIndex].replies[args.replyIndex].password;
-          const isMatch = await comparePassword(args.password, hash || '');
+        if (comments) {
+          if (args.password) {
+            const hash = comments.comments[args.commentIndex].replies[args.replyIndex].password;
+            const isMatch = await comparePassword(args.password, hash || '');
 
-          if (!isMatch) throw new AuthenticationError('비밀번호가 맞지 않습니다.');
+            if (!isMatch) throw new AuthenticationError('비밀번호가 맞지 않습니다.');
+          }
+
+          comments.comments[args.commentIndex].replies.splice(args.replyIndex, 1);
+          comments.count -= 1;
+
+          comments.save();
         }
-
-        commentContainer.comments[args.commentIndex].replies.splice(args.replyIndex, 1);
-        commentContainer.count -= 1;
-
-        commentContainer.save();
 
         return null;
       } catch (err) {

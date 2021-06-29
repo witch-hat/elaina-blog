@@ -76,15 +76,18 @@ export const commentLogResolver = {
       context: ContextType
     ) {
       try {
-        const deletedLog: CommentLog = await CommentLogModel.findOne({
+        const foundLog: CommentLog | null = await CommentLogModel.findOne({
           postId: args.postId,
           commentIndex: args.commentIndex,
           replyIndex: args.replyIndex ? args.replyIndex : null
         });
-        await CommentLogModel.deleteOne({ _id: deletedLog._id });
 
-        if (deletedLog.commentEvent === 0) {
-          await CommentLogModel.deleteMany({ postId: deletedLog.postId, commentIndex: deletedLog.commentIndex });
+        if (foundLog) {
+          await CommentLogModel.deleteOne({ _id: foundLog._id });
+
+          if (foundLog.commentEvent === 0) {
+            await CommentLogModel.deleteMany({ postId: foundLog.postId, commentIndex: foundLog.commentIndex });
+          }
         }
 
         return;

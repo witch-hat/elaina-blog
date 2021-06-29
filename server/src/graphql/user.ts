@@ -61,7 +61,7 @@ export const userResolver = {
   Query: {
     async me() {
       try {
-        const user: User = await UserModel.findById(1);
+        const user: User | null = await UserModel.findById(1);
         return user;
       } catch (err) {
         console.log(err);
@@ -90,90 +90,93 @@ export const userResolver = {
         return { isAuth: false };
       }
 
-      const me = await UserModel.findOne({}, {}, { sort: { _id: -1 } });
-      const authList: Array<Auth> = me.auth;
+      const me: User | null = await UserModel.findOne({}, {}, { sort: { _id: -1 } });
+      if (me) {
+        const authList: Array<Auth> = me.auth;
 
-      try {
-        // 기기 id가 리스트에 없으면 re-login 유도(isAuth false)
-        if (authList.find((auth) => auth.userUniqueId === userUniqueId) === undefined) {
-          return { isAuth: false };
-        } else {
-          // 기기 id가 리스트에 있고, verify success시 isAuth true
-          jwt.verify(accessToken, config.secret);
-          return { isAuth: true };
-        }
-      } catch (err) {
-        // 만약 authlist에 id가 있으면 refreshToken check 후 accessToken, refreshToken 발급
-        // refresh tokens
-        if (err instanceof TokenExpiredError) {
-          try {
-            // authList에 있는 auth중 uniqueid 찾기
-            const authIndex = authList.findIndex((auth) => auth.userUniqueId === userUniqueId);
-            const isMatch = await bcrypt.compare(me.auth[authIndex].refreshToken, refreshToken);
-            if (isMatch) {
-              // re-generate access, refresh token
-              const id = uuidv4();
-              me.auth[authIndex].id = id;
+        try {
+          // 기기 id가 리스트에 없으면 re-login 유도(isAuth false)
+          if (authList.find((auth) => auth.userUniqueId === userUniqueId) === undefined) {
+            return { isAuth: false };
+          } else {
+            // 기기 id가 리스트에 있고, verify success시 isAuth true
+            jwt.verify(accessToken, config.secret);
+            return { isAuth: true };
+          }
+        } catch (err) {
+          // 만약 authlist에 id가 있으면 refreshToken check 후 accessToken, refreshToken 발급
+          // refresh tokens
+          if (err instanceof TokenExpiredError) {
+            try {
+              // authList에 있는 auth중 uniqueid 찾기
+              const authIndex = authList.findIndex((auth) => auth.userUniqueId === userUniqueId);
+              const isMatch = await bcrypt.compare(me.auth[authIndex].refreshToken, refreshToken);
+              if (isMatch) {
+                // re-generate access, refresh token
+                const id = uuidv4();
+                me.auth[authIndex].id = id;
 
-              const payload = {
-                refreshTokenId: id
-              };
+                const payload = {
+                  refreshTokenId: id
+                };
 
-              const accessToken = getToken(payload, FIVE_MINUTE);
-              const refreshToken = getToken(payload, MONTH);
+                const accessToken = getToken(payload, FIVE_MINUTE);
+                const refreshToken = getToken(payload, MONTH);
 
-              const hashedRefreshToken = await bcrypt.hash(refreshToken, SALT);
-              cookies.set('a_refresh', hashedRefreshToken, {
-                httpOnly: false,
-                sameSite: 'strict',
-                secure: false
-              });
+                const hashedRefreshToken = await bcrypt.hash(refreshToken, SALT);
+                cookies.set('a_refresh', hashedRefreshToken, {
+                  httpOnly: false,
+                  sameSite: 'strict',
+                  secure: false
+                });
 
-              me.auth[authIndex].refreshToken = refreshToken;
-              me.auth[authIndex].latestLogin = new Date();
-              me.save();
+                me.auth[authIndex].refreshToken = refreshToken;
+                me.auth[authIndex].latestLogin = new Date();
+                me.save();
 
-              cookies.set('a_access', accessToken, {
-                httpOnly: false,
-                sameSite: 'strict',
-                secure: false
-              });
+                cookies.set('a_access', accessToken, {
+                  httpOnly: false,
+                  sameSite: 'strict',
+                  secure: false
+                });
 
-              // context.res.getHeader('set-cookie') return Array<string> type
-              return { isAuth: true, cookie: context.res.getHeader('set-cookie') };
-            } else {
+                // context.res.getHeader('set-cookie') return Array<string> type
+                return { isAuth: true, cookie: context.res.getHeader('set-cookie') };
+              } else {
+                context.res.clearCookie('a_access');
+                context.res.clearCookie('a_refresh');
+
+                return { isAuth: false };
+              }
+            } catch (err) {
               context.res.clearCookie('a_access');
               context.res.clearCookie('a_refresh');
 
               return { isAuth: false };
             }
-          } catch (err) {
+          } else {
             context.res.clearCookie('a_access');
             context.res.clearCookie('a_refresh');
-
             return { isAuth: false };
+            // malformed error is prior than expired error
           }
-        } else {
-          context.res.clearCookie('a_access');
-          context.res.clearCookie('a_refresh');
-          return { isAuth: false };
-          // malformed error is prior than expired error
         }
       }
     },
 
     async findDevices(_: any, args: any, context: ContextType) {
       try {
-        const user: User = await UserModel.findById(1);
+        const user: User | null = await UserModel.findById(1);
 
-        const result = user.auth.map((device) => {
-          return {
-            userUniqueId: device.userUniqueId,
-            latestLogin: device.latestLogin
-          };
-        });
-
-        return result;
+        if (user) {
+          const result = user.auth.map((device) => {
+            return {
+              userUniqueId: device.userUniqueId,
+              latestLogin: device.latestLogin
+            };
+          });
+          return result;
+        }
       } catch (err) {
         throw err;
       }
@@ -203,21 +206,21 @@ export const userResolver = {
           throw new UserInputError('잘못된 비밀번호 양식입니다.');
         }
 
-        const user: User = await UserModel.findById(1);
+        const user: User | null = await UserModel.findById(1);
 
-        const isMatch = await comparePassword(args.old, user.password);
+        if (user) {
+          const isMatch = await comparePassword(args.old, user.password);
 
-        if (isMatch) {
-          if (args.old === args.new) throw new UserInputError('이전과 동일한 비밀번호 입니다.');
+          if (isMatch) {
+            if (args.old === args.new) throw new UserInputError('이전과 동일한 비밀번호 입니다.');
 
-          user.password = args.new;
-          user.auth = user.auth.filter((auth) => auth.userUniqueId === userUniqueId);
-          user.save();
-        } else {
-          throw new AuthenticationError('패스워드 정보가 일치하지 않습니다.');
+            user.password = args.new;
+            user.auth = user.auth.filter((auth) => auth.userUniqueId === userUniqueId);
+            user.save();
+          } else {
+            throw new AuthenticationError('패스워드 정보가 일치하지 않습니다.');
+          }
         }
-
-        return;
       } catch (err) {
         throw err;
       }
@@ -249,56 +252,58 @@ export const userResolver = {
 
       const cookies = new Cookies(context.req, context.res);
       try {
-        const me: User = await UserModel.findById(1);
-        const authList = me.auth;
+        const me: User | null = await UserModel.findById(1);
+        if (me) {
+          const authList = me.auth;
 
-        if (args.emailId === me.emailId) {
-          const isMatch = await comparePassword(args.password, me.password);
+          if (args.emailId === me.emailId) {
+            const isMatch = await comparePassword(args.password, me.password);
 
-          if (isMatch) {
-            const id = uuidv4();
-            const payload = {
-              refreshTokenId: id
-            };
+            if (isMatch) {
+              const id = uuidv4();
+              const payload = {
+                refreshTokenId: id
+              };
 
-            const accessToken = getToken(payload, FIVE_MINUTE);
-            const refreshToken = getToken(payload, MONTH);
+              const accessToken = getToken(payload, FIVE_MINUTE);
+              const refreshToken = getToken(payload, MONTH);
 
-            const authIndex = authList.findIndex((auth) => auth.userUniqueId === userUniqueId);
-            const latestLogin = new Date();
+              const authIndex = authList.findIndex((auth) => auth.userUniqueId === userUniqueId);
+              const latestLogin = new Date();
 
-            if (authIndex === -1) {
-              me.auth.push({ userUniqueId, refreshToken, id, latestLogin });
+              if (authIndex === -1) {
+                me.auth.push({ userUniqueId, refreshToken, id, latestLogin });
+              } else {
+                me.auth[authIndex].refreshToken = refreshToken;
+                me.auth[authIndex].id = id;
+                me.auth[authIndex].latestLogin = latestLogin;
+              }
+              me.save();
+
+              await bcrypt
+                .hash(refreshToken, SALT)
+                .then((hashedRefreshToken) => {
+                  cookies.set('a_refresh', hashedRefreshToken, {
+                    httpOnly: false,
+                    sameSite: 'strict',
+                    secure: false
+                  });
+                })
+                .catch((err) => console.error(err));
+
+              cookies.set('a_access', accessToken, {
+                httpOnly: false,
+                sameSite: 'strict',
+                secure: false
+              });
+
+              return { isSuccess: true };
             } else {
-              me.auth[authIndex].refreshToken = refreshToken;
-              me.auth[authIndex].id = id;
-              me.auth[authIndex].latestLogin = latestLogin;
+              throw new AuthenticationError('이메일 또는 비밀번호가 맞지 않습니다.');
             }
-            me.save();
-
-            await bcrypt
-              .hash(refreshToken, SALT)
-              .then((hashedRefreshToken) => {
-                cookies.set('a_refresh', hashedRefreshToken, {
-                  httpOnly: false,
-                  sameSite: 'strict',
-                  secure: false
-                });
-              })
-              .catch((err) => console.error(err));
-
-            cookies.set('a_access', accessToken, {
-              httpOnly: false,
-              sameSite: 'strict',
-              secure: false
-            });
-
-            return { isSuccess: true };
           } else {
             throw new AuthenticationError('이메일 또는 비밀번호가 맞지 않습니다.');
           }
-        } else {
-          throw new AuthenticationError('이메일 또는 비밀번호가 맞지 않습니다.');
         }
       } catch (err) {
         throw err;
@@ -319,20 +324,22 @@ export const userResolver = {
       const cookies = new Cookies(context.req, context.res);
 
       try {
-        const me: User = await UserModel.findById(1);
-        const deleteResultAuth = me.auth.filter((authInfo) => {
-          return authInfo.userUniqueId !== userUniqueId;
-        });
+        const me: User | null = await UserModel.findById(1);
+        if (me) {
+          const deleteResultAuth = me.auth.filter((authInfo) => {
+            return authInfo.userUniqueId !== userUniqueId;
+          });
 
-        me.auth = deleteResultAuth;
-        me.save();
+          me.auth = deleteResultAuth;
+          me.save();
 
-        cookies.set('a_refresh', '', {
-          expires: new Date(0)
-        });
-        cookies.set('a_access', '', {
-          expires: new Date(0)
-        });
+          cookies.set('a_refresh', '', {
+            expires: new Date(0)
+          });
+          cookies.set('a_access', '', {
+            expires: new Date(0)
+          });
+        }
 
         return null;
       } catch (err) {
