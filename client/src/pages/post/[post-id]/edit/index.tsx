@@ -6,7 +6,7 @@ import { initApolloClient } from 'src/apollo/withApollo';
 import { Writer } from 'src/pages/admin/writer/component/Writer';
 import { GET_PROFILE } from 'src/query/profile';
 import { FIND_POST_BY_URL } from 'src/query/post';
-import { CategoryDetails, FIND_CATEGORY_BY_ID, GET_CATEGORY } from 'src/query/category';
+import { CategoryDetails, FIND_CATEGORY_BY_ID, GET_CATEGORIES_WITH_DETAILS } from 'src/query/category';
 
 interface ServerSideProps {
   author: string;
@@ -56,8 +56,8 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
   const category = await client.query({ query: FIND_CATEGORY_BY_ID, variables: { id: categoryId } });
   const categoryTitle = category.data.findCategoryById.title;
 
-  const categoriesQuery = await client.query({ query: GET_CATEGORY });
-  const categories = categoriesQuery.data.categories;
+  const categoriesQuery = await client.query({ query: GET_CATEGORIES_WITH_DETAILS });
+  const categories = categoriesQuery.data.categoriesWithDetails;
 
   return {
     props: {

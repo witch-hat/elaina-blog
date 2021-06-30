@@ -11,7 +11,7 @@ import { ThemeMode } from 'src/redux/common/type';
 import { AppCommonProps, appCommponProps } from 'src/pages/_app';
 import { initApolloClient } from 'src/apollo/withApollo';
 import { GET_PROFILE, ProfileType } from 'src/query/profile';
-import { CategoryDetails, GET_CATEGORY } from 'src/query/category';
+import { CategoryDetails, GET_CATEGORIES_WITH_DETAILS } from 'src/query/category';
 
 const Container = styled.div<{ themeMode: ThemeMode }>((props) => ({
   display: 'flex',
@@ -67,10 +67,10 @@ export async function getServerSideProps(context: NextPageContext) {
 
   const client = initApolloClient({}, context);
   const profileQuery = await client.query({ query: GET_PROFILE });
-  const categoryQuery = await client.query({ query: GET_CATEGORY });
+  const categoryQuery = await client.query({ query: GET_CATEGORIES_WITH_DETAILS });
 
   const profile = profileQuery.data.profile;
-  const categories = categoryQuery.data.categories;
+  const categories = categoryQuery.data.categoriesWithDetails;
 
   return {
     props: {
