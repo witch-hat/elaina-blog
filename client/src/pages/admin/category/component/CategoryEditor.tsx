@@ -62,18 +62,18 @@ const PreviewTextWrapper = styled.div({
   alignItems: 'flex-start'
 });
 
-const Input = styled.input<{ themeMode: ThemeMode }>((props) => ({
+const Input = styled.input((props) => ({
   display: 'inline-block',
   width: '100%',
   height: '2rem',
   padding: '.2rem',
   outline: 'none',
-  border: `1px solid ${theme[props.themeMode].inputBorder}`,
+  border: `1px solid ${props.theme.inputBorder}`,
   borderRadius: '.5rem',
-  backgroundColor: theme[props.themeMode].inputBackground,
+  backgroundColor: props.theme.inputBackground,
   fontSize: '1.1rem',
   fontWeight: 'normal',
-  color: theme[props.themeMode].inputText
+  color: props.theme.inputText
 }));
 
 interface Props {
@@ -86,7 +86,7 @@ interface Props {
 }
 
 export function CategoryEditor(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   const [categoryTitle, setCategoryTitle] = useState('');
   const [categoryDescription, setCategoryDescription] = useState('');
@@ -172,18 +172,8 @@ export function CategoryEditor(props: Props) {
           </MenuContainer>
           <Content>
             <PreviewTextWrapper>
-              <Input
-                type='text'
-                themeMode={themeMode}
-                defaultValue={props.categories[props.index].title}
-                onChange={(e) => onTitleChange(e)}
-              />
-              <Input
-                type='text'
-                themeMode={themeMode}
-                defaultValue={props.categories[props.index].description}
-                onChange={(e) => onDescriptionChange(e)}
-              />
+              <Input type='text' defaultValue={props.categories[props.index].title} onChange={(e) => onTitleChange(e)} />
+              <Input type='text' defaultValue={props.categories[props.index].description} onChange={(e) => onDescriptionChange(e)} />
             </PreviewTextWrapper>
             <PreviewImage src={props.categories[props.index].previewImage} alt='preview image' />
           </Content>

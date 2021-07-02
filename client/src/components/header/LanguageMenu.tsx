@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faLanguage } from '@fortawesome/free-solid-svg-icons';
 
-import { theme } from 'src/styles';
+// import { theme } from 'src/styles';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { commonDispatch } from 'src/redux/common/dispatch';
@@ -28,7 +28,7 @@ const LanguageDropDown = styled.div({
   }
 });
 
-const LanguageItem = styled.p<{ themeMode: ThemeMode }>((props) => ({
+const LanguageItem = styled.p((props) => ({
   width: '100%',
   padding: '.5rem',
   borderRadius: '.5rem',
@@ -36,7 +36,7 @@ const LanguageItem = styled.p<{ themeMode: ThemeMode }>((props) => ({
   cursor: 'pointer',
   userSelect: 'none',
   '&:hover': {
-    backgroundColor: theme[props.themeMode].hoverBackground
+    backgroundColor: props.theme.hoverBackground
   }
 }));
 
@@ -47,7 +47,7 @@ export function LanguageMenu() {
   };
   const currentLangCode = getCurrentLangCode();
   const lang: LangCode = useSelector<RootState, any>((state) => state.common.lang);
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   const [isLangMenuVisible, setIsLangMenuVisible] = useState(false);
 
@@ -75,7 +75,7 @@ export function LanguageMenu() {
                     commonDispatch.SetLanguage(code);
                     setIsLangMenuVisible(false);
                   }}
-                  themeMode={themeMode}
+                  // themeMode={themeMode}
                 >
                   {languages[code as LangCode]}
                 </LanguageItem>

@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 
 import { FocusWrapper } from 'src/components';
 import { ThemeMode } from 'src/redux/common/type';
-import { theme } from 'src/styles';
+// import { theme } from 'src/styles';
 import { RootState } from 'src/redux/rootReducer';
 
 const MenuContainer = styled.div({
@@ -19,19 +19,19 @@ const MenuListWrapper = styled.div({
   zIndex: 1
 });
 
-const MenuList = styled.div<{ themeMode: ThemeMode }>((props) => ({
+const MenuList = styled.div((props) => ({
   display: 'flex',
-  backgroundColor: theme[props.themeMode].secondaryContentBackground,
+  backgroundColor: props.theme.secondaryContentBackground,
   borderRadius: '.5rem',
   flexDirection: 'column'
 }));
 
-const MainButton = styled.div<{ themeMode: ThemeMode }>((props) => ({
+const MainButton = styled.div((props) => ({
   padding: '.5rem .8rem',
   borderRadius: '.5rem',
   cursor: 'pointer',
   '&:hover': {
-    backgroundColor: theme[props.themeMode].hoverBackground
+    backgroundColor: props.theme.hoverBackground
   },
   '@media screen and (max-width: 767px)': {
     padding: '.5rem'
@@ -46,16 +46,14 @@ interface Props {
 }
 
 export function DropDownMenu(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   return (
     <MenuContainer>
-      <MainButton onClick={() => props.setVisible(!props.visible)} themeMode={themeMode}>
-        {props.mainButton}
-      </MainButton>
+      <MainButton onClick={() => props.setVisible(!props.visible)}>{props.mainButton}</MainButton>
       <FocusWrapper visible={props.visible} onClickOutside={() => props.setVisible(false)}>
         <MenuListWrapper>
-          <MenuList themeMode={themeMode}>{props.dropMenu}</MenuList>
+          <MenuList>{props.dropMenu}</MenuList>
         </MenuListWrapper>
       </FocusWrapper>
     </MenuContainer>

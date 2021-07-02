@@ -46,7 +46,7 @@ const Container = styled.div({
   }
 });
 
-const ContentContainer = styled.section<{ themeMode: ThemeMode }>((props) => ({
+const ContentContainer = styled.section((props) => ({
   display: 'flex',
   flex: 3,
   margin: '0 2.5rem',
@@ -54,7 +54,7 @@ const ContentContainer = styled.section<{ themeMode: ThemeMode }>((props) => ({
   alignItems: 'center',
   justifyContent: 'center',
   borderRadius: '.5rem',
-  backgroundColor: theme[props.themeMode].articleBackground,
+  backgroundColor: props.theme.articleBackground,
   '@media screen and (max-width: 1380px)': {
     width: '72%'
   },
@@ -77,7 +77,7 @@ const Rotate = keyframes({
   }
 });
 
-const PostCategoryMobileButton = styled.button<{ themeMode: ThemeMode; holdingButton: boolean }>(
+const PostCategoryMobileButton = styled.button<{ holdingButton: boolean }>(
   (props) => ({
     display: 'flex',
     position: 'fixed',
@@ -85,8 +85,8 @@ const PostCategoryMobileButton = styled.button<{ themeMode: ThemeMode; holdingBu
     right: '1.5rem',
     padding: '.85rem',
     borderRadius: '50%',
-    backgroundColor: theme[props.themeMode].secondaryContentBackground,
-    boxShadow: `0 6px 3px -3px ${theme[props.themeMode].shadowColor}`,
+    backgroundColor: props.theme.secondaryContentBackground,
+    boxShadow: `0 6px 3px -3px ${props.theme.shadowColor}`,
     alignItems: 'center',
     justifyContent: 'center'
   }),
@@ -107,7 +107,7 @@ interface ServerSideProps {
 interface Props extends AppCommonProps, ServerSideProps {}
 
 export default function PostId(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const post: Post = props.post;
   const comments: Comments = props.comment;
   const titles: [{ title: string; _id: number }] = props.sameCategoryTitles;
@@ -166,7 +166,7 @@ export default function PostId(props: Props) {
           <PostCategory category={category} titles={titles} currentPostId={post._id} isLogin={props.app.isLogin} />
         </FocusWrapper>
       )}
-      <ContentContainer themeMode={themeMode}>
+      <ContentContainer>
         <Article title={post.title} profile={profile} createdAt={post.createdAt} article={post.article} isLogin={props.app.isLogin} />
         <Comment ref={commentRef}>
           <CommentContainer
@@ -181,7 +181,6 @@ export default function PostId(props: Props) {
       <RightSideContainer commentsCount={comments.count} scrollToComment={scrollToComment} />
       {width <= 767 && !showPostCategory && (
         <PostCategoryMobileButton
-          themeMode={themeMode}
           holdingButton={isHoldingButton}
           onClick={() => setShowPostCategory(true)}
           onTouchStart={(e) => {

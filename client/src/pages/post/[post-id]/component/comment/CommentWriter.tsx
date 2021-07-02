@@ -39,27 +39,27 @@ const UserInput = styled.div({
   }
 });
 
-const Editor = styled.pre<{ themeMode: ThemeMode }>(
+const Editor = styled.pre(
   (props) => ({
     display: 'block',
     width: '100%',
     minHeight: '5rem',
     padding: '.5rem',
-    border: `1px solid ${theme[props.themeMode].inputBorder}`,
+    border: `1px solid ${props.theme.inputBorder}`,
     borderRadius: '.5rem',
     outline: 'none',
-    backgroundColor: theme[props.themeMode].inputBackground,
+    backgroundColor: props.theme.inputBackground,
     fontFamily: '"Nanum Gothic", sans-serif',
     overflowY: 'hidden',
     resize: 'none',
     wordBreak: 'keep-all',
-    color: theme[props.themeMode].inputText
+    color: props.theme.inputText
   }),
   // Cannot use &[contenteditable]:empty::before in styled-object...
-  css<{ themeMode: ThemeMode }>`
+  css`
     &[contenteditable]:empty::before {
       content: 'Write comment...';
-      color: ${(props) => theme[props.themeMode].placeholderText};
+      color: ${(props) => props.theme.placeholderText};
     }
     &[contenteditable]:empty:focus::before {
       content: '';
@@ -67,7 +67,7 @@ const Editor = styled.pre<{ themeMode: ThemeMode }>(
   `
 );
 
-const SubmitButton = styled.button<{ themeMode: ThemeMode }>((props) => ({
+const SubmitButton = styled.button((props) => ({
   display: 'flex',
   width: '8rem',
   height: '3rem',
@@ -80,7 +80,7 @@ const SubmitButton = styled.button<{ themeMode: ThemeMode }>((props) => ({
   cursor: 'pointer',
   userSelect: 'none',
   '&:hover': {
-    backgroundColor: theme[props.themeMode].hoverBackground
+    backgroundColor: props.theme.hoverBackground
   }
 }));
 
@@ -97,7 +97,7 @@ interface Props {
 }
 
 export function CommentWriter(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   const router = useRouter();
   const [username, setUsername] = useState('');
@@ -124,7 +124,7 @@ export function CommentWriter(props: Props) {
     const AuthResponse = await client.query({ query: IS_AUTH });
     const isAdmin = AuthResponse.data.isAuth.isAuth;
     const _id = +router.query['post-id'];
-    const createdAt = new Date().toISOString();
+    const createdAt = new Date().getTime();
 
     if (isAdmin) {
       try {
@@ -140,7 +140,7 @@ export function CommentWriter(props: Props) {
         if (props.setNewComment) {
           props.setNewComment({
             comment,
-            createdAt: new Date(createdAt),
+            createdAt,
             isAdmin,
             replies: []
           });
@@ -171,7 +171,7 @@ export function CommentWriter(props: Props) {
             username,
             password,
             comment,
-            createdAt: new Date(createdAt),
+            createdAt,
             isAdmin,
             replies: []
           });
@@ -312,12 +312,10 @@ export function CommentWriter(props: Props) {
       )}
       <Editor
         role='textbox'
-        themeMode={themeMode}
         contentEditable
         onInput={(e: React.KeyboardEvent<HTMLPreElement>) => setComment(e.currentTarget.textContent || '')}
       />
       <SubmitButton
-        themeMode={themeMode}
         onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
           e.preventDefault();
           props.isReply ? submitReply() : submitComment();

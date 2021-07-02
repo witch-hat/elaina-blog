@@ -55,7 +55,11 @@ function ModeSwitchIcon(props: SwitchIconProps) {
   );
 }
 
-export function ModeSwitch() {
+interface Props {
+  changeThemeMode: (value: string) => void;
+}
+
+export function ModeSwitch(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   const [isChecked, setIsChecked] = useState(themeMode === ThemeMode.light ? false : true);
@@ -63,8 +67,12 @@ export function ModeSwitch() {
   useEffect(() => {
     if (isChecked) {
       commonDispatch.SetThemeMode(ThemeMode.dark);
+      window.localStorage.setItem('mode', ThemeMode.dark);
+      props.changeThemeMode(ThemeMode.dark);
     } else {
       commonDispatch.SetThemeMode(ThemeMode.light);
+      window.localStorage.setItem('mode', ThemeMode.light);
+      props.changeThemeMode(ThemeMode.light);
     }
   }, [isChecked]);
 

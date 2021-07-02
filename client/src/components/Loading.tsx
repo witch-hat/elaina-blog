@@ -15,7 +15,7 @@ const Container = styled.div<{ themeMode: ThemeMode }>((props) => ({
   right: '0',
   width: '100vw',
   height: '100vh',
-  backgroundColor: theme[props.themeMode].loadingBackground,
+  backgroundColor: props.theme.loadingBackground,
   justifyContent: 'center',
   alignItems: 'center'
 }));

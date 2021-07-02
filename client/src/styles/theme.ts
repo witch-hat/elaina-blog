@@ -1,42 +1,6 @@
 import { DefaultTheme } from 'styled-components';
 
-export const theme: DefaultTheme = {
-  dark: {
-    themeColor: '#2a9df4',
-    // Background Color
-    mainBackground: '#1a1a1a',
-    inputBackground: '#555',
-    hoverBackground: '#444',
-    buttonBackground: '',
-    headerBackground: 'rgb(37, 37, 37)',
-    articleBackground: '#252525',
-    secondaryContentBackground: '#313131',
-    submitButtonColor: '#2a9df4',
-    editorBackground: '#313131',
-    dangerButtonColor: '#dd0000',
-    adminCommentColor: 'rgba(77, 77, 77, 0.5)',
-    adminReplyColor: 'rgba(77, 77, 77, 0.7)',
-    loadingBackground: 'rgba(0, 0, 0, .7)',
-    // Text Color
-    blogName: '#f1f2f3',
-    mainText: '#f1f2f3',
-    detailText: '#aaa',
-    hoverText: '',
-    placeholderText: '#f1f2f3',
-    inputText: '#f1f2f3',
-    dangerContentText: '#f1f2f3',
-    // Border
-    borderColor: '#aaa',
-    inputBorder: '#111',
-    focusBorder: '#324123',
-    hoverBorderColor: '#f1f2f3',
-    invalidBorder: '#ff3d41',
-    // Others
-    navUnderBar: '#888',
-    navHoverUnderBar: '#ddd',
-    shadowColor: 'rgba(0, 0, 0, 0.9)',
-    inputOutline: 'rgba(134, 125, 255, .7)'
-  },
+export const theme: { light: DefaultTheme; dark: DefaultTheme } = {
   light: {
     themeColor: '#2a9df4',
     // Background Color
@@ -71,6 +35,42 @@ export const theme: DefaultTheme = {
     navUnderBar: '#555',
     navHoverUnderBar: '#888',
     shadowColor: 'rgba(38, 38, 38, 0.4)',
+    inputOutline: 'rgba(134, 125, 255, .7)'
+  },
+  dark: {
+    themeColor: '#2a9df4',
+    // Background Color
+    mainBackground: '#1a1a1a',
+    inputBackground: '#555',
+    hoverBackground: '#444',
+    buttonBackground: '',
+    headerBackground: 'rgb(37, 37, 37)',
+    articleBackground: '#252525',
+    secondaryContentBackground: '#313131',
+    submitButtonColor: '#2a9df4',
+    editorBackground: '#313131',
+    dangerButtonColor: '#dd0000',
+    adminCommentColor: 'rgba(77, 77, 77, 0.5)',
+    adminReplyColor: 'rgba(77, 77, 77, 0.7)',
+    loadingBackground: 'rgba(0, 0, 0, .7)',
+    // Text Color
+    blogName: '#f1f2f3',
+    mainText: '#f1f2f3',
+    detailText: '#aaa',
+    hoverText: '',
+    placeholderText: '#f1f2f3',
+    inputText: '#f1f2f3',
+    dangerContentText: '#f1f2f3',
+    // Border
+    borderColor: '#aaa',
+    inputBorder: '#111',
+    focusBorder: '#324123',
+    hoverBorderColor: '#f1f2f3',
+    invalidBorder: '#ff3d41',
+    // Others
+    navUnderBar: '#888',
+    navHoverUnderBar: '#ddd',
+    shadowColor: 'rgba(0, 0, 0, 0.9)',
     inputOutline: 'rgba(134, 125, 255, .7)'
   }
 };

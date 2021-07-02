@@ -43,7 +43,7 @@ interface Props {
 }
 
 export function AboutPage(props: Props) {
-  const theme: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  // const theme: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const about: About = props.about;
   const profile: ProfileType = props.profile;
   const updatedAt = new Date(about.updatedAt);

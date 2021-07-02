@@ -8,29 +8,29 @@ import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { CategoryDetails } from 'src/query/category';
 
-const CategoryContainer = styled.div<{ themeMode: ThemeMode }>((props) => ({
+const CategoryContainer = styled.div((props) => ({
   position: 'relative',
   width: '100%',
   padding: '.5rem 0',
-  border: `1px solid ${theme[props.themeMode].borderColor}`,
+  border: `1px solid ${props.theme.borderColor}`,
   borderRadius: '.5rem',
   cursor: 'pointer',
   wordBreak: 'break-all'
 }));
 
-const CategoryList = styled.ul<{ themeMode: ThemeMode }>((props) => ({
+const CategoryList = styled.ul((props) => ({
   position: 'absolute',
   top: '.125rem',
   left: '0',
-  border: `1px solid ${theme[props.themeMode].borderColor}`,
-  backgroundColor: theme[props.themeMode].secondaryContentBackground,
+  border: `1px solid ${props.theme.borderColor}`,
+  backgroundColor: props.theme.secondaryContentBackground,
   borderRadius: '.5rem',
-  boxShadow: `0 6px 3px -3px ${theme[props.themeMode].shadowColor}`,
+  boxShadow: `0 6px 3px -3px ${props.theme.shadowColor}`,
   userSelect: 'none',
   zIndex: 1
 }));
 
-const CategoryTitle = styled.li<{ themeMode: ThemeMode }>((props) => ({
+const CategoryTitle = styled.li((props) => ({
   display: '-webkit-box',
   width: '100%',
   height: 'fit-content',
@@ -41,7 +41,7 @@ const CategoryTitle = styled.li<{ themeMode: ThemeMode }>((props) => ({
   WebkitLineClamp: 1,
   WebkitBoxOrient: 'vertical',
   '&:hover': {
-    backgroundColor: theme[props.themeMode].hoverBackground
+    backgroundColor: props.theme.hoverBackground
   },
   '&:hover > p': {
     cursor: 'pointer'
@@ -55,17 +55,17 @@ interface Props {
 }
 
 export function CategorySelector(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   const [isListOpen, setIsListOpen] = useState(false);
 
   return (
-    <CategoryContainer themeMode={themeMode}>
+    <CategoryContainer>
       <div onClick={() => setIsListOpen(!isListOpen)}>
         <p style={{ padding: '.2rem' }}>{props.selectedCategory}</p>
       </div>
       <FocusWrapper visible={isListOpen} onClickOutside={() => setIsListOpen(false)}>
-        <CategoryList themeMode={themeMode}>
+        <CategoryList>
           {props.categories.map((category) => {
             return (
               <CategoryTitle
@@ -74,7 +74,6 @@ export function CategorySelector(props: Props) {
                   props.changeCategory(category.title);
                   setIsListOpen(false);
                 }}
-                themeMode={themeMode}
               >
                 <p>{category.title}</p>
               </CategoryTitle>

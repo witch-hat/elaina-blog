@@ -10,7 +10,7 @@ import { theme } from 'src/styles';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { CircleRippleWrapper } from 'src/components/common/wrapper/CircleRippleWrapper';
-import { CategoryDetails, GET_CATEGORY, ORDER_CATEGORY, UPDATE_CATEGORY } from 'src/query/category';
+import { CategoryDetails, ORDER_CATEGORY, UPDATE_CATEGORY } from 'src/query/category';
 
 const Container = styled.div({
   display: 'flex',
@@ -113,7 +113,7 @@ interface Props {
 }
 
 export function CategoryViewer(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   const [orderCategory] = useMutation(ORDER_CATEGORY);
 

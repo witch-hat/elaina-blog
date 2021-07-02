@@ -47,7 +47,7 @@ const UserImage = styled.img({
 });
 
 interface Props {
-  time: Date;
+  time: number;
   categoryTitle: string;
   postId: number;
   postTitle: string;
@@ -55,7 +55,7 @@ interface Props {
 }
 
 export default function CommentLogBox(props: Props) {
-  const dateDifferent = FormatUnifier.calculateDate(props.time);
+  const dateDifferent = FormatUnifier.calculateDate(new Date(props.time));
   const event = props.isEvent === null ? `User upload new comment ${dateDifferent}` : `User upload new reply ${dateDifferent}`;
   return (
     <div>

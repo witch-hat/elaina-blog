@@ -1,10 +1,10 @@
 import { createGlobalStyle } from 'styled-components';
 import 'normalize.css';
 
-import { theme } from 'src/styles/theme';
+// import { theme } from 'src/styles/theme';
 import { ThemeMode } from 'src/redux/common/type';
 
-export const GlobalStyles = createGlobalStyle<{ themeMode: ThemeMode }>`
+export const GlobalStyles = createGlobalStyle`
 	html {
 		/* scroll-behavior: smooth; */
 		font-size: 16px;
@@ -18,8 +18,8 @@ export const GlobalStyles = createGlobalStyle<{ themeMode: ThemeMode }>`
 		}
 	}
 	body {
-		background-color: ${(props) => theme[props.themeMode].mainBackground};
-		color: ${(props) => theme[props.themeMode].mainText};
+		background-color: ${(props) => props.theme.mainBackground};
+		color: ${(props) => props.theme.mainText};
 		line-height: 1.4;
 	}
 	* {
@@ -41,11 +41,11 @@ export const GlobalStyles = createGlobalStyle<{ themeMode: ThemeMode }>`
 	}
 	button {
 		background-color: inherit;
-		color: ${(props) => theme[props.themeMode].mainText};
+		color: ${(props) => props.theme.mainText};
 		user-select: none;
 		outline: none;
 		cursor: pointer;
-		border: 1px solid ${(props) => theme[props.themeMode].borderColor};
+		border: 1px solid ${(props) => props.theme.borderColor};
 	}
 	input {
 		font-weight: 200;

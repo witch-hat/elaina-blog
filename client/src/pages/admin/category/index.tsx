@@ -25,10 +25,10 @@ const ButtonWrapper = styled.div({
   justifyContent: 'flex-end'
 });
 
-const AddButton = styled.button<{ themeMode: ThemeMode }>((props) => ({
+const AddButton = styled.button((props) => ({
   padding: '.5rem',
   borderRadius: '.5rem',
-  backgroundColor: theme[props.themeMode].submitButtonColor,
+  backgroundColor: props.theme.submitButtonColor,
   color: '#f1f2f3'
 }));
 
@@ -39,7 +39,7 @@ interface Props extends AppCommonProps, ServerSideProps {
 }
 
 export default function Category(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
@@ -48,9 +48,7 @@ export default function Category(props: Props) {
       <Container>
         <PageTitle title={trans(Lang.CategoryManage)} />
         <ButtonWrapper>
-          <AddButton themeMode={themeMode} onClick={() => setIsAddModalOpen(true)}>
-            Add
-          </AddButton>
+          <AddButton onClick={() => setIsAddModalOpen(true)}>Add</AddButton>
         </ButtonWrapper>
         <CategoryContainer categories={props.categories} isAddModalOpen={isAddModalOpen} setIsAddModalOpen={setIsAddModalOpen} />
       </Container>

@@ -24,15 +24,16 @@ const Container = styled.main({
 
 interface Props extends AppCommonProps {
   children: JSX.Element | JSX.Element[];
+  changeThemeMode: (value: string) => void;
 }
 
 export function Layout(props: Props) {
-  const theme: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  // const theme: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   return (
     <>
-      <GlobalStyles themeMode={theme} />
-      <Header name={mockUpData.blogName} isLogin={props.app.isLogin} />
+      <GlobalStyles />
+      <Header name={mockUpData.blogName} isLogin={props.app.isLogin} changeThemeMode={props.changeThemeMode} />
       <Container>{props.children}</Container>
     </>
   );
