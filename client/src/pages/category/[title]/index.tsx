@@ -1,6 +1,8 @@
 import { GetServerSideProps } from 'next';
 import styled from 'styled-components';
 
+import { GET_CATEGORIES_WITH_DETAILS, CategoryDetails } from 'src/query/category';
+
 interface ServerSideProps {}
 
 interface Props extends ServerSideProps {}
