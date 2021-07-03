@@ -41,7 +41,12 @@ const FONT = `
 `;
 
 function ElainaBlog({ Component, pageProps, apolloClient, cookies }: any) {
-  const [themeMode, setThemeMode] = useState('');
+  const [themeMode, setThemeMode] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const initialState = window.localStorage.getItem('mode') || '';
+      return initialState;
+    }
+  });
 
   if (typeof window !== 'undefined') {
     if (cookies[0] && cookies[1]) {
@@ -49,10 +54,6 @@ function ElainaBlog({ Component, pageProps, apolloClient, cookies }: any) {
       document.cookie = cookies[1];
     }
   }
-
-  useEffect(() => {
-    setThemeMode(window.localStorage.getItem('mode') || '');
-  }, []);
 
   useTranslation();
 
