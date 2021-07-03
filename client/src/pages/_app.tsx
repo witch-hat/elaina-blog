@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Provider, useSelector } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { ThemeProvider } from 'styled-components';
@@ -57,7 +57,7 @@ function ElainaBlog({ Component, pageProps, apolloClient, cookies }: any) {
 
   useTranslation();
 
-  const changeThemeMode = (value: string) => setThemeMode(value);
+  const changeThemeMode = useCallback((value: string) => setThemeMode(value), []);
 
   return (
     <ApolloProvider client={apolloClient}>
