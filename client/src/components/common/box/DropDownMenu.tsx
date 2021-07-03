@@ -8,7 +8,8 @@ import { ThemeMode } from 'src/redux/common/type';
 import { RootState } from 'src/redux/rootReducer';
 
 const MenuContainer = styled.div({
-  position: 'relative'
+  position: 'relative',
+  userSelect: 'none'
 });
 
 const MenuListWrapper = styled.div({
