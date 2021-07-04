@@ -45,6 +45,8 @@ function ElainaBlog({ Component, pageProps, apolloClient, cookies }: any) {
     if (typeof window !== 'undefined') {
       const initialState = window.localStorage.getItem('mode') || '';
       return initialState;
+    } else {
+      return '';
     }
   });
 

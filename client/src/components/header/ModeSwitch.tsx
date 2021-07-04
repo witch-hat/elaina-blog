@@ -60,17 +60,26 @@ interface Props {
 }
 
 export function ModeSwitch(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
-  const [isChecked, setIsChecked] = useState(themeMode === ThemeMode.light ? false : true);
+  const [isChecked, setIsChecked] = useState(() => {
+    if (typeof window !== 'undefined') {
+      if (window.localStorage.getItem('mode') === 'dark') return true;
+      else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  });
 
   useEffect(() => {
     if (isChecked) {
-      commonDispatch.SetThemeMode(ThemeMode.dark);
+      // commonDispatch.SetThemeMode(ThemeMode.dark);
       window.localStorage.setItem('mode', ThemeMode.dark);
       props.changeThemeMode(ThemeMode.dark);
     } else {
-      commonDispatch.SetThemeMode(ThemeMode.light);
+      // commonDispatch.SetThemeMode(ThemeMode.light);
       window.localStorage.setItem('mode', ThemeMode.light);
       props.changeThemeMode(ThemeMode.light);
     }

@@ -41,9 +41,7 @@ export function NavigationButton(props: Props) {
 
   return (
     <Link href={props.href ? props.href : { query: { tab: props.query } }} shallow>
-      <NavButtons isSelected={router.query['tab'] === props.query} themeMode={themeMode}>
-        {props.children}
-      </NavButtons>
+      <NavButtons isSelected={router.query['tab'] === props.query}>{props.children}</NavButtons>
     </Link>
   );
 }
