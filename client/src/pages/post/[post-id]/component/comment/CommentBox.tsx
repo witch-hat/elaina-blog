@@ -102,13 +102,13 @@ const ModalButtonContainer = styled.div({
   justifyContent: 'flex-end'
 });
 
-const ModalButton = styled.button<{ themeMode?: ThemeMode }>((props) => ({
+const ModalButton = styled.button<{ danger?: boolean }>((props) => ({
   width: '4.5rem',
   padding: '.5rem',
   marginLeft: '.5rem',
   borderRadius: '.5rem',
-  backgroundColor: props.themeMode ? theme[props.themeMode].dangerButtonColor : 'inherit',
-  color: props.themeMode ? theme[props.themeMode].dangerContentText : 'inherit'
+  backgroundColor: props.danger ? props.theme.dangerButtonColor : 'inherit',
+  color: props.danger ? props.theme.dangerContentText : 'inherit'
 }));
 
 const EditContainer = styled.div({
@@ -159,7 +159,7 @@ interface Props {
 
 export function CommentBox(props: Props) {
   const createdAt = new Date(props.comment.createdAt);
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -490,7 +490,7 @@ export function CommentBox(props: Props) {
                   handleDeleteComment();
                 }
               }}
-              themeMode={themeMode}
+              danger
             >
               {props.isLogin ? '예' : '삭제'}
             </ModalButton>

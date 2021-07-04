@@ -59,12 +59,12 @@ Label.defaultProps = {
   isBold: false
 };
 
-const LogInButton = styled.button<{ themeMode: ThemeMode }>((props) => ({
+const LogInButton = styled.button((props) => ({
   width: '85%',
   height: '2.5rem',
   marginTop: '24px',
   borderRadius: '.5rem',
-  backgroundColor: theme[props.themeMode].submitButtonColor,
+  backgroundColor: props.theme.submitButtonColor,
   color: '#f1f2f3'
 }));
 
@@ -84,7 +84,7 @@ interface Props extends ServerSideProps {
 }
 
 export default function Login(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   const router = useRouter();
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -197,7 +197,7 @@ export default function Login(props: Props) {
         <MessageBox>
           <Label color={'red'}>{errorMessage}</Label>
         </MessageBox>
-        <LogInButton ref={buttonRef} type='submit' themeMode={themeMode}>
+        <LogInButton ref={buttonRef} type='submit'>
           <LogInText>로그인</LogInText>
         </LogInButton>
         <HelpWrapper></HelpWrapper>

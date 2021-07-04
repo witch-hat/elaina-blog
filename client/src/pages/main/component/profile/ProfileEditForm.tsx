@@ -27,7 +27,7 @@ const ImageContainer = styled.div({
   justifyContent: 'center'
 });
 
-const ChangeImageButton = styled.label<{ themeMode: ThemeMode }>((props) => ({
+const ChangeImageButton = styled.label((props) => ({
   display: 'flex',
   position: 'absolute',
   top: '250px',
@@ -38,7 +38,7 @@ const ChangeImageButton = styled.label<{ themeMode: ThemeMode }>((props) => ({
   margin: '0 0 .5rem .5rem',
   border: '1px solid #222',
   borderRadius: '.5rem',
-  backgroundColor: theme[props.themeMode].secondaryContentBackground,
+  backgroundColor: props.theme.secondaryContentBackground,
   alignItems: 'center',
   justifyContent: 'center',
   cursor: 'pointer',
@@ -64,16 +64,16 @@ const InputContainer = styled.div({
   alignItems: 'center'
 });
 
-const Editor = styled.textarea<{ themeMode: ThemeMode }>((props) => ({
+const Editor = styled.textarea((props) => ({
   display: 'block',
   width: '100%',
   height: '5rem',
   padding: '.2rem',
   outline: 'none',
-  border: `1px solid ${theme[props.themeMode].inputBorder}`,
+  border: `1px solid ${props.theme.inputBorder}`,
   borderRadius: '.5rem',
-  backgroundColor: theme[props.themeMode].inputBackground,
-  color: theme[props.themeMode].inputText,
+  backgroundColor: props.theme.inputBackground,
+  color: props.theme.inputText,
   whiteSpace: 'pre-wrap',
   wordBreak: 'break-word',
   fontSize: '1.0rem',
@@ -94,16 +94,16 @@ const ButtonContainer = styled.div({
   justifyContent: 'center'
 });
 
-const Button = styled.button<{ themeMode: ThemeMode; isSubmit?: boolean }>((props) => ({
+const Button = styled.button<{ isSubmit?: boolean }>((props) => ({
   display: 'flex',
   width: '47.5%',
   padding: '.5rem',
   marginRight: props.isSubmit ? '5%' : '0',
   borderRadius: '.5rem',
-  backgroundColor: props.isSubmit ? theme[props.themeMode].submitButtonColor : 'inherit',
+  backgroundColor: props.isSubmit ? props.theme.submitButtonColor : 'inherit',
   cursor: 'pointer',
   justifyContent: 'center',
-  color: props.isSubmit ? '#f1f2f3' : theme[props.themeMode].mainText,
+  color: props.isSubmit ? '#f1f2f3' : props.theme.mainText,
   userSelect: 'none',
   '@media screen and (max-width: 767px)': {
     maxWidth: '150px'
@@ -127,7 +127,7 @@ interface Props {
 }
 
 export function ProfileEditForm(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   const [isSelectImage, setIsSelectImage] = useState(false);
   const [croppedImageFile, setCroppedImageFile] = useState<Blob>();
@@ -236,7 +236,7 @@ export function ProfileEditForm(props: Props) {
             small: { width: '200px', height: '200px' }
           }}
         />
-        <ChangeImageButton htmlFor='profile-select' themeMode={themeMode}>
+        <ChangeImageButton htmlFor='profile-select'>
           <ProfileIcon icon={faCamera} />
           Edit
         </ChangeImageButton>
@@ -262,7 +262,6 @@ export function ProfileEditForm(props: Props) {
         </InputContainer>
         <Editor
           placeholder='Introduce'
-          themeMode={themeMode}
           role='textbox'
           defaultValue={editingProfile.introduce}
           onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -299,11 +298,10 @@ export function ProfileEditForm(props: Props) {
         </InputContainer>
       </Form>
       <ButtonContainer>
-        <Button themeMode={themeMode} form='profile-form' type='submit' isSubmit={true}>
+        <Button form='profile-form' type='submit' isSubmit={true}>
           {trans(Lang.Save)}
         </Button>
         <Button
-          themeMode={themeMode}
           onClick={() => {
             props.setEditMode(false);
           }}

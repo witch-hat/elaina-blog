@@ -13,9 +13,9 @@ import { CommentBox } from './CommentBox';
 import { CommentWriter } from './CommentWriter';
 import { ReplyElement } from './ReplyElement';
 
-const Container = styled.div<{ themeMode: ThemeMode; isAdmin: boolean }>((props) => ({
+const Container = styled.div<{ isAdmin: boolean }>((props) => ({
   borderRadius: '.5rem',
-  backgroundColor: props.isAdmin ? theme[props.themeMode].adminCommentColor : 'inherit'
+  backgroundColor: props.isAdmin ? props.theme.adminCommentColor : 'inherit'
 }));
 
 const ReplyButtonContainer = styled.div({
@@ -58,7 +58,7 @@ interface Props {
 }
 
 export function CommentElement(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  // ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   const [isShowingReply, setIsShowingReply] = useState(false);
   const [isAddReply, setIsAddReply] = useState(false);
@@ -97,7 +97,7 @@ export function CommentElement(props: Props) {
   }, [deletedReplyIndex]);
 
   return (
-    <Container themeMode={themeMode} isAdmin={props.isCommentFromAdmin}>
+    <Container isAdmin={props.isCommentFromAdmin}>
       <BorderBox isTransform={false} styles={{ margin: '1rem 0 0', width: '100%' }}>
         <CommentBox
           isLogin={props.isLogin}

@@ -7,7 +7,7 @@ import { useMutation } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 
-import { theme } from 'src/styles';
+// import { theme } from 'src/styles';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { trans, Lang } from 'src/resources/languages';
@@ -17,7 +17,7 @@ import { DropDownMenu } from '../common/box/DropDownMenu';
 
 const AdminDropDown = styled.div({});
 
-const MenuItem = styled.a<{ themeMode: ThemeMode }>((props) => {
+const MenuItem = styled.a((props) => {
   return {
     padding: '.5rem',
     borderRadius: '.5rem',
@@ -26,7 +26,7 @@ const MenuItem = styled.a<{ themeMode: ThemeMode }>((props) => {
     userSelect: 'none',
     wordBreak: 'keep-all',
     '&:hover': {
-      backgroundColor: theme[props.themeMode].hoverBackground
+      backgroundColor: props.theme.hoverBackground
     }
   };
 });
@@ -72,13 +72,10 @@ export function AdminMenu(props: Props) {
         dropMenu={
           <>
             <Link href='/admin'>
-              <MenuItem themeMode={themeMode} onClick={() => setIsAdminMenuOpen(false)}>
-                {trans(Lang.Admin)}
-              </MenuItem>
+              <MenuItem onClick={() => setIsAdminMenuOpen(false)}>{trans(Lang.Admin)}</MenuItem>
             </Link>
             {props.isLogin ? (
               <MenuItem
-                themeMode={themeMode}
                 onClick={() => {
                   logout();
                 }}
@@ -87,9 +84,7 @@ export function AdminMenu(props: Props) {
               </MenuItem>
             ) : (
               <Link href={{ pathname: '/admin/login', query: { url: router.asPath } }}>
-                <MenuItem themeMode={themeMode} onClick={() => setIsAdminMenuOpen(false)}>
-                  {trans(Lang.Login)}
-                </MenuItem>
+                <MenuItem onClick={() => setIsAdminMenuOpen(false)}>{trans(Lang.Login)}</MenuItem>
               </Link>
             )}
           </>

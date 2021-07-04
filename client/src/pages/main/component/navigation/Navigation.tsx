@@ -34,7 +34,7 @@ function NavigationIcon(props: IconProps) {
 interface Props {}
 
 export function Navigation(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   const router = useRouter();
 

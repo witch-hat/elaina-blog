@@ -9,7 +9,7 @@ import { ThemeMode } from 'src/redux/common/type';
 
 interface ContainerProps {
   isActive: boolean;
-  themeMode: ThemeMode;
+  // themeMode: ThemeMode;
 }
 
 const Toggle = styled.div({
@@ -25,7 +25,7 @@ const Toggle = styled.div({
   display: 'none'
 });
 
-const Container = styled.div<ContainerProps>((props: ContainerProps) => {
+const Container = styled.div<{ isActive: boolean }>((props) => {
   return {
     display: 'flex',
     width: '2rem',
@@ -38,7 +38,7 @@ const Container = styled.div<ContainerProps>((props: ContainerProps) => {
     borderRadius: '.5rem',
     cursor: props.isActive ? 'pointer' : 'not-allowed',
     '&:hover': {
-      border: props.isActive ? `1px solid ${theme[props.themeMode].hoverBorderColor}` : '1px solid transparent'
+      border: props.isActive ? `1px solid ${props.theme.hoverBorderColor}` : '1px solid transparent'
     },
     [`&:hover ${Toggle}`]: {
       display: 'block'
@@ -54,10 +54,10 @@ interface Props {
 }
 
 export function MenuButton(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   return (
-    <Container onClick={() => props.onClick()} isActive={props.isActive} themeMode={themeMode}>
+    <Container onClick={() => props.onClick()} isActive={props.isActive}>
       {props.children}
       <Toggle>
         <p>{props.desc}</p>

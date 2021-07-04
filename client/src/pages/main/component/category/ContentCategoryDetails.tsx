@@ -9,10 +9,10 @@ import { theme } from 'src/styles';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 
-const Container = styled.div<{ themeMode: ThemeMode }>((props) => ({
+const Container = styled.div((props) => ({
   display: 'flex',
   marginTop: '.4rem',
-  color: theme[props.themeMode].detailText,
+  color: props.theme.detailText,
   fontSize: '.8rem'
 }));
 
@@ -33,10 +33,10 @@ interface Props {
 }
 
 export function ContentCategoryDetails(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   return (
-    <Container themeMode={themeMode}>
+    <Container>
       <LatestTime>
         <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
         <p>{props.time !== null ? FormatUnifier.getFullFormatDate(new Date(props.time)) : 'None'}</p>

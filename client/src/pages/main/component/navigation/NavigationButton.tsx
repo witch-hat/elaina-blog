@@ -9,23 +9,21 @@ import { ThemeMode } from 'src/redux/common/type';
 
 interface ButtonProps {
   isSelected: boolean;
-  themeMode: string;
+  // themeMode: string;
 }
 
 const NavButtons = styled.a<ButtonProps>((props) => {
   return {
     display: 'flex',
     padding: '.5rem 1rem',
-    boxShadow: props.isSelected ? `inset 0 -3px 0 ${theme[props.themeMode].navUnderBar}` : 'none',
+    boxShadow: props.isSelected ? `inset 0 -3px 0 ${props.theme.navUnderBar}` : 'none',
     alignItems: 'center',
     fontSize: '1.25rem',
     cursor: 'pointer',
     transition: '.2s all',
     userSelect: 'none',
     '&:hover': {
-      boxShadow: props.isSelected
-        ? `inset 0 -3px 0 ${theme[props.themeMode].navUnderBar}`
-        : `inset 0 -3px 0 ${theme[props.themeMode].navHoverUnderBar}`
+      boxShadow: props.isSelected ? `inset 0 -3px 0 ${props.theme.navUnderBar}` : `inset 0 -3px 0 ${props.theme.navHoverUnderBar}`
     }
   };
 });
@@ -37,15 +35,13 @@ interface Props {
 }
 
 export function NavigationButton(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   const router = useRouter();
 
   return (
     <Link href={props.href ? props.href : { query: { tab: props.query } }} shallow>
-      <NavButtons isSelected={router.query['tab'] === props.query} themeMode={themeMode}>
-        {props.children}
-      </NavButtons>
+      <NavButtons isSelected={router.query['tab'] === props.query}>{props.children}</NavButtons>
     </Link>
   );
 }

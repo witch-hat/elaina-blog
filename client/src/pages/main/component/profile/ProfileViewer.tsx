@@ -159,7 +159,7 @@ interface Props {
 }
 
 export function ProfileViewer(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   let animationDelay = 1;
 
   return (

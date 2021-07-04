@@ -29,13 +29,13 @@ const ModalButtonContainer = styled.div({
   justifyContent: 'flex-end'
 });
 
-const ModalButton = styled.button<{ themeMode?: ThemeMode }>((props) => ({
+const ModalButton = styled.button<{ delete?: boolean }>((props) => ({
   width: '4.5rem',
   padding: '.5rem',
   marginLeft: '.5rem',
   borderRadius: '.5rem',
-  backgroundColor: props.themeMode ? theme[props.themeMode].dangerButtonColor : 'inherit',
-  color: props.themeMode ? theme[props.themeMode].dangerContentText : 'inherit'
+  backgroundColor: props.delete ? props.theme.dangerButtonColor : 'inherit',
+  color: props.delete ? props.theme.dangerContentText : 'inherit'
 }));
 
 interface Props {
@@ -55,7 +55,7 @@ interface Props {
 }
 
 export function DeleteCategoryModal(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   const router = useRouter();
 
@@ -117,7 +117,7 @@ export function DeleteCategoryModal(props: Props) {
               props.setDeletedCategory({ isModalOpen: false });
               handleDeleteCategory();
             }}
-            themeMode={themeMode}
+            delete
           >
             예
           </ModalButton>

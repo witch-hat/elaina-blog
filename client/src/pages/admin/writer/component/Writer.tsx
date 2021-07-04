@@ -20,10 +20,10 @@ import { IS_AUTH } from 'src/query/user';
 import { Menu } from './Menu';
 import { CategorySelector } from './CategorySelector';
 
-const Container = styled.div<{ themeMode: ThemeMode }>((props) => ({
+const Container = styled.div({
   display: 'flex',
   width: '100%'
-}));
+});
 
 const Title = styled.div({
   width: '100%',
@@ -36,7 +36,7 @@ const EditorContainer = styled.div({
   flex: '1'
 });
 
-const Editor = styled.div<{ themeMode: ThemeMode }>((props) => ({
+const Editor = styled.div((props) => ({
   display: 'flex',
   width: '100%',
   flexDirection: 'column',
@@ -45,12 +45,12 @@ const Editor = styled.div<{ themeMode: ThemeMode }>((props) => ({
   fontFamily: "'Nanum Gothic', sans-serif",
   outline: 'none',
   padding: '.5rem',
-  border: `1px solid ${theme[props.themeMode].borderColor}`,
+  border: `1px solid ${props.theme.borderColor}`,
   borderRadius: '.5rem',
   wordBreak: 'break-word',
   whiteSpace: 'pre-wrap',
   overflowY: 'auto',
-  backgroundColor: theme[props.themeMode].editorBackground
+  backgroundColor: props.theme.editorBackground
 }));
 
 const PreviewContainer = styled.div({
@@ -87,10 +87,10 @@ const ButtonContainer = styled.div({
   margin: '.5rem 0'
 });
 
-const WriteButton = styled.button<{ themeMode: ThemeMode; available: boolean }>((props) => ({
+const WriteButton = styled.button<{ available: boolean }>((props) => ({
   padding: '.5rem',
   borderRadius: '.5rem',
-  backgroundColor: theme[props.themeMode].submitButtonColor,
+  backgroundColor: props.theme.submitButtonColor,
   color: '#f1f2f3',
   cursor: props.available ? 'pointer' : 'not-allowed'
 }));
@@ -116,7 +116,7 @@ interface Props {
 }
 
 export function Writer(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   const width = useWidth();
   const router = useRouter();
@@ -281,7 +281,7 @@ export function Writer(props: Props) {
   }
 
   return (
-    <Container themeMode={themeMode}>
+    <Container>
       <EditorContainer>
         <MoblieModeButton onClick={() => handleButtonClick()}>{mode === Mode.write ? Mode.preview : Mode.write}</MoblieModeButton>
         {((width <= 767 && mode === Mode.write) || width > 767) && (
@@ -309,13 +309,11 @@ export function Writer(props: Props) {
               onKeyDown={handleKeyDown}
               onPaste={handlePaste}
               onInput={parseTextContent}
-              themeMode={themeMode}
             >
               <Text></Text>
             </Editor>
             <ButtonContainer>
               <WriteButton
-                themeMode={themeMode}
                 available={visibleSubmitBtn}
                 onClick={() => {
                   if (visibleSubmitBtn) {

@@ -31,8 +31,6 @@ interface ServerSideProps {
 interface Props extends ServerSideProps {}
 
 export default function DevicePage(props: Props) {
-  console.log(props.loginDevices);
-
   return (
     <AdminPageLayout>
       <Container>

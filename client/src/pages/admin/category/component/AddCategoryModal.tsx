@@ -41,18 +41,18 @@ const PreviewTextWrapper = styled.div({
   alignItems: 'flex-start'
 });
 
-const Input = styled.input<{ themeMode: ThemeMode }>((props) => ({
+const Input = styled.input((props) => ({
   display: 'inline-block',
   width: '100%',
   height: '2rem',
   padding: '.2rem',
   outline: 'none',
-  border: `1px solid ${theme[props.themeMode].inputBorder}`,
-  backgroundColor: theme[props.themeMode].inputBackground,
+  border: `1px solid ${props.theme.inputBorder}`,
+  backgroundColor: props.theme.inputBackground,
   borderRadius: '.5rem',
   fontSize: '1.1rem',
   fontWeight: 'normal',
-  color: theme[props.themeMode].inputText
+  color: props.theme.inputText
 }));
 
 const ModalContainer = styled.div<{ width: string }>((props) => ({
@@ -72,13 +72,13 @@ const ModalButtonContainer = styled.div({
   justifyContent: 'flex-end'
 });
 
-const ModalButton = styled.button<{ themeMode?: ThemeMode }>((props) => ({
+const ModalButton = styled.button<{ save?: boolean }>((props) => ({
   width: '4.5rem',
   padding: '.5rem',
   marginLeft: '.5rem',
   borderRadius: '.5rem',
-  backgroundColor: props.themeMode ? theme[props.themeMode].dangerButtonColor : 'inherit',
-  color: props.themeMode ? theme[props.themeMode].dangerContentText : 'inherit'
+  backgroundColor: props.save ? props.theme.dangerButtonColor : 'inherit',
+  color: props.save ? props.theme.dangerContentText : 'inherit'
 }));
 
 const SelectedImage = styled.div({
@@ -134,7 +134,7 @@ export function AddCategoryModal(props: Props) {
         description,
         previewImage,
         postCount: 0,
-        recentCreatedAt: new Date(),
+        recentCreatedAt: new Date().getTime(),
         order: props.categories.length
       });
 
@@ -159,14 +159,8 @@ export function AddCategoryModal(props: Props) {
         <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
           <Content>
             <PreviewTextWrapper>
-              <Input type='text' themeMode={themeMode} placeholder='Title' value={title} onChange={(e) => setTitle(e.target.value)} />
-              <Input
-                type='text'
-                themeMode={themeMode}
-                placeholder='Description'
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              />
+              <Input type='text' placeholder='Title' value={title} onChange={(e) => setTitle(e.target.value)} />
+              <Input type='text' placeholder='Description' value={description} onChange={(e) => setDescription(e.target.value)} />
             </PreviewTextWrapper>
             <SelectedImage>
               <label htmlFor='category-image-select'>
@@ -177,7 +171,6 @@ export function AddCategoryModal(props: Props) {
                 <Input
                   id='category-image-select'
                   type='file'
-                  themeMode={themeMode}
                   accept='image/x-png,image/jpeg'
                   onChange={(e) => setPreviewImage(e.target.value)}
                 />
@@ -191,7 +184,7 @@ export function AddCategoryModal(props: Props) {
               props.setIsAddModalOpen(false);
               addNewCategory();
             }}
-            themeMode={themeMode}
+            save={true}
           >
             저장
           </ModalButton>
