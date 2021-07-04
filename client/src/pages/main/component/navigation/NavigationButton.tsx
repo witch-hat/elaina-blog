@@ -40,8 +40,10 @@ export function NavigationButton(props: Props) {
   const router = useRouter();
 
   return (
-    <Link href={props.href ? props.href : { query: { tab: props.query } }}>
-      <NavButtons isSelected={router.query['tab'] === props.query}>{props.children}</NavButtons>
+    <Link href={props.href ? props.href : { query: { tab: props.query } }} shallow>
+      <NavButtons isSelected={router.query['tab'] === props.query} themeMode={themeMode}>
+        {props.children}
+      </NavButtons>
     </Link>
   );
 }

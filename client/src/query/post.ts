@@ -62,6 +62,8 @@ export const GET_LASTEST_POSTS = gql`
   query {
     getLatestPostsEachCategory {
       _id
+      categoryId
+      article
     }
   }
 `;

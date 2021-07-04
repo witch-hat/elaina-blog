@@ -14,7 +14,7 @@ import { AboutPage } from './main/about/About';
 import { ContentCategory } from './main/component/category/ContentCategory';
 
 interface ServerSideProps {
-  latestPosts: [{ _id: number }];
+  latestPosts: ({ _id: number; categoryId: number; article: string } | null)[];
   profile: ProfileType;
   categories: CategoryDetails[];
   about: About;

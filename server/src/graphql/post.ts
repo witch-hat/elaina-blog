@@ -97,11 +97,13 @@ export const postResolver = {
     async getLatestPostsEachCategory() {
       const categories = await CategoryModel.find({}, {}, { sort: { order: 1 } });
 
-      const posts: Post[] = [];
+      const posts: (Post | null)[] = [];
       for (const category of categories) {
-        const post = await PostModel.findOne({ categoryId: category._id }, {}, { sort: { _id: -1 } });
+        const post: Post = await PostModel.findOne({ categoryId: category._id }, {}, { sort: { _id: -1 } });
         if (post) {
           posts.push(post);
+        } else {
+          posts.push(null);
         }
       }
 
