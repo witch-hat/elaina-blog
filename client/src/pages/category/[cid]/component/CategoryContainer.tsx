@@ -1,10 +1,20 @@
 import styled from 'styled-components';
 
 import { CategoryDetails } from 'src/query/category';
+import { CategoryItem } from './CategoryItem';
 
 const Container = styled.div({
+  position: 'sticky',
+  top: 'calc(4rem + 20px)',
   width: '300px'
 });
+
+const Description = styled.p({
+  fontSize: '1.1rem',
+  fontWeight: 'bold'
+});
+
+const CategoryList = styled.ul({});
 
 const CategoryTitle = styled.p({
   display: '-webkit-box',
@@ -24,9 +34,12 @@ interface Props {
 export function CategoryContainer(props: Props) {
   return (
     <Container>
-      {props.categories.map((category) => {
-        return <CategoryTitle>{category.title}</CategoryTitle>;
-      })}
+      <Description>Categories</Description>
+      <CategoryList>
+        {props.categories.map((category) => {
+          return <CategoryItem key={category.title} title={category.title} id={category._id} />;
+        })}
+      </CategoryList>
     </Container>
   );
 }
