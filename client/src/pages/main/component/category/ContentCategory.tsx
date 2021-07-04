@@ -43,7 +43,7 @@ const Item = styled.div(
 
 interface Props {
   categories: CategoryDetails[];
-  latestPosts: [{ _id: number }];
+  latestPosts: ({ _id: number; categoryId: number; article: string } | null)[];
   isLogin: boolean;
 }
 
@@ -70,8 +70,12 @@ export function ContentCategory(props: Props) {
             }
           }
           return (
-            <Item key={category.title} onClick={() => router.push(`/post/${props.latestPosts[index]._id}`)} index={index}>
-              <ContentCategoryItem category={category} />
+            <Item key={category.title} onClick={() => {}} index={index}>
+              <Link href={`/category/${category._id}`}>
+                <a>
+                  <ContentCategoryItem category={category} />
+                </a>
+              </Link>
             </Item>
           );
         })}
