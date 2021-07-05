@@ -35,7 +35,15 @@ export const theme: { light: DefaultTheme; dark: DefaultTheme } = {
     navUnderBar: '#555',
     navHoverUnderBar: '#888',
     shadowColor: 'rgba(38, 38, 38, 0.4)',
-    inputOutline: 'rgba(134, 125, 255, .7)'
+    inputOutline: 'rgba(134, 125, 255, .7)',
+    // Nav
+    navList: {
+      selectedColor: '#867dff',
+      selectedBorderLeft: '2px solid #867dff',
+      hoverColor: 'inherit',
+      hoverMarginLeft: '.35rem',
+      hoverBorderLeft: '2px solid #121314'
+    }
   },
   dark: {
     themeColor: '#2a9df4',
@@ -71,6 +79,14 @@ export const theme: { light: DefaultTheme; dark: DefaultTheme } = {
     navUnderBar: '#888',
     navHoverUnderBar: '#ddd',
     shadowColor: 'rgba(0, 0, 0, 0.9)',
-    inputOutline: 'rgba(134, 125, 255, .7)'
+    inputOutline: 'rgba(134, 125, 255, .7)',
+    // Nav
+    navList: {
+      selectedColor: '#867dff',
+      selectedBorderLeft: '2px solid #867dff',
+      hoverColor: 'inherit',
+      hoverMarginLeft: '.35rem',
+      hoverBorderLeft: `2px solid #f1f2f3`
+    }
   }
 };

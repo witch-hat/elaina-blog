@@ -1,6 +1,14 @@
 import 'styled-components';
 
 declare module 'styled-components' {
+  export interface NavList {
+    selectedColor: string;
+    selectedBorderLeft: string;
+    hoverColor: string;
+    hoverMarginLeft: string;
+    hoverBorderLeft: string;
+  }
+
   export interface DefaultTheme {
     themeColor: string;
     // Background Color
@@ -36,5 +44,8 @@ declare module 'styled-components' {
     navHoverUnderBar: string;
     shadowColor: string;
     inputOutline: string;
+
+    // Nav
+    navList: NavList;
   }
 }
