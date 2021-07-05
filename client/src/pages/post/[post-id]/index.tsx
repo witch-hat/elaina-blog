@@ -159,13 +159,13 @@ export default function PostId(props: Props) {
     // onTouchStart={(event: React.TouchEvent) => handleTouchStart(event)}
     // onTouchEnd={(event: React.TouchEvent) => handleTouchEnd(event)}
     >
-      {width > 767 ? (
+      {/* {width > 767 ? (
         <PostCategory category={category} titles={titles} currentPostId={post._id} isLogin={props.app.isLogin} />
       ) : (
         <FocusWrapper visible={showPostCategory} onClickOutside={() => setShowPostCategory(false)}>
           <PostCategory category={category} titles={titles} currentPostId={post._id} isLogin={props.app.isLogin} />
         </FocusWrapper>
-      )}
+      )} */}
       <ContentContainer>
         <Article title={post.title} profile={profile} createdAt={post.createdAt} article={post.article} isLogin={props.app.isLogin} />
         <Comment ref={commentRef}>
