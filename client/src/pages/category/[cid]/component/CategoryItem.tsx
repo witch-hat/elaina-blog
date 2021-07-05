@@ -5,17 +5,19 @@ import { useRouter } from 'next/router';
 const Container = styled.li<{ isSelected: boolean }>((props) => ({
   width: '100%',
   padding: '.5rem 0',
-  borderLeft: props.isSelected ? '2px solid #867dff' : 'none',
-  borderBottom: `1px solid #000`,
+  borderLeft: props.isSelected ? props.theme.navList.selectedBorderLeft : 'none',
+  borderBottom: `1px solid ${props.theme.borderColor}`,
   fontWeight: props.isSelected ? 'bold' : 'normal',
-  color: props.isSelected ? '#867dff' : 'inherit',
+  color: props.isSelected ? props.theme.navList.selectedColor : 'inherit',
   textDecoration: props.isSelected ? 'underline' : 'none',
   listStyle: 'none',
   transition: '.2s all',
+  userSelect: 'none',
   '&:hover': {
-    color: 'inherit',
-    marginLeft: '.35rem',
-    borderLeft: '2px solid #000',
+    color: props.theme.navList.hoverColor,
+    marginLeft: props.theme.navList.hoverMarginLeft,
+    borderLeft: props.theme.navList.hoverBorderLeft,
+    fontWeight: 'bold',
     cursor: 'pointer'
   }
 }));
