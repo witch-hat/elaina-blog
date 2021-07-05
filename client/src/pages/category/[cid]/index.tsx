@@ -18,7 +18,7 @@ const Container = styled.div({
 
 interface ServerSideProps {
   categoryData: CategoryDetails[];
-  postData: { _id: number; title: string }[];
+  postData: { _id: number; title: string; article: string }[];
 }
 
 interface Props extends ServerSideProps {}
