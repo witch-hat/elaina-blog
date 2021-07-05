@@ -50,6 +50,7 @@ export const FIND_SAME_CATEGORY_POSTS = gql`
       post {
         _id
         title
+        article
       }
       category {
         title
