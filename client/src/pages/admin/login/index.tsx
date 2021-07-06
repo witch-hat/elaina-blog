@@ -1,4 +1,4 @@
-import React, { useRef, useState, FormEvent } from 'react';
+import React, { useRef, useState, FormEvent, useEffect } from 'react';
 import styled from 'styled-components';
 import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
@@ -102,6 +102,12 @@ export default function Login(props: Props) {
       handleSubmitError(err.message);
     }
   });
+
+  // prefetch
+  useEffect(() => {
+    const prefetchURL = `${router.query.url}`.replaceAll('%2F', '/');
+    router.prefetch(prefetchURL);
+  }, []);
 
   function controlEnterKey(e: React.KeyboardEvent<HTMLDivElement>, myInputRef: HTMLInputElement, otherInputRef: HTMLInputElement) {
     e.preventDefault();
