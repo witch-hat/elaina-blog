@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import dynamic from 'next/dynamic';
 
 import { AlertBox, AlertStateType } from 'src/components';
 import { ProfileType } from 'src/query/profile';
 
-import { ProfileEditForm } from './ProfileEditForm';
+import { ProfileEditor } from './ProfileEditor';
 import { ProfileViewer } from './ProfileViewer';
 
 interface Props {}
@@ -50,7 +51,7 @@ export function ProfileContainer(props: Props) {
   return (
     <Container>
       {isEditMode ? (
-        <ProfileEditForm
+        <ProfileEditor
           profile={profile}
           alertState={alertState}
           setEditMode={setIsEditMode}

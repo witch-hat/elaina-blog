@@ -1,10 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
-
-import { theme } from 'src/styles';
-import { RootState } from 'src/redux/rootReducer';
-import { ThemeMode } from 'src/redux/common/type';
 
 const Input = styled.input((props) => ({
   display: 'inline-block',
@@ -27,15 +22,14 @@ interface Props {
 }
 
 export function ProfileInput(props: Props) {
-  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
-
   return (
     <Input
       placeholder={props.placeholder}
-      // themeMode={themeMode}
       type='text'
-      defaultValue={props.defaultValue}
+      value={props.defaultValue}
       onChange={(event: React.ChangeEvent<HTMLInputElement>) => props.changeEditingProfile(event)}
     />
   );
 }
+
+export const MemoizedProfileInput = React.memo(ProfileInput, (prev, next) => prev.defaultValue === next.defaultValue);
