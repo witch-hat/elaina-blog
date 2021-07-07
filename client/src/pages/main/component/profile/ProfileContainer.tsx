@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
 import dynamic from 'next/dynamic';
 
@@ -50,9 +50,9 @@ export function ProfileContainer(props: Props) {
   const [profile, setProfile] = useState<ProfileType>(props.profile);
   const [alertState, setAlertState] = useState<AlertStateType>(initAlertState);
 
-  function applyUpdatedProfile(profile: ProfileType) {
-    setProfile(profile);
-  }
+  const applyUpdatedProfile = useCallback((profile: ProfileType) => setProfile(profile), []);
+
+  const enterEditMode = useCallback(() => setIsEditMode(true), []);
 
   return (
     <Container>
@@ -65,7 +65,7 @@ export function ProfileContainer(props: Props) {
           updateProfile={applyUpdatedProfile}
         />
       ) : (
-        <ProfileViewer profile={profile} isLogin={props.isLogin} setEditMode={setIsEditMode} />
+        <ProfileViewer profile={profile} isLogin={props.isLogin} enterEditMode={enterEditMode} />
       )}
       {alertState.isPop && (
         <DynamicAlertBox
@@ -79,3 +79,5 @@ export function ProfileContainer(props: Props) {
     </Container>
   );
 }
+
+export const MemoizedProfileContainer = React.memo(ProfileContainer);

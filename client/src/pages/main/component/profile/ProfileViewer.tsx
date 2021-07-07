@@ -1,16 +1,11 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import styled, { keyframes, css } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBuilding, faEnvelope, faLink, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 import { RoundImage } from 'src/components';
-import { theme } from 'src/styles';
 import { ProfileType } from 'src/query/profile';
 import { Lang, trans } from 'src/resources/languages';
-import { RootState } from 'src/redux/rootReducer';
-import { ThemeMode } from 'src/redux/common/type';
 
 const MoveRight = keyframes({
   from: {
@@ -144,22 +139,13 @@ const Paragraph = styled.p({
   whiteSpace: 'nowrap'
 });
 
-interface ProfileIconProps {
-  icon: IconProp;
-}
-
-function ProfileIcon(props: ProfileIconProps) {
-  return <FontAwesomeIcon icon={props.icon} style={{ marginRight: '8px' }} />;
-}
-
 interface Props {
   profile: ProfileType;
   isLogin: boolean;
-  setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
+  enterEditMode: () => void;
 }
 
 export function ProfileViewer(props: Props) {
-  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   let animationDelay = 1;
 
   return (
@@ -184,7 +170,7 @@ export function ProfileViewer(props: Props) {
         </Description>
         {props.profile.link && (
           <Description delay={animationDelay++}>
-            <ProfileIcon icon={faLink} />
+            <FontAwesomeIcon icon={faLink} style={{ marginRight: '8px' }} />
             <ParagraphLink href={props.profile.link} target='_blank' rel='noopener noreferer nofollow'>
               <Paragraph>{props.profile.link}</Paragraph>
             </ParagraphLink>
@@ -192,19 +178,19 @@ export function ProfileViewer(props: Props) {
         )}
         {props.profile.company && (
           <Description delay={animationDelay++}>
-            <ProfileIcon icon={faBuilding} />
+            <FontAwesomeIcon icon={faBuilding} style={{ marginRight: '8px' }} />
             <Paragraph>{props.profile.company}</Paragraph>
           </Description>
         )}
         {props.profile.location && (
           <Description delay={animationDelay++}>
-            <ProfileIcon icon={faMapMarkerAlt} />
+            <FontAwesomeIcon icon={faMapMarkerAlt} style={{ marginRight: '8px' }} />
             <Paragraph>{props.profile.location}</Paragraph>
           </Description>
         )}
         {props.profile.email && (
           <Description delay={animationDelay++}>
-            <ProfileIcon icon={faEnvelope} />
+            <FontAwesomeIcon icon={faEnvelope} style={{ marginRight: '8px' }} />
             <ParagraphLink href={`mailto:${props.profile.email}`}>
               <Paragraph>{props.profile.email}</Paragraph>
             </ParagraphLink>
@@ -213,7 +199,7 @@ export function ProfileViewer(props: Props) {
       </ListWrapper>
       {props.isLogin && (
         <ButtonContainer delay={animationDelay++}>
-          <EditButton onClick={() => props.setEditMode(true)}>{trans(Lang.EditProfile)}</EditButton>
+          <EditButton onClick={() => props.enterEditMode()}>{trans(Lang.EditProfile)}</EditButton>
         </ButtonContainer>
       )}
     </>
