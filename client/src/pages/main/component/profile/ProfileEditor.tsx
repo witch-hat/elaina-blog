@@ -9,8 +9,8 @@ import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';
 
 import { MemoizedProfileImageEditor } from './edit/ProfileImageEditor';
-import { ProfileFormEditor } from './edit/ProfileFormEditor';
-import { MemoizedButtonContainer } from './edit/ButtonContainer';
+import { MemoizedProfileFormEditor } from './edit/ProfileFormEditor';
+import { ButtonContainer } from './edit/ButtonContainer';
 
 interface CropperProps {
   imageFile: File;
@@ -44,7 +44,7 @@ export function ProfileEditor(props: Props) {
   const [uploadFile] = useMutation<{ uploadFile: FileType }>(UPLOAD_FILE);
   const [updateProfile] = useMutation<{ updateProfile: ProfileType }>(UPDATE_PROFILE);
 
-  async function handleSubmit() {
+  const handleSubmit = useCallback(async () => {
     let uploadedImagePath: string | undefined;
     const { data } = await client.query({ query: IS_AUTH });
 
@@ -105,7 +105,7 @@ export function ProfileEditor(props: Props) {
       props.setEditMode(false);
       setEditingProfile(props.profile);
     }
-  }
+  }, [editingProfile]);
 
   const selectImage = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -119,10 +119,10 @@ export function ProfileEditor(props: Props) {
   }, []);
 
   const updateEditingProfile = useCallback((profileProperty: string) => {
-    return (e: React.ChangeEvent<HTMLInputElement>) => {
+    return useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
       e.persist();
       setEditingProfile((prev) => ({ ...prev, [profileProperty]: e.target.value }));
-    };
+    }, []);
   }, []);
 
   const setEditModeFalse = useCallback(() => props.setEditMode(false), []);
@@ -135,7 +135,7 @@ export function ProfileEditor(props: Props) {
   return (
     <>
       <MemoizedProfileImageEditor image={editingProfile.image || ''} selectImage={selectImage} />
-      <ProfileFormEditor
+      <MemoizedProfileFormEditor
         profile={props.profile}
         editingProfile={editingProfile}
         updateEditingProfile={updateEditingProfile}
@@ -143,7 +143,7 @@ export function ProfileEditor(props: Props) {
         setEditModeFalse={setEditModeFalse}
         onChangeIntroduce={onChangeIntroduce}
       />
-      <MemoizedButtonContainer setEditModeFalse={setEditModeFalse} />
+      <ButtonContainer setEditModeFalse={setEditModeFalse} />
       <DynamicProfileImageCropper
         visible={isSelectImage}
         imageFile={selectedImageFile as File}

@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { Navigation } from './navigation/Navigation';
-import { MemoizedProfileContainer } from './profile/ProfileContainer';
+import { Profile } from './profile/Profile';
 
 const Container = styled.div({
   display: 'flex',
@@ -44,7 +44,7 @@ interface Props {
 export function MainPageLayout(props: Props) {
   return (
     <Container>
-      <MemoizedProfileContainer profile={props.profile} isLogin={props.isLogin} />
+      <Profile profile={props.profile} isLogin={props.isLogin} />
       <Wrapper>
         <Navigation />
         {props.children}

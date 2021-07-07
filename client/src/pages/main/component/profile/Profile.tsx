@@ -43,7 +43,7 @@ interface Props {
   isLogin: boolean;
 }
 
-export function ProfileContainer(props: Props) {
+export function Profile(props: Props) {
   const initAlertState: AlertStateType = { msg: '', isPop: false, isError: false };
 
   const [isEditMode, setIsEditMode] = useState(false);
@@ -79,5 +79,3 @@ export function ProfileContainer(props: Props) {
     </Container>
   );
 }
-
-export const MemoizedProfileContainer = React.memo(ProfileContainer);
