@@ -2,13 +2,19 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import dynamic from 'next/dynamic';
 
-import { AlertBox, AlertStateType } from 'src/components';
+import { AlertStateType } from 'src/components';
 import { ProfileType } from 'src/query/profile';
 
 import { ProfileEditor } from './ProfileEditor';
 import { ProfileViewer } from './ProfileViewer';
 
-interface Props {}
+interface AlertProps {
+  msg: string;
+  isError: boolean;
+  onCloseButtonClick: Function;
+}
+
+const DynamicAlertBox = dynamic<AlertProps>(() => import('src/components').then((mod) => mod.AlertBox));
 
 const Container = styled.aside({
   display: 'flex',
@@ -62,7 +68,7 @@ export function ProfileContainer(props: Props) {
         <ProfileViewer profile={profile} isLogin={props.isLogin} setEditMode={setIsEditMode} />
       )}
       {alertState.isPop && (
-        <AlertBox
+        <DynamicAlertBox
           isError={alertState.isError}
           msg={alertState.msg}
           onCloseButtonClick={() => {
