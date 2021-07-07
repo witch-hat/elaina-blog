@@ -19,9 +19,12 @@ interface CropperProps {
   visible: boolean;
 }
 
-const ProfileImageCropper = dynamic<CropperProps>(() => import('./edit/ProfileImageCropper').then((mod) => mod.ProfileImageCropper), {
-  ssr: false
-});
+const DynamicProfileImageCropper = dynamic<CropperProps>(
+  () => import('./edit/ProfileImageCropper').then((mod) => mod.ProfileImageCropper),
+  {
+    ssr: false
+  }
+);
 
 interface Props {
   profile: ProfileType;
@@ -141,7 +144,7 @@ export function ProfileEditor(props: Props) {
         onChangeIntroduce={onChangeIntroduce}
       />
       <MemoizedButtonContainer setEditModeFalse={setEditModeFalse} />
-      <ProfileImageCropper
+      <DynamicProfileImageCropper
         visible={isSelectImage}
         imageFile={selectedImageFile as File}
         onSave={(croppedImage: Blob) => {
