@@ -31,7 +31,6 @@ export const GlobalStyles = createGlobalStyle`
 	}
 	p {
 		margin: 0;
-		cursor: text;
 	}
 	article {
 		cursor: text;
