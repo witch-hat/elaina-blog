@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import styled, { keyframes, css } from 'styled-components';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 import { FocusWrapper, useWidth } from 'src/components';
-import { RootState } from 'src/redux/rootReducer';
-import { ThemeMode } from 'src/redux/common/type';
 
-import { ModeSwitch } from './ModeSwitch';
+import { MemoizedModeSwitch } from './ModeSwitch';
+import { MemoizedBlogTitle } from './BlogTitle';
 import { ProgressBar } from './ProgressBar';
 import { SearchMenu } from './SearchMenu';
-import { LanguageMenu } from './LanguageMenu';
+import { MemoizedLanguageMenu } from './LanguageMenu';
 import { AdminMenu } from './AdminMenu';
 
 const StyledHeader = styled.header((props) => {
@@ -46,13 +44,6 @@ const Container = styled.div({
     padding: '0'
   }
 });
-
-const BlogName = styled.a((props) => ({
-  padding: '10px',
-  color: props.theme.blogName,
-  fontSize: '1.8rem',
-  cursor: 'pointer'
-}));
 
 const Flex = styled.div({
   display: 'flex',
@@ -108,8 +99,6 @@ interface Props {
 }
 
 export function Header(props: Props) {
-  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
-
   const width = useWidth();
   const [isSwitchAndSearchVisible, setIsSwitchAndSearchVisible] = useState<boolean>(width > 767);
 
@@ -125,9 +114,7 @@ export function Header(props: Props) {
     <StyledHeader>
       <ProgressBar color={'#036ffc'} />
       <Container>
-        <Link href='/' passHref>
-          <BlogName>{props.name}</BlogName>
-        </Link>
+        <MemoizedBlogTitle name={props.name} />
         <Flex>
           <FocusWrapper
             visible={isSwitchAndSearchVisible}
@@ -138,13 +125,13 @@ export function Header(props: Props) {
             <>
               {isSwitchAndSearchVisible && (
                 <ResponsiveMenuBox>
-                  <ModeSwitch changeThemeMode={props.changeThemeMode} />
+                  <MemoizedModeSwitch changeThemeMode={props.changeThemeMode} />
                   <SearchMenu />
                 </ResponsiveMenuBox>
               )}
             </>
           </FocusWrapper>
-          <LanguageMenu />
+          <MemoizedLanguageMenu />
           <AdminMenu isLogin={props.isLogin} />
           <MobileMenuButton onClick={() => onMobileMenuButtonClick()}>
             <FontAwesomeIcon icon={faBars} />

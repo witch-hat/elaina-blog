@@ -4,11 +4,9 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faLanguage } from '@fortawesome/free-solid-svg-icons';
 
-// import { theme } from 'src/styles';
 import { RootState } from 'src/redux/rootReducer';
-import { ThemeMode } from 'src/redux/common/type';
 import { commonDispatch } from 'src/redux/common/dispatch';
-import { LangCode, changeLang, getCurrentLangCode, trans, Lang } from 'src/resources/languages';
+import { LangCode, changeLang, getCurrentLangCode } from 'src/resources/languages';
 
 import { DropDownMenu } from '../common/box/DropDownMenu';
 
@@ -40,14 +38,13 @@ const LanguageItem = styled.p((props) => ({
   }
 }));
 
-export function LanguageMenu() {
+interface Props {}
+
+export function LanguageMenu(props: Props) {
   const languages = {
     [LangCode.ko]: '한국어',
     [LangCode.en]: 'English'
   };
-  const currentLangCode = getCurrentLangCode();
-  const lang: LangCode = useSelector<RootState, any>((state) => state.common.lang);
-  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   const [isLangMenuVisible, setIsLangMenuVisible] = useState(false);
 
@@ -87,3 +84,5 @@ export function LanguageMenu() {
     </LanguageDropDown>
   );
 }
+
+export const MemoizedLanguageMenu = React.memo(LanguageMenu);

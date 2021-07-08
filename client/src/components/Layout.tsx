@@ -1,12 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
 
 import { Header } from 'src/components';
 import { GlobalStyles } from 'src/styles';
-import { RootState } from 'src/redux/rootReducer';
-import { ThemeMode } from 'src/redux/common/type';
-import { mockUpData } from 'src/resources';
 import { AppCommonProps } from 'src/pages/_app';
 
 const Container = styled.main({
@@ -28,12 +24,10 @@ interface Props extends AppCommonProps {
 }
 
 export function Layout(props: Props) {
-  // const theme: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
-
   return (
     <>
       <GlobalStyles />
-      <Header name={mockUpData.blogName} isLogin={props.app.isLogin} changeThemeMode={props.changeThemeMode} />
+      <Header name='ElainaBlog' isLogin={props.app.isLogin} changeThemeMode={props.changeThemeMode} />
       <Container>{props.children}</Container>
     </>
   );

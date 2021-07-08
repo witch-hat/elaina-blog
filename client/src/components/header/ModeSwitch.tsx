@@ -93,3 +93,5 @@ export function ModeSwitch(props: Props) {
     </Container>
   );
 }
+
+export const MemoizedModeSwitch = React.memo(ModeSwitch);
