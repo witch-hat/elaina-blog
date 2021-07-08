@@ -3,7 +3,7 @@ import { gql } from '@apollo/client';
 export interface CategoryDetails {
   _id: number;
   title: string;
-  recentCreatedAt: number;
+  recentCreatedAt: number | null;
   postCount: number;
   order: number;
 }
