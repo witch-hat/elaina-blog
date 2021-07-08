@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCamera } from '@fortawesome/free-solid-svg-icons';
 import { useMutation } from '@apollo/client';
 
 import { AlertStateType } from 'src/components';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
-import { theme } from 'src/styles';
 import { ModalWrapper, BorderBox } from 'src/components';
 import { ADD_CATEGORY, CategoryDetails } from 'src/query/category';
 
@@ -19,18 +16,6 @@ const Content = styled.div({
   padding: '.8rem',
   justifyContent: 'center',
   alignItems: 'center'
-});
-
-const PreviewImage = styled.img({
-  float: 'right',
-  width: '260px',
-  height: '8.4rem',
-  marginLeft: '1rem',
-  objectFit: 'cover',
-  '@media screen and (max-width: 1380px)': {
-    width: '32%',
-    marginLeft: '3%'
-  }
 });
 
 const PreviewTextWrapper = styled.div({
@@ -81,18 +66,6 @@ const ModalButton = styled.button<{ save?: boolean }>((props) => ({
   color: props.save ? props.theme.dangerContentText : 'inherit'
 }));
 
-const SelectedImage = styled.div({
-  float: 'right',
-  width: '260px',
-  height: '8.4rem',
-  marginLeft: '1rem',
-  objectFit: 'cover',
-  '@media screen and (max-width: 1380px)': {
-    width: '32%',
-    marginLeft: '3%'
-  }
-});
-
 interface Props {
   isAddModalOpen: boolean;
   setIsAddModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -103,8 +76,6 @@ interface Props {
 }
 
 export function AddCategoryModal(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
-
   const [title, setTitle] = useState('');
   const [newCategory, setNewCategory] = useState<CategoryDetails | null>(null);
 
@@ -153,7 +124,7 @@ export function AddCategoryModal(props: Props) {
         <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
           <Content>
             <PreviewTextWrapper>
-              <Input type='text' placeholder='Title' value={title} onChange={(e) => setTitle(e.target.value)} />
+              <Input type='text' placeholder='Title' value={title} maxLength={30} onChange={(e) => setTitle(e.target.value)} />
             </PreviewTextWrapper>
           </Content>
         </BorderBox>

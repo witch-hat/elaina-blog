@@ -1,98 +1,24 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGripVertical, faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { useMutation } from '@apollo/client';
 import { cloneDeep, throttle } from 'lodash';
 
 import { BorderBox, AlertStateType } from 'src/components';
-import { CircleRippleWrapper } from 'src/components/common/wrapper/CircleRippleWrapper';
 import { CategoryDetails, ORDER_CATEGORY } from 'src/query/category';
+import { CategoryTitle } from './CategoryTitle';
+import { CategoryMenu } from './CategoryMenu';
 
 const Container = styled.div({
-  display: 'flex',
-  width: '100%',
-  alignItems: 'center'
+  width: '600px',
+  margin: '0 auto'
 });
 
 const Wrapper = styled.div({
   display: 'flex',
-  flex: 1,
-  flexDirection: 'column'
-});
-
-const Content = styled.div({
-  display: 'flex',
   width: '100%',
-  height: '10rem',
-  padding: '.8rem',
-  justifyContent: 'center',
-  alignItems: 'center'
-});
-
-const MenuContainer = styled.div({
-  display: 'flex',
-  padding: '4px 8px 0px 8px',
-  flex: 1,
-  flexDirection: 'row',
-  justifyContent: 'flex-end'
-});
-
-const PreviewImage = styled.img({
-  float: 'right',
-  width: '260px',
-  height: '8.4rem',
-  marginLeft: '1rem',
-  objectFit: 'cover',
-  '@media screen and (max-width: 1380px)': {
-    width: '32%',
-    marginLeft: '3%'
-  }
-});
-
-const PreviewTextWrapper = styled.div({
-  display: 'flex',
-  width: '100%',
-  height: '8.4rem',
-  flexDirection: 'column',
-  alignItems: 'flex-start'
-});
-
-const PreviewTitle = styled.span({
-  display: '-webkit-box',
-  height: '2rem',
-  width: '100%',
-  flexShrink: 0,
-  fontSize: '1.4rem',
-  fontWeight: 'bold',
-  textAlign: 'left',
-  wordBreak: 'break-all',
-  overflow: 'hidden',
-  WebkitLineClamp: 1,
-  WebkitBoxOrient: 'vertical',
-  '@media screen and (max-width: 1380px)': {
-    wordBreak: 'break-all'
-  }
-});
-
-const PreviewContent = styled.span({
-  display: '-webkit-box',
-  width: '100%',
-  height: '4.5rem',
-  margin: '.25rem 0 0',
-  flexShrink: 0,
-  fontSize: '1.1rem',
-  wordBreak: 'keep-all',
-  textAlign: 'left',
-  overflow: 'hidden',
-  WebkitLineClamp: 3,
-  WebkitBoxOrient: 'vertical'
-});
-
-const GrabButtonContainer = styled.div({
-  '&:hover > *': {
-    cursor: 'grab'
-  }
+  padding: '.5rem',
+  alignItems: 'center',
+  justifyContent: 'space-between'
 });
 
 interface Props {
@@ -100,35 +26,47 @@ interface Props {
   index: number;
   grabbingCategoryIndex: number;
   initAlertState: AlertStateType;
-  setCategories: React.Dispatch<React.SetStateAction<CategoryDetails[]>>;
-  setEditingCategoryIndex: React.Dispatch<React.SetStateAction<number>>;
-  setGrabbingCategoryIndex: React.Dispatch<React.SetStateAction<number>>;
-  setDeletedCategory: React.Dispatch<React.SetStateAction<{ isModalOpen: boolean; index?: number | undefined }>>;
-  setAlertState: React.Dispatch<React.SetStateAction<AlertStateType>>;
+  updateCategories: (newCategories: CategoryDetails[]) => void;
+  grabElement: (index: number) => void;
+  releaseElement: () => void;
+  setGreenAlert: (msg: string) => void;
+  setRedAlert: (err: any) => void;
+  setInitAlert: () => void;
+  openDeleteModal: (index: number) => void;
 }
 
 export function CategoryViewer(props: Props) {
+  const [isEdit, setIsEdit] = useState(false);
+  const [title, setTitle] = useState(props.categories[props.index].title);
   const initialCategoryOrder = useRef<number[] | null>(null);
 
   const [orderCategory] = useMutation(ORDER_CATEGORY);
 
+  const handleEditTitle = useCallback((e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value), []);
+
+  const backupTitle = useCallback(() => setTitle(props.categories[props.index].title), []);
+
+  const endEditMode = useCallback(() => setIsEdit(false), []);
+
+  const enterEditMode = useCallback(() => setIsEdit(true), []);
+
   const onDragStart = useCallback((e: React.DragEvent<HTMLDivElement>) => {
     initialCategoryOrder.current = props.categories.map((category) => category._id);
-    props.setGrabbingCategoryIndex(Number(e.currentTarget.dataset.position));
   }, []);
 
   const onDragEnter = useCallback(
     throttle((e: React.DragEvent<HTMLDivElement>) => {
       let dragOverItemPosition = Number(e.currentTarget.dataset.position);
+
       // props is immutable, splice() change data
       const copiedCategory = cloneDeep(props.categories);
 
       copiedCategory.splice(props.grabbingCategoryIndex, 1);
       copiedCategory.splice(dragOverItemPosition, 0, props.categories[props.grabbingCategoryIndex]);
 
-      props.setGrabbingCategoryIndex(dragOverItemPosition);
+      props.grabElement(dragOverItemPosition);
       dragOverItemPosition = -1;
-      props.setCategories(copiedCategory);
+      props.updateCategories(copiedCategory);
     }, 400),
     [props.grabbingCategoryIndex, props.categories]
   );
@@ -144,23 +82,17 @@ export function CategoryViewer(props: Props) {
           }
         }
 
-        props.setAlertState(props.initAlertState);
+        props.setInitAlert();
 
         await orderCategory({
           variables: {
             ids: changedOrder
           }
         });
-
-        props.setGrabbingCategoryIndex(-1);
       } catch (err) {
         const backUpCategories = [...props.categories];
-        props.setCategories(backUpCategories);
-        props.setAlertState({
-          msg: err.message,
-          isPop: true,
-          isError: true
-        });
+        props.updateCategories(backUpCategories);
+        props.setRedAlert(err);
       }
     },
     [props.categories]
@@ -177,46 +109,22 @@ export function CategoryViewer(props: Props) {
     >
       <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
         <Wrapper>
-          <MenuContainer>
-            <CircleRippleWrapper
-              onClick={() => {
-                props.setEditingCategoryIndex(props.index);
-              }}
-            >
-              <FontAwesomeIcon icon={faPen} style={{ fontSize: '1.25rem' }} />
-            </CircleRippleWrapper>
-            {props.categories[props.index]._id > 0 && (
-              <CircleRippleWrapper
-                onClick={() => {
-                  props.setDeletedCategory({ isModalOpen: true, index: props.index });
-                }}
-              >
-                <FontAwesomeIcon icon={faTrash} style={{ fontSize: '1.25rem' }} />
-              </CircleRippleWrapper>
-            )}
-            <GrabButtonContainer
-              onMouseDown={(e: React.MouseEvent<HTMLDivElement>) => {
-                if (e.button === 0) {
-                  props.setGrabbingCategoryIndex(props.index);
-                } else {
-                  props.setGrabbingCategoryIndex(-1);
-                }
-              }}
-              onMouseUp={() => {
-                props.setGrabbingCategoryIndex(-1);
-              }}
-              onTouchStart={() => props.setGrabbingCategoryIndex(props.index)}
-            >
-              <CircleRippleWrapper onClick={() => {}}>
-                <FontAwesomeIcon icon={faGripVertical} style={{ fontSize: '1.25rem' }} />
-              </CircleRippleWrapper>
-            </GrabButtonContainer>
-          </MenuContainer>
-          <Content>
-            <PreviewTextWrapper>
-              <PreviewTitle>{props.categories[props.index].title}</PreviewTitle>
-            </PreviewTextWrapper>
-          </Content>
+          <CategoryTitle title={title} isEdit={isEdit} handleChange={handleEditTitle} />
+          <CategoryMenu
+            isEdit={isEdit}
+            id={props.categories[props.index]._id}
+            title={title}
+            isDefault={props.categories[props.index]._id === 0}
+            index={props.index}
+            enterEditMode={enterEditMode}
+            endEditMode={endEditMode}
+            backupTitle={backupTitle}
+            grabElement={props.grabElement}
+            releaseElement={props.releaseElement}
+            setGreenAlert={props.setGreenAlert}
+            setRedAlert={props.setRedAlert}
+            openDeleteModal={props.openDeleteModal}
+          />
         </Wrapper>
       </BorderBox>
     </Container>

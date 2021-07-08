@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import styled from 'styled-components';
 
@@ -7,7 +7,6 @@ import { CategoryDetails } from 'src/query/category';
 
 import { AddCategoryModal } from './AddCategoryModal';
 import { DeleteCategoryModal } from './DeleteCategoryModal';
-import { CategoryEditor } from './CategoryEditor';
 import { CategoryViewer } from './CategoryViewer';
 
 const Container = styled.div({});
@@ -22,43 +21,46 @@ export function CategoryContainer(props: Props) {
   const initAlertState: AlertStateType = { msg: '', isPop: false, isError: false };
 
   const [categories, setCategories] = useState<CategoryDetails[]>(props.categories);
-  const [editingCategoryIndex, setEditingCategoryIndex] = useState<number>(-1);
   const [alertState, setAlertState] = useState<AlertStateType>(initAlertState);
   const [grabbingCategoryIndex, setGrabbingCategoryIndex] = useState<number>(-1);
   const [deletedCategory, setDeletedCategory] = useState<{ isModalOpen: boolean; index?: number }>({ isModalOpen: false });
+
+  const grabElement = useCallback((index: number) => {
+    setGrabbingCategoryIndex(index);
+  }, []);
+
+  const releaseElement = useCallback(() => setGrabbingCategoryIndex(-1), []);
+
+  const setInitAlert = useCallback(() => setAlertState(initAlertState), []);
+
+  const setGreenAlert = useCallback((msg: string) => setAlertState({ msg, isPop: true, isError: false }), []);
+
+  const setRedAlert = useCallback((err: any) => setAlertState({ msg: err.message, isPop: true, isError: true }), []);
+
+  const openDeleteModal = useCallback((index: number) => setDeletedCategory({ isModalOpen: true, index }), []);
+
+  const updateCategories = useCallback((newCategories: CategoryDetails[]) => setCategories(newCategories), []);
 
   return (
     <Container>
       <Container>
         {categories.map((category, index) => {
-          if (index === editingCategoryIndex) {
-            return (
-              <CategoryEditor
-                key={category.title}
-                categories={categories}
-                index={index}
-                initAlertState={initAlertState}
-                setAlertState={setAlertState}
-                setCategories={setCategories}
-                setEditingCategoryIndex={setEditingCategoryIndex}
-              />
-            );
-          } else {
-            return (
-              <CategoryViewer
-                key={category.title}
-                categories={categories}
-                index={index}
-                grabbingCategoryIndex={grabbingCategoryIndex}
-                initAlertState={initAlertState}
-                setCategories={setCategories}
-                setEditingCategoryIndex={setEditingCategoryIndex}
-                setGrabbingCategoryIndex={setGrabbingCategoryIndex}
-                setDeletedCategory={setDeletedCategory}
-                setAlertState={setAlertState}
-              />
-            );
-          }
+          return (
+            <CategoryViewer
+              key={category.title}
+              categories={categories}
+              index={index}
+              grabbingCategoryIndex={grabbingCategoryIndex}
+              initAlertState={initAlertState}
+              updateCategories={updateCategories}
+              grabElement={grabElement}
+              releaseElement={releaseElement}
+              setGreenAlert={setGreenAlert}
+              setRedAlert={setRedAlert}
+              setInitAlert={setInitAlert}
+              openDeleteModal={openDeleteModal}
+            />
+          );
         })}
       </Container>
       <DeleteCategoryModal
