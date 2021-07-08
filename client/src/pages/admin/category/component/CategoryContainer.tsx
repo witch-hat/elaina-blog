@@ -7,9 +7,9 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { AlertBox, AlertStateType } from 'src/components';
 import { CategoryDetails } from 'src/query/category';
 
-import { AddCategoryModal } from './AddCategoryModal';
 import { DeleteCategoryModal } from './DeleteCategoryModal';
 import { CategoryViewer } from './CategoryViewer';
+import { NewCategory } from './NewCategory';
 
 const Container = styled.div({});
 
@@ -34,6 +34,8 @@ interface Props {
 export function CategoryContainer(props: Props) {
   const initAlertState: AlertStateType = { msg: '', isPop: false, isError: false };
 
+  const [isAdd, setIsAdd] = useState(false);
+  const [newCategoryTitle, setNewCategoryTitle] = useState('');
   const [categories, setCategories] = useState<CategoryDetails[]>(props.categories);
   const [alertState, setAlertState] = useState<AlertStateType>(initAlertState);
   const [grabbingCategoryIndex, setGrabbingCategoryIndex] = useState<number>(-1);
@@ -54,6 +56,15 @@ export function CategoryContainer(props: Props) {
   const openDeleteModal = useCallback((index: number) => setDeletedCategory({ isModalOpen: true, index }), []);
 
   const updateCategories = useCallback((newCategories: CategoryDetails[]) => setCategories(newCategories), []);
+
+  const cancelCreateCategory = useCallback(() => {
+    setIsAdd(false);
+    setNewCategoryTitle('');
+  }, []);
+
+  const writeNewTitle = useCallback((value: string) => setNewCategoryTitle(value), []);
+
+  const addNewCategory = useCallback((category: CategoryDetails) => setCategories((prev) => [...prev, category]), []);
 
   return (
     <Container>
@@ -77,23 +88,28 @@ export function CategoryContainer(props: Props) {
           );
         })}
       </Container>
-      <AddCategory>
-        <FontAwesomeIcon icon={faPlus} style={{ marginRight: '.5rem' }} />
-        <p>Add Category</p>
-      </AddCategory>
+      {isAdd ? (
+        <NewCategory
+          title={newCategoryTitle}
+          order={props.categories.length}
+          cancelCreateCategory={cancelCreateCategory}
+          writeNewTitle={writeNewTitle}
+          setInitAlert={setInitAlert}
+          setGreenAlert={setGreenAlert}
+          setRedAlert={setRedAlert}
+          addNewCategory={addNewCategory}
+        />
+      ) : (
+        <AddCategory onClick={() => setIsAdd(true)}>
+          <FontAwesomeIcon icon={faPlus} style={{ marginRight: '.5rem' }} />
+          <p>Add Category</p>
+        </AddCategory>
+      )}
       <DeleteCategoryModal
         isDeleteModalOpen={deletedCategory.isModalOpen}
         setDeletedCategory={setDeletedCategory}
         index={deletedCategory.index}
         defaultCategoryTitle={categories.filter((category) => category._id === 0)[0].title}
-        categories={categories}
-        setCategories={setCategories}
-        initAlertState={initAlertState}
-        setAlertState={setAlertState}
-      />
-      <AddCategoryModal
-        isAddModalOpen={props.isAddModalOpen}
-        setIsAddModalOpen={props.setIsAddModalOpen}
         categories={categories}
         setCategories={setCategories}
         initAlertState={initAlertState}
