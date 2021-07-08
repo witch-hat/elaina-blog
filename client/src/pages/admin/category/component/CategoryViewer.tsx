@@ -1,13 +1,13 @@
 import React, { useCallback, useRef } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGripVertical, faPen, faTrash, faSave, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import { faGripVertical, faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { useMutation } from '@apollo/client';
 import { cloneDeep, throttle } from 'lodash';
 
 import { BorderBox, AlertStateType } from 'src/components';
 import { CircleRippleWrapper } from 'src/components/common/wrapper/CircleRippleWrapper';
-import { CategoryDetails, ORDER_CATEGORY, UPDATE_CATEGORY } from 'src/query/category';
+import { CategoryDetails, ORDER_CATEGORY } from 'src/query/category';
 
 const Container = styled.div({
   display: 'flex',
@@ -99,24 +99,22 @@ interface Props {
   categories: CategoryDetails[];
   index: number;
   grabbingCategoryIndex: number;
-  grabbedElement: (EventTarget & HTMLDivElement) | null;
   initAlertState: AlertStateType;
   setCategories: React.Dispatch<React.SetStateAction<CategoryDetails[]>>;
   setEditingCategoryIndex: React.Dispatch<React.SetStateAction<number>>;
   setGrabbingCategoryIndex: React.Dispatch<React.SetStateAction<number>>;
   setDeletedCategory: React.Dispatch<React.SetStateAction<{ isModalOpen: boolean; index?: number | undefined }>>;
-  setGrabbedElement: React.Dispatch<React.SetStateAction<(EventTarget & HTMLDivElement) | null>>;
   setAlertState: React.Dispatch<React.SetStateAction<AlertStateType>>;
 }
 
 export function CategoryViewer(props: Props) {
   const initialCategoryOrder = useRef<number[] | null>(null);
+
   const [orderCategory] = useMutation(ORDER_CATEGORY);
 
   const onDragStart = useCallback((e: React.DragEvent<HTMLDivElement>) => {
     initialCategoryOrder.current = props.categories.map((category) => category._id);
     props.setGrabbingCategoryIndex(Number(e.currentTarget.dataset.position));
-    props.setGrabbedElement(e.currentTarget);
   }, []);
 
   const onDragEnter = useCallback(
@@ -141,6 +139,7 @@ export function CategoryViewer(props: Props) {
         const changedOrder = props.categories.map((category) => category._id);
         if (initialCategoryOrder.current) {
           if (initialCategoryOrder.current.every((id, index) => id === changedOrder[index])) {
+            // if order doesn't change, don't need to call mutation query
             return;
           }
         }
@@ -216,9 +215,7 @@ export function CategoryViewer(props: Props) {
           <Content>
             <PreviewTextWrapper>
               <PreviewTitle>{props.categories[props.index].title}</PreviewTitle>
-              <PreviewContent>{props.categories[props.index].description}</PreviewContent>
             </PreviewTextWrapper>
-            <PreviewImage src={props.categories[props.index].previewImage} alt='preview image' />
           </Content>
         </Wrapper>
       </BorderBox>

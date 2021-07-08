@@ -3,8 +3,6 @@ import { gql } from '@apollo/client';
 export interface CategoryDetails {
   _id: number;
   title: string;
-  description: string;
-  previewImage: string;
   recentCreatedAt: number;
   postCount: number;
   order: number;
@@ -15,8 +13,6 @@ export const GET_CATEGORIES_WITH_DETAILS = gql`
     categoriesWithDetails {
       _id
       title
-      description
-      previewImage
       postCount
       recentCreatedAt
       order
@@ -28,15 +24,13 @@ export const FIND_CATEGORY_BY_ID = gql`
   query ($id: Int!) {
     findCategoryById(id: $id) {
       title
-      description
-      previewImage
     }
   }
 `;
 
 export const ADD_CATEGORY = gql`
-  mutation ($title: String!, $description: String!, $previewImage: String!) {
-    addCategory(title: $title, description: $description, previewImage: $previewImage) {
+  mutation ($title: String!) {
+    addCategory(title: $title) {
       isSuccess
       _id
     }
@@ -44,8 +38,8 @@ export const ADD_CATEGORY = gql`
 `;
 
 export const UPDATE_CATEGORY = gql`
-  mutation ($id: Int, $title: String, $description: String) {
-    updateCategory(id: $id, title: $title, description: $description)
+  mutation ($id: Int, $title: String) {
+    updateCategory(id: $id, title: $title)
   }
 `;
 

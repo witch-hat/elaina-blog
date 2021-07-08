@@ -89,13 +89,11 @@ export function CategoryEditor(props: Props) {
   // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   const [categoryTitle, setCategoryTitle] = useState('');
-  const [categoryDescription, setCategoryDescription] = useState('');
 
   const [updateCategory] = useMutation(UPDATE_CATEGORY);
 
   useEffect(() => {
     setCategoryTitle(props.categories[props.index].title);
-    setCategoryDescription(props.categories[props.index].description);
   }, []);
 
   const onTitleChange = useCallback(
@@ -105,27 +103,19 @@ export function CategoryEditor(props: Props) {
     [categoryTitle]
   );
 
-  const onDescriptionChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setCategoryDescription(e.target.value);
-    },
-    [categoryDescription]
-  );
-
   async function save() {
     props.setAlertState(props.initAlertState);
 
     try {
-      if (!categoryTitle || !categoryDescription) {
-        alert('제목 또는 소개를 입력해주세요.');
+      if (!categoryTitle) {
+        alert('제목을 입력해주세요.');
         return;
       }
 
       await updateCategory({
         variables: {
           id: props.categories[props.index]._id,
-          title: categoryTitle,
-          description: categoryDescription
+          title: categoryTitle
         }
       });
 
@@ -134,7 +124,6 @@ export function CategoryEditor(props: Props) {
 
       if (editingCategory) {
         editingCategory.title = categoryTitle;
-        editingCategory.description = categoryDescription;
         props.setCategories(copiedCategories);
       }
 
@@ -173,9 +162,7 @@ export function CategoryEditor(props: Props) {
           <Content>
             <PreviewTextWrapper>
               <Input type='text' defaultValue={props.categories[props.index].title} onChange={(e) => onTitleChange(e)} />
-              <Input type='text' defaultValue={props.categories[props.index].description} onChange={(e) => onDescriptionChange(e)} />
             </PreviewTextWrapper>
-            <PreviewImage src={props.categories[props.index].previewImage} alt='preview image' />
           </Content>
         </Wrapper>
       </BorderBox>

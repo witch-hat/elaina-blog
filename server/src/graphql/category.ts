@@ -9,16 +9,12 @@ export const categoryTypeDef = gql`
   type Category {
     _id: Int!
     title: String!
-    description: String!
-    previewImage: String!
     order: Int!
   }
 
   type CategoryWithDetails {
     _id: Int!
     title: String!
-    description: String!
-    previewImage: String!
     postCount: Int
     recentCreatedAt: DateTime
     order: Int!
@@ -75,8 +71,6 @@ export const categoryResolver = {
           return {
             _id: category._id,
             title: category.title,
-            description: category.description,
-            previewImage: category.previewImage,
             postCount,
             recentCreatedAt,
             order: category.order
@@ -100,12 +94,12 @@ export const categoryResolver = {
   },
 
   Mutation: {
-    async addCategory(_: any, args: { title: string; description: string; previewImage: string }, context: ContextType) {
+    async addCategory(_: any, args: { title: string }, context: ContextType) {
       try {
         const categoryList: Category[] = await CategoryModel.find();
 
-        if (!args.title || !args.description) {
-          throw new UserInputError('카테고리 제목 또는 소개를 입력해주세요.');
+        if (!args.title) {
+          throw new UserInputError('카테고리 제목을 입력해주세요.');
         } else if (categoryList.filter((category) => category.title.toLowerCase() === args.title.toLowerCase()).length) {
           throw new ValidationError('이미 존재하는 제목입니다.');
         }
@@ -116,8 +110,6 @@ export const categoryResolver = {
         CategoryModel.create({
           _id: newId,
           title: args.title,
-          description: args.description,
-          previewImage: args.previewImage,
           order
         });
 
@@ -127,10 +119,10 @@ export const categoryResolver = {
       }
     },
 
-    async updateCategory(_: any, args: { id: number; title: string; description: string }, context: ContextType) {
+    async updateCategory(_: any, args: { id: number; title: string }, context: ContextType) {
       try {
-        if (!args.title || !args.description) {
-          throw new UserInputError('카테고리 제목 또는 소개를 입력해주세요.');
+        if (!args.title) {
+          throw new UserInputError('카테고리 제목을 입력해주세요.');
         }
 
         const categoryList: Category[] = await CategoryModel.find();
@@ -142,8 +134,7 @@ export const categoryResolver = {
             _id: args.id
           },
           {
-            title: args.title,
-            description: args.description
+            title: args.title
           }
         );
 

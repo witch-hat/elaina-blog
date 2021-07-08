@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
+import dynamic from 'next/dynamic';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
 
 import { AlertBox, AlertStateType } from 'src/components';
 import { CategoryDetails } from 'src/query/category';
@@ -26,7 +26,6 @@ export function CategoryContainer(props: Props) {
   const [alertState, setAlertState] = useState<AlertStateType>(initAlertState);
   const [grabbingCategoryIndex, setGrabbingCategoryIndex] = useState<number>(-1);
   const [deletedCategory, setDeletedCategory] = useState<{ isModalOpen: boolean; index?: number }>({ isModalOpen: false });
-  const [grabbedElement, setGrabbedElement] = useState<(EventTarget & HTMLDivElement) | null>(null);
 
   return (
     <Container>
@@ -51,13 +50,11 @@ export function CategoryContainer(props: Props) {
                 categories={categories}
                 index={index}
                 grabbingCategoryIndex={grabbingCategoryIndex}
-                grabbedElement={grabbedElement}
                 initAlertState={initAlertState}
                 setCategories={setCategories}
                 setEditingCategoryIndex={setEditingCategoryIndex}
                 setGrabbingCategoryIndex={setGrabbingCategoryIndex}
                 setDeletedCategory={setDeletedCategory}
-                setGrabbedElement={setGrabbedElement}
                 setAlertState={setAlertState}
               />
             );

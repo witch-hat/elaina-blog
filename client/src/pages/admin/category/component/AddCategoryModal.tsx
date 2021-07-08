@@ -106,8 +106,6 @@ export function AddCategoryModal(props: Props) {
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [previewImage, setPreviewImage] = useState('');
   const [newCategory, setNewCategory] = useState<CategoryDetails | null>(null);
 
   const [addCategory] = useMutation(ADD_CATEGORY);
@@ -122,17 +120,13 @@ export function AddCategoryModal(props: Props) {
     try {
       const response = await addCategory({
         variables: {
-          title,
-          description,
-          previewImage
+          title
         }
       });
 
       setNewCategory({
         _id: response.data.addCategory._id,
         title,
-        description,
-        previewImage,
         postCount: 0,
         recentCreatedAt: new Date().getTime(),
         order: props.categories.length
@@ -160,22 +154,7 @@ export function AddCategoryModal(props: Props) {
           <Content>
             <PreviewTextWrapper>
               <Input type='text' placeholder='Title' value={title} onChange={(e) => setTitle(e.target.value)} />
-              <Input type='text' placeholder='Description' value={description} onChange={(e) => setDescription(e.target.value)} />
             </PreviewTextWrapper>
-            <SelectedImage>
-              <label htmlFor='category-image-select'>
-                <FontAwesomeIcon icon={faCamera} />
-                &nbsp;Choose
-              </label>
-              <span hidden>
-                <Input
-                  id='category-image-select'
-                  type='file'
-                  accept='image/x-png,image/jpeg'
-                  onChange={(e) => setPreviewImage(e.target.value)}
-                />
-              </span>
-            </SelectedImage>
           </Content>
         </BorderBox>
         <ModalButtonContainer>
