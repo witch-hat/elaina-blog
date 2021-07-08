@@ -62,8 +62,8 @@ const ModalButton = styled.button<{ save?: boolean }>((props) => ({
   padding: '.5rem',
   marginLeft: '.5rem',
   borderRadius: '.5rem',
-  backgroundColor: props.save ? props.theme.dangerButtonColor : 'inherit',
-  color: props.save ? props.theme.dangerContentText : 'inherit'
+  backgroundColor: props.save ? props.theme.dangerButton.buttonColor : 'inherit',
+  color: props.save ? props.theme.dangerButton.textColor : 'inherit'
 }));
 
 interface Props {

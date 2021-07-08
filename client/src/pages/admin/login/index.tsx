@@ -64,8 +64,8 @@ const LogInButton = styled.button((props) => ({
   height: '2.5rem',
   marginTop: '24px',
   borderRadius: '.5rem',
-  backgroundColor: props.theme.submitButtonColor,
-  color: '#f1f2f3'
+  backgroundColor: props.theme.submitButton.buttonColor,
+  color: props.theme.submitButton.textColor
 }));
 
 const LogInText = styled.span({

@@ -34,8 +34,8 @@ const ModalButton = styled.button<{ delete?: boolean }>((props) => ({
   padding: '.5rem',
   marginLeft: '.5rem',
   borderRadius: '.5rem',
-  backgroundColor: props.delete ? props.theme.dangerButtonColor : 'inherit',
-  color: props.delete ? props.theme.dangerContentText : 'inherit'
+  backgroundColor: props.delete ? props.theme.dangerButton.buttonColor : 'inherit',
+  color: props.delete ? props.theme.dangerButton.textColor : 'inherit'
 }));
 
 interface Props {

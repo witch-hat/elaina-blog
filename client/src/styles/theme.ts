@@ -11,9 +11,7 @@ export const theme: { light: DefaultTheme; dark: DefaultTheme } = {
     headerBackground: 'rgb(255, 255, 255)',
     articleBackground: '#fff',
     secondaryContentBackground: '#eee',
-    submitButtonColor: '#2a9df4',
     editorBackground: '#fff',
-    dangerButtonColor: '#ff0000',
     adminCommentColor: 'rgba(145, 255, 0, 0.05)',
     adminReplyColor: 'rgba(145, 255, 0, 0.15)',
     loadingBackground: 'rgba(255, 255, 255, .8)',
@@ -24,7 +22,6 @@ export const theme: { light: DefaultTheme; dark: DefaultTheme } = {
     hoverText: '',
     placeholderText: '#888',
     inputText: '#121314',
-    dangerContentText: '#f1f2f3',
     // Border
     borderColor: '#ddd',
     inputBorder: '#ccc',
@@ -36,6 +33,19 @@ export const theme: { light: DefaultTheme; dark: DefaultTheme } = {
     navHoverUnderBar: '#888',
     shadowColor: 'rgba(38, 38, 38, 0.4)',
     inputOutline: 'rgba(134, 125, 255, .7)',
+
+    // submit
+    submitButton: {
+      buttonColor: '#2a9df4',
+      textColor: '#f1f2f3'
+    },
+
+    // danger
+    dangerButton: {
+      buttonColor: '#ff0000',
+      textColor: '#f1f2f3'
+    },
+
     // Nav
     navList: {
       selectedColor: '#867dff',
@@ -55,9 +65,7 @@ export const theme: { light: DefaultTheme; dark: DefaultTheme } = {
     headerBackground: 'rgb(37, 37, 37)',
     articleBackground: '#252525',
     secondaryContentBackground: '#313131',
-    submitButtonColor: '#2a9df4',
     editorBackground: '#313131',
-    dangerButtonColor: '#dd0000',
     adminCommentColor: 'rgba(77, 77, 77, 0.5)',
     adminReplyColor: 'rgba(77, 77, 77, 0.7)',
     loadingBackground: 'rgba(0, 0, 0, .7)',
@@ -68,7 +76,6 @@ export const theme: { light: DefaultTheme; dark: DefaultTheme } = {
     hoverText: '',
     placeholderText: '#f1f2f3',
     inputText: '#f1f2f3',
-    dangerContentText: '#f1f2f3',
     // Border
     borderColor: '#aaa',
     inputBorder: '#111',
@@ -80,6 +87,19 @@ export const theme: { light: DefaultTheme; dark: DefaultTheme } = {
     navHoverUnderBar: '#ddd',
     shadowColor: 'rgba(0, 0, 0, 0.9)',
     inputOutline: 'rgba(134, 125, 255, .7)',
+
+    // submit
+    submitButton: {
+      buttonColor: '#2a9df4',
+      textColor: '#f1f2f3'
+    },
+
+    // danger
+    dangerButton: {
+      buttonColor: '#ff0000',
+      textColor: '#f1f2f3'
+    },
+
     // Nav
     navList: {
       selectedColor: '#867dff',

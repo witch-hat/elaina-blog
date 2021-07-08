@@ -1,6 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import { AlertBox, AlertStateType } from 'src/components';
 import { CategoryDetails } from 'src/query/category';
@@ -10,6 +12,18 @@ import { DeleteCategoryModal } from './DeleteCategoryModal';
 import { CategoryViewer } from './CategoryViewer';
 
 const Container = styled.div({});
+
+const AddCategory = styled.button((props) => ({
+  display: 'flex',
+  width: '600px',
+  margin: '0 auto',
+  padding: '.5rem',
+  borderRadius: '.5rem',
+  backgroundColor: props.theme.submitButton.buttonColor,
+  color: props.theme.submitButton.textColor,
+  alignItems: 'center',
+  justifyContent: 'center'
+}));
 
 interface Props {
   categories: CategoryDetails[];
@@ -63,6 +77,10 @@ export function CategoryContainer(props: Props) {
           );
         })}
       </Container>
+      <AddCategory>
+        <FontAwesomeIcon icon={faPlus} style={{ marginRight: '.5rem' }} />
+        <p>Add Category</p>
+      </AddCategory>
       <DeleteCategoryModal
         isDeleteModalOpen={deletedCategory.isModalOpen}
         setDeletedCategory={setDeletedCategory}

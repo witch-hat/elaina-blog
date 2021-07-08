@@ -9,6 +9,15 @@ declare module 'styled-components' {
     hoverBorderLeft: string;
   }
 
+  interface Button {
+    buttonColor: string;
+    textColor: string;
+  }
+
+  export interface SubmitButton extends Button {}
+
+  export interface DangerButton extends Button {}
+
   export interface DefaultTheme {
     themeColor: string;
     // Background Color
@@ -19,9 +28,7 @@ declare module 'styled-components' {
     hoverBackground: string;
     articleBackground: string;
     secondaryContentBackground: string;
-    submitButtonColor: string;
     editorBackground: string;
-    dangerButtonColor: string;
     adminCommentColor: string;
     adminReplyColor: string;
     loadingBackground: string;
@@ -32,7 +39,6 @@ declare module 'styled-components' {
     hoverText: string;
     placeholderText: string;
     inputText: string;
-    dangerContentText: string;
     // Border
     borderColor: string;
     inputBorder: string;
@@ -44,6 +50,12 @@ declare module 'styled-components' {
     navHoverUnderBar: string;
     shadowColor: string;
     inputOutline: string;
+
+    // submit btn
+    submitButton: SubmitButton;
+
+    // danget btn
+    dangerButton: DangerButton;
 
     // Nav
     navList: NavList;
