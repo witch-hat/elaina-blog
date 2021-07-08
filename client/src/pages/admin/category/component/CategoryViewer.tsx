@@ -1,14 +1,11 @@
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGripVertical, faPen, faTrash, faSave, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { useMutation } from '@apollo/client';
+import { cloneDeep, throttle } from 'lodash';
 
 import { BorderBox, AlertStateType } from 'src/components';
-import { theme } from 'src/styles';
-import { RootState } from 'src/redux/rootReducer';
-import { ThemeMode } from 'src/redux/common/type';
 import { CircleRippleWrapper } from 'src/components/common/wrapper/CircleRippleWrapper';
 import { CategoryDetails, ORDER_CATEGORY, UPDATE_CATEGORY } from 'src/query/category';
 
@@ -113,62 +110,71 @@ interface Props {
 }
 
 export function CategoryViewer(props: Props) {
-  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
-
+  const initialCategoryOrder = useRef<number[] | null>(null);
   const [orderCategory] = useMutation(ORDER_CATEGORY);
 
-  function onDragStart(e: React.DragEvent<HTMLDivElement>) {
+  const onDragStart = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+    initialCategoryOrder.current = props.categories.map((category) => category._id);
+    props.setGrabbingCategoryIndex(Number(e.currentTarget.dataset.position));
     props.setGrabbedElement(e.currentTarget);
-    e.dataTransfer.effectAllowed = 'move';
-    // @ts-ignore
-    e.dataTransfer.setData('text/html', e.currentTarget);
-  }
+  }, []);
 
-  function onDragOver(e: React.DragEvent<HTMLDivElement>) {
-    e.preventDefault();
-  }
+  const onDragEnter = useCallback(
+    throttle((e: React.DragEvent<HTMLDivElement>) => {
+      let dragOverItemPosition = Number(e.currentTarget.dataset.position);
+      // props is immutable, splice() change data
+      const copiedCategory = cloneDeep(props.categories);
 
-  function onDragEnd(e: React.DragEvent<HTMLDivElement>) {
-    e.dataTransfer.dropEffect = 'move';
-  }
+      copiedCategory.splice(props.grabbingCategoryIndex, 1);
+      copiedCategory.splice(dragOverItemPosition, 0, props.categories[props.grabbingCategoryIndex]);
 
-  function onDrop(e: React.DragEvent<HTMLDivElement>) {
-    let grabPosition = Number(props.grabbedElement?.dataset.position);
-    let dropPosition = Number(e.currentTarget.dataset.position);
+      props.setGrabbingCategoryIndex(dragOverItemPosition);
+      dragOverItemPosition = -1;
+      props.setCategories(copiedCategory);
+    }, 400),
+    [props.grabbingCategoryIndex, props.categories]
+  );
 
-    try {
-      const newCategories = [...props.categories];
-      newCategories[grabPosition] = newCategories.splice(dropPosition, 1, newCategories[grabPosition])[0];
-
-      props.setAlertState(props.initAlertState);
-
-      orderCategory({
-        variables: {
-          ids: newCategories.map((category) => category._id)
+  const onDrop = useCallback(
+    async (e: React.DragEvent<HTMLDivElement>) => {
+      try {
+        const changedOrder = props.categories.map((category) => category._id);
+        if (initialCategoryOrder.current) {
+          if (initialCategoryOrder.current.every((id, index) => id === changedOrder[index])) {
+            return;
+          }
         }
-      });
-      props.setCategories(newCategories);
-      props.setGrabbingCategoryIndex(-1);
-    } catch (err) {
-      const backUpCategories = [...props.categories];
 
-      props.setCategories(backUpCategories);
-      props.setAlertState({
-        msg: err.message,
-        isPop: true,
-        isError: true
-      });
-    }
-  }
+        props.setAlertState(props.initAlertState);
+
+        await orderCategory({
+          variables: {
+            ids: changedOrder
+          }
+        });
+
+        props.setGrabbingCategoryIndex(-1);
+      } catch (err) {
+        const backUpCategories = [...props.categories];
+        props.setCategories(backUpCategories);
+        props.setAlertState({
+          msg: err.message,
+          isPop: true,
+          isError: true
+        });
+      }
+    },
+    [props.categories]
+  );
 
   return (
     <Container
       data-position={props.index}
       draggable={props.grabbingCategoryIndex === props.index}
-      onDragOver={(e: React.DragEvent<HTMLDivElement>) => onDragOver(e)}
-      onDragStart={(e: React.DragEvent<HTMLDivElement>) => props.grabbingCategoryIndex > -1 && onDragStart(e)}
-      onDragEnd={(e: React.DragEvent<HTMLDivElement>) => props.grabbingCategoryIndex > -1 && onDragEnd(e)}
-      onDrop={(e: React.DragEvent<HTMLDivElement>) => props.grabbingCategoryIndex > -1 && onDrop(e)}
+      onDragStart={(e) => props.grabbingCategoryIndex > -1 && onDragStart(e)}
+      onDragOver={(e) => e.preventDefault()}
+      onDragEnter={(e) => props.grabbingCategoryIndex > -1 && onDragEnter(e)}
+      onDrop={(e) => props.grabbingCategoryIndex > -1 && onDrop(e)}
     >
       <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
         <Wrapper>
