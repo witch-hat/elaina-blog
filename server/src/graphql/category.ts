@@ -32,8 +32,8 @@ export const categoryTypeDef = gql`
   }
 
   extend type Mutation {
-    addCategory(title: String!, description: String!, previewImage: String!): AddResponse
-    updateCategory(id: Int, title: String, description: String): Void
+    addCategory(title: String!): AddResponse
+    updateCategory(id: Int, title: String): Void
     deleteCategory(index: Int!): Void
     orderCategory(ids: [Int]): Void
   }
