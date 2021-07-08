@@ -43,7 +43,7 @@ const Item = styled.div(
 
 interface Props {
   categories: CategoryDetails[];
-  latestPosts: ({ _id: number; categoryId: number; article: string } | null)[];
+  latestPosts: ({ _id: number; categoryId: number; title: string; article: string } | null)[];
   isLogin: boolean;
 }
 
@@ -58,22 +58,21 @@ export function ContentCategory(props: Props) {
             if (props.isLogin) {
               return (
                 <Item key={category.title} onClick={() => router.push(`/admin/writer?category=${category.title}`)} index={index}>
-                  <ContentCategoryItem category={category} />
-                </Item>
-              );
-            } else {
-              return (
-                <Item key={category.title} index={index}>
-                  <ContentCategoryItem category={category} isEmpty={true} />
+                  <ContentCategoryItem category={category} latestPost={null} />
                 </Item>
               );
             }
+            return (
+              <Item key={category.title} index={index}>
+                <ContentCategoryItem category={category} isEmpty={true} latestPost={null} />
+              </Item>
+            );
           }
           return (
             <Item key={category.title} onClick={() => {}} index={index}>
               <Link href={`/category/${category._id}`}>
                 <a>
-                  <ContentCategoryItem category={category} />
+                  <ContentCategoryItem category={category} latestPost={props.latestPosts[index]} />
                 </a>
               </Link>
             </Item>

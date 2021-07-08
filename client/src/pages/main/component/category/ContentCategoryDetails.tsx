@@ -11,6 +11,7 @@ import { ThemeMode } from 'src/redux/common/type';
 
 const Container = styled.div((props) => ({
   display: 'flex',
+  width: '100%',
   marginTop: '.4rem',
   color: props.theme.detailText,
   fontSize: '.8rem'
@@ -22,14 +23,26 @@ const LatestTime = styled.span({
   alignItems: 'center'
 });
 
-const PostCount = styled.span({
+const CategoryTitleContainer = styled.span({
   display: 'flex',
-  alignItems: 'center'
+  width: '100%',
+  alignItems: 'center',
+  flex: 1
+});
+
+const CategoryTitle = styled.p({
+  display: '-webkit-box',
+  width: '400px',
+  wordBreak: 'break-all',
+  overflow: 'hidden',
+  WebkitLineClamp: 1,
+  WebkitBoxOrient: 'vertical'
 });
 
 interface Props {
   time: number | null;
-  count: number;
+  // count: number;
+  categoryTitle: string;
 }
 
 export function ContentCategoryDetails(props: Props) {
@@ -41,10 +54,10 @@ export function ContentCategoryDetails(props: Props) {
         <FontAwesomeIcon icon={faClock} style={{ marginRight: '5px' }} />
         <p>{props.time !== null ? FormatUnifier.getFullFormatDate(new Date(props.time)) : 'None'}</p>
       </LatestTime>
-      <PostCount>
+      <CategoryTitleContainer>
         <FontAwesomeIcon icon={faBook} style={{ marginRight: '5px' }} />
-        <p>{props.count}</p>
-      </PostCount>
+        <CategoryTitle>{props.categoryTitle}</CategoryTitle>
+      </CategoryTitleContainer>
     </Container>
   );
 }

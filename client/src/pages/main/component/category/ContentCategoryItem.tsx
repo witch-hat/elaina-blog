@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import { BorderBox, useWidth } from 'src/components';
 import { CategoryDetails } from 'src/query/category';
+import { Post } from 'src/query/post';
 
 import { ContentCategoryDetails } from './ContentCategoryDetails';
 
@@ -34,10 +35,13 @@ const PreviewTextWrapper = styled.div({
   height: '8.4rem',
   flexDirection: 'column',
   alignItems: 'flex-start',
-  justifyContent: 'center'
+  justifyContent: 'center',
+  '&:hover': {
+    cursor: 'ponter'
+  }
 });
 
-const PreviewTitle = styled.span({
+const LatestPostTitle = styled.p({
   display: '-webkit-box',
   width: '100%',
   height: '1.8rem',
@@ -49,10 +53,13 @@ const PreviewTitle = styled.span({
   overflow: 'hidden',
   WebkitLineClamp: 1,
   WebkitBoxOrient: 'vertical',
+  '&:hover': {
+    cursor: 'pointer'
+  },
   '@media screen and (max-width: 1380px)': {}
 });
 
-const PreviewContent = styled.span({
+const LatestPostArticle = styled.p({
   display: '-webkit-box',
   width: '100%',
   height: '4.5rem',
@@ -63,24 +70,44 @@ const PreviewContent = styled.span({
   textAlign: 'left',
   overflow: 'hidden',
   WebkitLineClamp: 3,
-  WebkitBoxOrient: 'vertical'
+  WebkitBoxOrient: 'vertical',
+  '&:hover': {
+    cursor: 'pointer'
+  }
 });
 
 interface Props {
   category: CategoryDetails;
+  latestPost: { _id: number; categoryId: number; title: string; article: string } | null;
   isEmpty?: boolean;
 }
 
 function ContentCategoryItem(props: Props) {
   const width = useWidth();
 
+  if (props.latestPost === null) {
+    return (
+      <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
+        <Content>
+          <PreviewTextWrapper>
+            <LatestPostTitle>최신글이 없어요...</LatestPostTitle>
+            <LatestPostArticle>최신글이 없어요...</LatestPostArticle>
+            {/* <ContentCategoryDetails time={props.category.recentCreatedAt} count={props.category.postCount} /> */}
+            <ContentCategoryDetails time={props.category.recentCreatedAt} categoryTitle={props.category.title} />
+          </PreviewTextWrapper>
+          {!(width <= 767) && <PreviewImage src={props.category.previewImage} alt={`${props.category.title} preview image`} />}
+        </Content>
+      </BorderBox>
+    );
+  }
   return (
     <BorderBox isTransform={props.isEmpty ? false : true} styles={{ width: '100%', margin: '.8rem 0' }}>
       <Content>
         <PreviewTextWrapper>
-          <PreviewTitle>{props.category.title}</PreviewTitle>
-          <PreviewContent>{props.category.description}</PreviewContent>
-          <ContentCategoryDetails time={props.category.recentCreatedAt} count={props.category.postCount} />
+          <LatestPostTitle>{props.latestPost.title}</LatestPostTitle>
+          <LatestPostArticle>{props.latestPost.article}</LatestPostArticle>
+          {/* <ContentCategoryDetails time={props.category.recentCreatedAt} count={props.category.postCount} /> */}
+          <ContentCategoryDetails time={props.category.recentCreatedAt} categoryTitle={props.category.title} />
         </PreviewTextWrapper>
         {!(width <= 767) && <PreviewImage src={props.category.previewImage} alt={`${props.category.title} preview image`} />}
       </Content>
