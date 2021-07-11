@@ -99,7 +99,7 @@ export const postResolver = {
 
       const posts: (Post | null)[] = [];
       for (const category of categories) {
-        const post: Post = await PostModel.findOne({ categoryId: category._id }, {}, { sort: { _id: -1 } });
+        const post: Post | null = await PostModel.findOne({ categoryId: category._id }, {}, { sort: { _id: -1 } });
         if (post) {
           posts.push(post);
         } else {
