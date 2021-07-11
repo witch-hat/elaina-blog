@@ -10,7 +10,7 @@ const Container = styled.div({
 });
 
 const Description = styled.p({
-  fontSize: '1.1rem',
+  fontSize: '1.2rem',
   fontWeight: 'bold'
 });
 

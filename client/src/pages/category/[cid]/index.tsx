@@ -1,4 +1,5 @@
 import { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
 import { GET_CATEGORIES_WITH_DETAILS, CategoryDetails } from 'src/query/category';
@@ -24,15 +25,22 @@ interface ServerSideProps {
 interface Props extends ServerSideProps {}
 
 export default function CategoryPage(props: Props) {
+  const router = useRouter();
+
+  const cid = router.asPath.split('/')[2];
+  const postCount = props.categoryData.filter((category) => category._id === +cid)[0].postCount;
+
   return (
     <Container>
       <CategoryContainer categories={props.categoryData} />
-      <PostContainer posts={props.postData} />
+      <PostContainer posts={props.postData} postCount={postCount || 0} />
     </Container>
   );
 }
 
 export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (context) => {
+  context.res.setHeader('Cache-Control', 'max-age=0, public, must-revalidate');
+
   const categoryId = context.resolvedUrl.split('/')[2];
   const apolloClient = initApolloClient({}, context);
 
