@@ -42,6 +42,14 @@ const Editor = styled.textarea((props) => ({
   }
 }));
 
+const Icon = styled.div({
+  display: 'flex',
+  width: '2rem',
+  height: '2rem',
+  alignItems: 'center',
+  justifyContent: 'center'
+});
+
 interface Props {
   profile: ProfileType;
   editingProfile: ProfileType;
@@ -78,7 +86,9 @@ export function ProfileFormEditor(props: Props) {
         onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => props.onChangeIntroduce(e)}
       />
       <InputContainer>
-        <FontAwesomeIcon icon={faLink} style={{ marginRight: '.5rem' }} />
+        <Icon>
+          <FontAwesomeIcon icon={faLink} />
+        </Icon>
         <MemoizedProfileInput
           placeholder='Link'
           defaultValue={props.editingProfile.link || ''}
@@ -86,7 +96,9 @@ export function ProfileFormEditor(props: Props) {
         />
       </InputContainer>
       <InputContainer>
-        <FontAwesomeIcon icon={faBuilding} style={{ marginRight: '.5rem' }} />
+        <Icon>
+          <FontAwesomeIcon icon={faBuilding} />
+        </Icon>
         <MemoizedProfileInput
           placeholder='Company'
           defaultValue={props.editingProfile.company || ''}
@@ -94,7 +106,9 @@ export function ProfileFormEditor(props: Props) {
         />
       </InputContainer>
       <InputContainer>
-        <FontAwesomeIcon icon={faMapMarkerAlt} style={{ marginRight: '.5rem' }} />
+        <Icon>
+          <FontAwesomeIcon icon={faMapMarkerAlt} />
+        </Icon>
         <MemoizedProfileInput
           placeholder='Location'
           defaultValue={props.editingProfile.location || ''}
@@ -102,7 +116,9 @@ export function ProfileFormEditor(props: Props) {
         />
       </InputContainer>
       <InputContainer>
-        <FontAwesomeIcon icon={faEnvelope} style={{ marginRight: '.5rem' }} />
+        <Icon>
+          <FontAwesomeIcon icon={faEnvelope} />
+        </Icon>
         <MemoizedProfileInput
           placeholder='Email'
           defaultValue={props.editingProfile.email || ''}

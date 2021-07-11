@@ -100,6 +100,7 @@ export function ContentCategoryItem(props: Props) {
       </BorderBox>
     );
   }
+
   return (
     <BorderBox isTransform={props.isEmpty ? false : true} styles={{ width: '100%', margin: '.8rem 0' }}>
       <Content>

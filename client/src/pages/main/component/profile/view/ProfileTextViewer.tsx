@@ -66,6 +66,14 @@ const Description = styled.li(
   `
 );
 
+const Icon = styled.div({
+  display: 'flex',
+  width: '2rem',
+  height: '2rem',
+  alignItems: 'center',
+  justifyContent: 'center'
+});
+
 const ParagraphLink = styled.a({
   display: 'block',
   width: '100%',
@@ -103,7 +111,9 @@ function ProfileTextViewer(props: Props) {
         </Description>
         {props.profile.link && (
           <Description delay={animationDelay++}>
-            <FontAwesomeIcon icon={faLink} style={{ marginRight: '8px' }} />
+            <Icon>
+              <FontAwesomeIcon icon={faLink} />
+            </Icon>
             <ParagraphLink href={props.profile.link} target='_blank' rel='noopener noreferer nofollow'>
               <Paragraph>{props.profile.link}</Paragraph>
             </ParagraphLink>
@@ -111,19 +121,25 @@ function ProfileTextViewer(props: Props) {
         )}
         {props.profile.company && (
           <Description delay={animationDelay++}>
-            <FontAwesomeIcon icon={faBuilding} style={{ marginRight: '8px' }} />
+            <Icon>
+              <FontAwesomeIcon icon={faBuilding} />
+            </Icon>
             <Paragraph>{props.profile.company}</Paragraph>
           </Description>
         )}
         {props.profile.location && (
           <Description delay={animationDelay++}>
-            <FontAwesomeIcon icon={faMapMarkerAlt} style={{ marginRight: '8px' }} />
+            <Icon>
+              <FontAwesomeIcon icon={faMapMarkerAlt} />
+            </Icon>
             <Paragraph>{props.profile.location}</Paragraph>
           </Description>
         )}
         {props.profile.email && (
           <Description delay={animationDelay++}>
-            <FontAwesomeIcon icon={faEnvelope} style={{ marginRight: '8px' }} />
+            <Icon>
+              <FontAwesomeIcon icon={faEnvelope} />
+            </Icon>
             <ParagraphLink href={`mailto:${props.profile.email}`}>
               <Paragraph>{props.profile.email}</Paragraph>
             </ParagraphLink>
