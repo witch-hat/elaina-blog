@@ -41,7 +41,7 @@ const PreviewTextWrapper = styled.div({
   }
 });
 
-const LatestPostTitle = styled.p({
+const LatestPostTitle = styled.p<{ null?: boolean }>((props) => ({
   display: '-webkit-box',
   width: '100%',
   height: '1.8rem',
@@ -54,12 +54,12 @@ const LatestPostTitle = styled.p({
   WebkitLineClamp: 1,
   WebkitBoxOrient: 'vertical',
   '&:hover': {
-    cursor: 'pointer'
+    cursor: props.null ? 'default' : 'pointer'
   },
   '@media screen and (max-width: 1380px)': {}
-});
+}));
 
-const LatestPostArticle = styled.p({
+const LatestPostArticle = styled.p<{ null?: boolean }>((props) => ({
   display: '-webkit-box',
   width: '100%',
   height: '4.5rem',
@@ -72,9 +72,9 @@ const LatestPostArticle = styled.p({
   WebkitLineClamp: 3,
   WebkitBoxOrient: 'vertical',
   '&:hover': {
-    cursor: 'pointer'
+    cursor: props.null ? 'default' : 'pointer'
   }
-});
+}));
 
 interface Props {
   category: CategoryDetails;
@@ -82,20 +82,20 @@ interface Props {
   isEmpty?: boolean;
 }
 
-function ContentCategoryItem(props: Props) {
-  const width = useWidth();
+export function ContentCategoryItem(props: Props) {
+  // const width = useWidth();
 
   if (props.latestPost === null) {
     return (
       <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
         <Content>
           <PreviewTextWrapper>
-            <LatestPostTitle>최신글이 없어요...</LatestPostTitle>
-            <LatestPostArticle>최신글이 없어요...</LatestPostArticle>
+            <LatestPostTitle null>최신글이 없어요...</LatestPostTitle>
+            <LatestPostArticle null>최신글이 없어요...</LatestPostArticle>
             {/* <ContentCategoryDetails time={props.category.recentCreatedAt} count={props.category.postCount} /> */}
             <ContentCategoryDetails time={props.category.recentCreatedAt} categoryTitle={props.category.title} />
           </PreviewTextWrapper>
-          {!(width <= 767) && <PreviewImage src={props.category.previewImage} alt={`${props.category.title} preview image`} />}
+          {/* {!(width <= 767) && <PreviewImage src={props.category.previewImage} alt={`${props.category.title} preview image`} />} */}
         </Content>
       </BorderBox>
     );
@@ -109,10 +109,8 @@ function ContentCategoryItem(props: Props) {
           {/* <ContentCategoryDetails time={props.category.recentCreatedAt} count={props.category.postCount} /> */}
           <ContentCategoryDetails time={props.category.recentCreatedAt} categoryTitle={props.category.title} />
         </PreviewTextWrapper>
-        {!(width <= 767) && <PreviewImage src={props.category.previewImage} alt={`${props.category.title} preview image`} />}
+        {/* {!(width <= 767) && <PreviewImage src={props.category.previewImage} alt={`${props.category.title} preview image`} />} */}
       </Content>
     </BorderBox>
   );
 }
-
-export default React.memo(ContentCategoryItem);

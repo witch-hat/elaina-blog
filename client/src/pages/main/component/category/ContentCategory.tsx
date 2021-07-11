@@ -3,11 +3,9 @@ import { useRouter } from 'next/router';
 import styled, { css, keyframes } from 'styled-components';
 import Link from 'next/link';
 
-import { BorderBox } from 'src/components';
 import { CategoryDetails } from 'src/query/category';
 
-import { ContentCategoryDetails } from './ContentCategoryDetails';
-import ContentCategoryItem from './ContentCategoryItem';
+import { ContentCategoryItem } from './ContentCategoryItem';
 
 const MoveUp = keyframes({
   from: {
@@ -31,10 +29,13 @@ const Container = styled.div({
 });
 
 const Item = styled.div(
-  {
+  (props) => ({
     width: '100%',
-    opacity: '0'
-  },
+    opacity: '0',
+    '&:hover': {
+      cursor: props.onClick ? 'pointer' : 'default !important'
+    }
+  }),
   css<{ index: number }>`
     animation: ${MoveUp} 0.4s ease-out forwards;
     animation-delay: ${(props) => props.index * 0.25}s;
@@ -69,7 +70,7 @@ export function ContentCategory(props: Props) {
             );
           }
           return (
-            <Item key={category.title} onClick={() => {}} index={index}>
+            <Item key={category.title} index={index}>
               <Link href={`/category/${category._id}`}>
                 <a>
                   <ContentCategoryItem category={category} latestPost={props.latestPosts[index]} />
@@ -82,3 +83,5 @@ export function ContentCategory(props: Props) {
     </section>
   );
 }
+
+export const MemoizedContentCategory = React.memo(ContentCategory);
