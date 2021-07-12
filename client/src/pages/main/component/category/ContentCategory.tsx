@@ -1,22 +1,11 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import styled, { css, keyframes } from 'styled-components';
+import styled from 'styled-components';
 import Link from 'next/link';
 
 import { CategoryDetails } from 'src/query/category';
 
 import { ContentCategoryItem } from './ContentCategoryItem';
-
-const MoveUp = keyframes({
-  from: {
-    opacity: '0',
-    transform: 'translateY(1.5rem)'
-  },
-  to: {
-    opacity: '1',
-    transform: 'translateY(0)'
-  }
-});
 
 const Container = styled.div({
   display: 'flex',
@@ -28,19 +17,12 @@ const Container = styled.div({
   alignItems: 'center'
 });
 
-const Item = styled.div(
-  (props) => ({
-    width: '100%',
-    opacity: '0',
-    '&:hover': {
-      cursor: props.onClick ? 'pointer' : 'default !important'
-    }
-  }),
-  css<{ index: number }>`
-    animation: ${MoveUp} 0.4s ease-out forwards;
-    animation-delay: ${(props) => props.index * 0.25}s;
-  `
-);
+const Item = styled.div((props) => ({
+  width: '100%',
+  '&:hover': {
+    cursor: props.onClick ? 'pointer' : 'default !important'
+  }
+}));
 
 interface Props {
   categories: CategoryDetails[];
@@ -58,19 +40,19 @@ export function ContentCategory(props: Props) {
           if (props.latestPosts[index] === null) {
             if (props.isLogin) {
               return (
-                <Item key={category.title} onClick={() => router.push(`/admin/writer?category=${category.title}`)} index={index}>
+                <Item key={category.title} onClick={() => router.push(`/admin/writer?category=${category.title}`)}>
                   <ContentCategoryItem category={category} latestPost={null} />
                 </Item>
               );
             }
             return (
-              <Item key={category.title} index={index}>
+              <Item key={category.title}>
                 <ContentCategoryItem category={category} isEmpty={true} latestPost={null} />
               </Item>
             );
           }
           return (
-            <Item key={category.title} index={index}>
+            <Item key={category.title}>
               <Link href={`/category/${category._id}`}>
                 <a>
                   <ContentCategoryItem category={category} latestPost={props.latestPosts[index]} />

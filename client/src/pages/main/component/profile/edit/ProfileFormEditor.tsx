@@ -5,7 +5,7 @@ import { faBuilding, faEnvelope, faLink, faMapMarkerAlt } from '@fortawesome/fre
 
 import { ProfileType } from 'src/query/profile';
 
-import { MemoizedProfileInput, ProfileInput } from './ProfileInput';
+import { MemoizedProfileInput } from './ProfileInput';
 
 const Form = styled.form({
   width: '100%',
@@ -45,7 +45,6 @@ const Editor = styled.textarea((props) => ({
 const Icon = styled.div({
   display: 'flex',
   width: '2rem',
-  height: '2rem',
   alignItems: 'center',
   justifyContent: 'center'
 });

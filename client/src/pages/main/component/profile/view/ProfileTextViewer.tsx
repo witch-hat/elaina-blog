@@ -1,40 +1,22 @@
 import React from 'react';
-import styled, { keyframes, css } from 'styled-components';
+import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBuilding, faEnvelope, faLink, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 
 import { ProfileType } from 'src/query/profile';
 
-const MoveRight = keyframes({
-  from: {
-    opacity: '0',
-    transform: 'translateX(-1.5rem)'
-  },
-  to: {
-    opacity: '1',
-    transform: 'translateX(0)'
+const Name = styled.span({
+  display: 'block',
+  width: '100%',
+  margin: '.5rem 0 0 0',
+  fontSize: '1.4rem',
+  fontWeight: 'bold',
+  wordBreak: 'keep-all',
+  '@media screen and (max-width: 767px)': {
+    margin: '10px 0',
+    textAlign: 'center'
   }
 });
-
-const Name = styled.span(
-  {
-    display: 'block',
-    width: '100%',
-    margin: '8px 0 0 0',
-    fontSize: '1.4rem',
-    fontWeight: 'bold',
-    wordBreak: 'keep-all',
-    opacity: '0',
-    '@media screen and (max-width: 767px)': {
-      margin: '10px 0',
-      textAlign: 'center'
-    }
-  },
-  css<{ delay: number }>`
-    animation: ${MoveRight} 0.4s ease-out forwards;
-    animation-delay: ${(props) => props.delay * 0.2}s;
-  `
-);
 
 const ListWrapper = styled.ul({
   display: 'flex',
@@ -50,26 +32,18 @@ const ListWrapper = styled.ul({
   }
 });
 
-const Description = styled.li(
-  {
-    display: 'flex',
-    width: '100%',
-    margin: '.4rem 0',
-    alignItems: 'center',
-    fontSize: '1.1rem',
-    wordBreak: 'keep-all',
-    opacity: '0'
-  },
-  css<{ delay: number }>`
-    animation: ${MoveRight} 0.4s ease-out forwards;
-    animation-delay: ${(props) => props.delay * 0.2}s;
-  `
-);
+const Description = styled.li({
+  display: 'flex',
+  width: '100%',
+  margin: '.4rem 0',
+  alignItems: 'center',
+  fontSize: '1.1rem',
+  wordBreak: 'keep-all'
+});
 
 const Icon = styled.div({
   display: 'flex',
   width: '2rem',
-  height: '2rem',
   alignItems: 'center',
   justifyContent: 'center'
 });
@@ -104,13 +78,13 @@ function ProfileTextViewer(props: Props) {
 
   return (
     <>
-      <Name delay={animationDelay++}>{props.profile.name}</Name>
+      <Name>{props.profile.name}</Name>
       <ListWrapper>
-        <Description delay={animationDelay++}>
+        <Description>
           <Paragraph>{props.profile.introduce}</Paragraph>
         </Description>
         {props.profile.link && (
-          <Description delay={animationDelay++}>
+          <Description>
             <Icon>
               <FontAwesomeIcon icon={faLink} />
             </Icon>
@@ -120,7 +94,7 @@ function ProfileTextViewer(props: Props) {
           </Description>
         )}
         {props.profile.company && (
-          <Description delay={animationDelay++}>
+          <Description>
             <Icon>
               <FontAwesomeIcon icon={faBuilding} />
             </Icon>
@@ -128,7 +102,7 @@ function ProfileTextViewer(props: Props) {
           </Description>
         )}
         {props.profile.location && (
-          <Description delay={animationDelay++}>
+          <Description>
             <Icon>
               <FontAwesomeIcon icon={faMapMarkerAlt} />
             </Icon>
@@ -136,7 +110,7 @@ function ProfileTextViewer(props: Props) {
           </Description>
         )}
         {props.profile.email && (
-          <Description delay={animationDelay++}>
+          <Description>
             <Icon>
               <FontAwesomeIcon icon={faEnvelope} />
             </Icon>

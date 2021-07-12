@@ -1,31 +1,15 @@
 import React from 'react';
-import styled, { keyframes, css } from 'styled-components';
+import styled from 'styled-components';
 
 import { RoundImage } from 'src/components';
 
-const MoveRight = keyframes({
-  from: {
-    opacity: '0',
-    transform: 'translateX(-1.5rem)'
-  },
-  to: {
-    opacity: '1',
-    transform: 'translateX(0)'
-  }
+const ImageContainer = styled.div({
+  display: 'flex',
+  poisition: 'relative',
+  width: '100%',
+  alignItems: 'center',
+  justifyContent: 'center'
 });
-
-const ImageContainer = styled.div(
-  {
-    display: 'flex',
-    poisition: 'relative',
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  css`
-    animation: ${MoveRight} 0.4s ease-out forwards;
-  `
-);
 
 interface Props {
   image: string;
