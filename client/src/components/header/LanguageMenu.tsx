@@ -10,13 +10,9 @@ import { LangCode, changeLang, getCurrentLangCode } from 'src/resources/language
 
 import { DropDownMenu } from '../common/box/DropDownMenu';
 
-const RotateIcon = styled.span<{ isOpen: boolean }>((props) => {
-  return {
-    display: 'inline-block',
-    marginLeft: '.4rem',
-    transition: '.3s all',
-    transform: props.isOpen ? 'rotate(180deg)' : 'none'
-  };
+const RotateIcon = styled.span({
+  display: 'inline-block',
+  marginLeft: '.4rem'
 });
 
 const LanguageDropDown = styled.div({
@@ -46,21 +42,17 @@ export function LanguageMenu(props: Props) {
     [LangCode.en]: 'English'
   };
 
-  const [isLangMenuVisible, setIsLangMenuVisible] = useState(false);
-
   return (
     <LanguageDropDown>
       <DropDownMenu
-        visible={isLangMenuVisible}
         mainButton={
           <>
             <FontAwesomeIcon size={'lg'} icon={faLanguage} />
-            <RotateIcon isOpen={isLangMenuVisible}>
+            <RotateIcon>
               <FontAwesomeIcon icon={faCaretDown} />
             </RotateIcon>
           </>
         }
-        setVisible={setIsLangMenuVisible}
         dropMenu={
           <>
             {Object.keys(languages).map((code: any) => {
@@ -70,7 +62,6 @@ export function LanguageMenu(props: Props) {
                   onClick={() => {
                     changeLang(code as LangCode);
                     commonDispatch.SetLanguage(code);
-                    setIsLangMenuVisible(false);
                   }}
                   // themeMode={themeMode}
                 >

@@ -107,8 +107,8 @@ const ModalButton = styled.button<{ danger?: boolean }>((props) => ({
   padding: '.5rem',
   marginLeft: '.5rem',
   borderRadius: '.5rem',
-  backgroundColor: props.danger ? props.theme.dangerButtonColor : 'inherit',
-  color: props.danger ? props.theme.dangerContentText : 'inherit'
+  backgroundColor: props.danger ? props.theme.dangerButton.buttonColor : 'inherit',
+  color: props.danger ? props.theme.dangerButton.textColor : 'inherit'
 }));
 
 const EditContainer = styled.div({
@@ -161,7 +161,6 @@ export function CommentBox(props: Props) {
   const createdAt = new Date(props.comment.createdAt);
   // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [password, setPassword] = useState('');
   const [commentContent, setCommentContent] = useState<string>(props.comment.comment);
@@ -380,40 +379,16 @@ export function CommentBox(props: Props) {
         </InformationContainer>
         {(props.isLogin || !props.isCommentFromAdmin) && (
           <DropDownMenu
-            visible={isMenuOpen}
             mainButton={<FontAwesomeIcon icon={faEllipsisV} />}
-            setVisible={setIsMenuOpen}
             dropMenu={
               <>
                 {/* admin인경우: 자기것만 edit, 나머지는 edit 버튼 X, admin 아닌경우 edit 버튼 O */}
                 {props.isLogin ? (
-                  props.comment.isAdmin && (
-                    <MenuButton
-                      onClick={() => {
-                        setIsAdminCommentEdit(true);
-                        setIsMenuOpen(false);
-                      }}
-                    >
-                      {trans(Lang.Edit)}
-                    </MenuButton>
-                  )
+                  props.comment.isAdmin && <MenuButton onClick={() => setIsAdminCommentEdit(true)}>{trans(Lang.Edit)}</MenuButton>
                 ) : (
-                  <MenuButton
-                    onClick={() => {
-                      setIsUserCommentEdit(true);
-                      setIsMenuOpen(false);
-                    }}
-                  >
-                    {trans(Lang.Edit)}
-                  </MenuButton>
+                  <MenuButton onClick={() => setIsUserCommentEdit(true)}>{trans(Lang.Edit)}</MenuButton>
                 )}
-                <MenuButton
-                  danger
-                  onClick={() => {
-                    setIsModalOpen(true);
-                    setIsMenuOpen(false);
-                  }}
-                >
+                <MenuButton danger onClick={() => setIsModalOpen(true)}>
                   {trans(Lang.Delete)}
                 </MenuButton>
               </>

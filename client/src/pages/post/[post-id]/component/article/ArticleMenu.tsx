@@ -24,8 +24,6 @@ const MenuButton = styled.p<{ danger?: boolean }>((props) => ({
   padding: '.5rem',
   borderRadius: '.5rem',
   textAlign: 'center',
-  cursor: 'pointer',
-  userSelect: 'none',
   wordBreak: 'keep-all',
   color: props.danger ? '#dd0000' : 'inherit',
   '&:hover': {
@@ -42,16 +40,12 @@ interface Props {
 }
 
 export function ContentMenu(props: Props) {
-  const [isOpenMenu, setIsOpenMenu] = useState(false);
-
   return (
     <Menu>
       <ArticleInfo profile={props.profile} time={props.time} />
       {props.isLogin && (
         <DropDownMenu
-          visible={isOpenMenu}
           mainButton={<FontAwesomeIcon icon={faEllipsisV} />}
-          setVisible={setIsOpenMenu}
           dropMenu={
             <>
               <MenuButton>

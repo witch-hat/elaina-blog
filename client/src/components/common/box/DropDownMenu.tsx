@@ -1,11 +1,7 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
 
 import { FocusWrapper } from 'src/components';
-import { ThemeMode } from 'src/redux/common/type';
-// import { theme } from 'src/styles';
-import { RootState } from 'src/redux/rootReducer';
 
 const MenuContainer = styled.div({
   position: 'relative',
@@ -27,9 +23,10 @@ const MenuList = styled.div((props) => ({
   flexDirection: 'column'
 }));
 
-const MainButton = styled.div((props) => ({
+const MainButton = styled.div<{ visible: boolean }>((props) => ({
   padding: '.5rem .8rem',
   borderRadius: '.5rem',
+  backgroundColor: props.visible ? props.theme.selectedButton : 'inherit',
   cursor: 'pointer',
   '&:hover': {
     backgroundColor: props.theme.hoverBackground
@@ -40,19 +37,23 @@ const MainButton = styled.div((props) => ({
 }));
 
 interface Props {
-  visible: boolean;
   mainButton: JSX.Element;
   dropMenu: JSX.Element;
-  setVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export function DropDownMenu(props: Props) {
-  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  const [isVisible, setIsVisible] = useState(false);
+
+  const onClickMainButton = useCallback(() => setIsVisible((prev) => !prev), []);
+
+  const onClickOutside = useCallback(() => setIsVisible(false), []);
 
   return (
     <MenuContainer>
-      <MainButton onClick={() => props.setVisible(!props.visible)}>{props.mainButton}</MainButton>
-      <FocusWrapper visible={props.visible} onClickOutside={() => props.setVisible(false)}>
+      <MainButton onClick={onClickMainButton} visible={isVisible}>
+        {props.mainButton}
+      </MainButton>
+      <FocusWrapper visible={isVisible} onClickOutside={onClickOutside}>
         <MenuListWrapper>
           <MenuList>{props.dropMenu}</MenuList>
         </MenuListWrapper>
