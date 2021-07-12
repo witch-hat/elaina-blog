@@ -13,3 +13,12 @@ export const GET_ABOUT = gql`
     }
   }
 `;
+
+export const UPDATE_ABOUT = gql`
+  mutation ($article: String) {
+    updateAbout(article: $article) {
+      article
+      updatedAt
+    }
+  }
+`;
