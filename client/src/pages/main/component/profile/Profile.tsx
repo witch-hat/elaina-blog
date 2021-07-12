@@ -50,9 +50,13 @@ export function Profile(props: Props) {
   const [profile, setProfile] = useState<ProfileType>(props.profile);
   const [alertState, setAlertState] = useState<AlertStateType>(initAlertState);
 
-  const applyUpdatedProfile = useCallback((profile: ProfileType) => setProfile(profile), []);
+  function applyUpdatedProfile(profile: ProfileType) {
+    setProfile(profile);
+  }
 
-  const enterEditMode = useCallback(() => setIsEditMode(true), []);
+  function enterEditMode() {
+    setIsEditMode(true);
+  }
 
   return (
     <Container>

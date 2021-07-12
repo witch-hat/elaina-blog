@@ -1,13 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBook, faStream, faUser } from '@fortawesome/free-solid-svg-icons';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { useSelector } from 'react-redux';
-import { useRouter } from 'next/router';
+import { faBook, faUser } from '@fortawesome/free-solid-svg-icons';
 
-import { RootState } from 'src/redux/rootReducer';
-import { ThemeMode } from 'src/redux/common/type';
 import { Lang, trans } from 'src/resources/languages';
 
 import { NavigationButton } from './NavigationButton';
@@ -23,26 +18,14 @@ const NavName = styled.span({
   fontWeight: 'bold'
 });
 
-interface IconProps {
-  icon: IconProp;
-}
-
-function NavigationIcon(props: IconProps) {
-  return <FontAwesomeIcon icon={props.icon} style={{ marginRight: '8px' }} />;
-}
-
 interface Props {}
 
 export function Navigation(props: Props) {
-  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
-
-  const router = useRouter();
-
   return (
     <Container>
       <NavigationButton href='/'>
         <>
-          <NavigationIcon icon={faBook} />
+          <FontAwesomeIcon icon={faBook} style={{ marginRight: '.5rem' }} />
           <NavName>{trans(Lang.Board)}</NavName>
         </>
       </NavigationButton>
@@ -54,7 +37,7 @@ export function Navigation(props: Props) {
       </NavigationButton> */}
       <NavigationButton query='about'>
         <>
-          <NavigationIcon icon={faUser} />
+          <FontAwesomeIcon icon={faUser} style={{ marginRight: '.5rem' }} />
           <NavName>{trans(Lang.About)}</NavName>
         </>
       </NavigationButton>

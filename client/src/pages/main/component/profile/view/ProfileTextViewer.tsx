@@ -74,8 +74,6 @@ interface Props {
 }
 
 function ProfileTextViewer(props: Props) {
-  let animationDelay = 1;
-
   return (
     <>
       <Name>{props.profile.name}</Name>

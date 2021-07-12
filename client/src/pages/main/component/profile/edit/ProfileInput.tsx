@@ -22,14 +22,7 @@ interface Props {
 }
 
 export function ProfileInput(props: Props) {
-  return (
-    <Input
-      placeholder={props.placeholder}
-      type='text'
-      value={props.defaultValue}
-      onChange={(event: React.ChangeEvent<HTMLInputElement>) => props.changeEditingProfile(event)}
-    />
-  );
+  return <Input placeholder={props.placeholder} type='text' value={props.defaultValue} onChange={props.changeEditingProfile} />;
 }
 
-export const MemoizedProfileInput = React.memo(ProfileInput, (prev, next) => prev.defaultValue === next.defaultValue);
+export const MemoizedProfileInput = React.memo(ProfileInput);

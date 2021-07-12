@@ -67,7 +67,7 @@ export function ProfileImageEditor(props: Props) {
         <FontAwesomeIcon icon={faCamera} style={{ marginRight: '.5rem' }} />
         Edit
       </ChangeImageButton>
-      <FileSelector type='file' id='profile-select' accept='image/x-png,image/jpeg' onChange={(e) => props.selectImage(e)} />
+      <FileSelector type='file' id='profile-select' accept='image/x-png,image/jpeg' onChange={props.selectImage} />
     </ImageContainer>
   );
 }
