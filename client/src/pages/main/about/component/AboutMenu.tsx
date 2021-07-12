@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 
@@ -32,10 +33,19 @@ interface Props {
 }
 
 export function AboutMenu(props: Props) {
+  const router = useRouter();
+
   return (
     <FlexWrapper>
       <MemoizedAboutInfo name={props.name} updatedAt={props.updatedAt} />
-      {props.isLogin && <DropDownMenu mainButton={<FontAwesomeIcon icon={faEllipsisV} />} dropMenu={<Button>{trans(Lang.Edit)}</Button>} />}
+      {props.isLogin && (
+        <DropDownMenu
+          mainButton={<FontAwesomeIcon icon={faEllipsisV} />}
+          dropMenu={
+            <Button onClick={() => router.replace(router.asPath + '&edit=true', undefined, { shallow: true })}>{trans(Lang.Edit)}</Button>
+          }
+        />
+      )}
     </FlexWrapper>
   );
 }

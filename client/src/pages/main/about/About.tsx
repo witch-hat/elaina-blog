@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
-import { ProfileType } from 'src/query/profile';
+import { useRouter } from 'next/router';
+
 import { About } from 'src/query/about';
 
 import { MemoizedAboutContent } from './component/AboutContent';
 import { AboutMenu } from './component/AboutMenu';
+import { AboutEditor } from './component/AboutEditor';
 
 const Container = styled.section({
   width: '100%',
@@ -14,15 +16,30 @@ const Container = styled.section({
 
 interface Props {
   about: About;
-  profile: ProfileType;
+  name: string;
   isLogin: boolean;
 }
 
 export function AboutPage(props: Props) {
+  const [about, setAbout] = useState<About>(props.about);
+  const router = useRouter();
+
+  function onUpdate(updatedAbout: About) {
+    setAbout(updatedAbout);
+  }
+
+  if (router.query.edit) {
+    return (
+      <Container>
+        <AboutEditor article={about.article} onUpdate={onUpdate} />
+      </Container>
+    );
+  }
+
   return (
     <Container>
-      <AboutMenu name={props.profile.name} updatedAt={props.about.updatedAt} isLogin={props.isLogin} />
-      <MemoizedAboutContent content={props.about.article} />
+      <AboutMenu name={props.name} updatedAt={about.updatedAt} isLogin={props.isLogin} />
+      <MemoizedAboutContent content={about.article} />
     </Container>
   );
 }
