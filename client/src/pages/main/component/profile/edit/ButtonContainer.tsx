@@ -16,10 +16,10 @@ const Button = styled.button<{ isSubmit?: boolean }>((props) => ({
   padding: '.5rem',
   marginRight: props.isSubmit ? '5%' : '0',
   borderRadius: '.5rem',
-  backgroundColor: props.isSubmit ? props.theme.submitButtonColor : 'inherit',
+  backgroundColor: props.isSubmit ? props.theme.submitButton.buttonColor : 'inherit',
   cursor: 'pointer',
   justifyContent: 'center',
-  color: props.isSubmit ? '#f1f2f3' : props.theme.mainText,
+  color: props.isSubmit ? props.theme.submitButton.textColor : 'inherit',
   userSelect: 'none',
   '@media screen and (max-width: 767px)': {
     maxWidth: '150px'

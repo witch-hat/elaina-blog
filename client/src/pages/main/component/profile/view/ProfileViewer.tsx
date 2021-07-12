@@ -2,9 +2,9 @@ import styled, { keyframes, css } from 'styled-components';
 
 import { ProfileType } from 'src/query/profile';
 
-import { MemoizedProfileImageViewer } from './view/ProfileImageViewer';
-import { MemoizedProfileTextViewer } from './view/ProfileTextViewer';
-import { ButtonContainer } from './view/ButtonContainer';
+import { MemoizedProfileImageViewer } from './ProfileImageViewer';
+import { MemoizedProfileTextViewer } from './ProfileTextViewer';
+import { ButtonContainer } from './ButtonContainer';
 
 interface Props {
   profile: ProfileType;

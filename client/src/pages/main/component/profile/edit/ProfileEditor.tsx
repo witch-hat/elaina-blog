@@ -8,9 +8,9 @@ import { FileType, UPLOAD_FILE } from 'src/query/file';
 import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';
 
-import { MemoizedProfileImageEditor } from './edit/ProfileImageEditor';
-import { MemoizedProfileFormEditor } from './edit/ProfileFormEditor';
-import { ButtonContainer } from './edit/ButtonContainer';
+import { MemoizedProfileImageEditor } from './ProfileImageEditor';
+import { MemoizedProfileFormEditor } from './ProfileFormEditor';
+import { ButtonContainer } from './ButtonContainer';
 
 interface CropperProps {
   imageFile: File;
@@ -19,12 +19,9 @@ interface CropperProps {
   visible: boolean;
 }
 
-const DynamicProfileImageCropper = dynamic<CropperProps>(
-  () => import('./edit/ProfileImageCropper').then((mod) => mod.ProfileImageCropper),
-  {
-    ssr: false
-  }
-);
+const DynamicProfileImageCropper = dynamic<CropperProps>(() => import('./ProfileImageCropper').then((mod) => mod.ProfileImageCropper), {
+  ssr: false
+});
 
 interface Props {
   profile: ProfileType;

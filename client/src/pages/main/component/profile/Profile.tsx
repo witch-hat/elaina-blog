@@ -5,8 +5,8 @@ import dynamic from 'next/dynamic';
 import { AlertStateType } from 'src/components';
 import { ProfileType } from 'src/query/profile';
 
-import { ProfileEditor } from './ProfileEditor';
-import { ProfileViewer } from './ProfileViewer';
+import { ProfileEditor } from './edit/ProfileEditor';
+import { ProfileViewer } from './view/ProfileViewer';
 
 interface AlertProps {
   msg: string;

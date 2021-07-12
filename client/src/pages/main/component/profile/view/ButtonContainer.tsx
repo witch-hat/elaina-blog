@@ -1,28 +1,13 @@
-import styled, { keyframes, css } from 'styled-components';
+import styled from 'styled-components';
 
 import { Lang, trans } from 'src/resources/languages';
 
-const FadeIn = keyframes({
-  from: {
-    opacity: '0'
-  },
-  to: {
-    opacity: '1'
-  }
+const Container = styled.div({
+  display: 'flex',
+  width: '100%',
+  marginTop: '.5rem',
+  justifyContent: 'center'
 });
-
-const Container = styled.div(
-  {
-    display: 'flex',
-    width: '100%',
-    marginTop: '.5rem',
-    justifyContent: 'center',
-    opacity: '0'
-  },
-  css`
-    animation: ${FadeIn} 0.4s 1.2s ease-out forwards;
-  `
-);
 
 const EditButton = styled.div({
   display: 'flex',
