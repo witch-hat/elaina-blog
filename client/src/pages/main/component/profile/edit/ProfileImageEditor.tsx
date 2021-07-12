@@ -7,7 +7,7 @@ import { RoundImage } from 'src/components';
 
 const ImageContainer = styled.div({
   display: 'flex',
-  poisition: 'relative',
+  position: 'relative',
   width: '100%',
   alignItems: 'center',
   justifyContent: 'center'
@@ -28,7 +28,13 @@ const ChangeImageButton = styled.label((props) => ({
   alignItems: 'center',
   justifyContent: 'center',
   cursor: 'pointer',
-  userSelect: 'none'
+  userSelect: 'none',
+  '@media screen and (max-width: 1380px)': {
+    top: '85%'
+  },
+  '@media screen and (max-width: 767px)': {
+    left: '35%'
+  }
 }));
 
 const FileSelector = styled.input({
