@@ -17,10 +17,10 @@ const Container = styled.div({
   alignItems: 'center'
 });
 
-const Item = styled.div((props) => ({
+const Item = styled.div<{ pointer?: boolean }>((props) => ({
   width: '100%',
   '&:hover': {
-    cursor: props.onClick ? 'pointer' : 'default !important'
+    cursor: props.pointer ? 'pointer' : 'default !important'
   }
 }));
 
@@ -40,19 +40,21 @@ export function ContentCategory(props: Props) {
           if (props.latestPosts[index] === null) {
             if (props.isLogin) {
               return (
-                <Item key={category.title} onClick={() => router.push(`/admin/writer?category=${category.title}`)}>
-                  <ContentCategoryItem category={category} latestPost={null} />
+                <Item key={category.title} onClick={() => router.push(`/admin/writer?category=${category.title}`)} pointer>
+                  <ContentCategoryItem category={category} latestPost={null} isLogin={props.isLogin} />
                 </Item>
               );
             }
+
             return (
               <Item key={category.title}>
                 <ContentCategoryItem category={category} isEmpty={true} latestPost={null} />
               </Item>
             );
           }
+
           return (
-            <Item key={category.title}>
+            <Item key={category.title} pointer>
               <Link href={`/category/${category._id}`}>
                 <a>
                   <ContentCategoryItem category={category} latestPost={props.latestPosts[index]} />

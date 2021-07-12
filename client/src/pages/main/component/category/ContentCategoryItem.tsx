@@ -79,19 +79,18 @@ const LatestPostArticle = styled.p<{ null?: boolean }>((props) => ({
 interface Props {
   category: CategoryDetails;
   latestPost: { _id: number; categoryId: number; title: string; article: string } | null;
+  isLogin?: boolean;
   isEmpty?: boolean;
 }
 
 export function ContentCategoryItem(props: Props) {
-  // const width = useWidth();
-
   if (props.latestPost === null) {
     return (
       <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
         <Content>
           <PreviewTextWrapper>
-            <LatestPostTitle null>최신글이 없어요...</LatestPostTitle>
-            <LatestPostArticle null>최신글이 없어요...</LatestPostArticle>
+            <LatestPostTitle null={!props.isLogin}>최신글이 없어요...</LatestPostTitle>
+            <LatestPostArticle null={!props.isLogin}>최신글이 없어요...</LatestPostArticle>
             {/* <ContentCategoryDetails time={props.category.recentCreatedAt} count={props.category.postCount} /> */}
             <ContentCategoryDetails time={props.category.recentCreatedAt} categoryTitle={props.category.title} />
           </PreviewTextWrapper>
