@@ -41,68 +41,7 @@ export function ProfileEditor(props: Props) {
   const [uploadFile] = useMutation<{ uploadFile: FileType }>(UPLOAD_FILE);
   const [updateProfile] = useMutation<{ updateProfile: ProfileType }>(UPDATE_PROFILE);
 
-  const handleSubmit = useCallback(async () => {
-    let uploadedImagePath: string | undefined;
-    const { data } = await client.query({ query: IS_AUTH });
-
-    const isAdmin = data.isAuth.isAuth;
-
-    if (!isAdmin) {
-      props.setAlertState({
-        msg: 'Login Invalid: Please login',
-        isPop: true,
-        isError: true
-      });
-      props.setEditMode(false);
-      return;
-    }
-
-    try {
-      if (editingProfile.image !== props.profile.image) {
-        const uploadResponse = await uploadFile({
-          variables: {
-            file: croppedImageFile
-          }
-        });
-
-        uploadedImagePath = uploadResponse.data?.uploadFile.path || '';
-      }
-    } catch (err) {
-      alert(err.message);
-      return;
-    }
-
-    try {
-      const { data } = await updateProfile({
-        variables: {
-          id: editingProfile._id,
-          image: uploadedImagePath ? uploadedImagePath : props.profile.image,
-          name: editingProfile.name,
-          introduce: editingProfile.introduce,
-          link: editingProfile.link,
-          company: editingProfile.company,
-          location: editingProfile.location,
-          email: editingProfile.email
-        }
-      });
-
-      props.updateProfile(data?.updateProfile!);
-      props.setEditMode(false);
-      props.setAlertState({
-        msg: 'Profile changed successfully',
-        isPop: true,
-        isError: false
-      });
-    } catch (err) {
-      props.setAlertState({
-        msg: err.message,
-        isPop: true,
-        isError: true
-      });
-      props.setEditMode(false);
-      setEditingProfile(props.profile);
-    }
-  }, [editingProfile]);
+  const setEditModeFalse = useCallback(() => props.setEditMode(false), []);
 
   const selectImage = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -122,11 +61,79 @@ export function ProfileEditor(props: Props) {
     }, []);
   }, []);
 
-  const setEditModeFalse = useCallback(() => props.setEditMode(false), []);
-
   const onChangeIntroduce = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
     e.persist();
     setEditingProfile((prev) => ({ ...prev, introduce: e.target.value }));
+  }, []);
+
+  const handleSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>, oldProfile: ProfileType, newProfile: ProfileType) => {
+    e.preventDefault();
+
+    let uploadedImagePath: string | undefined;
+    const { data } = await client.query({ query: IS_AUTH });
+
+    const isAdmin = data.isAuth.isAuth;
+
+    if (!isAdmin) {
+      props.setAlertState({
+        msg: 'Login Invalid: Please login',
+        isPop: true,
+        isError: true
+      });
+      setEditModeFalse();
+      return;
+    }
+
+    if (Object.entries(oldProfile).toString() === Object.entries(newProfile).toString()) {
+      setEditModeFalse();
+      return;
+    }
+
+    try {
+      if (newProfile.image !== oldProfile.image) {
+        const uploadResponse = await uploadFile({
+          variables: {
+            file: croppedImageFile
+          }
+        });
+
+        uploadedImagePath = uploadResponse.data?.uploadFile.path || '';
+      }
+    } catch (err) {
+      alert(err.message);
+      return;
+    }
+
+    try {
+      const { data } = await updateProfile({
+        variables: {
+          id: newProfile._id,
+          image: uploadedImagePath ? uploadedImagePath : oldProfile.image,
+          name: newProfile.name,
+          introduce: newProfile.introduce,
+          link: newProfile.link,
+          company: newProfile.company,
+          location: newProfile.location,
+          email: newProfile.email
+        }
+      });
+
+      props.updateProfile(data?.updateProfile!);
+      setEditModeFalse();
+      props.setAlertState({
+        msg: 'Profile changed successfully',
+        isPop: true,
+        isError: false
+      });
+    } catch (err) {
+      props.setAlertState({
+        msg: err.message,
+        isPop: true,
+        isError: true
+      });
+      setEditModeFalse();
+      setEditingProfile(oldProfile);
+    }
   }, []);
 
   return (

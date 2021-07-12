@@ -1,5 +1,21 @@
 import React from 'react';
 import styled from 'styled-components';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+const InputContainer = styled.div({
+  display: 'flex',
+  width: '100%',
+  margin: '.7rem 0',
+  alignItems: 'center'
+});
+
+const Icon = styled.div({
+  display: 'flex',
+  width: '2rem',
+  alignItems: 'center',
+  justifyContent: 'center'
+});
 
 const Input = styled.input((props) => ({
   display: 'inline-block',
@@ -17,12 +33,22 @@ const Input = styled.input((props) => ({
 
 interface Props {
   placeholder: string;
-  defaultValue: string;
+  value: string;
   changeEditingProfile: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  icon?: IconProp;
 }
 
 export function ProfileInput(props: Props) {
-  return <Input placeholder={props.placeholder} type='text' value={props.defaultValue} onChange={props.changeEditingProfile} />;
+  return (
+    <InputContainer>
+      {props.icon && (
+        <Icon>
+          <FontAwesomeIcon icon={props.icon} />
+        </Icon>
+      )}
+      <Input placeholder={props.placeholder} type='text' value={props.value} onChange={props.changeEditingProfile} />
+    </InputContainer>
+  );
 }
 
-export const MemoizedProfileInput = React.memo(ProfileInput);
+export const MemoizedProfileInput = React.memo(ProfileInput, (prev, next) => prev.value === next.value);
