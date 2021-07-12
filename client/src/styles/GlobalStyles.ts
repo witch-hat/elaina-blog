@@ -1,9 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
 import 'normalize.css';
 
-// import { theme } from 'src/styles/theme';
-import { ThemeMode } from 'src/redux/common/type';
-
 export const GlobalStyles = createGlobalStyle`
 	html {
 		/* scroll-behavior: smooth; */

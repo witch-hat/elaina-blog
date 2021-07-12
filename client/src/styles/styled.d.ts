@@ -24,7 +24,6 @@ declare module 'styled-components' {
     mainBackground: string;
     headerBackground: string;
     inputBackground: string;
-    buttonBackground: string;
     hoverBackground: string;
     articleBackground: string;
     secondaryContentBackground: string;
@@ -32,6 +31,7 @@ declare module 'styled-components' {
     adminCommentColor: string;
     adminReplyColor: string;
     loadingBackground: string;
+    selectedButton: string;
     // Text Color
     blogName: string;
     mainText: string;
