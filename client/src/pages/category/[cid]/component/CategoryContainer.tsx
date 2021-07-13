@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 import { CategoryDetails } from 'src/query/category';
-import { CategoryItem } from './CategoryItem';
+import { MemoizedCategoryItem } from './CategoryItem';
 
 const Container = styled.div({
   position: 'sticky',
@@ -37,7 +37,7 @@ export function CategoryContainer(props: Props) {
       <Description>Categories</Description>
       <CategoryList>
         {props.categories.map((category) => {
-          return <CategoryItem key={category.title} title={category.title} id={category._id} />;
+          return <MemoizedCategoryItem key={category.title} title={category.title} id={category._id} />;
         })}
       </CategoryList>
     </Container>

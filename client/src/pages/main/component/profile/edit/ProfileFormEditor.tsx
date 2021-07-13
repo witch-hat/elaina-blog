@@ -35,13 +35,6 @@ const Editor = styled.textarea((props) => ({
   }
 }));
 
-const Icon = styled.div({
-  display: 'flex',
-  width: '2rem',
-  alignItems: 'center',
-  justifyContent: 'center'
-});
-
 interface Props {
   profile: ProfileType;
   editingProfile: ProfileType;

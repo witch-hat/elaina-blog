@@ -1,3 +1,4 @@
+import React from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
 
@@ -80,3 +81,5 @@ export function PostItem(props: Props) {
     </Container>
   );
 }
+
+export const MemoizedPostItem = React.memo(PostItem);

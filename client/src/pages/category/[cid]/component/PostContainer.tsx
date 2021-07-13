@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { PostItem } from './PostItem';
+import { MemoizedPostItem } from './PostItem';
 
 const Container = styled.div({
   width: '850px',
@@ -25,6 +25,10 @@ const StyledHr = styled.hr((props) => ({
   borderBottom: `1px solid ${props.theme.borderColor}`
 }));
 
+const PostWrapper = styled.div({
+  width: '100%'
+});
+
 interface Props {
   posts: { _id: number; title: string; article: string }[];
   postCount: number;
@@ -37,9 +41,11 @@ export function PostContainer(props: Props) {
         <Count>Post Count: {props.postCount}</Count>
         <StyledHr />
       </CountContainer>
-      {props.posts.map((post) => {
-        return <PostItem key={post._id} post={post} />;
-      })}
+      <PostWrapper>
+        {props.posts.map((post) => {
+          return <MemoizedPostItem key={post._id} post={post} />;
+        })}
+      </PostWrapper>
     </Container>
   );
 }
