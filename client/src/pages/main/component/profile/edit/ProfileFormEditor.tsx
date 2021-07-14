@@ -47,7 +47,7 @@ interface Props {
 export function ProfileFormEditor(props: Props) {
   const onSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => await props.handleSubmit(e, props.profile, props.editingProfile),
-    []
+    [props.editingProfile]
   );
 
   return (
