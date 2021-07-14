@@ -33,8 +33,8 @@ export const GET_LAST_POST = gql`
 `;
 
 export const FIND_POST_BY_URL = gql`
-  query ($requestUrl: String!) {
-    findPostByUrl(requestUrl: $requestUrl) {
+  query ($id: String!) {
+    findPostById(id: $id) {
       _id
       title
       createdAt

@@ -37,7 +37,7 @@ export const postTypeDef = gql`
   extend type Query {
     posts: [Post]
     lastPost: Post!
-    findPostByUrl(requestUrl: String!): Post!
+    findPostById(id: String!): Post!
     findSameCategoryPosts(categoryId: Int!): PostCategory
     getLatestPostsEachCategory: [Post]
     search(keyword: String!): SearchResponse
@@ -70,9 +70,9 @@ export const postResolver = {
       }
     },
 
-    async findPostByUrl(_: any, args: { requestUrl: string }, context: ContextType) {
+    async findPostById(_: any, args: { id: string }, context: ContextType) {
       try {
-        const parsedUrl = Number.parseInt(args.requestUrl);
+        const parsedUrl = Number.parseInt(args.id);
         const findedPost = await PostModel.findOne({ _id: parsedUrl });
         return findedPost;
       } catch (err) {

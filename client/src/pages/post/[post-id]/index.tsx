@@ -195,12 +195,13 @@ export default function PostId(props: Props) {
 export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (context: GetServerSidePropsContext) => {
   context.res.setHeader('Cache-Control', 'max-age=0, public, must-revalidate');
 
-  const requestUrl = context.query['post-id'];
+  const id = context.query['post-id'];
+
   try {
     const client = initApolloClient({}, context);
 
-    const postQueryResult = await client.query({ query: FIND_POST_BY_URL, variables: { requestUrl } });
-    const findedPost = postQueryResult.data.findPostByUrl;
+    const postQueryResult = await client.query({ query: FIND_POST_BY_URL, variables: { id } });
+    const findedPost = postQueryResult.data.findPostById;
 
     const commentQueryResult = await client.query({ query: GET_COMMENTS, variables: { _id: findedPost._id } });
     const findedComment = commentQueryResult.data.comments;

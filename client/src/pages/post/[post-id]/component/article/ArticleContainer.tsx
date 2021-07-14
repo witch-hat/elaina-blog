@@ -77,21 +77,21 @@ export function ArticleContainer(props: Props) {
           }
         });
 
-        const categoryId = deleteResponse.data.deletePost.categoryId;
-
-        const { data } = await client.query({ query: FIND_SAME_CATEGORY_POSTS, variables: { categoryId } });
-        if (data.findSameCategoryPosts.post.length === 0) {
-          router.push('/');
-        } else {
-          const lastPostId = data.findSameCategoryPosts.post[data.findSameCategoryPosts.post.length - 1]._id;
-          router.push(`/post/${lastPostId}`);
-        }
-
         await deletePostAllCommentLog({
           variables: {
             postId: +id
           }
         });
+
+        const categoryId = deleteResponse.data.deletePost.categoryId;
+        const { data } = await client.query({ query: FIND_SAME_CATEGORY_POSTS, variables: { categoryId } });
+
+        if (data.findSameCategoryPosts.post.length === 0) {
+          router.push('/');
+        } else {
+          const lastPostId = data.findSameCategoryPosts.post[0]._id;
+          router.push(`/post/${lastPostId}`);
+        }
       } catch (err) {
         alert(err.message);
       }

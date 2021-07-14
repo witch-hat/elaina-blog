@@ -83,7 +83,7 @@ export function ArticleInfo(props: Props) {
     <ContentInfoWrapper>
       <Author onMouseEnter={(e) => handleHover(e)} onMouseLeave={() => clearHover()}>
         <FontAwesomeIcon icon={faUser} style={{ marginRight: '0.5rem' }} />
-        {props.profile.name!}
+        {props.profile.name}
         {isHover && (
           <HoverBox>
             <Flex>
