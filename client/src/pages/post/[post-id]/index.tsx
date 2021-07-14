@@ -1,29 +1,19 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled, { keyframes, css } from 'styled-components';
-import { useSelector } from 'react-redux';
-import {
-  InferGetServerSidePropsType,
-  NextPageContext,
-  GetServerSideProps,
-  GetServerSidePropsContext,
-  GetServerSidePropsResult
-} from 'next';
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSwatchbook } from '@fortawesome/free-solid-svg-icons';
 
 import { useWidth, FocusWrapper } from 'src/components';
-import { theme } from 'src/styles';
-import { RootState } from 'src/redux/rootReducer';
-import { ThemeMode } from 'src/redux/common/type';
 import { initApolloClient } from 'src/apollo/withApollo';
 import { FIND_POST_BY_URL, FIND_SAME_CATEGORY_POSTS, Post } from 'src/query/post';
 import { GET_COMMENTS, Comments } from 'src/query/comment';
 import { GET_PROFILE, ProfileType } from 'src/query/profile';
 import { AppCommonProps } from 'src/pages/_app';
 
-import { Article } from './component/article/Article';
+import { ArticleContainer } from './component/article/ArticleContainer';
 import { CommentContainer } from './component/comment/CommentContainer';
-import { PostCategory } from './component/PostCategory';
+// import { PostCategory } from './component/PostCategory';
 import { RightSideContainer } from './component/rightside/RightSideContainer';
 
 // interface ContentContainerProps {
@@ -167,7 +157,13 @@ export default function PostId(props: Props) {
         </FocusWrapper>
       )} */}
       <ContentContainer>
-        <Article title={post.title} profile={profile} createdAt={post.createdAt} article={post.article} isLogin={props.app.isLogin} />
+        <ArticleContainer
+          title={post.title}
+          profile={profile}
+          createdAt={post.createdAt}
+          article={post.article}
+          isLogin={props.app.isLogin}
+        />
         <Comment ref={commentRef}>
           <CommentContainer
             comments={comments}
@@ -197,6 +193,8 @@ export default function PostId(props: Props) {
 }
 
 export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (context: GetServerSidePropsContext) => {
+  context.res.setHeader('Cache-Control', 'max-age=0, public, must-revalidate');
+
   const requestUrl = context.query['post-id'];
   try {
     const client = initApolloClient({}, context);

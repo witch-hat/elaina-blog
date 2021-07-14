@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import Link from 'next/link';
+import React from 'react';
+import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
@@ -39,7 +39,9 @@ interface Props {
   id: string;
 }
 
-export function ContentMenu(props: Props) {
+export function ArticleMenu(props: Props) {
+  const router = useRouter();
+
   return (
     <Menu>
       <ArticleInfo profile={props.profile} time={props.time} />
@@ -48,9 +50,7 @@ export function ContentMenu(props: Props) {
           mainButton={<FontAwesomeIcon icon={faEllipsisV} />}
           dropMenu={
             <>
-              <MenuButton>
-                <Link href={`/post/${props.id}/edit`}>{trans(Lang.Edit)}</Link>
-              </MenuButton>
+              <MenuButton onClick={() => router.push(`/post/${props.id}/edit`)}>{trans(Lang.Edit)}</MenuButton>
               <MenuButton danger onClick={() => props.setIsModalOpen(true)}>
                 {trans(Lang.Delete)}
               </MenuButton>
