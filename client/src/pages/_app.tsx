@@ -21,6 +21,24 @@ import { withApollo, initApolloClient } from '../apollo/withApollo';
 // Skip Adding FontAwesome CSS
 config.autoAddCss = false;
 
+const FONT = `
+  @font-face {
+    font-family: "Nanum Gothic";
+    src: url("/fonts/Nanum Gothic.woff2");
+    font-style: normal;
+    font-weight: 400;
+    font-display: fallback;
+  }
+
+  @font-face {
+    font-family: "Nanum Gothic";
+    src: url("/fonts/Nanum Gothic Bold.woff2");
+    font-style: bold;
+    font-weight: 600;
+    font-display: fallback;
+  }
+`;
+
 function ElainaBlog({ Component, pageProps, apolloClient, cookies }: any) {
   const [themeMode, setThemeMode] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -56,6 +74,7 @@ function ElainaBlog({ Component, pageProps, apolloClient, cookies }: any) {
               {/* <link rel='apple-touch-icon' href='%PUBLIC_URL%/logo192.png' /> */}
               {/* <link rel='manifest' href='%PUBLIC_URL%/manifest.json' /> */}
               <title>Elaina Blog</title>
+              <style>{FONT}</style>
             </Head>
             <GlobalStyles />
             <Layout {...pageProps} changeThemeMode={changeThemeMode}>
