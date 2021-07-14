@@ -6,7 +6,7 @@ import { faSwatchbook } from '@fortawesome/free-solid-svg-icons';
 
 import { useWidth, FocusWrapper } from 'src/components';
 import { initApolloClient } from 'src/apollo/withApollo';
-import { FIND_POST_BY_URL, FIND_SAME_CATEGORY_POSTS, Post } from 'src/query/post';
+import { FIND_POST_BY_ID, FIND_SAME_CATEGORY_POSTS, Post } from 'src/query/post';
 import { GET_COMMENTS, Comments } from 'src/query/comment';
 import { GET_PROFILE, ProfileType } from 'src/query/profile';
 import { AppCommonProps } from 'src/pages/_app';
@@ -200,7 +200,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
   try {
     const client = initApolloClient({}, context);
 
-    const postQueryResult = await client.query({ query: FIND_POST_BY_URL, variables: { id } });
+    const postQueryResult = await client.query({ query: FIND_POST_BY_ID, variables: { id } });
     const findedPost = postQueryResult.data.findPostById;
 
     const commentQueryResult = await client.query({ query: GET_COMMENTS, variables: { _id: findedPost._id } });

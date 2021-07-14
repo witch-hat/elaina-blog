@@ -32,7 +32,7 @@ export const GET_LAST_POST = gql`
   }
 `;
 
-export const FIND_POST_BY_URL = gql`
+export const FIND_POST_BY_ID = gql`
   query ($id: String!) {
     findPostById(id: $id) {
       _id
