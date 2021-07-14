@@ -49,4 +49,20 @@ export const GlobalStyles = createGlobalStyle`
 	ul {
 		padding: 0;
 	}
+	
+	@font-face {
+    font-family: "Nanum Gothic";
+    src: url("/fonts/Nanum Gothic.woff2");
+    font-style: normal;
+    font-weight: 400;
+    font-display: fallback;
+  }
+
+  @font-face {
+    font-family: "Nanum Gothic";
+    src: url("/fonts/Nanum Gothic Bold.woff2");
+    font-style: bold;
+    font-weight: 600;
+    font-display: fallback;
+  }
 `;

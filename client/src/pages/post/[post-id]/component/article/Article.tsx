@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 
-import styles from 'src/styles/MarkdownStyles.module.css';
+import styles from 'src/styles/markdown-styles.module.css';
 
 const StyledArticle = styled.article({
   width: '100%',

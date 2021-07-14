@@ -12,33 +12,14 @@ import { useTranslation } from 'react-i18next';
 
 import { Layout } from 'src/components/Layout';
 import { store, persistor } from 'src/redux';
-import { RootState } from 'src/redux/rootReducer';
+import { GlobalStyles } from 'src/styles';
 import { IS_AUTH } from 'src/query/user';
 import { theme } from 'src/styles';
 
 import { withApollo, initApolloClient } from '../apollo/withApollo';
-import { ThemeMode } from 'src/redux/common/type';
 
 // Skip Adding FontAwesome CSS
 config.autoAddCss = false;
-
-const FONT = `
-  @font-face {
-    font-family: "Nanum Gothic";
-    src: url("/fonts/Nanum Gothic.woff2");
-    font-style: normal;
-    font-weight: 400;
-    font-display: fallback;
-  }
-
-  @font-face {
-    font-family: "Nanum Gothic";
-    src: url("/fonts/Nanum Gothic Bold.woff2");
-    font-style: bold;
-    font-weight: 600;
-    font-display: fallback;
-  }
-`;
 
 function ElainaBlog({ Component, pageProps, apolloClient, cookies }: any) {
   const [themeMode, setThemeMode] = useState(() => {
@@ -75,8 +56,8 @@ function ElainaBlog({ Component, pageProps, apolloClient, cookies }: any) {
               {/* <link rel='apple-touch-icon' href='%PUBLIC_URL%/logo192.png' /> */}
               {/* <link rel='manifest' href='%PUBLIC_URL%/manifest.json' /> */}
               <title>Elaina Blog</title>
-              <style>{FONT}</style>
             </Head>
+            <GlobalStyles />
             <Layout {...pageProps} changeThemeMode={changeThemeMode}>
               <Component {...pageProps} />
             </Layout>

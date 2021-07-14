@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import ReactMarkdown from 'react-markdown';
 import styled from 'styled-components';
-import styles from 'src/styles/MarkdownStyles.module.css';
 import gfm from 'remark-gfm';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
@@ -16,6 +15,7 @@ import { CategoryDetails } from 'src/query/category';
 import { EDIT_POST, WRITE_POST } from 'src/query/post';
 import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';
+import styles from 'src/styles/MarkdownStyles.module.css';
 
 import { Menu } from './Menu';
 import { CategorySelector } from './CategorySelector';
@@ -90,8 +90,8 @@ const ButtonContainer = styled.div({
 const WriteButton = styled.button<{ available: boolean }>((props) => ({
   padding: '.5rem',
   borderRadius: '.5rem',
-  backgroundColor: props.theme.submitButtonColor,
-  color: '#f1f2f3',
+  backgroundColor: props.theme.submitButton.buttonColor,
+  color: props.theme.submitButton.textColor,
   cursor: props.available ? 'pointer' : 'not-allowed'
 }));
 

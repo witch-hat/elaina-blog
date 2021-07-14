@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { Header } from 'src/components';
-import { GlobalStyles } from 'src/styles';
 import { AppCommonProps } from 'src/pages/_app';
 
 const Container = styled.main({
@@ -26,7 +25,6 @@ interface Props extends AppCommonProps {
 export function Layout(props: Props) {
   return (
     <>
-      <GlobalStyles />
       <Header name='ElainaBlog' isLogin={props.app.isLogin} changeThemeMode={props.changeThemeMode} />
       <Container>{props.children}</Container>
     </>
