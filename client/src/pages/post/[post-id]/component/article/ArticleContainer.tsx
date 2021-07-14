@@ -71,17 +71,18 @@ export function ArticleContainer(props: Props) {
 
     if (isAdmin) {
       try {
-        const deleteResponse = await deletePost({
-          variables: {
-            id: +id
-          }
-        });
-
-        await deletePostAllCommentLog({
-          variables: {
-            postId: +id
-          }
-        });
+        const [deleteResponse] = await Promise.all([
+          deletePost({
+            variables: {
+              id: +id
+            }
+          }),
+          deletePostAllCommentLog({
+            variables: {
+              postId: +id
+            }
+          })
+        ]);
 
         const categoryId = deleteResponse.data.deletePost.categoryId;
         const { data } = await client.query({ query: FIND_SAME_CATEGORY_POSTS, variables: { categoryId } });
