@@ -203,6 +203,12 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
     const postQueryResult = await client.query({ query: FIND_POST_BY_ID, variables: { id } });
     const findedPost = postQueryResult.data.findPostById;
 
+    if (!findedPost) {
+      return {
+        notFound: true
+      };
+    }
+
     const commentQueryResult = await client.query({ query: GET_COMMENTS, variables: { _id: findedPost._id } });
     const findedComment = commentQueryResult.data.comments;
 

@@ -37,7 +37,7 @@ export const postTypeDef = gql`
   extend type Query {
     posts: [Post]
     lastPost: Post!
-    findPostById(id: String!): Post!
+    findPostById(id: String!): Post
     findSameCategoryPosts(categoryId: Int!): PostCategory
     getLatestPostsEachCategory: [Post]
     search(keyword: String!): SearchResponse
