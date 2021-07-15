@@ -1,12 +1,21 @@
 import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
+import dynamic from 'next/dynamic';
 
 import { Comment, Reply } from 'src/query/comment';
 
 import { CommentEditor } from './CommentEditor';
-import { DeleteModal } from './DeleteModal';
 import { MemoizedCommentDetail } from './CommentDetail';
 import { CommentMenu } from './CommentMenu';
+
+interface ModalProps {
+  visible: boolean;
+  isLogin: boolean;
+  onDelete: (password: string) => Promise<void>;
+  onCancel: () => void;
+}
+
+const DynamicDeleteModal = dynamic<ModalProps>(() => import('./DeleteModal').then((mod) => mod.DeleteModal));
 
 const Container = styled.div({
   width: '100%',
@@ -93,7 +102,7 @@ export function CommentBoxLayout(props: Props) {
         <CommentContent>{commentContent}</CommentContent>
       )}
       {props.children}
-      <DeleteModal visible={isModalOpen} isLogin={props.isLogin} onDelete={props.onDelete} onCancel={cancelDelete} />
+      <DynamicDeleteModal visible={isModalOpen} isLogin={props.isLogin} onDelete={props.onDelete} onCancel={cancelDelete} />
     </Container>
   );
 }
