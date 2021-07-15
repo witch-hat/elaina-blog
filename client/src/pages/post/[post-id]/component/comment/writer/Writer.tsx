@@ -62,17 +62,9 @@ export function Writer(props: WriterProps) {
   const [password, setPassword] = useState('');
   const [comment, setComment] = useState('');
 
-  function reset() {
-    setUsername('');
-    setPassword('');
-    setComment('');
-  }
-
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     await props.addComment(username, password, comment);
-
-    reset();
   }
 
   const onIDChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value), []);
