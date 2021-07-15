@@ -55,6 +55,7 @@ const SubmitButton = styled.button((props) => ({
 export interface WriterProps {
   isLogin: boolean;
   addComment: (username: string, password: string, comment: string) => Promise<void>;
+  isComment?: boolean;
 }
 
 export function Writer(props: WriterProps) {
@@ -62,9 +63,17 @@ export function Writer(props: WriterProps) {
   const [password, setPassword] = useState('');
   const [comment, setComment] = useState('');
 
+  function reset() {
+    setUsername('');
+    setPassword('');
+    setComment('');
+  }
+
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     await props.addComment(username, password, comment);
+
+    props.isComment && reset();
   }
 
   const onIDChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value), []);

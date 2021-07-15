@@ -14,7 +14,8 @@ interface Props {
   comment: Comment | Reply;
   author: string;
   commentIndex: number;
-  setDeletedIndex: React.Dispatch<React.SetStateAction<number>>;
+  editComment: (index: number, comment: string) => void;
+  deleteComment: (index: number) => void;
   children?: JSX.Element;
 }
 
@@ -58,6 +59,8 @@ export function CommentBox(props: Props) {
         throw err;
       }
     }
+
+    props.editComment(props.commentIndex, commentContent);
   }
 
   async function handleDeleteComment(password: string) {
@@ -73,8 +76,6 @@ export function CommentBox(props: Props) {
             index: props.commentIndex
           }
         });
-
-        props.setDeletedIndex(props.commentIndex);
       } catch (err) {
         alert(err.message);
         return;
@@ -90,8 +91,6 @@ export function CommentBox(props: Props) {
             password
           }
         });
-
-        props.setDeletedIndex(props.commentIndex);
       } catch (err) {
         alert(err.message);
         return;
@@ -108,6 +107,8 @@ export function CommentBox(props: Props) {
     } catch (err) {
       alert(err.message);
     }
+
+    props.deleteComment(props.commentIndex);
   }
 
   return (

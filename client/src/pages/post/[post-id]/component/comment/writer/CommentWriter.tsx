@@ -95,5 +95,5 @@ export function CommentWriter(props: Props) {
     }
   }
 
-  return <Writer isLogin={props.isLogin} addComment={addComment} />;
+  return <Writer isLogin={props.isLogin} addComment={addComment} isComment />;
 }

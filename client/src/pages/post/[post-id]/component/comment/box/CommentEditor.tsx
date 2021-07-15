@@ -43,18 +43,18 @@ interface Props {
 
 export function CommentEditor(props: Props) {
   const [password, setPassword] = useState('');
-  const [commentContent, setCommentContent] = useState(props.commentContent);
+  const [editingCommentContent, setEditingCommentContent] = useState(props.commentContent);
 
   async function onEdit() {
-    if (commentContent === props.commentContent) {
+    if (editingCommentContent === props.commentContent) {
       props.onCancel();
       return;
     }
 
     try {
-      await props.onEdit(commentContent, password);
+      await props.onEdit(editingCommentContent, password);
     } catch (err) {
-      setCommentContent(props.commentContent);
+      setEditingCommentContent(props.commentContent);
       alert(err.message);
     }
 
@@ -62,7 +62,7 @@ export function CommentEditor(props: Props) {
   }
 
   function onCancel() {
-    setCommentContent(props.commentContent);
+    setEditingCommentContent(props.commentContent);
     props.onCancel();
   }
 
@@ -70,9 +70,9 @@ export function CommentEditor(props: Props) {
     <Container>
       <Editor
         role='textbox'
-        value={commentContent}
+        value={editingCommentContent}
         onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-          setCommentContent(e.target.value);
+          setEditingCommentContent(e.target.value);
         }}
       />
       <EditMenuContainer>

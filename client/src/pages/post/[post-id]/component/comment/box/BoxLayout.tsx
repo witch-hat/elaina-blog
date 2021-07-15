@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import dynamic from 'next/dynamic';
 
@@ -52,7 +52,6 @@ interface Props {
 }
 
 export function CommentBoxLayout(props: Props) {
-  const [commentContent, setCommentContent] = useState<string>(props.comment.comment);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAdminCommentEdit, setIsAdminCommentEdit] = useState(false);
   const [isUserCommentEdit, setIsUserCommentEdit] = useState(false);
@@ -65,7 +64,6 @@ export function CommentBoxLayout(props: Props) {
 
   const cancelEdit = () => {
     isAdminCommentEdit ? setIsAdminCommentEdit(false) : setIsUserCommentEdit(false);
-    setCommentContent(props.comment.comment);
   };
 
   const endEdit = () => {
@@ -92,14 +90,14 @@ export function CommentBoxLayout(props: Props) {
       </DetailsContainer>
       {isAdminCommentEdit || isUserCommentEdit ? (
         <CommentEditor
-          commentContent={commentContent}
+          commentContent={props.comment.comment}
           isCommentFromAdmin={props.comment.isAdmin}
           onEdit={props.onEdit}
           endEdit={endEdit}
           onCancel={cancelEdit}
         />
       ) : (
-        <CommentContent>{commentContent}</CommentContent>
+        <CommentContent>{props.comment.comment}</CommentContent>
       )}
       {props.children}
       <DynamicDeleteModal visible={isModalOpen} isLogin={props.isLogin} onDelete={props.onDelete} onCancel={cancelDelete} />

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { cloneDeep } from 'lodash';
 
 import { Comments, Comment } from 'src/query/comment';
 import { trans, Lang } from 'src/resources/languages';
@@ -44,7 +45,6 @@ interface Props {
 
 export function CommentContainer(props: Props) {
   const [commentContainer, setCommentContainer] = useState<Comments>(props.comments);
-  const [deletedIndex, setDeletedIndex] = useState(-1);
 
   function addNewComment(newComment: Comment) {
     setCommentContainer({
@@ -54,31 +54,27 @@ export function CommentContainer(props: Props) {
     });
   }
 
-  function deleteComment() {
-    // modal 삭제 버튼 누르면 deleteIndex 바뀌게...
-    if (deletedIndex > -1 && commentContainer) {
-      const decreaseCount = commentContainer.comments[deletedIndex].replies.length + 1;
-      const filteredComment = commentContainer.comments.filter((comment, index) => index !== deletedIndex);
-      setCommentContainer({
-        ...commentContainer,
-        comments: [...filteredComment],
-        count: commentContainer.count - decreaseCount
-      });
-    }
+  function editComment(editIndex: number, comment: string) {
+    const comments = cloneDeep(commentContainer.comments);
+    comments[editIndex].comment = comment;
+
+    setCommentContainer({
+      _id: commentContainer._id,
+      comments,
+      count: commentContainer.count
+    });
   }
 
-  useEffect(() => {
-    if (deletedIndex > -1 && commentContainer) {
-      const decreaseCount = commentContainer.comments[deletedIndex].replies.length + 1;
-      const filteredComment = commentContainer.comments.filter((comment, index) => index !== deletedIndex);
-      setCommentContainer({
-        ...commentContainer,
-        comments: [...filteredComment],
-        count: commentContainer.count - decreaseCount
-      });
-    }
-    setDeletedIndex(-1);
-  }, [deletedIndex]);
+  function deleteComment(deleteIndex: number) {
+    const decreaseCount = commentContainer.comments[deleteIndex].replies.length + 1;
+    const filteredComment = commentContainer.comments.filter((comment, index) => index !== deleteIndex);
+
+    setCommentContainer({
+      _id: commentContainer._id,
+      comments: filteredComment,
+      count: commentContainer.count - decreaseCount
+    });
+  }
 
   return (
     <Container>
@@ -106,8 +102,9 @@ export function CommentContainer(props: Props) {
                 commentIndex={index}
                 count={commentContainer.count}
                 commentContainer={commentContainer}
+                editComment={editComment}
+                deleteComment={deleteComment}
                 setCommentContainer={setCommentContainer}
-                setDeletedIndex={setDeletedIndex}
               />
             );
           })}

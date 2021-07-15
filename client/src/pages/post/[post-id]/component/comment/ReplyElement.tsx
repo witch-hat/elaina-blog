@@ -20,7 +20,8 @@ interface Props {
   author: string;
   commentIndex: number;
   replyIndex: number;
-  setDeletedReplyIndex: React.Dispatch<React.SetStateAction<number>>;
+  editReply: (index: number, reply: string) => void;
+  deleteReply: (index: number) => void;
 }
 
 export function ReplyElement(props: Props) {
@@ -36,7 +37,8 @@ export function ReplyElement(props: Props) {
         author={props.author}
         commentIndex={props.commentIndex}
         replyIndex={props.replyIndex}
-        setDeletedReplyIndex={props.setDeletedReplyIndex}
+        editReply={props.editReply}
+        deleteReply={props.deleteReply}
       />
     </ReplyContainer>
   );
