@@ -55,7 +55,7 @@ export function DropDownMenu(props: Props) {
       </MainButton>
       <FocusWrapper visible={isVisible} onClickOutside={onClickOutside}>
         <MenuListWrapper>
-          <MenuList>{props.dropMenu}</MenuList>
+          <MenuList onClick={() => setIsVisible(false)}>{props.dropMenu}</MenuList>
         </MenuListWrapper>
       </FocusWrapper>
     </MenuContainer>
