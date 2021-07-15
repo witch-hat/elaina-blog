@@ -5,7 +5,7 @@ import { BorderBox } from 'src/components';
 import { Reply, Comment, Comments } from 'src/query/comment';
 import { trans, Lang } from 'src/resources/languages';
 
-import { CommentBox } from './CommentBox';
+import { CommentBox } from './box/CommentBox';
 import { ReplyWriter } from './writer/ReplyWriter';
 import { ReplyElement } from './ReplyElement';
 

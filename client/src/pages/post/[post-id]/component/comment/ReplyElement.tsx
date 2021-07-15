@@ -1,13 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
 
 import { Reply } from 'src/query/comment';
-import { RootState } from 'src/redux/rootReducer';
-import { ThemeMode } from 'src/redux/common/type';
-import { theme } from 'src/styles';
 
-import { CommentBox } from './CommentBox';
+import { ReplyBox } from './box/ReplyBox';
 
 const ReplyContainer = styled.div<{ isAdmin: boolean }>((props) => ({
   width: '95%',
@@ -28,19 +24,17 @@ interface Props {
 }
 
 export function ReplyElement(props: Props) {
-  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const createdAt = new Date(props.reply.createdAt);
 
   return (
     <ReplyContainer key={`${createdAt}`} isAdmin={props.reply.isAdmin}>
-      <CommentBox
+      <ReplyBox
         isLogin={props.isLogin}
         postId={props.postId}
         isCommentFromAdmin={props.reply.isAdmin}
         comment={props.reply}
         author={props.author}
         commentIndex={props.commentIndex}
-        isReply
         replyIndex={props.replyIndex}
         setDeletedReplyIndex={props.setDeletedReplyIndex}
       />
