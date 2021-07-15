@@ -1,10 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
-
-// import { theme } from 'src/styles';
-import { RootState } from 'src/redux/rootReducer';
-import { ThemeMode } from 'src/redux/common/type';
 
 interface Styles {
   width?: string;
@@ -18,7 +13,6 @@ interface Styles {
 }
 
 interface InputProps {
-  // themeMode: ThemeMode;
   isValid?: boolean;
   styles?: Styles;
 }
@@ -65,8 +59,6 @@ interface Props {
 }
 
 export function NoRefInputBox(props: Props) {
-  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
-
   return (
     <Input
       id={props.id}
@@ -75,8 +67,8 @@ export function NoRefInputBox(props: Props) {
       minLength={props.minLength}
       maxLength={props.maxLength}
       autoComplete='off'
+      value={props.value}
       styles={props.styles}
-      // themeMode={themeMode}
       onFocus={() => {
         if (props.onFocus) {
           props.onFocus();
