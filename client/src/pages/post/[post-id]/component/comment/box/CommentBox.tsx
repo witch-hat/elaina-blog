@@ -43,7 +43,8 @@ export function CommentBox(props: Props) {
           }
         });
       } catch (err) {
-        throw err;
+        alert(err.message);
+        return;
       }
     } else {
       try {
@@ -56,7 +57,8 @@ export function CommentBox(props: Props) {
           }
         });
       } catch (err) {
-        throw err;
+        alert(err.message);
+        return;
       }
     }
 
