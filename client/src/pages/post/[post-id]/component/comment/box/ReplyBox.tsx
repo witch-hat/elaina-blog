@@ -5,7 +5,7 @@ import { DELETE_COMMENT_LOG } from 'src/query/comment-log';
 import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';
 
-import { CommentBoxLayout } from './CommentBoxLayout';
+import { CommentBoxLayout } from './BoxLayout';
 
 interface Props {
   isLogin: boolean;
