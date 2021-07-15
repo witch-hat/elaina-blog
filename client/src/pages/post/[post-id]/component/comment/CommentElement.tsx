@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
 
 import { BorderBox } from 'src/components';
 import { Reply, Comment, Comments } from 'src/query/comment';
-import { theme } from 'src/styles';
-import { RootState } from 'src/redux/rootReducer';
-import { ThemeMode } from 'src/redux/common/type';
 import { trans, Lang } from 'src/resources/languages';
 
 import { CommentBox } from './CommentBox';
-import { CommentWriter } from './CommentWriter';
+import { ReplyWriter } from './writer/ReplyWriter';
 import { ReplyElement } from './ReplyElement';
 
 const Container = styled.div<{ isAdmin: boolean }>((props) => ({
@@ -58,31 +54,10 @@ interface Props {
 }
 
 export function CommentElement(props: Props) {
-  // ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
-
   const [isShowingReply, setIsShowingReply] = useState(false);
   const [isAddReply, setIsAddReply] = useState(false);
   const [replies, setReplies] = useState<Reply[]>(props.comment.replies);
-  const [newReply, setNewReply] = useState<Reply>();
   const [deletedReplyIndex, setDeletedReplyIndex] = useState(-1);
-
-  useEffect(() => {
-    setReplies(props.comment.replies);
-    setIsShowingReply(false);
-  }, [props.commentContainer]);
-
-  useEffect(() => {
-    if (newReply) {
-      setReplies([...replies, newReply]);
-
-      props.commentContainer.comments[props.commentIndex].replies.push(newReply);
-      const newComments = props.commentContainer.comments;
-
-      props.setCommentContainer({ ...props.commentContainer, comments: newComments, count: props.count + 1 });
-      setIsAddReply(false);
-      setIsShowingReply(true);
-    }
-  }, [newReply]);
 
   useEffect(() => {
     if (deletedReplyIndex > -1) {
@@ -95,6 +70,17 @@ export function CommentElement(props: Props) {
     }
     setDeletedReplyIndex(-1);
   }, [deletedReplyIndex]);
+
+  function onAddReply(newReply: Reply) {
+    setReplies([...replies, newReply]);
+
+    props.commentContainer.comments[props.commentIndex].replies.push(newReply);
+    const newComments = props.commentContainer.comments;
+
+    props.setCommentContainer({ ...props.commentContainer, comments: newComments, count: props.count + 1 });
+    setIsAddReply(false);
+    setIsShowingReply(true);
+  }
 
   return (
     <Container isAdmin={props.isCommentFromAdmin}>
@@ -118,15 +104,13 @@ export function CommentElement(props: Props) {
               </ReplyButton>
             </ReplyButtonContainer>
             {isAddReply && (
-              <CommentWriter
+              <ReplyWriter
                 isLogin={props.isLogin}
-                buttonText={trans(Lang.Save)}
-                setNewReply={setNewReply}
+                onAddReply={onAddReply}
                 categoryId={props.categoryId}
                 postId={props.postId}
-                replyIndex={replies.length + 1}
-                isReply
                 commentIndex={props.commentIndex}
+                replyIndex={replies.length + 1}
               />
             )}
             <ReplyContainer>
