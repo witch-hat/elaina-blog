@@ -3,7 +3,7 @@ import { gql } from '@apollo/client';
 export interface Reply {
   username?: string;
   password?: string;
-  createdAt: Date;
+  createdAt: number;
   comment: string;
   isAdmin: boolean;
 }

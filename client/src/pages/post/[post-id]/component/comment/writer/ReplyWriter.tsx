@@ -30,7 +30,7 @@ export function ReplyWriter(props: Props) {
 
     const AuthResponse = await client.query({ query: IS_AUTH });
     const isAdmin = AuthResponse.data.isAuth.isAuth;
-    const createdAt = new Date().toISOString();
+    const createdAt = new Date().getTime();
 
     if (isAdmin) {
       try {
@@ -50,7 +50,7 @@ export function ReplyWriter(props: Props) {
           username,
           password,
           comment,
-          createdAt: new Date(createdAt),
+          createdAt,
           isAdmin
         });
       } catch (err) {
@@ -91,7 +91,7 @@ export function ReplyWriter(props: Props) {
           username,
           password,
           comment,
-          createdAt: new Date(createdAt),
+          createdAt: createdAt,
           isAdmin
         });
       } catch (err) {
