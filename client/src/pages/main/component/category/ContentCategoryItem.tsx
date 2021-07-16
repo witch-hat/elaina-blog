@@ -86,7 +86,7 @@ interface Props {
 export function ContentCategoryItem(props: Props) {
   if (props.latestPost === null) {
     return (
-      <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
+      <BorderBox isHoverEffect={false} styles={{ width: '100%', margin: '.8rem 0' }}>
         <Content>
           <PreviewTextWrapper>
             <LatestPostTitle null={!props.isLogin}>최신글이 없어요...</LatestPostTitle>
@@ -101,7 +101,7 @@ export function ContentCategoryItem(props: Props) {
   }
 
   return (
-    <BorderBox isTransform={props.isEmpty ? false : true} styles={{ width: '100%', margin: '.8rem 0' }}>
+    <BorderBox isHoverEffect={props.isEmpty ? false : true} styles={{ width: '100%', margin: '.8rem 0' }}>
       <Content>
         <PreviewTextWrapper>
           <LatestPostTitle>{props.latestPost.title}</LatestPostTitle>

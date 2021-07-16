@@ -107,7 +107,7 @@ export function CategoryViewer(props: Props) {
       onDragEnter={(e) => props.grabbingCategoryIndex > -1 && onDragEnter(e)}
       onDrop={(e) => props.grabbingCategoryIndex > -1 && onDrop(e)}
     >
-      <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
+      <BorderBox isHoverEffect={false} styles={{ width: '100%', margin: '.8rem 0' }}>
         <Wrapper>
           <CategoryTitle title={title} isEdit={isEdit} handleChange={handleEditTitle} />
           <CategoryMenu

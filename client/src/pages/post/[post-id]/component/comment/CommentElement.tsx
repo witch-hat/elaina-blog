@@ -84,7 +84,7 @@ export function CommentElement(props: Props) {
 
   return (
     <Container isAdmin={props.isCommentFromAdmin}>
-      <BorderBox isTransform={false} styles={{ margin: '1rem 0 0', width: '100%' }}>
+      <BorderBox isHoverEffect={false} styles={{ margin: '1rem 0 0', width: '100%' }}>
         <CommentBox
           isLogin={props.isLogin}
           postId={props.postId}
