@@ -1,15 +1,17 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
-import { AlertBox, AlertStateType } from 'src/components';
+import { AlertStateType, AlertProps } from 'src/components';
 import { CategoryDetails } from 'src/query/category';
 
-import { DeleteCategoryModal } from './DeleteCategoryModal';
 import { CategoryViewer } from './CategoryViewer';
 import { NewCategory } from './NewCategory';
+import { DeleteModalProps } from './DeleteCategoryModal';
+
+const DynamicAlertBox = dynamic<AlertProps>(() => import('src/components').then((mod) => mod.AlertBox));
 
 const Container = styled.div({});
 
@@ -35,36 +37,44 @@ export function CategoryContainer(props: Props) {
   const initAlertState: AlertStateType = { msg: '', isPop: false, isError: false };
 
   const [isAdd, setIsAdd] = useState(false);
-  const [newCategoryTitle, setNewCategoryTitle] = useState('');
   const [categories, setCategories] = useState<CategoryDetails[]>(props.categories);
   const [alertState, setAlertState] = useState<AlertStateType>(initAlertState);
   const [grabbingCategoryIndex, setGrabbingCategoryIndex] = useState<number>(-1);
-  const [deletedCategory, setDeletedCategory] = useState<{ isModalOpen: boolean; index?: number }>({ isModalOpen: false });
 
-  const grabElement = useCallback((index: number) => {
+  const defaultCategoryTitle = `${categories.find((category) => category._id === 0)?.title}`;
+
+  const grabElement = (index: number) => {
     setGrabbingCategoryIndex(index);
-  }, []);
+  };
 
-  const releaseElement = useCallback(() => setGrabbingCategoryIndex(-1), []);
+  const releaseElement = () => setGrabbingCategoryIndex(-1);
 
-  const setInitAlert = useCallback(() => setAlertState(initAlertState), []);
+  const setInitAlert = () => setAlertState(initAlertState);
 
-  const setGreenAlert = useCallback((msg: string) => setAlertState({ msg, isPop: true, isError: false }), []);
+  const setGreenAlert = (msg: string) => setAlertState({ msg, isPop: true, isError: false });
 
-  const setRedAlert = useCallback((err: any) => setAlertState({ msg: err.message, isPop: true, isError: true }), []);
+  const setRedAlert = (err: any) => setAlertState({ msg: err.message, isPop: true, isError: true });
 
-  const openDeleteModal = useCallback((index: number) => setDeletedCategory({ isModalOpen: true, index }), []);
+  const updateCategories = (newCategories: CategoryDetails[]) => setCategories(newCategories);
 
-  const updateCategories = useCallback((newCategories: CategoryDetails[]) => setCategories(newCategories), []);
-
-  const cancelCreateCategory = useCallback(() => {
+  const cancelCreateCategory = () => {
     setIsAdd(false);
-    setNewCategoryTitle('');
-  }, []);
+  };
 
-  const writeNewTitle = useCallback((value: string) => setNewCategoryTitle(value), []);
+  const addNewCategory = (category: CategoryDetails) => setCategories((prev) => [...prev, category]);
 
-  const addNewCategory = useCallback((category: CategoryDetails) => setCategories((prev) => [...prev, category]), []);
+  const deleteCategory = (index: number) => {
+    const remainCategories = categories.filter((category) => category.order != index);
+    const reorderedCategories = remainCategories.map((category) => {
+      if (category.order > index) {
+        return { ...category, order: category.order - 1 };
+      } else {
+        return category;
+      }
+    });
+
+    setCategories(reorderedCategories);
+  };
 
   return (
     <Container>
@@ -74,26 +84,25 @@ export function CategoryContainer(props: Props) {
             <CategoryViewer
               key={category.title}
               categories={categories}
+              title={categories[index].title}
               index={index}
               grabbingCategoryIndex={grabbingCategoryIndex}
               initAlertState={initAlertState}
+              defaultCategoryTitle={defaultCategoryTitle}
               updateCategories={updateCategories}
+              deleteCategory={deleteCategory}
               grabElement={grabElement}
               releaseElement={releaseElement}
               setGreenAlert={setGreenAlert}
               setRedAlert={setRedAlert}
               setInitAlert={setInitAlert}
-              openDeleteModal={openDeleteModal}
             />
           );
         })}
       </Container>
       {isAdd ? (
         <NewCategory
-          title={newCategoryTitle}
-          order={props.categories.length}
           cancelCreateCategory={cancelCreateCategory}
-          writeNewTitle={writeNewTitle}
           setInitAlert={setInitAlert}
           setGreenAlert={setGreenAlert}
           setRedAlert={setRedAlert}
@@ -105,18 +114,8 @@ export function CategoryContainer(props: Props) {
           <p>Add Category</p>
         </AddCategory>
       )}
-      <DeleteCategoryModal
-        isDeleteModalOpen={deletedCategory.isModalOpen}
-        setDeletedCategory={setDeletedCategory}
-        index={deletedCategory.index}
-        defaultCategoryTitle={categories.filter((category) => category._id === 0)[0].title}
-        categories={categories}
-        setCategories={setCategories}
-        initAlertState={initAlertState}
-        setAlertState={setAlertState}
-      />
       {alertState.isPop && (
-        <AlertBox
+        <DynamicAlertBox
           isError={alertState.isError}
           msg={alertState.msg}
           onCloseButtonClick={() => {

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
@@ -55,9 +55,6 @@ const IconWrapper = styled.span((props) => ({
 }));
 
 interface Props {
-  title: string;
-  order: number;
-  writeNewTitle: (value: string) => void;
   cancelCreateCategory: () => void;
   setGreenAlert: (msg: string) => void;
   setRedAlert: (err: any) => void;
@@ -66,24 +63,26 @@ interface Props {
 }
 
 export function NewCategory(props: Props) {
+  const [newCategoryTitle, setNewCategoryTitle] = useState('');
+
   const [addCategory] = useMutation(ADD_CATEGORY);
 
-  const onSave = useCallback(async () => {
+  const onSave = async () => {
     props.setInitAlert();
 
     try {
       const { data } = await addCategory({
         variables: {
-          title: props.title
+          title: newCategoryTitle
         }
       });
 
       const newCategory: CategoryDetails = {
         _id: data.addCategory._id,
-        title: props.title,
+        title: data.addCategory.title,
         postCount: 0,
         recentCreatedAt: null,
-        order: props.order
+        order: data.addCategory.order
       };
 
       props.addNewCategory(newCategory);
@@ -91,12 +90,15 @@ export function NewCategory(props: Props) {
     } catch (err) {
       props.setRedAlert(err);
     }
+
     props.cancelCreateCategory();
-  }, [props.title, props.order]);
+  };
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => setNewCategoryTitle(e.target.value);
 
   return (
     <Container>
-      <Input type='text' placeholder='Title' value={props.title} onChange={(e) => props.writeNewTitle(e.target.value)} />
+      <Input type='text' placeholder='Title' value={newCategoryTitle} onChange={onChange} />
       <MenuContainer>
         <IconWrapper onClick={() => onSave()}>
           <FontAwesomeIcon icon={faSave} style={{ fontSize: '1.25rem' }} />

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { useMutation } from '@apollo/client';
 import { cloneDeep, throttle } from 'lodash';
@@ -24,79 +24,77 @@ const Wrapper = styled.div({
 interface Props {
   categories: CategoryDetails[];
   index: number;
+  title: string;
   grabbingCategoryIndex: number;
   initAlertState: AlertStateType;
+  defaultCategoryTitle: string;
   updateCategories: (newCategories: CategoryDetails[]) => void;
+  deleteCategory: (index: number) => void;
   grabElement: (index: number) => void;
   releaseElement: () => void;
   setGreenAlert: (msg: string) => void;
   setRedAlert: (err: any) => void;
   setInitAlert: () => void;
-  openDeleteModal: (index: number) => void;
 }
 
 export function CategoryViewer(props: Props) {
   const [isEdit, setIsEdit] = useState(false);
-  const [title, setTitle] = useState(props.categories[props.index].title);
+  const [title, setTitle] = useState(props.title);
   const initialCategoryOrder = useRef<number[] | null>(null);
 
   const [orderCategory] = useMutation(ORDER_CATEGORY);
 
-  const handleEditTitle = useCallback((e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value), []);
+  const handleEditTitle = (e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value);
 
-  const backupTitle = useCallback(() => setTitle(props.categories[props.index].title), []);
+  const backupTitle = () => setTitle(props.title);
 
-  const endEditMode = useCallback(() => setIsEdit(false), []);
+  const updateTitle = (newTitle: string) => setTitle(newTitle);
 
-  const enterEditMode = useCallback(() => setIsEdit(true), []);
+  const endEditMode = () => setIsEdit(false);
 
-  const onDragStart = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+  const enterEditMode = () => setIsEdit(true);
+
+  const onDragStart = (e: React.DragEvent<HTMLDivElement>) => {
     initialCategoryOrder.current = props.categories.map((category) => category._id);
-  }, []);
+  };
 
-  const onDragEnter = useCallback(
-    throttle((e: React.DragEvent<HTMLDivElement>) => {
-      let dragOverItemPosition = Number(e.currentTarget.dataset.position);
+  const onDragEnter = throttle((e: React.DragEvent<HTMLDivElement>) => {
+    let dragOverItemPosition = Number(e.currentTarget.dataset.position);
 
-      // props is immutable, splice() change data
-      const copiedCategory = cloneDeep(props.categories);
+    // props is immutable, splice() change data
+    const copiedCategory = cloneDeep(props.categories);
 
-      copiedCategory.splice(props.grabbingCategoryIndex, 1);
-      copiedCategory.splice(dragOverItemPosition, 0, props.categories[props.grabbingCategoryIndex]);
+    copiedCategory.splice(props.grabbingCategoryIndex, 1);
+    copiedCategory.splice(dragOverItemPosition, 0, props.categories[props.grabbingCategoryIndex]);
 
-      props.grabElement(dragOverItemPosition);
-      dragOverItemPosition = -1;
-      props.updateCategories(copiedCategory);
-    }, 400),
-    [props.grabbingCategoryIndex, props.categories]
-  );
+    props.grabElement(dragOverItemPosition);
+    dragOverItemPosition = -1;
+    props.updateCategories(copiedCategory);
+  }, 400);
 
-  const onDrop = useCallback(
-    async (e: React.DragEvent<HTMLDivElement>) => {
-      try {
-        const changedOrder = props.categories.map((category) => category._id);
-        if (initialCategoryOrder.current) {
-          if (initialCategoryOrder.current.every((id, index) => id === changedOrder[index])) {
-            // if order doesn't change, don't need to call mutation query
-            return;
-          }
+  const onDrop = async (e: React.DragEvent<HTMLDivElement>) => {
+    try {
+      const changedOrder = props.categories.map((category) => category._id);
+      if (initialCategoryOrder.current) {
+        if (initialCategoryOrder.current.every((id, index) => id === changedOrder[index])) {
+          // if order doesn't change, don't need to call mutation query
+          return;
         }
-
-        props.setInitAlert();
-
-        await orderCategory({
-          variables: {
-            ids: changedOrder
-          }
-        });
-      } catch (err) {
-        const backUpCategories = [...props.categories];
-        props.updateCategories(backUpCategories);
-        props.setRedAlert(err);
       }
-    },
-    [props.categories]
-  );
+
+      props.setInitAlert();
+
+      await orderCategory({
+        variables: {
+          ids: changedOrder
+        }
+      });
+    } catch (err) {
+      const backUpCategories = [...props.categories];
+      props.updateCategories(backUpCategories);
+      props.setRedAlert(err);
+    }
+  };
 
   return (
     <Container
@@ -116,14 +114,16 @@ export function CategoryViewer(props: Props) {
             title={title}
             isDefault={props.categories[props.index]._id === 0}
             index={props.index}
+            defaultCategoryTitle={props.defaultCategoryTitle}
             enterEditMode={enterEditMode}
             endEditMode={endEditMode}
+            updateTitle={updateTitle}
             backupTitle={backupTitle}
+            deleteCategory={props.deleteCategory}
             grabElement={props.grabElement}
             releaseElement={props.releaseElement}
             setGreenAlert={props.setGreenAlert}
             setRedAlert={props.setRedAlert}
-            openDeleteModal={props.openDeleteModal}
           />
         </Wrapper>
       </BorderBox>

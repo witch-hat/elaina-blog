@@ -1,10 +1,15 @@
-import React, { useCallback } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import dynamic from 'next/dynamic';
 import { useMutation } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGripVertical, faPen, faTrash, faSave, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 
-import { CategoryDetails, UPDATE_CATEGORY } from 'src/query/category';
+import { UPDATE_CATEGORY } from 'src/query/category';
+
+import { DeleteModalProps } from './DeleteCategoryModal';
+
+const DynamicDeleteModal = dynamic<DeleteModalProps>(() => import('./DeleteCategoryModal').then((mod) => mod.DeleteCategoryModal));
 
 const MenuContainer = styled.div((props) => ({
   display: 'flex',
@@ -34,33 +39,43 @@ interface Props {
   title: string;
   isDefault: boolean;
   index: number;
+  defaultCategoryTitle: string;
   enterEditMode: () => void;
   endEditMode: () => void;
+  updateTitle: (title: string) => void;
   backupTitle: () => void;
+  deleteCategory: (index: number) => void;
   grabElement: (index: number) => void;
   releaseElement: () => void;
   setGreenAlert: (msg: string) => void;
   setRedAlert: (err: any) => void;
-  openDeleteModal: (index: number) => void;
 }
 
 export function CategoryMenu(props: Props) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const [updateCategory] = useMutation(UPDATE_CATEGORY);
 
-  const onSaveClick = useCallback(async () => {
+  async function onSaveClick() {
     if (!props.title) {
       alert('제목을 입력해주세요.');
       return;
     }
 
-    await updateCategory({
+    const { data } = await updateCategory({
       variables: {
         id: props.id,
         title: props.title
       }
     });
 
-    props.setGreenAlert('Update category successfully.');
+    // response null-check
+    if (data.updateCategory) {
+      props.updateTitle(data.updateCategory.title);
+      props.setGreenAlert('Update category successfully.');
+    } else {
+      props.setRedAlert({ message: 'Cannot update category' });
+    }
 
     try {
     } catch (err) {
@@ -68,7 +83,9 @@ export function CategoryMenu(props: Props) {
     }
 
     props.endEditMode();
-  }, [props.title]);
+  }
+
+  const endDeleteModal = () => setIsModalOpen(false);
 
   if (props.isEdit) {
     return (
@@ -94,7 +111,7 @@ export function CategoryMenu(props: Props) {
         <FontAwesomeIcon icon={faPen} style={{ fontSize: '1.25rem' }} />
       </IconWrapper>
       {!props.isDefault && (
-        <IconWrapper onClick={() => props.openDeleteModal(props.index)}>
+        <IconWrapper onClick={() => setIsModalOpen(true)}>
           <FontAwesomeIcon icon={faTrash} style={{ fontSize: '1.25rem' }} />
         </IconWrapper>
       )}
@@ -113,6 +130,17 @@ export function CategoryMenu(props: Props) {
       >
         <FontAwesomeIcon icon={faGripVertical} style={{ fontSize: '1.25rem' }} />
       </IconWrapper>
+      <DynamicDeleteModal
+        visible={isModalOpen}
+        index={props.index}
+        defaultCategoryTitle={props.defaultCategoryTitle}
+        deleteCategory={props.deleteCategory}
+        setGreenAlert={props.setGreenAlert}
+        setRedAlert={props.setRedAlert}
+        endDeleteModal={endDeleteModal}
+      />
     </MenuContainer>
   );
 }
+
+export const MomoizedCategoryMenu = React.memo(CategoryMenu);
