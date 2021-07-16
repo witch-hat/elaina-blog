@@ -31,21 +31,26 @@ export const FIND_CATEGORY_BY_ID = gql`
 export const ADD_CATEGORY = gql`
   mutation ($title: String!) {
     addCategory(title: $title) {
-      isSuccess
       _id
+      title
+      order
     }
   }
 `;
 
 export const UPDATE_CATEGORY = gql`
   mutation ($id: Int, $title: String) {
-    updateCategory(id: $id, title: $title)
+    updateCategory(id: $id, title: $title) {
+      title
+    }
   }
 `;
 
 export const DELETE_CATEGORY = gql`
   mutation ($index: Int!) {
-    deleteCategory(index: $index)
+    deleteCategory(index: $index) {
+      isSuccess
+    }
   }
 `;
 

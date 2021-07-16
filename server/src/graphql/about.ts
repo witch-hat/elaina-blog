@@ -31,7 +31,7 @@ export const aboutResolver = {
   },
 
   Mutation: {
-    async updateAbout(_: any, args: { article: string }, context: ContextType) {
+    async updateAbout(_: any, args: { article: string }) {
       try {
         const about: About | null = await AboutModel.findById(1);
 
