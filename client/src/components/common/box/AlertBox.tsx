@@ -43,7 +43,7 @@ const CloseButton = styled.button({
   outline: 'none'
 });
 
-interface Props {
+export interface AlertProps {
   msg: string;
   isError: boolean;
   onCloseButtonClick: Function;
@@ -55,7 +55,7 @@ export interface AlertStateType {
   isError: boolean;
 }
 
-export function AlertBox(props: Props) {
+export function AlertBox(props: AlertProps) {
   return (
     <Container isError={props.isError}>
       <MessageContainer>
