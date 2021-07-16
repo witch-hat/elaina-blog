@@ -18,6 +18,7 @@ export { ModalWrapper } from './common/wrapper/ModalWrapper';
 
 // Images
 export { RoundImage } from './common/image/RoundImage';
+export { NoImage } from './common/image/NoImage';
 
 // hook
 export { useWidth } from './common/hook/useWidth';
