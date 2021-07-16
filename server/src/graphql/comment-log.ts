@@ -21,7 +21,7 @@ export const commentLogTypeDef = gql`
 
   extend type Mutation {
     pushCommentLog(time: DateTime!, event: Int!, categoryId: Int!, postId: Int!, commentIndex: Int!, replyIndex: Int): Void
-    deleteCommentLog(postId: Int!, commentIndex: Int!, replyIndex: Int): Void
+    deleteCommentLog(postId: Int!, commentIndex: Int!, replyIndex: Int): MutationResponse
     deletePostAllCommentLog(postId: Int!): Void
   }
 `;
@@ -88,9 +88,11 @@ export const commentLogResolver = {
           if (foundLog.commentEvent === 0) {
             await CommentLogModel.deleteMany({ postId: foundLog.postId, commentIndex: foundLog.commentIndex });
           }
+        } else {
+          return { isSuccess: false };
         }
 
-        return;
+        return { isSuccess: true };
       } catch (err) {
         throw err;
       }

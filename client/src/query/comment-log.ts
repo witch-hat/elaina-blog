@@ -44,7 +44,9 @@ export const PUSH_COMMENT_LOG = gql`
 
 export const DELETE_COMMENT_LOG = gql`
   mutation ($postId: Int!, $commentIndex: Int!, $replyIndex: Int) {
-    deleteCommentLog(postId: $postId, commentIndex: $commentIndex, replyIndex: $replyIndex)
+    deleteCommentLog(postId: $postId, commentIndex: $commentIndex, replyIndex: $replyIndex) {
+      isSuccess
+    }
   }
 `;
 
