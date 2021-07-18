@@ -82,11 +82,21 @@ export const postResolver = {
 
     async findSameCategoryPosts(_: any, args: { categoryId: number }, context: ContextType) {
       try {
+        const removeMd = require('remove-markdown');
+
         const sameCategoryPosts: Post[] = await PostModel.find({ categoryId: args.categoryId });
         const categoryFindResult = await CategoryModel.findById(args.categoryId);
 
+        const previewPosts = sameCategoryPosts.map((posts) => ({
+          _id: posts._id,
+          title: posts.title,
+          createdAt: posts.createdAt,
+          categoryId: posts.categoryId,
+          article: removeMd(posts.article)
+        }));
+
         return {
-          post: sameCategoryPosts.reverse(),
+          post: previewPosts.reverse(),
           category: categoryFindResult
         };
       } catch (err) {
