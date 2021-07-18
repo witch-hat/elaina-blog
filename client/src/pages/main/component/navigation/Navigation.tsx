@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBook, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faStickyNote, faBook, faUser } from '@fortawesome/free-solid-svg-icons';
 
 import { Lang, trans } from 'src/resources/languages';
 
@@ -25,16 +25,16 @@ export function Navigation(props: Props) {
     <Container>
       <NavigationButton href='/'>
         <>
-          <FontAwesomeIcon icon={faBook} style={{ marginRight: '.5rem' }} />
-          <NavName>{trans(Lang.Board)}</NavName>
+          <FontAwesomeIcon icon={faStickyNote} style={{ marginRight: '.5rem' }} />
+          <NavName>{trans(Lang.LatestPost)}</NavName>
         </>
       </NavigationButton>
-      {/* <NavigationButton href='?tab=timeline'>
+      <NavigationButton query='category'>
         <>
-          <NavigationIcon icon={faStream} />
-          <NavName>{trans(Lang.TimeLine)}</NavName>
+          <FontAwesomeIcon icon={faBook} style={{ marginRight: '.5rem' }} />
+          <NavName>{trans(Lang.Category)}</NavName>
         </>
-      </NavigationButton> */}
+      </NavigationButton>
       <NavigationButton query='about'>
         <>
           <FontAwesomeIcon icon={faUser} style={{ marginRight: '.5rem' }} />

@@ -83,8 +83,8 @@ export const theme: { light: DefaultTheme; dark: DefaultTheme } = {
     hoverBorderColor: '#f1f2f3',
     invalidBorder: '#ff3d41',
     // Others
-    navUnderBar: '#888',
-    navHoverUnderBar: '#ddd',
+    navUnderBar: '#ddd',
+    navHoverUnderBar: '#888',
     shadowColor: 'rgba(0, 0, 0, 0.9)',
     inputOutline: 'rgba(134, 125, 255, .7)',
 
