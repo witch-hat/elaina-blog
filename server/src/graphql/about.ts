@@ -42,7 +42,7 @@ export const aboutResolver = {
 
         about.article = args.article;
         about.updatedAt = new Date();
-        about.save();
+        await about.save();
 
         return about;
       } catch (err) {

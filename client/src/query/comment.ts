@@ -48,19 +48,28 @@ export const GET_COMMENTS = gql`
 
 export const WRITE_COMMENT = gql`
   mutation ($_id: Int!, $username: String, $password: String, $comment: String!, $createdAt: DateTime!, $isAdmin: Boolean!) {
-    writeComment(_id: $_id, username: $username, password: $password, comment: $comment, createdAt: $createdAt, isAdmin: $isAdmin)
+    writeComment(_id: $_id, username: $username, password: $password, comment: $comment, createdAt: $createdAt, isAdmin: $isAdmin) {
+      createdAt
+      comment
+      isAdmin
+      replies
+    }
   }
 `;
 
 export const EDIT_COMMENT = gql`
   mutation ($_id: Int!, $index: Int!, $newComment: String!, $password: String) {
-    editComment(_id: $_id, index: $index, newComment: $newComment, password: $password)
+    editComment(_id: $_id, index: $index, newComment: $newComment, password: $password) {
+      isSuccess
+    }
   }
 `;
 
 export const DELETE_COMMENT = gql`
   mutation ($_id: Int!, $index: Int!, $password: String) {
-    deleteComment(_id: $_id, index: $index, password: $password)
+    deleteComment(_id: $_id, index: $index, password: $password) {
+      isSuccess
+    }
   }
 `;
 
@@ -82,18 +91,26 @@ export const WRITE_REPLY = gql`
       comment: $comment
       createdAt: $createdAt
       isAdmin: $isAdmin
-    )
+    ) {
+      createdAt
+      comment
+      isAdmin
+    }
   }
 `;
 
 export const EDIT_REPLY = gql`
   mutation ($_id: Int!, $commentIndex: Int!, $replyIndex: Int!, $newReply: String!, $password: String) {
-    editReply(_id: $_id, commentIndex: $commentIndex, replyIndex: $replyIndex, newReply: $newReply, password: $password)
+    editReply(_id: $_id, commentIndex: $commentIndex, replyIndex: $replyIndex, newReply: $newReply, password: $password) {
+      isSuccess
+    }
   }
 `;
 
 export const DELETE_REPLY = gql`
   mutation ($_id: Int!, $commentIndex: Int!, $replyIndex: Int!, $password: String) {
-    deleteReply(_id: $_id, commentIndex: $commentIndex, replyIndex: $replyIndex, password: $password)
+    deleteReply(_id: $_id, commentIndex: $commentIndex, replyIndex: $replyIndex, password: $password) {
+      isSuccess
+    }
   }
 `;

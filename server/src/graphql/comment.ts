@@ -1,58 +1,58 @@
 import { ApolloError, AuthenticationError, gql, UserInputError } from 'apollo-server';
 
-import { CommentModel, Comments, Comment, Reply } from '../model/comment';
+import { CommentModel, CommentConatiner, Comment, Reply } from '../model/comment';
 import { ContextType } from '../types/context';
 import { comparePassword } from '../util/auth';
 
 export const commentTypeDef = gql`
   type Reply {
+    createdAt: DateTime!
+    comment: String!
+    isAdmin: Boolean!
     username: String
     password: String
-    createdAt: DateTime
-    comment: String
-    isAdmin: Boolean
   }
 
   type Comment {
+    createdAt: DateTime!
+    comment: String!
+    isAdmin: Boolean!
+    replies: [Reply]!
     username: String
     password: String
-    createdAt: DateTime
-    comment: String
-    isAdmin: Boolean
-    replies: [Reply]
   }
 
-  type Comments {
+  type CommentConatiner {
     _id: Int
     count: Int!
     comments: [Comment]
   }
 
   extend type Query {
-    comments(_id: Int!): Comments
+    comments(_id: Int!): CommentConatiner
   }
 
   extend type Mutation {
-    writeComment(_id: Int!, username: String, password: String, comment: String!, createdAt: DateTime!, isAdmin: Boolean!): Void
-    editComment(_id: Int!, index: Int!, newComment: String!, password: String): Void
-    deleteComment(_id: Int!, index: Int!, password: String): Void
+    writeComment(_id: Int!, comment: String!, createdAt: DateTime!, isAdmin: Boolean!, username: String, password: String): Comment
+    editComment(_id: Int!, index: Int!, newComment: String!, password: String): MutationResponse
+    deleteComment(_id: Int!, index: Int!, password: String): MutationResponse
     writeReply(
       _id: Int!
       commentIndex: Int!
-      username: String
-      password: String
       comment: String!
       createdAt: DateTime!
       isAdmin: Boolean!
-    ): Void
-    editReply(_id: Int!, commentIndex: Int!, replyIndex: Int!, newReply: String!, password: String): Void
-    deleteReply(_id: Int!, commentIndex: Int!, replyIndex: Int!, password: String): Void
+      username: String
+      password: String
+    ): Reply
+    editReply(_id: Int!, commentIndex: Int!, replyIndex: Int!, newReply: String!, password: String): MutationResponse
+    deleteReply(_id: Int!, commentIndex: Int!, replyIndex: Int!, password: String): MutationResponse
   }
 `;
 
 export const commentResolver = {
   Query: {
-    async comments(_: any, args: { _id: number }, context: ContextType) {
+    async comments(_: any, args: { _id: number }) {
       try {
         const comment = await CommentModel.findById(args._id);
         return comment;
@@ -65,8 +65,7 @@ export const commentResolver = {
   Mutation: {
     async writeComment(
       _: any,
-      args: { _id: number; username: string; password: string; comment: string; createdAt: Date; isAdmin: boolean },
-      context: ContextType
+      args: { _id: number; comment: string; createdAt: Date; isAdmin: boolean; username?: string; password?: string }
     ) {
       const passwordRegex = new RegExp('^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,20})');
 
@@ -74,17 +73,24 @@ export const commentResolver = {
         if (!args.comment) {
           throw new UserInputError('내용을 입력해 주세요.');
         }
-        const comments: Comments | null = await CommentModel.findById(args._id);
+
+        const comments: CommentConatiner | null = await CommentModel.findById(args._id);
+
         if (comments) {
           let newComment: Comment;
+
           if (args.isAdmin) {
             newComment = {
-              comment: args.comment,
               createdAt: args.createdAt,
-              replies: [],
-              isAdmin: args.isAdmin
+              comment: args.comment,
+              isAdmin: args.isAdmin,
+              replies: []
             };
           } else {
+            if (!args.username || !args.password) {
+              throw new UserInputError('username: 2~10 자 이내, password: 8~20자 이내로 입력해주세요');
+            }
+
             if (args.password.length < 8 || args.password.length > 20 || args.username.length < 2 || args.username.length > 10) {
               throw new UserInputError('username: 2~10 자 이내, password: 8~20자 이내로 입력해주세요');
             }
@@ -94,28 +100,29 @@ export const commentResolver = {
             }
 
             newComment = {
-              username: args.username,
-              password: args.password,
-              comment: args.comment,
               createdAt: args.createdAt,
+              comment: args.comment,
+              isAdmin: args.isAdmin,
               replies: [],
-              isAdmin: args.isAdmin
+              username: args.username,
+              password: args.password
             };
           }
 
           comments.comments.push(newComment);
           comments.count += 1;
+          await comments.save();
 
-          comments.save();
+          return newComment;
         }
 
-        return null;
+        throw new ApolloError('Cannot write comment.. please retry!');
       } catch (err) {
         throw err;
       }
     },
 
-    async editComment(_: any, args: { _id: number; index: number; newComment: string; password?: string }, context: ContextType) {
+    async editComment(_: any, args: { _id: number; index: number; newComment: string; password?: string }) {
       try {
         if (!args.newComment.length) {
           throw new UserInputError('내용을 입력해 주세요.');
@@ -127,7 +134,7 @@ export const commentResolver = {
           }
         }
 
-        const comments: Comments | null = await CommentModel.findById(args._id);
+        const comments: CommentConatiner | null = await CommentModel.findById(args._id);
 
         if (comments) {
           if (args.password) {
@@ -138,18 +145,20 @@ export const commentResolver = {
           }
 
           comments.comments[args.index].comment = args.newComment;
-          comments.save();
+          await comments.save();
+
+          return { isSuccess: true };
         }
 
-        return null;
+        return { isSuccess: false };
       } catch (err) {
         throw err;
       }
     },
 
-    async deleteComment(_: any, args: { _id: number; index: number; password?: string }, context: ContextType) {
+    async deleteComment(_: any, args: { _id: number; index: number; password?: string }) {
       try {
-        const comments: Comments | null = await CommentModel.findById(args._id);
+        const comments: CommentConatiner | null = await CommentModel.findById(args._id);
 
         if (comments) {
           if (args.password) {
@@ -165,13 +174,13 @@ export const commentResolver = {
 
           const decreaseCount = comments.comments[args.index].replies.length + 1;
           comments.comments.splice(args.index, 1);
-
           comments.count -= decreaseCount;
+          await comments.save();
 
-          comments.save();
+          return { isSuccess: true };
         }
 
-        return null;
+        return { isSuccess: false };
       } catch (err) {
         throw err;
       }
@@ -179,13 +188,12 @@ export const commentResolver = {
 
     async writeReply(
       _: any,
-      args: { _id: number; commentIndex: number; username: string; password: string; comment: string; createdAt: Date; isAdmin: boolean },
-      context: ContextType
+      args: { _id: number; commentIndex: number; comment: string; createdAt: Date; isAdmin: boolean; username?: string; password?: string }
     ) {
       const passwordRegex = new RegExp('^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,20})');
 
       try {
-        const comments: Comments | null = await CommentModel.findById(args._id);
+        const comments: CommentConatiner | null = await CommentModel.findById(args._id);
 
         if (comments) {
           let newReply: Reply;
@@ -197,6 +205,10 @@ export const commentResolver = {
               isAdmin: args.isAdmin
             };
           } else {
+            if (!args.username || !args.password) {
+              throw new UserInputError('username: 2~10 자 이내, password: 8~20자 이내로 입력해주세요');
+            }
+
             if (args.password.length < 8 || args.password.length > 20 || args.username.length < 2 || args.username.length > 10) {
               throw new UserInputError('username: 2~10 자 이내, password: 8~20자 이내로 입력해주세요');
             }
@@ -214,23 +226,21 @@ export const commentResolver = {
             };
           }
 
+          // how can detect comment is deleted?...
           comments.comments[args.commentIndex].replies.push(newReply);
           comments.count += 1;
+          await comments.save();
 
-          comments.save();
+          return newReply;
         }
 
-        return null;
+        throw new ApolloError('Cannot write reply.. please retry!');
       } catch (err) {
         throw err;
       }
     },
 
-    async editReply(
-      _: any,
-      args: { _id: number; commentIndex: number; replyIndex: number; newReply: string; password?: string },
-      context: ContextType
-    ) {
+    async editReply(_: any, args: { _id: number; commentIndex: number; replyIndex: number; newReply: string; password?: string }) {
       try {
         if (!args.newReply.length) {
           throw new UserInputError('내용을 입력해 주세요.');
@@ -242,7 +252,7 @@ export const commentResolver = {
           }
         }
 
-        const comments: Comments | null = await CommentModel.findById(args._id);
+        const comments: CommentConatiner | null = await CommentModel.findById(args._id);
 
         if (comments) {
           if (args.password) {
@@ -253,18 +263,20 @@ export const commentResolver = {
           }
 
           comments.comments[args.commentIndex].replies[args.replyIndex].comment = args.newReply;
-          comments.save();
+          await comments.save();
+
+          return { isSuccess: true };
         }
 
-        return null;
+        return { isSuccess: false };
       } catch (err) {
         throw err;
       }
     },
 
-    async deleteReply(_: any, args: { _id: number; commentIndex: number; replyIndex: number; password?: string }, context: ContextType) {
+    async deleteReply(_: any, args: { _id: number; commentIndex: number; replyIndex: number; password?: string }) {
       try {
-        const comments: Comments | null = await CommentModel.findById(args._id);
+        const comments: CommentConatiner | null = await CommentModel.findById(args._id);
 
         if (comments) {
           if (args.password) {
@@ -276,11 +288,12 @@ export const commentResolver = {
 
           comments.comments[args.commentIndex].replies.splice(args.replyIndex, 1);
           comments.count -= 1;
+          await comments.save();
 
-          comments.save();
+          return { isSuccess: true };
         }
 
-        return null;
+        return { isSuccess: false };
       } catch (err) {
         throw err;
       }
