@@ -30,13 +30,11 @@ export const GET_COMMENTS = gql`
       count
       comments {
         username
-        password
         createdAt
         comment
         isAdmin
         replies {
           username
-          password
           comment
           createdAt
           isAdmin
