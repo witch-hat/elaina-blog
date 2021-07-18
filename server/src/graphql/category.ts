@@ -1,4 +1,5 @@
 import { ApolloError, gql, UserInputError, ValidationError } from 'apollo-server';
+import { Query, UpdateWriteOpResult } from 'mongoose';
 
 import { CategoryModel, Category } from '../model/category';
 import { CommentModel } from '../model/comment';
@@ -82,7 +83,7 @@ export const categoryResolver = {
 
     async findCategoryById(_: any, args: { id: number }) {
       try {
-        const category: Category | null = CategoryModel.findById(args.id);
+        const category: Category | null = await CategoryModel.findById(args.id);
         return category;
       } catch (err) {
         throw err;
@@ -169,12 +170,13 @@ export const categoryResolver = {
             CategoryModel.find()
           ]);
 
-          const postsToUpdate: Promise<any>[] = posts.map((post) => PostModel.updateOne({ _id: post._id }, { categoryId: 0 }));
-          const categoriesToUpdate: Promise<any>[] = categories.map((category) => {
-            if (category.order > args.index) {
-              return CategoryModel.updateOne({ _id: category._id }, { order: category.order - 1 });
-            }
-          });
+          const postsToUpdate: Query<UpdateWriteOpResult, Post, {}>[] = posts.map((post) =>
+            PostModel.updateOne({ _id: post._id }, { categoryId: 0 })
+          );
+          const categoriesToUpdate: Query<UpdateWriteOpResult, Category, {}>[] = [];
+          for (const category of categories) {
+            categoriesToUpdate.push(CategoryModel.updateOne({ _id: category._id }, { order: category.order - 1 }));
+          }
 
           await Promise.all([...postsToUpdate, ...categoriesToUpdate]);
         }
@@ -187,14 +189,14 @@ export const categoryResolver = {
 
     async orderCategory(_: any, args: { ids: number[] }) {
       try {
-        const categoriesToUpdate: Promise<any>[] = [];
+        const categoriesToUpdate: Query<UpdateWriteOpResult, Category, {}>[] = [];
 
         for (let i = 0; i <= CategoryModel.length; i++) {
           const currentId = args.ids[i];
           categoriesToUpdate.push(CategoryModel.updateOne({ _id: currentId }, { order: i }));
         }
 
-        await Promise.all([...categoriesToUpdate]);
+        await Promise.all(categoriesToUpdate);
 
         // NEED TO FIX: return null is bad idea...
         return null;
