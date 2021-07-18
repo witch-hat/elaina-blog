@@ -15,7 +15,7 @@ import { CategoryDetails } from 'src/query/category';
 import { EDIT_POST, WRITE_POST } from 'src/query/post';
 import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';
-import styles from 'src/styles/MarkdownStyles.module.css';
+import styles from 'src/styles/markdown-styles.module.css';
 
 import { Menu } from './Menu';
 import { CategorySelector } from './CategorySelector';
