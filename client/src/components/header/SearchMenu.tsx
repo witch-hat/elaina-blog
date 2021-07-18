@@ -5,20 +5,20 @@ import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
-import { theme } from 'src/styles';
+// import { theme } from 'src/styles';
 import { NoRefInputBox } from 'src/components';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { trans, Lang } from 'src/resources/languages';
 
-const SearchButton = styled.button<{ themeMode: ThemeMode }>((props) => ({
+const SearchButton = styled.button((props) => ({
   display: 'flex',
   width: '45px',
   height: '45px',
   marginLeft: '5px',
   border: 'none',
   borderRadius: '50%',
-  backgroundColor: theme[props.themeMode].headerBackground,
+  backgroundColor: props.theme.headerBackground,
   alignItems: 'center',
   justifyContent: 'center',
   fontSize: '1.2rem',
@@ -27,12 +27,12 @@ const SearchButton = styled.button<{ themeMode: ThemeMode }>((props) => ({
     outline: 'none'
   },
   '&:hover': {
-    backgroundColor: theme[props.themeMode].hoverBackground
+    backgroundColor: props.theme.hoverBackground
   },
   '@media screen and (max-width: 767px)': {
     width: '32px',
     height: '32px',
-    backgroundColor: theme[props.themeMode].secondaryContentBackground
+    backgroundColor: props.theme.secondaryContentBackground
   }
 }));
 
@@ -46,7 +46,7 @@ const SearchForm = styled.form({
 interface Props {}
 
 export function SearchMenu(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   const router = useRouter();
   const [searchKeyword, setSearchKeyWord] = useState('');
@@ -74,7 +74,7 @@ export function SearchMenu(props: Props) {
         styles={{ width: '180px', small: { width: '120px', height: '32px' } }}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchKeyWord(e.currentTarget.value)}
       />
-      <SearchButton type='submit' themeMode={themeMode}>
+      <SearchButton type='submit'>
         <FontAwesomeIcon icon={faSearch} />
       </SearchButton>
     </SearchForm>

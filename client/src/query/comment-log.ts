@@ -7,7 +7,7 @@ export enum CommentEvent {
 
 export interface CommentLog {
   _id: number;
-  time: Date;
+  time: number;
   event: CommentEvent;
   categoryId: number;
   postId: number;
@@ -30,7 +30,7 @@ export const GET_COMMENT_LOGS = gql`
 `;
 
 export const PUSH_COMMENT_LOG = gql`
-  mutation($time: DateTime!, $event: Int!, $categoryId: Int!, $postId: Int!, $commentIndex: Int!, $replyIndex: Int) {
+  mutation ($time: DateTime!, $event: Int!, $categoryId: Int!, $postId: Int!, $commentIndex: Int!, $replyIndex: Int) {
     pushCommentLog(
       time: $time
       event: $event
@@ -43,13 +43,15 @@ export const PUSH_COMMENT_LOG = gql`
 `;
 
 export const DELETE_COMMENT_LOG = gql`
-  mutation($postId: Int!, $commentIndex: Int!, $replyIndex: Int) {
-    deleteCommentLog(postId: $postId, commentIndex: $commentIndex, replyIndex: $replyIndex)
+  mutation ($postId: Int!, $commentIndex: Int!, $replyIndex: Int) {
+    deleteCommentLog(postId: $postId, commentIndex: $commentIndex, replyIndex: $replyIndex) {
+      isSuccess
+    }
   }
 `;
 
 export const DELETE_POST_ALL_COMMENT_LOG = gql`
-  mutation($postId: Int!) {
+  mutation ($postId: Int!) {
     deletePostAllCommentLog(postId: $postId)
   }
 `;

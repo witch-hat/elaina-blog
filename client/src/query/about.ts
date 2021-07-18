@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 
 export interface About {
   article: string;
-  updatedAt: Date;
+  updatedAt: number;
 }
 
 export const GET_ABOUT = gql`
@@ -10,6 +10,15 @@ export const GET_ABOUT = gql`
     about {
       updatedAt
       article
+    }
+  }
+`;
+
+export const UPDATE_ABOUT = gql`
+  mutation ($article: String) {
+    updateAbout(article: $article) {
+      article
+      updatedAt
     }
   }
 `;

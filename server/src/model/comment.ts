@@ -37,7 +37,7 @@ interface CommentSchemaType extends Document {
   isAdmin: boolean;
 }
 
-export interface Comments extends Document {
+export interface CommentConatiner extends Document {
   _id: number;
   count: number;
   comments: Comment[];
@@ -90,7 +90,7 @@ const commentSchema = new Schema<CommentSchemaType>({
   }
 });
 
-export const commentContainerSchema = new Schema<Comments>(
+export const commentContainerSchema = new Schema<CommentConatiner>(
   {
     _id: {
       type: Number,
@@ -145,4 +145,4 @@ commentSchema.pre('save', function (next) {
   }
 });
 
-export const CommentModel = model<Comments>('Comment', commentContainerSchema);
+export const CommentModel = model<CommentConatiner>('Comment', commentContainerSchema);

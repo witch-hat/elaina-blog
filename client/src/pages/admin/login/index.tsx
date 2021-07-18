@@ -1,4 +1,4 @@
-import React, { useRef, useState, FormEvent } from 'react';
+import React, { useRef, useState, FormEvent, useEffect } from 'react';
 import styled from 'styled-components';
 import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
@@ -59,13 +59,13 @@ Label.defaultProps = {
   isBold: false
 };
 
-const LogInButton = styled.button<{ themeMode: ThemeMode }>((props) => ({
+const LogInButton = styled.button((props) => ({
   width: '85%',
   height: '2.5rem',
   marginTop: '24px',
   borderRadius: '.5rem',
-  backgroundColor: theme[props.themeMode].submitButtonColor,
-  color: '#f1f2f3'
+  backgroundColor: props.theme.submitButton.buttonColor,
+  color: props.theme.submitButton.textColor
 }));
 
 const LogInText = styled.span({
@@ -84,7 +84,7 @@ interface Props extends ServerSideProps {
 }
 
 export default function Login(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   const router = useRouter();
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -96,12 +96,18 @@ export default function Login(props: Props) {
 
   const [login] = useMutation(LOGIN, {
     onCompleted: (data: any) => {
-      router.reload();
+      router.replace(router.asPath);
     },
     onError: (err: Error) => {
       handleSubmitError(err.message);
     }
   });
+
+  // prefetch
+  useEffect(() => {
+    const prefetchURL = `${router.query.url}`.replaceAll('%2F', '/');
+    router.prefetch(prefetchURL);
+  }, []);
 
   function controlEnterKey(e: React.KeyboardEvent<HTMLDivElement>, myInputRef: HTMLInputElement, otherInputRef: HTMLInputElement) {
     e.preventDefault();
@@ -197,7 +203,7 @@ export default function Login(props: Props) {
         <MessageBox>
           <Label color={'red'}>{errorMessage}</Label>
         </MessageBox>
-        <LogInButton ref={buttonRef} type='submit' themeMode={themeMode}>
+        <LogInButton ref={buttonRef} type='submit'>
           <LogInText>로그인</LogInText>
         </LogInButton>
         <HelpWrapper></HelpWrapper>

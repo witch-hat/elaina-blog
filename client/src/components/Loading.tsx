@@ -6,7 +6,7 @@ import { theme } from 'src/styles';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 
-const Container = styled.div<{ themeMode: ThemeMode }>((props) => ({
+const Container = styled.div((props) => ({
   display: 'flex',
   position: 'fixed',
   top: '0',
@@ -15,7 +15,7 @@ const Container = styled.div<{ themeMode: ThemeMode }>((props) => ({
   right: '0',
   width: '100vw',
   height: '100vh',
-  backgroundColor: theme[props.themeMode].loadingBackground,
+  backgroundColor: props.theme.loadingBackground,
   justifyContent: 'center',
   alignItems: 'center'
 }));
@@ -42,10 +42,10 @@ const RotatingIcon = styled.span(
 );
 
 export function Loading() {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   return (
-    <Container themeMode={themeMode}>
+    <Container>
       <RotatingIcon>
         <i className='fas fa-spinner'></i>
       </RotatingIcon>

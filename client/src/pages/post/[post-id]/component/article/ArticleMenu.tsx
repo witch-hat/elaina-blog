@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import Link from 'next/link';
+import React from 'react';
+import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
@@ -24,8 +24,6 @@ const MenuButton = styled.p<{ danger?: boolean }>((props) => ({
   padding: '.5rem',
   borderRadius: '.5rem',
   textAlign: 'center',
-  cursor: 'pointer',
-  userSelect: 'none',
   wordBreak: 'keep-all',
   color: props.danger ? '#dd0000' : 'inherit',
   '&:hover': {
@@ -41,22 +39,18 @@ interface Props {
   id: string;
 }
 
-export function ContentMenu(props: Props) {
-  const [isOpenMenu, setIsOpenMenu] = useState(false);
+export function ArticleMenu(props: Props) {
+  const router = useRouter();
 
   return (
     <Menu>
       <ArticleInfo profile={props.profile} time={props.time} />
       {props.isLogin && (
         <DropDownMenu
-          visible={isOpenMenu}
           mainButton={<FontAwesomeIcon icon={faEllipsisV} />}
-          setVisible={setIsOpenMenu}
           dropMenu={
             <>
-              <MenuButton>
-                <Link href={`/post/${props.id}/edit`}>{trans(Lang.Edit)}</Link>
-              </MenuButton>
+              <MenuButton onClick={() => router.push(`/post/${props.id}/edit`)}>{trans(Lang.Edit)}</MenuButton>
               <MenuButton danger onClick={() => props.setIsModalOpen(true)}>
                 {trans(Lang.Delete)}
               </MenuButton>

@@ -1,29 +1,19 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled, { keyframes, css } from 'styled-components';
-import { useSelector } from 'react-redux';
-import {
-  InferGetServerSidePropsType,
-  NextPageContext,
-  GetServerSideProps,
-  GetServerSidePropsContext,
-  GetServerSidePropsResult
-} from 'next';
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSwatchbook } from '@fortawesome/free-solid-svg-icons';
 
 import { useWidth, FocusWrapper } from 'src/components';
-import { theme } from 'src/styles';
-import { RootState } from 'src/redux/rootReducer';
-import { ThemeMode } from 'src/redux/common/type';
 import { initApolloClient } from 'src/apollo/withApollo';
-import { FIND_POST_BY_URL, FIND_SAME_CATEGORY_POSTS, Post } from 'src/query/post';
+import { FIND_POST_BY_ID, FIND_SAME_CATEGORY_POSTS, Post } from 'src/query/post';
 import { GET_COMMENTS, Comments } from 'src/query/comment';
 import { GET_PROFILE, ProfileType } from 'src/query/profile';
 import { AppCommonProps } from 'src/pages/_app';
 
-import { Article } from './component/article/Article';
+import { ArticleContainer } from './component/article/ArticleContainer';
 import { CommentContainer } from './component/comment/CommentContainer';
-import { PostCategory } from './component/PostCategory';
+// import { PostCategory } from './component/PostCategory';
 import { RightSideContainer } from './component/rightside/RightSideContainer';
 
 // interface ContentContainerProps {
@@ -46,7 +36,7 @@ const Container = styled.div({
   }
 });
 
-const ContentContainer = styled.section<{ themeMode: ThemeMode }>((props) => ({
+const ContentContainer = styled.section((props) => ({
   display: 'flex',
   flex: 3,
   margin: '0 2.5rem',
@@ -54,7 +44,7 @@ const ContentContainer = styled.section<{ themeMode: ThemeMode }>((props) => ({
   alignItems: 'center',
   justifyContent: 'center',
   borderRadius: '.5rem',
-  backgroundColor: theme[props.themeMode].articleBackground,
+  backgroundColor: props.theme.articleBackground,
   '@media screen and (max-width: 1380px)': {
     width: '72%'
   },
@@ -77,7 +67,7 @@ const Rotate = keyframes({
   }
 });
 
-const PostCategoryMobileButton = styled.button<{ themeMode: ThemeMode; holdingButton: boolean }>(
+const PostCategoryMobileButton = styled.button<{ holdingButton: boolean }>(
   (props) => ({
     display: 'flex',
     position: 'fixed',
@@ -85,8 +75,8 @@ const PostCategoryMobileButton = styled.button<{ themeMode: ThemeMode; holdingBu
     right: '1.5rem',
     padding: '.85rem',
     borderRadius: '50%',
-    backgroundColor: theme[props.themeMode].secondaryContentBackground,
-    boxShadow: `0 6px 3px -3px ${theme[props.themeMode].shadowColor}`,
+    backgroundColor: props.theme.secondaryContentBackground,
+    boxShadow: `0 6px 3px -3px ${props.theme.shadowColor}`,
     alignItems: 'center',
     justifyContent: 'center'
   }),
@@ -107,7 +97,7 @@ interface ServerSideProps {
 interface Props extends AppCommonProps, ServerSideProps {}
 
 export default function PostId(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const post: Post = props.post;
   const comments: Comments = props.comment;
   const titles: [{ title: string; _id: number }] = props.sameCategoryTitles;
@@ -159,15 +149,21 @@ export default function PostId(props: Props) {
     // onTouchStart={(event: React.TouchEvent) => handleTouchStart(event)}
     // onTouchEnd={(event: React.TouchEvent) => handleTouchEnd(event)}
     >
-      {width > 767 ? (
+      {/* {width > 767 ? (
         <PostCategory category={category} titles={titles} currentPostId={post._id} isLogin={props.app.isLogin} />
       ) : (
         <FocusWrapper visible={showPostCategory} onClickOutside={() => setShowPostCategory(false)}>
           <PostCategory category={category} titles={titles} currentPostId={post._id} isLogin={props.app.isLogin} />
         </FocusWrapper>
-      )}
-      <ContentContainer themeMode={themeMode}>
-        <Article title={post.title} profile={profile} createdAt={post.createdAt} article={post.article} isLogin={props.app.isLogin} />
+      )} */}
+      <ContentContainer>
+        <ArticleContainer
+          title={post.title}
+          profile={profile}
+          createdAt={post.createdAt}
+          article={post.article}
+          isLogin={props.app.isLogin}
+        />
         <Comment ref={commentRef}>
           <CommentContainer
             comments={comments}
@@ -181,7 +177,6 @@ export default function PostId(props: Props) {
       <RightSideContainer commentsCount={comments.count} scrollToComment={scrollToComment} />
       {width <= 767 && !showPostCategory && (
         <PostCategoryMobileButton
-          themeMode={themeMode}
           holdingButton={isHoldingButton}
           onClick={() => setShowPostCategory(true)}
           onTouchStart={(e) => {
@@ -198,12 +193,21 @@ export default function PostId(props: Props) {
 }
 
 export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (context: GetServerSidePropsContext) => {
-  const requestUrl = context.query['post-id'];
+  context.res.setHeader('Cache-Control', 'max-age=0, public, must-revalidate');
+
+  const id = context.query['post-id'];
+
   try {
     const client = initApolloClient({}, context);
 
-    const postQueryResult = await client.query({ query: FIND_POST_BY_URL, variables: { requestUrl } });
-    const findedPost = postQueryResult.data.findPostByUrl;
+    const postQueryResult = await client.query({ query: FIND_POST_BY_ID, variables: { id } });
+    const findedPost = postQueryResult.data.findPostById;
+
+    if (!findedPost) {
+      return {
+        notFound: true
+      };
+    }
 
     const commentQueryResult = await client.query({ query: GET_COMMENTS, variables: { _id: findedPost._id } });
     const findedComment = commentQueryResult.data.comments;

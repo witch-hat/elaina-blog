@@ -1,22 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import styled, { keyframes, css } from 'styled-components';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 
-import { theme } from 'src/styles';
 import { FocusWrapper, useWidth } from 'src/components';
-import { RootState } from 'src/redux/rootReducer';
-import { ThemeMode } from 'src/redux/common/type';
 
-import { ModeSwitch } from './ModeSwitch';
+import { MemoizedModeSwitch } from './ModeSwitch';
+import { MemoizedBlogTitle } from './BlogTitle';
 import { ProgressBar } from './ProgressBar';
 import { SearchMenu } from './SearchMenu';
-import { LanguageMenu } from './LanguageMenu';
+import { MemoizedLanguageMenu } from './LanguageMenu';
 import { AdminMenu } from './AdminMenu';
 
-const StyledHeader = styled.header<{ themeMode: ThemeMode }>((props) => {
+const StyledHeader = styled.header((props) => {
   return {
     display: 'flex',
     position: 'fixed',
@@ -25,7 +22,7 @@ const StyledHeader = styled.header<{ themeMode: ThemeMode }>((props) => {
     height: '4rem',
     padding: '.5rem 0',
     borderBottom: '1px solid #ccc',
-    backgroundColor: theme[props.themeMode].headerBackground,
+    backgroundColor: props.theme.headerBackground,
     fontWeight: 'bold',
     alignItems: 'center',
     zIndex: 9999
@@ -47,13 +44,6 @@ const Container = styled.div({
     padding: '0'
   }
 });
-
-const BlogName = styled.a<{ themeMode: ThemeMode }>((props) => ({
-  padding: '10px',
-  color: theme[props.themeMode].blogName,
-  fontSize: '1.8rem',
-  cursor: 'pointer'
-}));
 
 const Flex = styled.div({
   display: 'flex',
@@ -82,7 +72,7 @@ const OpeningAnimation = keyframes({
   }
 });
 
-const ResponsiveMenuBox = styled.div<{ themeMode: ThemeMode }>(
+const ResponsiveMenuBox = styled.div(
   (props) => ({
     display: 'flex',
     '@media screen and (max-width: 767px)': {
@@ -90,8 +80,8 @@ const ResponsiveMenuBox = styled.div<{ themeMode: ThemeMode }>(
       right: '0',
       padding: '10px',
       borderRadius: '.5rem',
-      backgroundColor: theme[props.themeMode].secondaryContentBackground,
-      boxShadow: `0 8px 4px -4px ${theme[props.themeMode].shadowColor}`,
+      backgroundColor: props.theme.secondaryContentBackground,
+      boxShadow: `0 8px 4px -4px ${props.theme.shadowColor}`,
       zIndex: 9999
     }
   }),
@@ -105,11 +95,10 @@ const ResponsiveMenuBox = styled.div<{ themeMode: ThemeMode }>(
 interface Props {
   isLogin: boolean;
   name: string;
+  changeThemeMode: (value: string) => void;
 }
 
 export function Header(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
-
   const width = useWidth();
   const [isSwitchAndSearchVisible, setIsSwitchAndSearchVisible] = useState<boolean>(width > 767);
 
@@ -122,12 +111,10 @@ export function Header(props: Props) {
   }
 
   return (
-    <StyledHeader themeMode={themeMode}>
-      <ProgressBar color={theme[themeMode].themeColor} />
+    <StyledHeader>
+      <ProgressBar color={'#036ffc'} />
       <Container>
-        <Link href='/' passHref>
-          <BlogName themeMode={themeMode}>{props.name}</BlogName>
-        </Link>
+        <MemoizedBlogTitle name={props.name} />
         <Flex>
           <FocusWrapper
             visible={isSwitchAndSearchVisible}
@@ -137,14 +124,14 @@ export function Header(props: Props) {
           >
             <>
               {isSwitchAndSearchVisible && (
-                <ResponsiveMenuBox themeMode={themeMode}>
-                  <ModeSwitch />
+                <ResponsiveMenuBox>
+                  <MemoizedModeSwitch changeThemeMode={props.changeThemeMode} />
                   <SearchMenu />
                 </ResponsiveMenuBox>
               )}
             </>
           </FocusWrapper>
-          <LanguageMenu />
+          <MemoizedLanguageMenu />
           <AdminMenu isLogin={props.isLogin} />
           <MobileMenuButton onClick={() => onMobileMenuButtonClick()}>
             <FontAwesomeIcon icon={faBars} />

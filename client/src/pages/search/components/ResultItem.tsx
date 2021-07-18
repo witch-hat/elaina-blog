@@ -55,7 +55,7 @@ export function ResultItem(props: Props) {
   return (
     <Link href={`/post/${props.id}`} passHref>
       <a style={{ width: '100%' }}>
-        <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
+        <BorderBox isHoverEffect={true} styles={{ width: '100%', margin: '.8rem 0' }}>
           <Content>
             <PostTitle>{props.title}</PostTitle>
             <CreatedAt>{FormatUnifier.getFullFormatDate(props.createdAt)}</CreatedAt>

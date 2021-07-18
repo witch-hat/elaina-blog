@@ -23,7 +23,7 @@ interface ServerSideProps {}
 interface Props extends AppCommonProps {}
 
 export default function ChangePassword(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   const [alertState, setAlertState] = useState<AlertStateType>(initAlert);
 

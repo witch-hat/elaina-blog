@@ -1,16 +1,31 @@
 import React, { useState } from 'react';
+import dynamic from 'next/dynamic';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
-import { AlertBox, AlertStateType } from 'src/components';
+import { AlertStateType, AlertProps } from 'src/components';
 import { CategoryDetails } from 'src/query/category';
 
-import { AddCategoryModal } from './AddCategoryModal';
-import { DeleteCategoryModal } from './DeleteCategoryModal';
-import { CategoryEditor } from './CategoryEditor';
 import { CategoryViewer } from './CategoryViewer';
+import { NewCategory } from './NewCategory';
+import { DeleteModalProps } from './DeleteCategoryModal';
+
+const DynamicAlertBox = dynamic<AlertProps>(() => import('src/components').then((mod) => mod.AlertBox));
 
 const Container = styled.div({});
+
+const AddCategory = styled.button((props) => ({
+  display: 'flex',
+  width: '600px',
+  margin: '0 auto',
+  padding: '.5rem',
+  borderRadius: '.5rem',
+  backgroundColor: props.theme.submitButton.buttonColor,
+  color: props.theme.submitButton.textColor,
+  alignItems: 'center',
+  justifyContent: 'center'
+}));
 
 interface Props {
   categories: CategoryDetails[];
@@ -21,69 +36,86 @@ interface Props {
 export function CategoryContainer(props: Props) {
   const initAlertState: AlertStateType = { msg: '', isPop: false, isError: false };
 
+  const [isAdd, setIsAdd] = useState(false);
   const [categories, setCategories] = useState<CategoryDetails[]>(props.categories);
-  const [editingCategoryIndex, setEditingCategoryIndex] = useState<number>(-1);
   const [alertState, setAlertState] = useState<AlertStateType>(initAlertState);
   const [grabbingCategoryIndex, setGrabbingCategoryIndex] = useState<number>(-1);
-  const [deletedCategory, setDeletedCategory] = useState<{ isModalOpen: boolean; index?: number }>({ isModalOpen: false });
-  const [grabbedElement, setGrabbedElement] = useState<(EventTarget & HTMLDivElement) | null>(null);
+
+  const defaultCategoryTitle = `${categories.find((category) => category._id === 0)?.title}`;
+
+  const grabElement = (index: number) => {
+    setGrabbingCategoryIndex(index);
+  };
+
+  const releaseElement = () => setGrabbingCategoryIndex(-1);
+
+  const setInitAlert = () => setAlertState(initAlertState);
+
+  const setGreenAlert = (msg: string) => setAlertState({ msg, isPop: true, isError: false });
+
+  const setRedAlert = (err: any) => setAlertState({ msg: err.message, isPop: true, isError: true });
+
+  const updateCategories = (newCategories: CategoryDetails[]) => setCategories(newCategories);
+
+  const cancelCreateCategory = () => {
+    setIsAdd(false);
+  };
+
+  const addNewCategory = (category: CategoryDetails) => setCategories((prev) => [...prev, category]);
+
+  const deleteCategory = (index: number) => {
+    const remainCategories = categories.filter((category) => category.order != index);
+    const reorderedCategories = remainCategories.map((category) => {
+      if (category.order > index) {
+        return { ...category, order: category.order - 1 };
+      } else {
+        return category;
+      }
+    });
+
+    setCategories(reorderedCategories);
+  };
 
   return (
     <Container>
       <Container>
         {categories.map((category, index) => {
-          if (index === editingCategoryIndex) {
-            return (
-              <CategoryEditor
-                key={category.title}
-                categories={categories}
-                index={index}
-                initAlertState={initAlertState}
-                setAlertState={setAlertState}
-                setCategories={setCategories}
-                setEditingCategoryIndex={setEditingCategoryIndex}
-              />
-            );
-          } else {
-            return (
-              <CategoryViewer
-                key={category.title}
-                categories={categories}
-                index={index}
-                grabbingCategoryIndex={grabbingCategoryIndex}
-                grabbedElement={grabbedElement}
-                initAlertState={initAlertState}
-                setCategories={setCategories}
-                setEditingCategoryIndex={setEditingCategoryIndex}
-                setGrabbingCategoryIndex={setGrabbingCategoryIndex}
-                setDeletedCategory={setDeletedCategory}
-                setGrabbedElement={setGrabbedElement}
-                setAlertState={setAlertState}
-              />
-            );
-          }
+          return (
+            <CategoryViewer
+              key={category.title}
+              categories={categories}
+              title={categories[index].title}
+              index={index}
+              grabbingCategoryIndex={grabbingCategoryIndex}
+              initAlertState={initAlertState}
+              defaultCategoryTitle={defaultCategoryTitle}
+              updateCategories={updateCategories}
+              deleteCategory={deleteCategory}
+              grabElement={grabElement}
+              releaseElement={releaseElement}
+              setGreenAlert={setGreenAlert}
+              setRedAlert={setRedAlert}
+              setInitAlert={setInitAlert}
+            />
+          );
         })}
       </Container>
-      <DeleteCategoryModal
-        isDeleteModalOpen={deletedCategory.isModalOpen}
-        setDeletedCategory={setDeletedCategory}
-        index={deletedCategory.index}
-        defaultCategoryTitle={categories.filter((category) => category._id === 0)[0].title}
-        categories={categories}
-        setCategories={setCategories}
-        initAlertState={initAlertState}
-        setAlertState={setAlertState}
-      />
-      <AddCategoryModal
-        isAddModalOpen={props.isAddModalOpen}
-        setIsAddModalOpen={props.setIsAddModalOpen}
-        categories={categories}
-        setCategories={setCategories}
-        initAlertState={initAlertState}
-        setAlertState={setAlertState}
-      />
+      {isAdd ? (
+        <NewCategory
+          cancelCreateCategory={cancelCreateCategory}
+          setInitAlert={setInitAlert}
+          setGreenAlert={setGreenAlert}
+          setRedAlert={setRedAlert}
+          addNewCategory={addNewCategory}
+        />
+      ) : (
+        <AddCategory onClick={() => setIsAdd(true)}>
+          <FontAwesomeIcon icon={faPlus} style={{ marginRight: '.5rem' }} />
+          <p>Add Category</p>
+        </AddCategory>
+      )}
       {alertState.isPop && (
-        <AlertBox
+        <DynamicAlertBox
           isError={alertState.isError}
           msg={alertState.msg}
           onCloseButtonClick={() => {

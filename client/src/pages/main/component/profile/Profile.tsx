@@ -1,13 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
+import dynamic from 'next/dynamic';
 
-import { AlertBox, AlertStateType } from 'src/components';
+import { AlertStateType } from 'src/components';
 import { ProfileType } from 'src/query/profile';
 
-import { ProfileEditForm } from './ProfileEditForm';
-import { ProfileViewer } from './ProfileViewer';
+import { ProfileEditor } from './edit/ProfileEditor';
+import { ProfileViewer } from './view/ProfileViewer';
 
-interface Props {}
+interface AlertProps {
+  msg: string;
+  isError: boolean;
+  onCloseButtonClick: Function;
+}
+
+const DynamicAlertBox = dynamic<AlertProps>(() => import('src/components').then((mod) => mod.AlertBox));
 
 const Container = styled.aside({
   display: 'flex',
@@ -36,7 +43,7 @@ interface Props {
   isLogin: boolean;
 }
 
-export function ProfileContainer(props: Props) {
+export function Profile(props: Props) {
   const initAlertState: AlertStateType = { msg: '', isPop: false, isError: false };
 
   const [isEditMode, setIsEditMode] = useState(false);
@@ -47,10 +54,14 @@ export function ProfileContainer(props: Props) {
     setProfile(profile);
   }
 
+  function enterEditMode() {
+    setIsEditMode(true);
+  }
+
   return (
     <Container>
       {isEditMode ? (
-        <ProfileEditForm
+        <ProfileEditor
           profile={profile}
           alertState={alertState}
           setEditMode={setIsEditMode}
@@ -58,10 +69,10 @@ export function ProfileContainer(props: Props) {
           updateProfile={applyUpdatedProfile}
         />
       ) : (
-        <ProfileViewer profile={profile} isLogin={props.isLogin} setEditMode={setIsEditMode} />
+        <ProfileViewer profile={profile} isLogin={props.isLogin} enterEditMode={enterEditMode} />
       )}
       {alertState.isPop && (
-        <AlertBox
+        <DynamicAlertBox
           isError={alertState.isError}
           msg={alertState.msg}
           onCloseButtonClick={() => {

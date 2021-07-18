@@ -1,21 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
+import { cloneDeep } from 'lodash';
 
 import { BorderBox } from 'src/components';
 import { Reply, Comment, Comments } from 'src/query/comment';
-import { theme } from 'src/styles';
-import { RootState } from 'src/redux/rootReducer';
-import { ThemeMode } from 'src/redux/common/type';
 import { trans, Lang } from 'src/resources/languages';
 
-import { CommentBox } from './CommentBox';
-import { CommentWriter } from './CommentWriter';
+import { CommentBox } from './box/CommentBox';
+import { ReplyWriter } from './writer/ReplyWriter';
 import { ReplyElement } from './ReplyElement';
 
-const Container = styled.div<{ themeMode: ThemeMode; isAdmin: boolean }>((props) => ({
+const Container = styled.div<{ isAdmin: boolean }>((props) => ({
   borderRadius: '.5rem',
-  backgroundColor: props.isAdmin ? theme[props.themeMode].adminCommentColor : 'inherit'
+  backgroundColor: props.isAdmin ? props.theme.adminCommentColor : 'inherit'
 }));
 
 const ReplyButtonContainer = styled.div({
@@ -53,52 +50,41 @@ interface Props {
   categoryId: number;
   postId: number;
   commentIndex: number;
+  editComment: (index: number, comment: string) => void;
+  deleteComment: (index: number) => void;
   setCommentContainer: React.Dispatch<React.SetStateAction<Comments>>;
-  setDeletedIndex: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export function CommentElement(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
-
   const [isShowingReply, setIsShowingReply] = useState(false);
   const [isAddReply, setIsAddReply] = useState(false);
-  const [replies, setReplies] = useState<Reply[]>(props.comment.replies);
-  const [newReply, setNewReply] = useState<Reply>();
-  const [deletedReplyIndex, setDeletedReplyIndex] = useState(-1);
 
-  useEffect(() => {
-    setReplies(props.comment.replies);
-    setIsShowingReply(false);
-  }, [props.commentContainer]);
+  function onAddReply(newReply: Reply) {
+    const copiedComments = cloneDeep(props.commentContainer.comments);
+    copiedComments[props.commentIndex].replies.push(newReply);
 
-  useEffect(() => {
-    if (newReply) {
-      setReplies([...replies, newReply]);
+    props.setCommentContainer({ ...props.commentContainer, comments: copiedComments, count: props.count + 1 });
+    setIsAddReply(false);
+    setIsShowingReply(true);
+  }
 
-      props.commentContainer.comments[props.commentIndex].replies.push(newReply);
-      const newComments = props.commentContainer.comments;
+  function onEditReply(editReplyIndex: number, reply: string) {
+    const copiedComments = cloneDeep(props.commentContainer.comments);
+    copiedComments[props.commentIndex].replies[editReplyIndex].comment = reply;
 
-      props.setCommentContainer({ ...props.commentContainer, comments: newComments, count: props.count + 1 });
-      setIsAddReply(false);
-      setIsShowingReply(true);
-    }
-  }, [newReply]);
+    props.setCommentContainer({ ...props.commentContainer, comments: copiedComments });
+  }
 
-  useEffect(() => {
-    if (deletedReplyIndex > -1) {
-      setReplies([...replies.filter((reply, index) => index !== deletedReplyIndex)]);
+  function onDeleteReply(deleteReplyIndex: number) {
+    const copiedComments = cloneDeep(props.commentContainer.comments);
+    copiedComments[props.commentIndex].replies.splice(deleteReplyIndex, 1);
 
-      props.commentContainer.comments[props.commentIndex].replies.splice(deletedReplyIndex, 1);
-      const newComments = props.commentContainer.comments;
-
-      props.setCommentContainer({ ...props.commentContainer, comments: newComments, count: props.count - 1 });
-    }
-    setDeletedReplyIndex(-1);
-  }, [deletedReplyIndex]);
+    props.setCommentContainer({ ...props.commentContainer, comments: copiedComments, count: props.count - 1 });
+  }
 
   return (
-    <Container themeMode={themeMode} isAdmin={props.isCommentFromAdmin}>
-      <BorderBox isTransform={false} styles={{ margin: '1rem 0 0', width: '100%' }}>
+    <Container isAdmin={props.isCommentFromAdmin}>
+      <BorderBox isHoverEffect={false} styles={{ margin: '1rem 0 0', width: '100%' }}>
         <CommentBox
           isLogin={props.isLogin}
           postId={props.postId}
@@ -106,32 +92,31 @@ export function CommentElement(props: Props) {
           comment={props.comment}
           author={props.author}
           commentIndex={props.commentIndex}
-          setDeletedIndex={props.setDeletedIndex}
+          editComment={props.editComment}
+          deleteComment={props.deleteComment}
         >
           <>
             <ReplyButtonContainer>
-              <ReplyButton onClick={() => replies.length && setIsShowingReply(!isShowingReply)}>{`${
-                isShowingReply ? 'Hide' : `Show ${replies.length}`
+              <ReplyButton onClick={() => props.comment.replies.length && setIsShowingReply(!isShowingReply)}>{`${
+                isShowingReply ? 'Hide' : `Show ${props.comment.replies.length}`
               } Reply `}</ReplyButton>
               <ReplyButton onClick={() => setIsAddReply(!isAddReply)}>
                 {isAddReply ? trans(Lang.Cancel) : trans(Lang.WriteReply)}
               </ReplyButton>
             </ReplyButtonContainer>
             {isAddReply && (
-              <CommentWriter
+              <ReplyWriter
                 isLogin={props.isLogin}
-                buttonText={trans(Lang.Save)}
-                setNewReply={setNewReply}
+                onAddReply={onAddReply}
                 categoryId={props.categoryId}
                 postId={props.postId}
-                replyIndex={replies.length + 1}
-                isReply
                 commentIndex={props.commentIndex}
+                replyIndex={props.comment.replies.length + 1}
               />
             )}
             <ReplyContainer>
               {isShowingReply
-                ? replies.map((reply: Reply, index: number) => {
+                ? props.comment.replies.map((reply: Reply, index: number) => {
                     return (
                       <ReplyElement
                         key={index}
@@ -141,7 +126,8 @@ export function CommentElement(props: Props) {
                         commentIndex={props.commentIndex}
                         reply={reply}
                         replyIndex={index}
-                        setDeletedReplyIndex={setDeletedReplyIndex}
+                        editReply={onEditReply}
+                        deleteReply={onDeleteReply}
                       />
                     );
                   })

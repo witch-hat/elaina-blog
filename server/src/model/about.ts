@@ -1,12 +1,16 @@
 import { Schema, model, Document } from 'mongoose';
 
 export interface About extends Document {
+  _id: number;
   updatedAt: Date;
   article: string;
 }
 
 export const aboutSchema = new Schema<About>(
   {
+    _id: {
+      type: Number
+    },
     updatedAt: {
       type: Date
     },
