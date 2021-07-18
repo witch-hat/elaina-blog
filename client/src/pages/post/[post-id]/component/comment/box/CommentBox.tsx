@@ -26,12 +26,12 @@ export function CommentBox(props: Props) {
   const [deleteCommentLog] = useMutation(DELETE_COMMENT_LOG);
 
   async function handleEditComment(commentContent: string, password: string) {
-    const AuthResponse = await client.query({ query: IS_AUTH });
-    const isAuth = AuthResponse.data.isAuth.isAuth;
-
     if (!commentContent) {
       throw new Error('내용을 입력해 주세요.');
     }
+
+    const AuthResponse = await client.query({ query: IS_AUTH });
+    const isAuth = AuthResponse.data.isAuth.isAuth;
 
     if (isAuth) {
       try {
@@ -43,8 +43,8 @@ export function CommentBox(props: Props) {
           }
         });
       } catch (err) {
-        alert(err.message);
-        return;
+        // NEED TO FIX: using throw for handling doesn't seems nice...
+        throw err;
       }
     } else {
       try {
@@ -57,8 +57,7 @@ export function CommentBox(props: Props) {
           }
         });
       } catch (err) {
-        alert(err.message);
-        return;
+        throw err;
       }
     }
 
