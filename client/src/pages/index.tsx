@@ -11,7 +11,8 @@ import { About, GET_ABOUT } from 'src/query/about';
 import { AppCommonProps, appCommponProps } from './_app';
 import { MainPageLayout } from './main/component/MainPageLayout';
 import { AboutPage } from './main/about/About';
-import { MemoizedContentCategory } from './main/component/category/ContentCategory';
+import { MemoizedContentCategory } from './main/category/ContentCategory';
+import { PostContainer } from './main/post/PostContainer';
 
 interface ServerSideProps {
   latestPosts: ({ _id: number; categoryId: number; title: string; article: string } | null)[];
@@ -33,9 +34,17 @@ export default function Index(props: Props) {
     );
   }
 
+  if (router.query.tab === 'category') {
+    return (
+      <MainPageLayout profile={props.profile} isLogin={props.app.isLogin}>
+        <MemoizedContentCategory categories={props.categories} latestPosts={props.latestPosts} isLogin={props.app.isLogin} />
+      </MainPageLayout>
+    );
+  }
+
   return (
     <MainPageLayout profile={props.profile} isLogin={props.app.isLogin}>
-      <MemoizedContentCategory categories={props.categories} latestPosts={props.latestPosts} isLogin={props.app.isLogin} />
+      <PostContainer />
     </MainPageLayout>
   );
 }

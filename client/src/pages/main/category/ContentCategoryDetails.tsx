@@ -1,13 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock, faBook } from '@fortawesome/free-solid-svg-icons';
 
 import { FormatUnifier } from 'src/utils';
-import { theme } from 'src/styles';
-import { RootState } from 'src/redux/rootReducer';
-import { ThemeMode } from 'src/redux/common/type';
 
 const Container = styled.div((props) => ({
   display: 'flex',
@@ -41,13 +37,10 @@ const CategoryTitle = styled.p({
 
 interface Props {
   time: number | null;
-  // count: number;
   categoryTitle: string;
 }
 
 export function ContentCategoryDetails(props: Props) {
-  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
-
   return (
     <Container>
       <LatestTime>
