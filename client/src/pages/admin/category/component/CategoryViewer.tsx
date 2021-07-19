@@ -27,7 +27,6 @@ interface Props {
   title: string;
   grabbingCategoryIndex: number;
   initAlertState: AlertStateType;
-  defaultCategoryTitle: string;
   updateCategories: (newCategories: CategoryDetails[]) => void;
   deleteCategory: (index: number) => void;
   grabElement: (index: number) => void;
@@ -107,14 +106,13 @@ export function CategoryViewer(props: Props) {
     >
       <BorderBox isHoverEffect={false} styles={{ width: '100%', margin: '.8rem 0' }}>
         <Wrapper>
-          <CategoryTitle title={title} isEdit={isEdit} handleChange={handleEditTitle} />
+          <CategoryTitle isDefault={props.categories[props.index]._id === 0} title={title} isEdit={isEdit} handleChange={handleEditTitle} />
           <CategoryMenu
             isEdit={isEdit}
             id={props.categories[props.index]._id}
             title={title}
             isDefault={props.categories[props.index]._id === 0}
             index={props.index}
-            defaultCategoryTitle={props.defaultCategoryTitle}
             enterEditMode={enterEditMode}
             endEditMode={endEditMode}
             updateTitle={updateTitle}

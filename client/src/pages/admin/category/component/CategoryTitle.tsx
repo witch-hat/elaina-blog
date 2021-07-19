@@ -34,6 +34,7 @@ const PreviewTitle = styled.p({
 });
 
 interface Props {
+  isDefault: boolean;
   title: string;
   isEdit: boolean;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -44,5 +45,5 @@ export function CategoryTitle(props: Props) {
     return <Input type='text' value={props.title} maxLength={30} onChange={(e) => props.handleChange(e)} />;
   }
 
-  return <PreviewTitle>{props.title}</PreviewTitle>;
+  return <PreviewTitle>{props.isDefault ? '최신글' : props.title}</PreviewTitle>;
 }

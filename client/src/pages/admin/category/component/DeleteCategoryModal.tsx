@@ -41,7 +41,6 @@ const ModalButton = styled.button<{ delete?: boolean }>((props) => ({
 export interface DeleteModalProps {
   visible: boolean;
   index: number;
-  defaultCategoryTitle: string;
   deleteCategory: (index: number) => void;
   setGreenAlert: (msg: string) => void;
   setRedAlert: (err: any) => void;
@@ -88,7 +87,7 @@ export function DeleteCategoryModal(props: DeleteModalProps) {
   return (
     <ModalWrapper visible={props.visible}>
       <ModalContainer>
-        <ModalParagraph>{`정말 삭제하시겠습니까?\n 글은 "${props.defaultCategoryTitle}" 카테로리로 이동됩니다.`}</ModalParagraph>
+        <ModalParagraph>{`정말 삭제하시겠습니까?\n 글은 최신글로 이동됩니다.`}</ModalParagraph>
         <ModalButtonContainer>
           <ModalButton
             onClick={() => {

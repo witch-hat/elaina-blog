@@ -41,8 +41,6 @@ export function CategoryContainer(props: Props) {
   const [alertState, setAlertState] = useState<AlertStateType>(initAlertState);
   const [grabbingCategoryIndex, setGrabbingCategoryIndex] = useState<number>(-1);
 
-  const defaultCategoryTitle = `${categories.find((category) => category._id === 0)?.title}`;
-
   const grabElement = (index: number) => {
     setGrabbingCategoryIndex(index);
   };
@@ -88,7 +86,6 @@ export function CategoryContainer(props: Props) {
               index={index}
               grabbingCategoryIndex={grabbingCategoryIndex}
               initAlertState={initAlertState}
-              defaultCategoryTitle={defaultCategoryTitle}
               updateCategories={updateCategories}
               deleteCategory={deleteCategory}
               grabElement={grabElement}

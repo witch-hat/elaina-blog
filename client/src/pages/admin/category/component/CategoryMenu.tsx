@@ -39,7 +39,6 @@ interface Props {
   title: string;
   isDefault: boolean;
   index: number;
-  defaultCategoryTitle: string;
   enterEditMode: () => void;
   endEditMode: () => void;
   updateTitle: (title: string) => void;
@@ -107,38 +106,39 @@ export function CategoryMenu(props: Props) {
 
   return (
     <MenuContainer>
-      <IconWrapper onClick={() => props.enterEditMode()}>
-        <FontAwesomeIcon icon={faPen} style={{ fontSize: '1.25rem' }} />
-      </IconWrapper>
       {!props.isDefault && (
-        <IconWrapper onClick={() => setIsModalOpen(true)}>
-          <FontAwesomeIcon icon={faTrash} style={{ fontSize: '1.25rem' }} />
-        </IconWrapper>
+        <>
+          <IconWrapper onClick={() => props.enterEditMode()}>
+            <FontAwesomeIcon icon={faPen} style={{ fontSize: '1.25rem' }} />
+          </IconWrapper>
+          <IconWrapper onClick={() => setIsModalOpen(true)}>
+            <FontAwesomeIcon icon={faTrash} style={{ fontSize: '1.25rem' }} />
+          </IconWrapper>
+          <IconWrapper
+            drag
+            onMouseDown={(e: React.MouseEvent<HTMLDivElement>) => {
+              if (e.button === 0) {
+                props.grabElement(props.index);
+              } else {
+                props.releaseElement();
+              }
+            }}
+            onMouseUp={() => props.releaseElement()}
+            onTouchStart={() => props.grabElement(props.index)}
+            onTouchEnd={() => props.releaseElement()}
+          >
+            <FontAwesomeIcon icon={faGripVertical} style={{ fontSize: '1.25rem' }} />
+          </IconWrapper>
+          <DynamicDeleteModal
+            visible={isModalOpen}
+            index={props.index}
+            deleteCategory={props.deleteCategory}
+            setGreenAlert={props.setGreenAlert}
+            setRedAlert={props.setRedAlert}
+            endDeleteModal={endDeleteModal}
+          />
+        </>
       )}
-      <IconWrapper
-        drag
-        onMouseDown={(e: React.MouseEvent<HTMLDivElement>) => {
-          if (e.button === 0) {
-            props.grabElement(props.index);
-          } else {
-            props.releaseElement();
-          }
-        }}
-        onMouseUp={() => props.releaseElement()}
-        onTouchStart={() => props.grabElement(props.index)}
-        onTouchEnd={() => props.releaseElement()}
-      >
-        <FontAwesomeIcon icon={faGripVertical} style={{ fontSize: '1.25rem' }} />
-      </IconWrapper>
-      <DynamicDeleteModal
-        visible={isModalOpen}
-        index={props.index}
-        defaultCategoryTitle={props.defaultCategoryTitle}
-        deleteCategory={props.deleteCategory}
-        setGreenAlert={props.setGreenAlert}
-        setRedAlert={props.setRedAlert}
-        endDeleteModal={endDeleteModal}
-      />
     </MenuContainer>
   );
 }
