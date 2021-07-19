@@ -87,16 +87,13 @@ export const postResolver = {
         const sameCategoryPosts: Post[] = await PostModel.find({ categoryId: args.categoryId });
         const categoryFindResult = await CategoryModel.findById(args.categoryId);
 
-        const previewPosts = sameCategoryPosts.map((posts) => ({
-          _id: posts._id,
-          title: posts.title,
-          createdAt: posts.createdAt,
-          categoryId: posts.categoryId,
-          article: removeMd(posts.article)
-        }));
+        // Remove markdown from article preview
+        for (let posts of sameCategoryPosts) {
+          posts.article = removeMd(posts.article);
+        }
 
         return {
-          post: previewPosts.reverse(),
+          post: sameCategoryPosts.reverse(),
           category: categoryFindResult
         };
       } catch (err) {
