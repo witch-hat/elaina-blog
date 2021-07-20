@@ -6,11 +6,12 @@ import Link from 'next/link';
 import { CategoryDetailType } from 'src/query/category';
 
 import { ContentCategoryItem } from './ContentCategoryItem';
+import { NoCategory } from './NoCategory';
 
 const Container = styled.div({
   display: 'flex',
   width: '100%',
-  height: '100%',
+  minHeight: 'calc(100vh - 4rem)',
   padding: '.9rem 1rem',
   flexDirection: 'column',
   justifyContent: 'center',
@@ -36,33 +37,37 @@ export function ContentCategory(props: Props) {
   return (
     <section style={{ width: '100%' }}>
       <Container>
-        {props.categories.map((category, index) => {
-          if (props.latestPosts[index] === null) {
-            if (props.isLogin) {
+        {props.categories.length ? (
+          props.categories.map((category, index) => {
+            if (props.latestPosts[index] === null) {
+              if (props.isLogin) {
+                return (
+                  <Item key={category.title} onClick={() => router.push(`/admin/writer?category=${category.title}`)} pointer>
+                    <ContentCategoryItem category={category} latestPost={null} isLogin={props.isLogin} />
+                  </Item>
+                );
+              }
+
               return (
-                <Item key={category.title} onClick={() => router.push(`/admin/writer?category=${category.title}`)} pointer>
-                  <ContentCategoryItem category={category} latestPost={null} isLogin={props.isLogin} />
+                <Item key={category.title}>
+                  <ContentCategoryItem category={category} isEmpty={true} latestPost={null} />
                 </Item>
               );
             }
 
             return (
-              <Item key={category.title}>
-                <ContentCategoryItem category={category} isEmpty={true} latestPost={null} />
+              <Item key={category.title} pointer>
+                <Link href={`/category/${category._id}`}>
+                  <a>
+                    <ContentCategoryItem category={category} latestPost={props.latestPosts[index]} />
+                  </a>
+                </Link>
               </Item>
             );
-          }
-
-          return (
-            <Item key={category.title} pointer>
-              <Link href={`/category/${category._id}`}>
-                <a>
-                  <ContentCategoryItem category={category} latestPost={props.latestPosts[index]} />
-                </a>
-              </Link>
-            </Item>
-          );
-        })}
+          })
+        ) : (
+          <NoCategory />
+        )}
       </Container>
     </section>
   );
