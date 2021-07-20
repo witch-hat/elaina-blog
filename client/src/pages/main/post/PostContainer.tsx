@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import { LatestPostQueryReturnType } from 'src/query/post';
+
 import { PostItem } from './PostItem';
 
 const Container = styled.div({
@@ -9,7 +11,7 @@ const Container = styled.div({
 });
 
 interface Props {
-  posts: { _id: number; createdAt: number; title: string; article: string }[];
+  posts: LatestPostQueryReturnType[];
 }
 
 export function PostContainer(props: Props) {

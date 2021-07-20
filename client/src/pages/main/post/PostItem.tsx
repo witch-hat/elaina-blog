@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import { BorderBox } from 'src/components';
 import { FormatUnifier } from 'src/utils';
+import { LatestPostQueryReturnType } from 'src/query/post';
 
 const Container = styled.div({
   width: '100%',
@@ -30,7 +31,7 @@ const PreviewArticle = styled.p({
 const DetailWrapper = styled.div({});
 
 interface Props {
-  post: { _id: number; createdAt: number; title: string; article: string };
+  post: LatestPostQueryReturnType;
 }
 
 export function PostItem(props: Props) {
@@ -43,6 +44,8 @@ export function PostItem(props: Props) {
             <PreviewArticle>{props.post.article}</PreviewArticle>
             <DetailWrapper>
               <p>{FormatUnifier.getFullFormatDate(new Date(props.post.createdAt))}</p>
+              <p>{props.post.likeCount}</p>
+              <p>{props.post.commentCount}</p>
             </DetailWrapper>
           </Container>
         </BorderBox>

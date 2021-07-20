@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { NextPageContext, InferGetServerSidePropsType, GetServerSideProps } from 'next';
 
 import { initApolloClient } from 'src/apollo/withApollo';
-import { GET_LATEST_POSTS, GET_LATEST_POSTS_PER_CATEGORY } from 'src/query/post';
+import { GET_LATEST_POSTS, GET_LATEST_POSTS_PER_CATEGORY, LatestPostQueryReturnType } from 'src/query/post';
 import { GET_CATEGORIES_WITH_DETAILS, CategoryDetailType } from 'src/query/category';
 import { GET_PROFILE, ProfileType } from 'src/query/profile';
 import { AboutType, GET_ABOUT } from 'src/query/about';
@@ -15,8 +15,8 @@ import { MemoizedContentCategory } from './main/category/ContentCategory';
 import { PostContainer } from './main/post/PostContainer';
 
 interface ServerSideProps {
-  categoryLatestPosts: ({ _id: number; categoryId: number; title: string; article: string } | null)[];
-  latestPosts: { _id: number; createdAt: number; title: string; article: string }[];
+  categoryLatestPosts: ({ _id: number; categoryId: number; title: string; article: string } | null)[]; // This will be deprecated
+  latestPosts: LatestPostQueryReturnType[];
   profile: ProfileType;
   categories: CategoryDetailType[];
   about: AboutType;
