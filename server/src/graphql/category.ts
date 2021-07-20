@@ -10,7 +10,7 @@ export const categoryTypeDef = gql`
   type Category {
     _id: Int!
     title: String!
-    order: Int!
+    order: Int
   }
 
   type CategoryWithDetails {
@@ -18,7 +18,7 @@ export const categoryTypeDef = gql`
     title: String!
     postCount: Int
     recentCreatedAt: DateTime
-    order: Int!
+    order: Int
   }
 
   extend type Query {
@@ -40,7 +40,8 @@ export const categoryResolver = {
     async categoriesWithDetails() {
       try {
         const [categories, posts]: [Category[], Post[]] = await Promise.all([
-          CategoryModel.find({}, {}, { sort: { order: 1 } }),
+          // exclude default category
+          CategoryModel.find({ $and: [{ _id: { $gte: 1 } }] }, {}, { sort: { order: 1 } }),
           PostModel.find()
         ]);
 
@@ -94,25 +95,36 @@ export const categoryResolver = {
   Mutation: {
     async addCategory(_: any, args: { title: string }) {
       try {
-        const categories: Category[] = await CategoryModel.find();
-
         if (!args.title) {
           throw new UserInputError('카테고리 제목을 입력해주세요.');
         }
+
+        const categories: Category[] = await CategoryModel.find();
 
         const isDuplicated = categories.filter((category) => category.title.toLowerCase() === args.title.toLowerCase()).length > 0;
         if (isDuplicated) {
           throw new ValidationError('이미 존재하는 제목입니다.');
         }
 
-        const newId = (categories[categories.length - 1]._id += 1);
-        const order = categories.length;
+        const lastCategory = categories[-1];
+        let newCategory: Category;
 
-        const newCategory: Category = await CategoryModel.create({
-          _id: newId,
-          title: args.title,
-          order
-        });
+        if (lastCategory) {
+          const newId = (categories[categories.length - 1]._id += 1);
+          const order = categories.length;
+
+          newCategory = await CategoryModel.create({
+            _id: newId,
+            title: args.title,
+            order
+          });
+        } else {
+          newCategory = await CategoryModel.create({
+            _id: 1,
+            title: args.title,
+            order: 1
+          });
+        }
 
         return newCategory;
       } catch (err) {
