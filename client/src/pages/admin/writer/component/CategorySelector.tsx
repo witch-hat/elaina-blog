@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
 
 import { FocusWrapper } from 'src/components';
-import { theme } from 'src/styles';
-import { RootState } from 'src/redux/rootReducer';
-import { ThemeMode } from 'src/redux/common/type';
 import { CategoryDetailType } from 'src/query/category';
 
 const CategoryContainer = styled.div((props) => ({
@@ -50,13 +46,12 @@ const CategoryTitle = styled.li((props) => ({
 
 interface Props {
   categories: CategoryDetailType[];
+  default: string;
   selectedCategory: string;
   changeCategory: (newCategory: string) => void;
 }
 
 export function CategorySelector(props: Props) {
-  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
-
   const [isListOpen, setIsListOpen] = useState(false);
 
   return (
@@ -66,6 +61,14 @@ export function CategorySelector(props: Props) {
       </div>
       <FocusWrapper visible={isListOpen} onClickOutside={() => setIsListOpen(false)}>
         <CategoryList>
+          <CategoryTitle
+            onClick={() => {
+              props.changeCategory(props.default);
+              setIsListOpen(false);
+            }}
+          >
+            <p>{props.default}</p>
+          </CategoryTitle>
           {props.categories.map((category) => {
             return (
               <CategoryTitle

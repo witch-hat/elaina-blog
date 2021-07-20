@@ -104,7 +104,7 @@ enum Mode {
   preview = 'Preview'
 }
 
-const DEFAULT_CATEGORY = '카테고리를 선택해 주세요';
+const DEFAULT_CATEGORY = '최신글';
 
 interface Props {
   author: string;
@@ -116,8 +116,6 @@ interface Props {
 }
 
 export function Writer(props: Props) {
-  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
-
   const width = useWidth();
   const router = useRouter();
   const editor = useRef<HTMLDivElement>(null);
@@ -190,12 +188,12 @@ export function Writer(props: Props) {
   async function handleCreatePost() {
     setVisibleSubmitBtn(false);
 
-    if (selectedCategory === DEFAULT_CATEGORY) {
-      window.scrollTo(0, 0);
-      alert('카테고리를 선택해 주세요');
-      setVisibleSubmitBtn(true);
-      return;
-    }
+    // if (selectedCategory === DEFAULT_CATEGORY) {
+    //   window.scrollTo(0, 0);
+    //   alert('카테고리를 선택해 주세요');
+    //   setVisibleSubmitBtn(true);
+    //   return;
+    // }
 
     if (!title) {
       window.scrollTo(0, 0);
@@ -227,7 +225,7 @@ export function Writer(props: Props) {
           title,
           createdAt: new Date().toISOString(),
           article,
-          category: selectedCategory
+          category: selectedCategory === DEFAULT_CATEGORY ? '' : selectedCategory
         }
       });
 
@@ -286,7 +284,12 @@ export function Writer(props: Props) {
         <MoblieModeButton onClick={() => handleButtonClick()}>{mode === Mode.write ? Mode.preview : Mode.write}</MoblieModeButton>
         {((width <= 767 && mode === Mode.write) || width > 767) && (
           <>
-            <CategorySelector categories={props.categories} selectedCategory={selectedCategory} changeCategory={changeCategory} />
+            <CategorySelector
+              categories={props.categories}
+              default={DEFAULT_CATEGORY}
+              selectedCategory={selectedCategory}
+              changeCategory={changeCategory}
+            />
             <Title>
               <RefInputBox
                 ref={titleRef}
