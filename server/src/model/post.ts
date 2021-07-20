@@ -30,7 +30,8 @@ export const postSchema = new Schema<Post>(
     },
     categoryId: {
       type: Number,
-      required: true
+      required: true,
+      default: 0
     },
     likeCount: {
       type: Number,
