@@ -108,3 +108,14 @@ export const SEARCH = gql`
     }
   }
 `;
+
+export const GET_LATEST_POSTS = gql`
+  query ($page: Int!) {
+    getLatestPosts(page: $page) {
+      _id
+      title
+      createdAt
+      article
+    }
+  }
+`;

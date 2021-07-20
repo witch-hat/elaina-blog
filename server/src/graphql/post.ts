@@ -41,6 +41,7 @@ export const postTypeDef = gql`
     findSameCategoryPosts(categoryId: Int!): PostCategory
     getLatestPostsEachCategory: [Post]
     search(keyword: String!): SearchResponse
+    getLatestPosts(page: Int!): [Post]
   }
 
   extend type Mutation {
@@ -149,6 +150,16 @@ export const postResolver = {
         });
 
         return { result: searchResult };
+      } catch (err) {
+        throw err;
+      }
+    },
+
+    async getLatestPosts(_: any, args: { page: number }) {
+      try {
+        const pagedPosts: Post[] = await PostModel.find({}, {}, { sort: { _id: -1 }, skip: (args.page - 1) * 10, limit: 10 });
+
+        return pagedPosts;
       } catch (err) {
         throw err;
       }
