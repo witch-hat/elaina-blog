@@ -111,6 +111,15 @@ export const SEARCH = gql`
   }
 `;
 
+export interface LatestPostQueryReturnType {
+  _id: number;
+  title: string;
+  createdAt: number;
+  article: string;
+  likeCount: number;
+  commentCount: number;
+}
+
 export const GET_LATEST_POSTS = gql`
   query ($page: Int!) {
     getLatestPosts(page: $page) {
@@ -118,7 +127,7 @@ export const GET_LATEST_POSTS = gql`
       title
       createdAt
       article
-      like
+      likeCount
       commentCount
     }
   }
