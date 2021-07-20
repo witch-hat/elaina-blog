@@ -6,8 +6,8 @@ import { faSwatchbook } from '@fortawesome/free-solid-svg-icons';
 
 import { useWidth, FocusWrapper } from 'src/components';
 import { initApolloClient } from 'src/apollo/withApollo';
-import { FIND_POST_BY_ID, FIND_SAME_CATEGORY_POSTS, Post } from 'src/query/post';
-import { GET_COMMENTS, Comments } from 'src/query/comment';
+import { FIND_POST_BY_ID, FIND_SAME_CATEGORY_POSTS, PostType } from 'src/query/post';
+import { GET_COMMENTS, CommentContainerType } from 'src/query/comment';
 import { GET_PROFILE, ProfileType } from 'src/query/profile';
 import { AppCommonProps } from 'src/pages/_app';
 
@@ -54,8 +54,8 @@ const Comment = styled.section({
 
 interface ServerSideProps {
   categoryId: number;
-  post: Post;
-  comment: Comments;
+  post: PostType;
+  comment: CommentContainerType;
   sameCategoryTitles: [{ title: string; _id: number }];
   category: { title: string };
   profile: ProfileType;

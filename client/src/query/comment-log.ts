@@ -5,7 +5,7 @@ export enum CommentEvent {
   newReply
 }
 
-export interface CommentLog {
+export interface CommentLogType {
   _id: number;
   time: number;
   event: CommentEvent;

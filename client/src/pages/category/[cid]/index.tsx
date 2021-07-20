@@ -2,9 +2,9 @@ import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
-import { GET_CATEGORIES_WITH_DETAILS, CategoryDetails } from 'src/query/category';
+import { GET_CATEGORIES_WITH_DETAILS, CategoryDetailType } from 'src/query/category';
 import { initApolloClient } from 'src/apollo/withApollo';
-import { FIND_SAME_CATEGORY_POSTS, Post } from 'src/query/post';
+import { FIND_SAME_CATEGORY_POSTS, PostType } from 'src/query/post';
 
 import { PostContainer } from './component/PostContainer';
 import { CategoryContainer } from './component/CategoryContainer';
@@ -18,7 +18,7 @@ const Container = styled.div({
 });
 
 interface ServerSideProps {
-  categoryData: CategoryDetails[];
+  categoryData: CategoryDetailType[];
   postData: { _id: number; title: string; article: string }[];
 }
 

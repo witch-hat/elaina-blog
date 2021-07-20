@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { CategoryDetails } from 'src/query/category';
+import { CategoryDetailType } from 'src/query/category';
 import { MemoizedCategoryItem } from './CategoryItem';
 
 const Container = styled.div({
@@ -28,7 +28,7 @@ const CategoryTitle = styled.p({
 });
 
 interface Props {
-  categories: CategoryDetails[];
+  categories: CategoryDetailType[];
 }
 
 export function CategoryContainer(props: Props) {

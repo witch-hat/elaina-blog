@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import Link from 'next/link';
 
-import { CategoryDetails } from 'src/query/category';
+import { CategoryDetailType } from 'src/query/category';
 
 import { ContentCategoryItem } from './ContentCategoryItem';
 
@@ -25,7 +25,7 @@ const Item = styled.div<{ pointer?: boolean }>((props) => ({
 }));
 
 interface Props {
-  categories: CategoryDetails[];
+  categories: CategoryDetailType[];
   latestPosts: ({ _id: number; categoryId: number; title: string; article: string } | null)[];
   isLogin: boolean;
 }

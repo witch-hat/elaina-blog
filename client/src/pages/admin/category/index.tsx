@@ -4,7 +4,7 @@ import { GetServerSideProps } from 'next';
 
 import { initApolloClient } from 'src/apollo/withApollo';
 import { appCommponProps, AppCommonProps } from 'src/pages/_app';
-import { CategoryDetails, GET_CATEGORIES_WITH_DETAILS, ORDER_CATEGORY, UPDATE_CATEGORY } from 'src/query/category';
+import { CategoryDetailType, GET_CATEGORIES_WITH_DETAILS, ORDER_CATEGORY, UPDATE_CATEGORY } from 'src/query/category';
 import { trans, Lang } from 'src/resources/languages';
 
 import { AdminPageLayout } from '../component/AdminPageLayout';
@@ -18,7 +18,7 @@ const Container = styled.div({
 interface ServerSideProps {}
 
 interface Props extends AppCommonProps, ServerSideProps {
-  categories: CategoryDetails[];
+  categories: CategoryDetailType[];
 }
 
 export default function Category(props: Props) {

@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import styled from 'styled-components';
 
 import { PostItem } from './PostItem';
@@ -17,11 +16,7 @@ export function PostContainer(props: Props) {
   return (
     <Container>
       {props.posts.map((post) => (
-        <Link href={`/post/${post._id}`}>
-          <a>
-            <PostItem key={post.article + post._id} post={post} />
-          </a>
-        </Link>
+        <PostItem key={post.article + post._id} post={post} />
       ))}
       {props.posts.length === 10 && <div>더보기</div>}
     </Container>

@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 
-import { WRITE_COMMENT, Comment } from 'src/query/comment';
+import { WRITE_COMMENT, CommentType } from 'src/query/comment';
 import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';
 import { PUSH_COMMENT_LOG, CommentEvent } from 'src/query/comment-log';
@@ -12,7 +12,7 @@ interface Props {
   categoryId: number;
   postId: number;
   commentIndex: number;
-  onAddComment: (newComment: Comment) => void;
+  onAddComment: (newComment: CommentType) => void;
 }
 
 export function CommentWriter(props: Props) {

@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-export interface CategoryDetails {
+export interface CategoryDetailType {
   _id: number;
   title: string;
   recentCreatedAt: number | null;

@@ -6,7 +6,7 @@ import { FocusWrapper } from 'src/components';
 import { theme } from 'src/styles';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
-import { CategoryDetails } from 'src/query/category';
+import { CategoryDetailType } from 'src/query/category';
 
 const CategoryContainer = styled.div((props) => ({
   position: 'relative',
@@ -49,7 +49,7 @@ const CategoryTitle = styled.li((props) => ({
 }));
 
 interface Props {
-  categories: CategoryDetails[];
+  categories: CategoryDetailType[];
   selectedCategory: string;
   changeCategory: (newCategory: string) => void;
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { InferGetServerSidePropsType, GetServerSideProps } from 'next';
 
-import { Post, SEARCH } from 'src/query/post';
+import { PostType, SEARCH } from 'src/query/post';
 import { initApolloClient } from 'src/apollo/withApollo';
 import { ResultContainer } from './components/ResultContainer';
 
@@ -38,13 +38,13 @@ const Count = styled.p({
 });
 
 interface ServerSideProps {
-  searchResult: { post: Post; content: string }[];
+  searchResult: { post: PostType; content: string }[];
 }
 
 interface Props extends ServerSideProps {}
 
 export default function SearchPage(props: Props) {
-  const searchResults: { post: Post; content: string }[] = props.searchResult;
+  const searchResults: { post: PostType; content: string }[] = props.searchResult;
 
   if (searchResults.length === 0) {
     return (

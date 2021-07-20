@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-export interface Reply {
+export interface ReplyType {
   username?: string;
   password?: string;
   createdAt: number;
@@ -8,19 +8,19 @@ export interface Reply {
   isAdmin: boolean;
 }
 
-export interface Comment {
+export interface CommentType {
   username?: string;
   password?: string;
   createdAt: number;
   comment: string;
-  replies: Reply[];
+  replies: ReplyType[];
   isAdmin: boolean;
 }
 
-export interface Comments {
+export interface CommentContainerType {
   _id: number;
   count: number;
-  comments: Comment[];
+  comments: CommentType[];
 }
 
 export const GET_COMMENTS = gql`

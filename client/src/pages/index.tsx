@@ -4,9 +4,9 @@ import { NextPageContext, InferGetServerSidePropsType, GetServerSideProps } from
 
 import { initApolloClient } from 'src/apollo/withApollo';
 import { GET_LATEST_POSTS, GET_LATEST_POSTS_PER_CATEGORY } from 'src/query/post';
-import { GET_CATEGORIES_WITH_DETAILS, CategoryDetails } from 'src/query/category';
+import { GET_CATEGORIES_WITH_DETAILS, CategoryDetailType } from 'src/query/category';
 import { GET_PROFILE, ProfileType } from 'src/query/profile';
-import { About, GET_ABOUT } from 'src/query/about';
+import { AboutType, GET_ABOUT } from 'src/query/about';
 
 import { AppCommonProps, appCommponProps } from './_app';
 import { MainPageLayout } from './main/component/MainPageLayout';
@@ -18,8 +18,8 @@ interface ServerSideProps {
   categoryLatestPosts: ({ _id: number; categoryId: number; title: string; article: string } | null)[];
   latestPosts: { _id: number; createdAt: number; title: string; article: string }[];
   profile: ProfileType;
-  categories: CategoryDetails[];
-  about: About;
+  categories: CategoryDetailType[];
+  about: AboutType;
 }
 
 interface Props extends AppCommonProps, ServerSideProps {}

@@ -2,8 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { BorderBox, useWidth } from 'src/components';
-import { CategoryDetails } from 'src/query/category';
-import { Post } from 'src/query/post';
+import { CategoryDetailType } from 'src/query/category';
+import { PostType } from 'src/query/post';
 
 import { ContentCategoryDetails } from './ContentCategoryDetails';
 
@@ -77,7 +77,7 @@ const LatestPostArticle = styled.p<{ null?: boolean }>((props) => ({
 }));
 
 interface Props {
-  category: CategoryDetails;
+  category: CategoryDetailType;
   latestPost: { _id: number; categoryId: number; title: string; article: string } | null;
   isLogin?: boolean;
   isEmpty?: boolean;

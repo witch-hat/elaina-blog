@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { useMutation } from '@apollo/client';
 
-import { ADD_CATEGORY, CategoryDetails } from 'src/query/category';
+import { ADD_CATEGORY, CategoryDetailType } from 'src/query/category';
 
 const Container = styled.div((props) => ({
   display: 'flex',
@@ -59,7 +59,7 @@ interface Props {
   setGreenAlert: (msg: string) => void;
   setRedAlert: (err: any) => void;
   setInitAlert: () => void;
-  addNewCategory: (category: CategoryDetails) => void;
+  addNewCategory: (category: CategoryDetailType) => void;
 }
 
 export function NewCategory(props: Props) {
@@ -77,7 +77,7 @@ export function NewCategory(props: Props) {
         }
       });
 
-      const newCategory: CategoryDetails = {
+      const newCategory: CategoryDetailType = {
         _id: data.addCategory._id,
         title: data.addCategory.title,
         postCount: 0,

@@ -1,11 +1,13 @@
 import { gql } from '@apollo/client';
 
-export interface Post {
+export interface PostType {
   _id: number;
   title: string;
   createdAt: number;
   article: string;
   categoryId: number;
+  likeCount: number;
+  commentCount: number;
 }
 
 export const GET_POSTS = gql`
@@ -116,6 +118,8 @@ export const GET_LATEST_POSTS = gql`
       title
       createdAt
       article
+      like
+      commentCount
     }
   }
 `;

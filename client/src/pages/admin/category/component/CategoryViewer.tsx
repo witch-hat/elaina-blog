@@ -4,7 +4,7 @@ import { useMutation } from '@apollo/client';
 import { cloneDeep, throttle } from 'lodash';
 
 import { BorderBox, AlertStateType } from 'src/components';
-import { CategoryDetails, ORDER_CATEGORY } from 'src/query/category';
+import { CategoryDetailType, ORDER_CATEGORY } from 'src/query/category';
 import { CategoryTitle } from './CategoryTitle';
 import { CategoryMenu } from './CategoryMenu';
 
@@ -22,12 +22,12 @@ const Wrapper = styled.div({
 });
 
 interface Props {
-  categories: CategoryDetails[];
+  categories: CategoryDetailType[];
   index: number;
   title: string;
   grabbingCategoryIndex: number;
   initAlertState: AlertStateType;
-  updateCategories: (newCategories: CategoryDetails[]) => void;
+  updateCategories: (newCategories: CategoryDetailType[]) => void;
   deleteCategory: (index: number) => void;
   grabElement: (index: number) => void;
   releaseElement: () => void;

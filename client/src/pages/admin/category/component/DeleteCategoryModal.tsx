@@ -7,7 +7,7 @@ import { useMutation } from '@apollo/client';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
 import { ModalWrapper, AlertStateType } from 'src/components';
-import { DELETE_CATEGORY, CategoryDetails } from 'src/query/category';
+import { DELETE_CATEGORY, CategoryDetailType } from 'src/query/category';
 import { theme } from 'src/styles';
 import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';

@@ -11,7 +11,7 @@ import { RefInputBox, useWidth, Loading } from 'src/components';
 import { theme } from 'src/styles';
 import { RootState } from 'src/redux/rootReducer';
 import { ThemeMode } from 'src/redux/common/type';
-import { CategoryDetails } from 'src/query/category';
+import { CategoryDetailType } from 'src/query/category';
 import { EDIT_POST, WRITE_POST } from 'src/query/post';
 import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';
@@ -108,7 +108,7 @@ const DEFAULT_CATEGORY = '카테고리를 선택해 주세요';
 
 interface Props {
   author: string;
-  categories: CategoryDetails[];
+  categories: CategoryDetailType[];
   category?: string;
   title?: string;
   article?: string;

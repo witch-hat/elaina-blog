@@ -6,11 +6,11 @@ import { initApolloClient } from 'src/apollo/withApollo';
 import { Writer } from 'src/pages/admin/writer/component/Writer';
 import { GET_PROFILE } from 'src/query/profile';
 import { FIND_POST_BY_ID } from 'src/query/post';
-import { CategoryDetails, FIND_CATEGORY_BY_ID, GET_CATEGORIES_WITH_DETAILS } from 'src/query/category';
+import { CategoryDetailType, FIND_CATEGORY_BY_ID, GET_CATEGORIES_WITH_DETAILS } from 'src/query/category';
 
 interface ServerSideProps {
   author: string;
-  categories: CategoryDetails[];
+  categories: CategoryDetailType[];
   category: string | undefined;
   title: string | undefined;
   article: string | undefined;

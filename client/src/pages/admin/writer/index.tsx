@@ -11,7 +11,7 @@ import { ThemeMode } from 'src/redux/common/type';
 import { AppCommonProps, appCommponProps } from 'src/pages/_app';
 import { initApolloClient } from 'src/apollo/withApollo';
 import { GET_PROFILE, ProfileType } from 'src/query/profile';
-import { CategoryDetails, GET_CATEGORIES_WITH_DETAILS } from 'src/query/category';
+import { CategoryDetailType, GET_CATEGORIES_WITH_DETAILS } from 'src/query/category';
 
 const Container = styled.div<{ themeMode: ThemeMode }>((props) => ({
   display: 'flex',
@@ -34,7 +34,7 @@ function WriterPage(props: Props) {
 
   const profile: ProfileType = props.profile;
   const categoryTitleFromQuery = props.router.query.category as string | undefined;
-  const categories: CategoryDetails[] = props.categories;
+  const categories: CategoryDetailType[] = props.categories;
   const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   if (categoryTitleFromQuery && !categories.find((category) => category.title === categoryTitleFromQuery)) {

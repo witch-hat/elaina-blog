@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { cloneDeep } from 'lodash';
 
-import { Comments, Comment } from 'src/query/comment';
+import { CommentContainerType, CommentType } from 'src/query/comment';
 import { trans, Lang } from 'src/resources/languages';
 
 import { CommentWriter } from './writer/CommentWriter';
@@ -38,15 +38,15 @@ const Counter = styled.p({
 interface Props {
   categoryId: number;
   postId: number;
-  comments: Comments;
+  comments: CommentContainerType;
   isLogin: boolean;
   author: string;
 }
 
 export function CommentContainer(props: Props) {
-  const [commentContainer, setCommentContainer] = useState<Comments>(props.comments);
+  const [commentContainer, setCommentContainer] = useState<CommentContainerType>(props.comments);
 
-  function addNewComment(newComment: Comment) {
+  function addNewComment(newComment: CommentType) {
     setCommentContainer({
       ...commentContainer,
       comments: [...commentContainer.comments, newComment],
@@ -89,7 +89,7 @@ export function CommentContainer(props: Props) {
       <div style={{ width: '100%' }}>
         <Counter>{`덧글 수: ${commentContainer.count}개`}</Counter>
         {commentContainer &&
-          commentContainer.comments.map((comment: Comment, index: number) => {
+          commentContainer.comments.map((comment: CommentType, index: number) => {
             return (
               <CommentElement
                 key={index}

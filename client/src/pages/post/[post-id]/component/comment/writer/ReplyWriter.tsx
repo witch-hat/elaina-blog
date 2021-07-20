@@ -1,7 +1,7 @@
 import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
 
-import { Reply, WRITE_REPLY } from 'src/query/comment';
+import { ReplyType, WRITE_REPLY } from 'src/query/comment';
 import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';
 import { PUSH_COMMENT_LOG, CommentEvent } from 'src/query/comment-log';
@@ -14,7 +14,7 @@ interface Props {
   postId: number;
   commentIndex: number;
   replyIndex: number;
-  onAddReply: (newReply: Reply) => void;
+  onAddReply: (newReply: ReplyType) => void;
 }
 
 export function ReplyWriter(props: Props) {

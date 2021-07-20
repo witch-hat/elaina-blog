@@ -9,7 +9,7 @@ import { BorderBox } from 'src/components';
 import { CircleRippleWrapper } from 'src/components/common/wrapper/CircleRippleWrapper';
 import { initApolloClient } from 'src/apollo/withApollo';
 import { appCommponProps, AppCommonProps } from 'src/pages/_app';
-import { Post, GET_POSTS } from 'src/query/post';
+import { PostType, GET_POSTS } from 'src/query/post';
 import { AdminPageLayout } from 'src/pages/admin/component/AdminPageLayout';
 import { trans, Lang } from 'src/resources/languages';
 
@@ -81,13 +81,13 @@ const PreviewContent = styled.span({
 });
 
 interface ServerSideProps {
-  posts: Post[];
+  posts: PostType[];
 }
 
 interface Props extends AppCommonProps, ServerSideProps {}
 
 export default function PostProps(props: Props) {
-  const [posts, setPosts] = useState<Post[]>(props.posts);
+  const [posts, setPosts] = useState<PostType[]>(props.posts);
 
   return (
     <AdminPageLayout>
@@ -97,7 +97,7 @@ export default function PostProps(props: Props) {
           return (
             <Link key={post.title + post._id} href={`/post/${post._id}`} passHref>
               <PostContainer>
-                <BorderBox isTransform={true} styles={{ width: '100%', margin: '.8rem 0' }}>
+                <BorderBox isHoverEffect={true} styles={{ width: '100%', margin: '.8rem 0' }}>
                   <Wrapper>
                     <DeleteButtonWrapper>
                       <CircleRippleWrapper

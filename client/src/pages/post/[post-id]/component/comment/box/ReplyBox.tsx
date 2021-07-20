@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 
-import { Comment, DELETE_REPLY, EDIT_REPLY, Reply } from 'src/query/comment';
+import { CommentType, DELETE_REPLY, EDIT_REPLY, ReplyType } from 'src/query/comment';
 import { DELETE_COMMENT_LOG } from 'src/query/comment-log';
 import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';
@@ -11,7 +11,7 @@ interface Props {
   isLogin: boolean;
   postId: number;
   isCommentFromAdmin: boolean;
-  comment: Comment | Reply;
+  comment: CommentType | ReplyType;
   author: string;
   commentIndex: number;
   replyIndex: number;

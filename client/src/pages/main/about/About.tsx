@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 
-import { About } from 'src/query/about';
+import { AboutType } from 'src/query/about';
 
 import { MemoizedAboutContent } from './component/AboutContent';
 import { AboutMenu } from './component/AboutMenu';
@@ -15,16 +15,16 @@ const Container = styled.section({
 });
 
 interface Props {
-  about: About;
+  about: AboutType;
   name: string;
   isLogin: boolean;
 }
 
 export function AboutPage(props: Props) {
-  const [about, setAbout] = useState<About>(props.about);
+  const [about, setAbout] = useState<AboutType>(props.about);
   const router = useRouter();
 
-  function onUpdate(updatedAbout: About) {
+  function onUpdate(updatedAbout: AboutType) {
     setAbout(updatedAbout);
   }
 
