@@ -1,6 +1,7 @@
 import { ApolloError, AuthenticationError, gql, UserInputError } from 'apollo-server';
 
 import { CommentModel, CommentConatiner, Comment, Reply } from '../model/comment';
+import { PostModel, Post } from '../model/post';
 import { ContextType } from '../types/context';
 import { comparePassword } from '../util/auth';
 
@@ -111,7 +112,14 @@ export const commentResolver = {
 
           comments.comments.push(newComment);
           comments.count += 1;
-          await comments.save();
+
+          const post = await PostModel.findByIdAndUpdate(args._id, { commentCount: comments.count });
+
+          if (post) {
+            await comments.save();
+          } else {
+            throw new ApolloError('Cannot write comment.. please retry!');
+          }
 
           return newComment;
         }
@@ -175,7 +183,14 @@ export const commentResolver = {
           const decreaseCount = comments.comments[args.index].replies.length + 1;
           comments.comments.splice(args.index, 1);
           comments.count -= decreaseCount;
-          await comments.save();
+
+          const post = await PostModel.findByIdAndUpdate(args._id, { commentCount: comments.count });
+
+          if (post) {
+            await comments.save();
+          } else {
+            return { isSuccess: false };
+          }
 
           return { isSuccess: true };
         }
@@ -229,7 +244,14 @@ export const commentResolver = {
           // how can detect comment is deleted?...
           comments.comments[args.commentIndex].replies.push(newReply);
           comments.count += 1;
-          await comments.save();
+
+          const post = await PostModel.findByIdAndUpdate(args._id, { commentCount: comments.count });
+
+          if (post) {
+            await comments.save();
+          } else {
+            throw new ApolloError('Cannot write reply.. please retry!');
+          }
 
           return newReply;
         }
@@ -288,7 +310,14 @@ export const commentResolver = {
 
           comments.comments[args.commentIndex].replies.splice(args.replyIndex, 1);
           comments.count -= 1;
-          await comments.save();
+
+          const post = await PostModel.findByIdAndUpdate(args._id, { commentCount: comments.count });
+
+          if (post) {
+            await comments.save();
+          } else {
+            return { isSuccess: false };
+          }
 
           return { isSuccess: true };
         }

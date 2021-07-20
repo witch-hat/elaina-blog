@@ -6,6 +6,8 @@ export interface Post extends Document {
   createdAt: Date;
   article: string;
   categoryId: number;
+  likeCount: number;
+  commentCount: number;
 }
 
 export const postSchema = new Schema<Post>(
@@ -29,6 +31,16 @@ export const postSchema = new Schema<Post>(
     categoryId: {
       type: Number,
       required: true
+    },
+    likeCount: {
+      type: Number,
+      required: true,
+      default: 0
+    },
+    commentCount: {
+      type: Number,
+      required: true,
+      default: 0
     }
   },
   {
