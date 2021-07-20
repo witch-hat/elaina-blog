@@ -59,7 +59,7 @@ export const FIND_SAME_CATEGORY_POSTS = gql`
   }
 `;
 
-export const GET_LASTEST_POSTS = gql`
+export const GET_LATEST_POSTS_PER_CATEGORY = gql`
   query {
     getLatestPostsEachCategory {
       _id
