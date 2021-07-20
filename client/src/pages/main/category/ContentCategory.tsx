@@ -14,7 +14,6 @@ const Container = styled.div({
   minHeight: 'calc(100vh - 4rem)',
   padding: '.9rem 1rem',
   flexDirection: 'column',
-  justifyContent: 'center',
   alignItems: 'center'
 });
 

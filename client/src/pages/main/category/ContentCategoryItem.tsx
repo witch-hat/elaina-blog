@@ -89,10 +89,10 @@ export function ContentCategoryItem(props: Props) {
       <BorderBox isHoverEffect={false} styles={{ width: '100%', margin: '.8rem 0' }}>
         <Content>
           <PreviewTextWrapper>
-            <LatestPostTitle null={!props.isLogin}>최신글이 없어요...</LatestPostTitle>
-            <LatestPostArticle null={!props.isLogin}>최신글이 없어요...</LatestPostArticle>
+            <LatestPostTitle null={!props.isLogin}>{props.category.title}</LatestPostTitle>
+            {/* <LatestPostArticle null={!props.isLogin}></LatestPostArticle> */}
             {/* <ContentCategoryDetails time={props.category.recentCreatedAt} count={props.category.postCount} /> */}
-            <ContentCategoryDetails time={props.category.recentCreatedAt} categoryTitle={props.category.title} />
+            <ContentCategoryDetails time={props.category.recentCreatedAt} count={props.category.postCount} />
           </PreviewTextWrapper>
           {/* {!(width <= 767) && <PreviewImage src={props.category.previewImage} alt={`${props.category.title} preview image`} />} */}
         </Content>
@@ -104,10 +104,10 @@ export function ContentCategoryItem(props: Props) {
     <BorderBox isHoverEffect={props.isEmpty ? false : true} styles={{ width: '100%', margin: '.8rem 0' }}>
       <Content>
         <PreviewTextWrapper>
-          <LatestPostTitle>{props.latestPost.title}</LatestPostTitle>
-          <LatestPostArticle>{props.latestPost.article}</LatestPostArticle>
+          <LatestPostTitle>{props.category.title}</LatestPostTitle>
+          {/* <LatestPostArticle>{props.latestPost.article}</LatestPostArticle> */}
           {/* <ContentCategoryDetails time={props.category.recentCreatedAt} count={props.category.postCount} /> */}
-          <ContentCategoryDetails time={props.category.recentCreatedAt} categoryTitle={props.category.title} />
+          <ContentCategoryDetails time={props.category.recentCreatedAt} count={props.category.postCount} />
         </PreviewTextWrapper>
         {/* {!(width <= 767) && <PreviewImage src={props.category.previewImage} alt={`${props.category.title} preview image`} />} */}
       </Content>

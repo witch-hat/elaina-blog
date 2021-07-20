@@ -37,7 +37,7 @@ const CategoryTitle = styled.p({
 
 interface Props {
   time: number | null;
-  categoryTitle: string;
+  count: number;
 }
 
 export function ContentCategoryDetails(props: Props) {
@@ -49,7 +49,7 @@ export function ContentCategoryDetails(props: Props) {
       </LatestTime>
       <CategoryTitleContainer>
         <FontAwesomeIcon icon={faBook} style={{ marginRight: '5px' }} />
-        <CategoryTitle>{props.categoryTitle}</CategoryTitle>
+        <CategoryTitle>{props.count}</CategoryTitle>
       </CategoryTitleContainer>
     </Container>
   );
