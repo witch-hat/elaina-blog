@@ -4,6 +4,7 @@ const Container = styled.div({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
+  alignSelf: 'stretch',
   flex: 1
 });
 

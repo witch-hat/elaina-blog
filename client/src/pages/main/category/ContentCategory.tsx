@@ -1,28 +1,20 @@
 import React from 'react';
-import { useRouter } from 'next/router';
 import styled from 'styled-components';
-import Link from 'next/link';
 
 import { CategoryDetailType } from 'src/query/category';
 
 import { ContentCategoryItem } from './ContentCategoryItem';
 import { NoCategory } from './NoCategory';
 
-const Container = styled.div({
+const Container = styled.section({
   display: 'flex',
   width: '100%',
   minHeight: 'calc(100vh - 4rem)',
   padding: '.9rem 1rem',
-  flexDirection: 'column',
-  alignItems: 'center'
+  justifyContent: 'space-between',
+  alignItems: 'flex-start',
+  flexWrap: 'wrap'
 });
-
-const Item = styled.div<{ pointer?: boolean }>((props) => ({
-  width: '100%',
-  '&:hover': {
-    cursor: props.pointer ? 'pointer' : 'default !important'
-  }
-}));
 
 interface Props {
   categories: CategoryDetailType[];
@@ -31,44 +23,16 @@ interface Props {
 }
 
 export function ContentCategory(props: Props) {
-  const router = useRouter();
-
   return (
-    <section style={{ width: '100%' }}>
-      <Container>
-        {props.categories.length ? (
-          props.categories.map((category, index) => {
-            if (props.latestPosts[index] === null) {
-              if (props.isLogin) {
-                return (
-                  <Item key={category.title} onClick={() => router.push(`/admin/writer?category=${category.title}`)} pointer>
-                    <ContentCategoryItem category={category} latestPost={null} isLogin={props.isLogin} />
-                  </Item>
-                );
-              }
-
-              return (
-                <Item key={category.title}>
-                  <ContentCategoryItem category={category} isEmpty={true} latestPost={null} />
-                </Item>
-              );
-            }
-
-            return (
-              <Item key={category.title} pointer>
-                <Link href={`/category/${category._id}`}>
-                  <a>
-                    <ContentCategoryItem category={category} latestPost={props.latestPosts[index]} />
-                  </a>
-                </Link>
-              </Item>
-            );
-          })
-        ) : (
-          <NoCategory />
-        )}
-      </Container>
-    </section>
+    <Container>
+      {props.categories.length ? (
+        props.categories.map((category, index) => {
+          return <ContentCategoryItem key={category.title} category={category} latestPost={props.latestPosts[index]} />;
+        })
+      ) : (
+        <NoCategory />
+      )}
+    </Container>
   );
 }
 

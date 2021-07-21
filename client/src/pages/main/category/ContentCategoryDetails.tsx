@@ -26,9 +26,8 @@ const CategoryTitleContainer = styled.span({
   flex: 1
 });
 
-const CategoryTitle = styled.p({
+const PostCount = styled.p({
   display: '-webkit-box',
-  width: '400px',
   wordBreak: 'break-all',
   overflow: 'hidden',
   WebkitLineClamp: 1,
@@ -49,7 +48,7 @@ export function ContentCategoryDetails(props: Props) {
       </LatestTime>
       <CategoryTitleContainer>
         <FontAwesomeIcon icon={faBook} style={{ marginRight: '5px' }} />
-        <CategoryTitle>{props.count}</CategoryTitle>
+        <PostCount>{props.count}</PostCount>
       </CategoryTitleContainer>
     </Container>
   );

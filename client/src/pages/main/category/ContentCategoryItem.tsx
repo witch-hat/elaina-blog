@@ -1,17 +1,27 @@
 import React from 'react';
+import Link from 'next/link';
 import styled from 'styled-components';
 
-import { BorderBox } from 'src/components';
+import { BorderBox, NoImage } from 'src/components';
 import { CategoryDetailType } from 'src/query/category';
 
 import { ContentCategoryDetails } from './ContentCategoryDetails';
 
+const Container = styled.a({
+  display: 'flex',
+  width: '47.5%'
+});
+
 const Content = styled.div({
+  width: '100%',
+  padding: '.8rem'
+});
+
+const ImageContainer = styled.div({
   display: 'flex',
   width: '100%',
-  padding: '.8rem',
-  justifyContent: 'center',
-  alignItems: 'center'
+  marginBottom: '.75rem',
+  justifyContent: 'center'
 });
 
 // const PreviewImage = styled.img({
@@ -31,7 +41,6 @@ const Content = styled.div({
 const PreviewTextWrapper = styled.div({
   display: 'flex',
   width: '100%',
-  height: '8.4rem',
   flexDirection: 'column',
   alignItems: 'flex-start',
   justifyContent: 'center',
@@ -40,7 +49,7 @@ const PreviewTextWrapper = styled.div({
   }
 });
 
-const LatestPostTitle = styled.p<{ null?: boolean }>((props) => ({
+const CategoryTitle = styled.p<{ null?: boolean }>((props) => ({
   display: '-webkit-box',
   width: '100%',
   height: '1.8rem',
@@ -83,33 +92,24 @@ interface Props {
 }
 
 export function ContentCategoryItem(props: Props) {
-  if (props.latestPost === null) {
-    return (
-      <BorderBox isHoverEffect={false} styles={{ width: '100%', margin: '.8rem 0' }}>
-        <Content>
-          <PreviewTextWrapper>
-            <LatestPostTitle null={!props.isLogin}>{props.category.title}</LatestPostTitle>
-            {/* <LatestPostArticle null={!props.isLogin}></LatestPostArticle> */}
-            {/* <ContentCategoryDetails time={props.category.recentCreatedAt} count={props.category.postCount} /> */}
-            <ContentCategoryDetails time={props.category.recentCreatedAt} count={props.category.postCount} />
-          </PreviewTextWrapper>
-          {/* {!(width <= 767) && <PreviewImage src={props.category.previewImage} alt={`${props.category.title} preview image`} />} */}
-        </Content>
-      </BorderBox>
-    );
-  }
-
   return (
-    <BorderBox isHoverEffect={props.isEmpty ? false : true} styles={{ width: '100%', margin: '.8rem 0' }}>
-      <Content>
-        <PreviewTextWrapper>
-          <LatestPostTitle>{props.category.title}</LatestPostTitle>
-          {/* <LatestPostArticle>{props.latestPost.article}</LatestPostArticle> */}
-          {/* <ContentCategoryDetails time={props.category.recentCreatedAt} count={props.category.postCount} /> */}
-          <ContentCategoryDetails time={props.category.recentCreatedAt} count={props.category.postCount} />
-        </PreviewTextWrapper>
-        {/* {!(width <= 767) && <PreviewImage src={props.category.previewImage} alt={`${props.category.title} preview image`} />} */}
-      </Content>
-    </BorderBox>
+    <Link href={`/category/${props.category._id}`}>
+      <Container>
+        <BorderBox isHoverEffect={true} styles={{ width: '100%', margin: '.8rem 0' }}>
+          <Content>
+            <ImageContainer>
+              <NoImage width={250} height={250} />
+            </ImageContainer>
+            <PreviewTextWrapper>
+              <CategoryTitle>{props.category.title}</CategoryTitle>
+              {/* <LatestPostArticle>{props.latestPost.article}</LatestPostArticle> */}
+              {/* <ContentCategoryDetails time={props.category.recentCreatedAt} count={props.category.postCount} /> */}
+              <ContentCategoryDetails time={props.category.recentCreatedAt} count={props.category.postCount} />
+            </PreviewTextWrapper>
+            {/* {!(width <= 767) && <PreviewImage src={props.category.previewImage} alt={`${props.category.title} preview image`} />} */}
+          </Content>
+        </BorderBox>
+      </Container>
+    </Link>
   );
 }
