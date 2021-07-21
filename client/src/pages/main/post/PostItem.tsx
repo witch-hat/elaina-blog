@@ -33,7 +33,7 @@ const PreviewArticle = styled.p({
 });
 
 const DetailWrapper = styled.div((props) => ({
-  fontSize: '.9rem',
+  fontSize: '.85rem',
   color: props.theme.detailText
 }));
 

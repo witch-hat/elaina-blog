@@ -10,7 +10,7 @@ const Container = styled.div((props) => ({
   width: '100%',
   marginTop: '.4rem',
   color: props.theme.detailText,
-  fontSize: '.8rem'
+  fontSize: '.85rem'
 }));
 
 const LatestTime = styled.span({
