@@ -7,11 +7,16 @@ import { Lang, trans } from 'src/resources/languages';
 
 import { NavigationButton } from './NavigationButton';
 
-const Container = styled.nav({
+const Container = styled.nav((props) => ({
+  position: 'sticky',
+  top: '4rem',
   display: 'flex',
   width: '100%',
-  alignItems: 'center'
-});
+  backgroundColor: props.theme.mainBackground,
+  borderBottom: `1px solid ${props.theme.borderColor}`,
+  alignItems: 'center',
+  zIndex: 2
+}));
 
 const NavName = styled.span({
   fontSize: '1.1rem',

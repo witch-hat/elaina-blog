@@ -32,7 +32,7 @@ export function NavigationButton(props: Props) {
   const router = useRouter();
 
   return (
-    <Link href={props.href ? props.href : { query: { tab: props.query } }} shallow>
+    <Link href={props.href ? props.href : { query: { tab: props.query } }} shallow scroll>
       <NavButtons isSelected={router.query['tab'] === props.query}>{props.children}</NavButtons>
     </Link>
   );
