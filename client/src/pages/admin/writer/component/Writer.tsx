@@ -61,12 +61,12 @@ const PreviewContainer = styled.div({
   }
 });
 
-const Paragraph = styled.p({
-  display: 'inline-block',
-  width: '100%',
-  wordBreak: 'break-word',
-  whiteSpace: 'pre-wrap'
-});
+// const Paragraph = styled.p({
+//   display: 'inline-block',
+//   width: '100%',
+//   wordBreak: 'break-word',
+//   whiteSpace: 'pre-wrap'
+// });
 
 const MoblieModeButton = styled.button({
   borderRadius: '.5rem',
@@ -91,9 +91,9 @@ const WriteButton = styled.button<{ available: boolean }>((props) => ({
   cursor: props.available ? 'pointer' : 'not-allowed'
 }));
 
-function Text(props: { children?: string }) {
-  return <Paragraph>{props.children !== undefined ? props.children : <br></br>}</Paragraph>;
-}
+// function Text(props: { children?: string }) {
+//   return <Paragraph>{props.children !== undefined ? props.children : <br></br>}</Paragraph>;
+// }
 
 enum Mode {
   Write = 'Editor',
@@ -148,10 +148,8 @@ export function Writer(props: Props) {
     }
   }, []);
 
-  function parseTextContent() {
-    if (editor.current !== null) {
-      setArticle(editor.current.innerText.replaceAll('\n\n', '  \n').replaceAll('\n  \n', '\n&#8203;  \n').replaceAll('\n\n', '\n'));
-    }
+  function parseTextContent(e: React.ChangeEvent<HTMLTextAreaElement>) {
+    setArticle(e.target.value.replaceAll('\n\n', '  \n').replaceAll('\n  \n', '\n&#8203;  \n').replaceAll('\n\n', '\n'));
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
@@ -300,9 +298,7 @@ export function Writer(props: Props) {
               />
             </Title>
             <Menu ref={editor} setArticle={setArticle} />
-            <Editor ref={editor} onKeyDown={handleKeyDown} onPaste={handlePaste} onChange={parseTextContent}>
-              <Text></Text>
-            </Editor>
+            <Editor ref={editor} onKeyDown={handleKeyDown} onPaste={handlePaste} onChange={parseTextContent} value={article} />
             <ButtonContainer>
               <WriteButton
                 available={visibleSubmitBtn}

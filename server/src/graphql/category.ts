@@ -99,18 +99,18 @@ export const categoryResolver = {
           throw new UserInputError('카테고리 제목을 입력해주세요.');
         }
 
-        const categories: Category[] = await CategoryModel.find();
+        const categories: Category[] = await CategoryModel.find({}, {}, { sort: { _id: -1 } });
 
         const isDuplicated = categories.filter((category) => category.title.toLowerCase() === args.title.toLowerCase()).length > 0;
         if (isDuplicated) {
           throw new ValidationError('이미 존재하는 제목입니다.');
         }
 
-        const lastCategory = categories[-1];
+        const lastCategory = categories[0];
         let newCategory: Category;
 
         if (lastCategory) {
-          const newId = (categories[categories.length - 1]._id += 1);
+          const newId = (lastCategory._id += 1);
           const order = categories.length;
 
           newCategory = await CategoryModel.create({
