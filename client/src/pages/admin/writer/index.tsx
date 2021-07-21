@@ -61,8 +61,10 @@ export async function getServerSideProps(context: NextPageContext) {
   }
 
   const client = initApolloClient({}, context);
-  const profileQuery = await client.query({ query: GET_PROFILE });
-  const categoryQuery = await client.query({ query: GET_CATEGORIES_WITH_DETAILS });
+  const [profileQuery, categoryQuery] = await Promise.all([
+    client.query({ query: GET_PROFILE }),
+    client.query({ query: GET_CATEGORIES_WITH_DETAILS })
+  ]);
 
   const profile = profileQuery.data.profile;
   const categories = categoryQuery.data.categoriesWithDetails;

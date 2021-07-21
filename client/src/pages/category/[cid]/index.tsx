@@ -18,8 +18,8 @@ const Container = styled.div({
 });
 
 interface ServerSideProps {
-  categoryData: CategoryDetailType[];
-  postData: { _id: number; title: string; article: string }[];
+  categories: CategoryDetailType[];
+  posts: { _id: number; title: string; article: string }[];
 }
 
 interface Props extends ServerSideProps {}
@@ -28,12 +28,12 @@ export default function CategoryPage(props: Props) {
   const router = useRouter();
 
   const cid = router.asPath.split('/')[2];
-  const postCount = props.categoryData.filter((category) => category._id === +cid)[0].postCount;
+  const postCount = props.categories.filter((category) => category._id === +cid)[0].postCount;
 
   return (
     <Container>
-      <CategoryContainer categories={props.categoryData} />
-      <PostContainer posts={props.postData} postCount={postCount || 0} />
+      <CategoryContainer categories={props.categories} />
+      <PostContainer posts={props.posts} postCount={postCount || 0} />
     </Container>
   );
 }
@@ -44,16 +44,21 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
   const categoryId = context.resolvedUrl.split('/')[2];
   const apolloClient = initApolloClient({}, context);
 
-  const { data: categoryData } = await apolloClient.query({ query: GET_CATEGORIES_WITH_DETAILS });
-  const { data: postData } = await apolloClient.query({
-    query: FIND_SAME_CATEGORY_POSTS,
-    variables: { categoryId: Number.parseInt(categoryId) }
-  });
+  const [categoryDetailsQueryResult, sameCategoryPostsQueryResult] = await Promise.all([
+    apolloClient.query({ query: GET_CATEGORIES_WITH_DETAILS }),
+    apolloClient.query({
+      query: FIND_SAME_CATEGORY_POSTS,
+      variables: { categoryId: Number.parseInt(categoryId) }
+    })
+  ]);
+
+  const categories: CategoryDetailType[] = categoryDetailsQueryResult.data.categoriesWithDetails;
+  const posts: { _id: number; title: string; article: string }[] = sameCategoryPostsQueryResult.data.findSameCategoryPosts.post;
 
   return {
     props: {
-      categoryData: categoryData.categoriesWithDetails,
-      postData: postData.findSameCategoryPosts.post
+      categories,
+      posts
     }
   };
 };

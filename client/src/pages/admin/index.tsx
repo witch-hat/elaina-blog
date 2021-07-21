@@ -63,12 +63,14 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
   context.res.setHeader('Cache-Control', 'max-age=0, public, must-revalidate');
 
   const client = initApolloClient({}, context);
-  const { data: CommentData } = await client.query({ query: GET_COMMENT_LOGS });
-  const { data: CategoryData } = await client.query({ query: GET_CATEGORIES_WITH_DETAILS });
-  const { data: PostTitle } = await client.query({ query: GET_POSTS });
+  const [{ data: CommentData }, { data: CategoryData }, { data: PostTitle }] = await Promise.all([
+    client.query({ query: GET_COMMENT_LOGS }),
+    client.query({ query: GET_CATEGORIES_WITH_DETAILS }),
+    client.query({ query: GET_POSTS })
+  ]);
   const logs: CommentLogType[] = CommentData.commentLogs;
-  const categoriesDetail = CategoryData.categoriesWithDetails;
-  const posts = PostTitle.posts;
+  const categoriesDetail: CategoryDetailType[] = CategoryData.categoriesWithDetails;
+  const posts: PostType[] = PostTitle.posts;
   return {
     props: {
       logs,

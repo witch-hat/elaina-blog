@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 
 import { initApolloClient } from 'src/apollo/withApollo';
-import { FIND_POST_BY_ID, FIND_SAME_CATEGORY_POSTS, PostType } from 'src/query/post';
+import { FIND_POST_BY_ID, PostType } from 'src/query/post';
 import { GET_COMMENTS, CommentContainerType } from 'src/query/comment';
 import { GET_PROFILE, ProfileType } from 'src/query/profile';
 import { AppCommonProps } from 'src/pages/_app';
@@ -53,8 +53,6 @@ interface ServerSideProps {
   categoryId: number;
   post: PostType;
   comment: CommentContainerType;
-  sameCategoryTitles: [{ title: string; _id: number }];
-  category: { title: string };
   profile: ProfileType;
 }
 
@@ -113,25 +111,19 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
       };
     }
 
-    const commentQueryResult = await client.query({ query: GET_COMMENTS, variables: { _id: findedPost._id } });
-    const findedComment = commentQueryResult.data.comments;
+    const [commentQueryResult, profileQueryResult] = await Promise.all([
+      client.query({ query: GET_COMMENTS, variables: { _id: findedPost._id } }),
+      client.query({ query: GET_PROFILE })
+    ]);
 
-    const profileQueryResult = await client.query({ query: GET_PROFILE });
-    const profile = profileQueryResult.data.profile;
-
-    const sameCategoryQueryResult = await client.query({
-      query: FIND_SAME_CATEGORY_POSTS,
-      variables: { categoryId: findedPost.categoryId }
-    });
-    const sameCategoryPostTitles = sameCategoryQueryResult.data.findSameCategoryPosts;
+    const findedComment: CommentContainerType = commentQueryResult.data.comments;
+    const profile: ProfileType = profileQueryResult.data.profile;
 
     return {
       props: {
         categoryId: findedPost.categoryId,
         post: findedPost,
         comment: findedComment,
-        sameCategoryTitles: sameCategoryPostTitles.post,
-        category: sameCategoryPostTitles.category,
         profile
       }
     };
