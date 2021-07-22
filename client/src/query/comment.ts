@@ -50,7 +50,6 @@ export const WRITE_COMMENT = gql`
       createdAt
       comment
       isAdmin
-      replies
     }
   }
 `;
