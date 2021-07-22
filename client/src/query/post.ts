@@ -53,6 +53,9 @@ export const FIND_SAME_CATEGORY_POSTS = gql`
         _id
         title
         article
+        createdAt
+        likeCount
+        commentCount
       }
       category {
         title
