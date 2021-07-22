@@ -21,7 +21,8 @@ const Container = styled.div<{ isError: boolean }>(
     padding: '.5rem',
     backgroundColor: props.isError ? 'rgb(224, 103, 103)' : 'rgb(111, 178, 237)',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    zIndex: 9999
   }),
   css`
     animation: ${GoingDown} 0.3s forwards;
