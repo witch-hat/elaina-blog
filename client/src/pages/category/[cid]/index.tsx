@@ -1,10 +1,14 @@
 import { GetServerSideProps } from 'next';
 import styled from 'styled-components';
+import { useRouter } from 'next/router';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import { initApolloClient } from 'src/apollo/withApollo';
 import { FIND_SAME_CATEGORY_POSTS, LatestPostQueryReturnType } from 'src/query/post';
 
 import { PostItem } from '../../main/post/PostItem';
+import { AppCommonProps } from 'src/pages/_app';
 
 const Container = styled.div({
   display: 'flex',
@@ -25,6 +29,17 @@ const InfoWrapper = styled.div({
 const CategoryTitle = styled.p({
   fontSize: '1.4rem',
   fontWeight: 'bold'
+});
+
+const WriteButton = styled.button({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  padding: '4px 5px',
+  borderRadius: '50%',
+  '&:hover': {
+    backgroundColor: '#eee'
+  }
 });
 
 const StyledHr = styled.hr((props) => ({
@@ -55,13 +70,24 @@ interface ServerSideProps {
   posts: LatestPostQueryReturnType[];
 }
 
-interface Props extends ServerSideProps {}
+interface Props extends ServerSideProps, AppCommonProps {}
 
 export default function CategoryPage(props: Props) {
+  const router = useRouter();
+
+  function handleWriteButtonClick() {
+    router.push({ pathname: '/admin/writer', query: { category: props.categoryTitle } });
+  }
+
   return (
     <Container>
       <InfoWrapper>
         <CategoryTitle>{props.categoryTitle}</CategoryTitle>
+        {props.app.isLogin && (
+          <WriteButton onClick={() => handleWriteButtonClick()}>
+            <FontAwesomeIcon icon={faPlus} />
+          </WriteButton>
+        )}
       </InfoWrapper>
       <StyledHr />
       <PostWrapper isEmpty={!props.posts.length}>
