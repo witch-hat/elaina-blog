@@ -7,6 +7,11 @@ import { BorderBox } from 'src/components';
 import { FormatUnifier } from 'src/utils';
 import { LatestPostQueryReturnType } from 'src/query/post';
 
+const StyledA = styled.a({
+  display: 'block',
+  margin: '1.6rem 0'
+});
+
 const Container = styled.div({
   width: '100%',
   padding: '.8rem'
@@ -50,8 +55,8 @@ interface Props {
 export function PostItem(props: Props) {
   return (
     <Link href={`/post/${props.post._id}`}>
-      <a>
-        <BorderBox isHoverEffect={true} styles={{ width: '100%', margin: '1.6rem 0' }}>
+      <StyledA>
+        <BorderBox isHoverEffect={true} styles={{ width: '100%', margin: '0' }}>
           <Container>
             <Title>{props.post.title}</Title>
             <PreviewArticle>{props.post.article}</PreviewArticle>
@@ -71,7 +76,7 @@ export function PostItem(props: Props) {
             </DetailWrapper>
           </Container>
         </BorderBox>
-      </a>
+      </StyledA>
     </Link>
   );
 }
