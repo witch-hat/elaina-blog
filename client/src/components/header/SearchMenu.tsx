@@ -7,7 +7,7 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { NoRefInputBox } from 'src/components';
 import { trans, Lang } from 'src/resources/languages';
 
-const SearchButton = styled.button((props) => ({
+const Button = styled.button((props) => ({
   display: 'flex',
   width: '45px',
   height: '45px',
@@ -39,6 +39,14 @@ const SearchForm = styled.form({
   justifyContent: 'center'
 });
 
+const MemoizedSearchButton = React.memo(function SearchButton() {
+  return (
+    <Button type='submit'>
+      <FontAwesomeIcon icon={faSearch} />
+    </Button>
+  );
+});
+
 export function SearchMenu() {
   const router = useRouter();
   const [searchKeyword, setSearchKeyWord] = useState('');
@@ -66,9 +74,7 @@ export function SearchMenu() {
         styles={{ width: '180px', small: { width: '120px', height: '32px' } }}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchKeyWord(e.currentTarget.value)}
       />
-      <SearchButton type='submit'>
-        <FontAwesomeIcon icon={faSearch} />
-      </SearchButton>
+      <MemoizedSearchButton />
     </SearchForm>
   );
 }

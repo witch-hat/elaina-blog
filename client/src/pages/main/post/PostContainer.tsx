@@ -1,3 +1,4 @@
+import React from 'react';
 import styled from 'styled-components';
 
 import { LatestPostQueryReturnType } from 'src/query/post';
@@ -24,3 +25,5 @@ export function PostContainer(props: Props) {
     </Container>
   );
 }
+
+export const MemoizedPostContainer = React.memo(PostContainer);

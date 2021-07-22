@@ -12,7 +12,7 @@ import { AppCommonProps, appCommponProps } from './_app';
 import { MainPageLayout } from './main/component/MainPageLayout';
 import { AboutPage } from './main/about/About';
 import { MemoizedContentCategory } from './main/category/ContentCategory';
-import { PostContainer } from './main/post/PostContainer';
+import { MemoizedPostContainer } from './main/post/PostContainer';
 
 interface ServerSideProps {
   categoryLatestPosts: ({ _id: number; categoryId: number; title: string; article: string } | null)[]; // This will be deprecated
@@ -45,7 +45,7 @@ export default function Index(props: Props) {
 
   return (
     <MainPageLayout profile={props.profile} isLogin={props.app.isLogin}>
-      <PostContainer posts={props.latestPosts} />
+      <MemoizedPostContainer posts={props.latestPosts} />
     </MainPageLayout>
   );
 }
