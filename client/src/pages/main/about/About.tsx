@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 
-import { AboutType } from 'src/query/about';
+import { AboutQueryReturnType } from 'src/query/about';
 
 import { MemoizedAboutContent } from './component/AboutContent';
 import { AboutMenu } from './component/AboutMenu';
@@ -15,16 +15,16 @@ const Container = styled.section({
 });
 
 interface Props {
-  about: AboutType;
+  about: AboutQueryReturnType;
   name: string;
   isLogin: boolean;
 }
 
 export function AboutPage(props: Props) {
-  const [about, setAbout] = useState<AboutType>(props.about);
+  const [about, setAbout] = useState<AboutQueryReturnType>(props.about);
   const router = useRouter();
 
-  function onUpdate(updatedAbout: AboutType) {
+  function onUpdate(updatedAbout: AboutQueryReturnType) {
     setAbout(updatedAbout);
   }
 

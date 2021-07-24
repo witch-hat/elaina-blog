@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-export interface AboutType {
+export interface AboutQueryReturnType {
   article: string;
   updatedAt: number;
 }

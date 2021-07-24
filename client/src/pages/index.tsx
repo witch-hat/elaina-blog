@@ -6,7 +6,7 @@ import { initApolloClient } from 'src/apollo/withApollo';
 import { GET_LATEST_POSTS, GET_LATEST_POSTS_PER_CATEGORY, LatestPostQueryReturnType } from 'src/query/post';
 import { GET_CATEGORIES_WITH_DETAILS, CategoryDetailType } from 'src/query/category';
 import { GET_PROFILE, ProfileType } from 'src/query/profile';
-import { AboutType, GET_ABOUT } from 'src/query/about';
+import { AboutQueryReturnType, GET_ABOUT } from 'src/query/about';
 
 import { AppCommonProps, appCommponProps } from './_app';
 import { MainPageLayout } from './main/component/MainPageLayout';
@@ -19,7 +19,7 @@ interface ServerSideProps {
   latestPosts: LatestPostQueryReturnType[];
   profile: ProfileType;
   categories: CategoryDetailType[];
-  about: AboutType;
+  about: AboutQueryReturnType;
 }
 
 interface Props extends AppCommonProps, ServerSideProps {}
