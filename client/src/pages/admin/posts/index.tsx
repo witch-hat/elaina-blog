@@ -138,7 +138,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
   }
 
   const client = initApolloClient({}, context);
-  const { data } = await client.query({ query: GET_POSTS });
+  const { data } = await client.query<{ posts: PostType[] }>({ query: GET_POSTS });
   const posts = data.posts;
 
   return {

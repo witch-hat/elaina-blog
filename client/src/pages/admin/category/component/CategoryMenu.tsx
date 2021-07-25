@@ -5,7 +5,7 @@ import { useMutation } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGripVertical, faPen, faTrash, faSave, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 
-import { UPDATE_CATEGORY } from 'src/query/category';
+import { UPDATE_CATEGORY, UpdateCategoryVars, UpdateCategoryQueryType } from 'src/query/category';
 
 import { DeleteModalProps } from './DeleteCategoryModal';
 
@@ -53,7 +53,7 @@ interface Props {
 export function CategoryMenu(props: Props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [updateCategory] = useMutation(UPDATE_CATEGORY);
+  const [updateCategory] = useMutation<UpdateCategoryQueryType, UpdateCategoryVars>(UPDATE_CATEGORY);
 
   async function onSaveClick() {
     if (!props.title) {
@@ -68,6 +68,11 @@ export function CategoryMenu(props: Props) {
           title: props.title
         }
       });
+
+      if (!data) {
+        alert('No server response...');
+        return;
+      }
 
       // response null-check
       if (data.updateCategory) {

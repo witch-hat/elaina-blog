@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { useMutation } from '@apollo/client';
 
 import { ModalWrapper } from 'src/components';
-import { DELETE_CATEGORY } from 'src/query/category';
+import { DELETE_CATEGORY, DeleteCategoryVars, DeleteCategoryQueryType } from 'src/query/category';
 import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';
 
@@ -47,7 +47,7 @@ export function DeleteCategoryModal(props: DeleteModalProps) {
   const router = useRouter();
 
   const client = useApollo();
-  const [deleteCategory] = useMutation(DELETE_CATEGORY);
+  const [deleteCategory] = useMutation<DeleteCategoryQueryType, DeleteCategoryVars>(DELETE_CATEGORY);
 
   async function handleDeleteCategory() {
     const authResponse = await client.query({ query: IS_AUTH });
@@ -69,6 +69,11 @@ export function DeleteCategoryModal(props: DeleteModalProps) {
       });
 
       // response check
+      if (!data) {
+        alert('No server response...');
+        return;
+      }
+
       if (data.deleteCategory.isSuccess) {
         props.deleteCategory(props.index);
         props.setGreenAlert('Category deleted successfully.');

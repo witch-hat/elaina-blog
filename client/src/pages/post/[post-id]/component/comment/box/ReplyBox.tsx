@@ -1,7 +1,16 @@
 import { useMutation } from '@apollo/client';
 
-import { CommentType, DELETE_REPLY, EDIT_REPLY, ReplyType } from 'src/query/comment';
-import { DELETE_COMMENT_LOG } from 'src/query/comment-log';
+import {
+  CommentType,
+  DELETE_REPLY,
+  EDIT_REPLY,
+  ReplyType,
+  DeleteReplyQueryType,
+  DeleteReplyVars,
+  EditReplyQueryType,
+  EditReplyVars
+} from 'src/query/comment';
+import { DELETE_COMMENT_LOG, DeleteCommentLogQueryType, DeleteCommentLogVars } from 'src/query/comment-log';
 import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';
 
@@ -21,9 +30,9 @@ interface Props {
 
 export function ReplyBox(props: Props) {
   const client = useApollo();
-  const [deleteReply] = useMutation(DELETE_REPLY);
-  const [editReply] = useMutation(EDIT_REPLY);
-  const [deleteCommentLog] = useMutation(DELETE_COMMENT_LOG);
+  const [deleteReply] = useMutation<DeleteReplyQueryType, DeleteReplyVars>(DELETE_REPLY);
+  const [editReply] = useMutation<EditReplyQueryType, EditReplyVars>(EDIT_REPLY);
+  const [deleteCommentLog] = useMutation<DeleteCommentLogQueryType, DeleteCommentLogVars>(DELETE_COMMENT_LOG);
 
   async function handleEditReply(commentContent: string, password: string) {
     if (!commentContent) {

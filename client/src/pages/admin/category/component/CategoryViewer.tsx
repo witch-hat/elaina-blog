@@ -4,7 +4,7 @@ import { useMutation } from '@apollo/client';
 import { cloneDeep, throttle } from 'lodash';
 
 import { BorderBox, AlertStateType } from 'src/components';
-import { CategoryDetailType, ORDER_CATEGORY } from 'src/query/category';
+import { CategoryDetailType, ORDER_CATEGORY, OrderCategoryVars, OrderCategoryQueryType } from 'src/query/category';
 import { CategoryTitle } from './CategoryTitle';
 import { CategoryMenu } from './CategoryMenu';
 
@@ -41,7 +41,7 @@ export function CategoryViewer(props: Props) {
   const [title, setTitle] = useState(props.title);
   const initialCategoryOrder = useRef<number[] | null>(null);
 
-  const [orderCategory] = useMutation(ORDER_CATEGORY);
+  const [orderCategory] = useMutation<OrderCategoryQueryType, OrderCategoryVars>(ORDER_CATEGORY);
 
   const handleEditTitle = (e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value);
 

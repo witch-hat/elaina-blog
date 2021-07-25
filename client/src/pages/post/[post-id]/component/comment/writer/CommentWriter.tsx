@@ -1,9 +1,9 @@
 import { useMutation } from '@apollo/client';
 
-import { WRITE_COMMENT, CommentType } from 'src/query/comment';
+import { WRITE_COMMENT, CommentType, WriteCommentVars, WriteCommentQueryType } from 'src/query/comment';
 import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';
-import { PUSH_COMMENT_LOG, CommentEvent } from 'src/query/comment-log';
+import { PUSH_COMMENT_LOG, CommentEvent, PushCommentLogVars, PushCommentLogQueryType } from 'src/query/comment-log';
 
 import { Writer } from './Writer';
 
@@ -17,8 +17,8 @@ interface Props {
 
 export function CommentWriter(props: Props) {
   const client = useApollo();
-  const [writeComment] = useMutation(WRITE_COMMENT);
-  const [pushCommentLog] = useMutation(PUSH_COMMENT_LOG);
+  const [writeComment] = useMutation<WriteCommentQueryType, WriteCommentVars>(WRITE_COMMENT);
+  const [pushCommentLog] = useMutation<PushCommentLogQueryType, PushCommentLogVars>(PUSH_COMMENT_LOG);
 
   async function addComment(username: string, password: string, comment: string) {
     if (comment.length < 2) {
@@ -28,7 +28,7 @@ export function CommentWriter(props: Props) {
 
     const AuthResponse = await client.query({ query: IS_AUTH });
     const isAdmin = AuthResponse.data.isAuth.isAuth;
-    const createdAt = new Date().getTime();
+    const createdAt = new Date();
 
     if (isAdmin) {
       try {
@@ -45,7 +45,7 @@ export function CommentWriter(props: Props) {
 
         props.onAddComment({
           comment,
-          createdAt,
+          createdAt: createdAt.getTime(),
           isAdmin,
           replies: []
         });
@@ -85,7 +85,7 @@ export function CommentWriter(props: Props) {
           username,
           password,
           comment,
-          createdAt,
+          createdAt: createdAt.getTime(),
           isAdmin,
           replies: []
         });

@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import { GetServerSideProps } from 'next';
 
 import { initApolloClient } from 'src/apollo/withApollo';
-import { CommentLogType, GET_COMMENT_LOGS } from 'src/query/comment-log';
+import { CommentLogDataType, GET_COMMENT_LOGS, CommentLogQueryType } from 'src/query/comment-log';
 import CommnetLogBox from 'src/pages/admin/component/CommentLogItem/CommentLogBox';
-import { GET_CATEGORIES_WITH_DETAILS, CategoryDetailType } from 'src/query/category';
+import { GET_CATEGORIES_WITH_DETAILS, CategoryDetailType, CategoryDetailsQueryType } from 'src/query/category';
 import { PostType, GET_POSTS } from 'src/query/post';
 import { trans, Lang } from 'src/resources/languages';
 
@@ -14,7 +14,7 @@ import { PageTitle } from './component/PageTitle';
 import { AppCommonProps, appCommponProps } from '../_app';
 
 interface ServerSideProps {
-  logs: CommentLogType[];
+  logs: CommentLogDataType[];
   categoriesDetail: CategoryDetailType[];
   posts: PostType[];
 }
@@ -64,13 +64,15 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
 
   const client = initApolloClient({}, context);
   const [{ data: CommentData }, { data: CategoryData }, { data: PostTitle }] = await Promise.all([
-    client.query({ query: GET_COMMENT_LOGS }),
-    client.query({ query: GET_CATEGORIES_WITH_DETAILS }),
-    client.query({ query: GET_POSTS })
+    client.query<CommentLogQueryType>({ query: GET_COMMENT_LOGS }),
+    client.query<CategoryDetailsQueryType>({ query: GET_CATEGORIES_WITH_DETAILS }),
+    client.query<{ posts: PostType[] }>({ query: GET_POSTS })
   ]);
-  const logs: CommentLogType[] = CommentData.commentLogs;
-  const categoriesDetail: CategoryDetailType[] = CategoryData.categoriesWithDetails;
-  const posts: PostType[] = PostTitle.posts;
+
+  const logs = CommentData.commentLogs;
+  const categoriesDetail = CategoryData.categoriesWithDetails;
+  const posts = PostTitle.posts;
+
   return {
     props: {
       logs,

@@ -4,7 +4,7 @@ import { GetServerSideProps } from 'next';
 
 import { initApolloClient } from 'src/apollo/withApollo';
 import { appCommponProps, AppCommonProps } from 'src/pages/_app';
-import { CategoryDetailType, GET_CATEGORIES_WITH_DETAILS } from 'src/query/category';
+import { CategoryDetailsQueryType, CategoryDetailType, GET_CATEGORIES_WITH_DETAILS } from 'src/query/category';
 import { trans, Lang } from 'src/resources/languages';
 
 import { AdminPageLayout } from '../component/AdminPageLayout';
@@ -47,7 +47,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
   context.res.setHeader('Cache-Control', 'max-age=0, public, must-revalidate');
 
   const client = initApolloClient({}, context);
-  const { data } = await client.query({ query: GET_CATEGORIES_WITH_DETAILS });
+  const { data } = await client.query<CategoryDetailsQueryType>({ query: GET_CATEGORIES_WITH_DETAILS });
 
   const categories = data.categoriesWithDetails;
 

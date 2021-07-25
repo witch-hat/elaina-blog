@@ -4,7 +4,7 @@ import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 
 import { initApolloClient } from 'src/apollo/withApollo';
 import { FIND_POST_BY_ID, PostType } from 'src/query/post';
-import { GET_COMMENTS, CommentContainerType } from 'src/query/comment';
+import { GET_COMMENTS, CommentContainerType, GetCommentsQueryType } from 'src/query/comment';
 import { GET_PROFILE, ProfileType } from 'src/query/profile';
 import { AppCommonProps } from 'src/pages/_app';
 
@@ -112,11 +112,11 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
     }
 
     const [commentQueryResult, profileQueryResult] = await Promise.all([
-      client.query({ query: GET_COMMENTS, variables: { _id: findedPost._id } }),
+      client.query<GetCommentsQueryType>({ query: GET_COMMENTS, variables: { _id: findedPost._id } }),
       client.query({ query: GET_PROFILE })
     ]);
 
-    const findedComment: CommentContainerType = commentQueryResult.data.comments;
+    const findedComment = commentQueryResult.data.comments;
     const profile: ProfileType = profileQueryResult.data.profile;
 
     return {

@@ -7,7 +7,7 @@ import { Writer } from 'src/pages/admin/writer/component/Writer';
 import { AppCommonProps, appCommponProps } from 'src/pages/_app';
 import { initApolloClient } from 'src/apollo/withApollo';
 import { GET_PROFILE, ProfileType } from 'src/query/profile';
-import { CategoryDetailType, GET_CATEGORIES_WITH_DETAILS } from 'src/query/category';
+import { CategoryDetailType, GET_CATEGORIES_WITH_DETAILS, CategoryDetailsQueryType } from 'src/query/category';
 
 const Container = styled.div({
   display: 'flex',
@@ -62,8 +62,8 @@ export async function getServerSideProps(context: NextPageContext) {
 
   const client = initApolloClient({}, context);
   const [profileQuery, categoryQuery] = await Promise.all([
-    client.query({ query: GET_PROFILE }),
-    client.query({ query: GET_CATEGORIES_WITH_DETAILS })
+    client.query<{ profile: ProfileType }>({ query: GET_PROFILE }),
+    client.query<CategoryDetailsQueryType>({ query: GET_CATEGORIES_WITH_DETAILS })
   ]);
 
   const profile = profileQuery.data.profile;

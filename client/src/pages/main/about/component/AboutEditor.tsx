@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { useMutation } from '@apollo/client';
 
 import { trans, Lang } from 'src/resources/languages/index';
-import { UPDATE_ABOUT, AboutQueryReturnType } from 'src/query/about';
+import { UPDATE_ABOUT, UpdateAboutQueryType, AboutDataType, UpdateAboutVars } from 'src/query/about';
 
 const Editor = styled.textarea((props) => ({
   display: 'block',
@@ -33,20 +33,25 @@ const Button = styled.button<{ submit?: boolean }>((props) => ({
 
 interface Props {
   article: string;
-  onUpdate: (about: AboutQueryReturnType) => void;
+  onUpdate: (about: AboutDataType) => void;
 }
 
 export function AboutEditor(props: Props) {
   const [article, setArticle] = useState(props.article);
   const router = useRouter();
 
-  const [updateAbout] = useMutation(UPDATE_ABOUT);
+  const [updateAbout] = useMutation<UpdateAboutQueryType, UpdateAboutVars>(UPDATE_ABOUT);
 
   async function onSubmit() {
     try {
       const { data } = await updateAbout({ variables: { article } });
 
-      const newAbout: AboutQueryReturnType = data.updateAbout;
+      if (!data) {
+        alert('No response error!');
+        return;
+      }
+
+      const newAbout = data.updateAbout;
       props.onUpdate(newAbout);
       router.replace('/?tab=about');
     } catch (err) {

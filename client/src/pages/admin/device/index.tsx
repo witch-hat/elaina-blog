@@ -58,8 +58,8 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
   context.res.setHeader('Cache-Control', 'max-age=0, public, must-revalidate');
 
   const client = initApolloClient({}, context);
-  const { data } = await client.query({ query: GET_DEVICES });
-  const loginDevices: LoginDeviceType[] = data.findDevices;
+  const { data } = await client.query<{ findDevices: LoginDeviceType[] }>({ query: GET_DEVICES });
+  const loginDevices = data.findDevices;
 
   return {
     props: {

@@ -4,9 +4,9 @@ import { GetServerSideProps } from 'next';
 
 import { initApolloClient } from 'src/apollo/withApollo';
 import { GET_LATEST_POSTS, GET_LATEST_POSTS_PER_CATEGORY, LatestPostQueryReturnType } from 'src/query/post';
-import { GET_CATEGORIES_WITH_DETAILS, CategoryDetailType } from 'src/query/category';
+import { GET_CATEGORIES_WITH_DETAILS, CategoryDetailType, CategoryDetailsQueryType } from 'src/query/category';
 import { GET_PROFILE, ProfileType } from 'src/query/profile';
-import { AboutQueryReturnType, GET_ABOUT } from 'src/query/about';
+import { AboutDataType, AboutQueryType, GET_ABOUT } from 'src/query/about';
 
 import { AppCommonProps, appCommponProps } from './_app';
 import { MainPageLayout } from './main/component/MainPageLayout';
@@ -19,7 +19,7 @@ interface ServerSideProps {
   latestPosts: LatestPostQueryReturnType[];
   profile: ProfileType;
   categories: CategoryDetailType[];
-  about: AboutQueryReturnType;
+  about: AboutDataType;
 }
 
 interface Props extends AppCommonProps, ServerSideProps {}
@@ -76,11 +76,11 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
   const apolloClient = initApolloClient({}, context);
   const [profileQueryResult, categoryQueryResult, categoryLatestPostQueryResult, aboutQueryResult, latestPostsQueryResult] =
     await Promise.all([
-      apolloClient.query({ query: GET_PROFILE }),
-      apolloClient.query({ query: GET_CATEGORIES_WITH_DETAILS }),
-      apolloClient.query({ query: GET_LATEST_POSTS_PER_CATEGORY }),
-      apolloClient.query({ query: GET_ABOUT }),
-      apolloClient.query({
+      apolloClient.query<{ profile: ProfileType }>({ query: GET_PROFILE }),
+      apolloClient.query<CategoryDetailsQueryType>({ query: GET_CATEGORIES_WITH_DETAILS }),
+      apolloClient.query({ query: GET_LATEST_POSTS_PER_CATEGORY }), // this will be deprecated
+      apolloClient.query<AboutQueryType>({ query: GET_ABOUT }),
+      apolloClient.query<{ getLatestPosts: LatestPostQueryReturnType[] }>({
         query: GET_LATEST_POSTS,
         variables: {
           page: 1
