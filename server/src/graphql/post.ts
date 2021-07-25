@@ -87,8 +87,10 @@ export const postResolver = {
       try {
         const removeMd = require('remove-markdown');
 
-        const sameCategoryPosts: Post[] = await PostModel.find({ categoryId: args.categoryId });
-        const categoryFindResult = await CategoryModel.findById(args.categoryId);
+        const [sameCategoryPosts, categoryFindResult]: [Post[], any] = await Promise.all([
+          PostModel.find({ categoryId: args.categoryId }),
+          CategoryModel.findById(args.categoryId)
+        ]);
 
         // Remove markdown from article preview
         for (let posts of sameCategoryPosts) {
