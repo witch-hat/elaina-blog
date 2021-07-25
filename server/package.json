@@ -48,6 +48,7 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@types/remove-markdown": "^0.3.1",
     "@types/ua-parser-js": "^0.7.35",
     "@types/uuid": "^8.3.0",
     "dotenv": "^8.2.0",

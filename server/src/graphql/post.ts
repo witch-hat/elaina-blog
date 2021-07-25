@@ -1,4 +1,5 @@
 import { ApolloError, gql, UserInputError } from 'apollo-server';
+import removeMd from 'remove-markdown';
 
 import { PostModel, Post } from '../model/post';
 import { ContextType } from '../types/context';
@@ -85,8 +86,6 @@ export const postResolver = {
 
     async findSameCategoryPosts(_: any, args: { categoryId: number }) {
       try {
-        const removeMd = require('remove-markdown');
-
         const [sameCategoryPosts, categoryFindResult]: [Post[], any] = await Promise.all([
           PostModel.find({ categoryId: args.categoryId }),
           CategoryModel.findById(args.categoryId)
