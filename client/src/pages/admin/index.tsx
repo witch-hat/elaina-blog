@@ -3,11 +3,10 @@ import styled from 'styled-components';
 import { GetServerSideProps } from 'next';
 
 import { initApolloClient } from 'src/apollo/withApollo';
-import { CommentEvent, CommentLog, GET_COMMENT_LOGS } from 'src/query/comment-log';
+import { CommentLogDataType, GET_COMMENT_LOGS, CommentLogQueryType } from 'src/query/comment-log';
 import CommnetLogBox from 'src/pages/admin/component/CommentLogItem/CommentLogBox';
-import { GET_CATEGORIES_WITH_DETAILS, CategoryDetails } from 'src/query/category';
-import { BorderBox } from 'src/components/common/box/BorderBox';
-import { Post, GET_POSTS } from 'src/query/post';
+import { GET_CATEGORIES_WITH_DETAILS, CategoryDetailType, CategoryDetailsQueryType } from 'src/query/category';
+import { PostType, GET_POSTS } from 'src/query/post';
 import { trans, Lang } from 'src/resources/languages';
 
 import { AdminPageLayout } from './component/AdminPageLayout';
@@ -15,9 +14,9 @@ import { PageTitle } from './component/PageTitle';
 import { AppCommonProps, appCommponProps } from '../_app';
 
 interface ServerSideProps {
-  logs: CommentLog[];
-  categoriesDetail: CategoryDetails[];
-  posts: Post[];
+  logs: CommentLogDataType[];
+  categoriesDetail: CategoryDetailType[];
+  posts: PostType[];
 }
 
 interface Props extends AppCommonProps, ServerSideProps {}
@@ -61,13 +60,19 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
     };
   }
 
+  context.res.setHeader('Cache-Control', 'max-age=0, public, must-revalidate');
+
   const client = initApolloClient({}, context);
-  const { data: CommentData } = await client.query({ query: GET_COMMENT_LOGS });
-  const { data: CategoryData } = await client.query({ query: GET_CATEGORIES_WITH_DETAILS });
-  const { data: PostTitle } = await client.query({ query: GET_POSTS });
-  const logs: CommentLog[] = CommentData.commentLogs;
+  const [{ data: CommentData }, { data: CategoryData }, { data: PostTitle }] = await Promise.all([
+    client.query<CommentLogQueryType>({ query: GET_COMMENT_LOGS }),
+    client.query<CategoryDetailsQueryType>({ query: GET_CATEGORIES_WITH_DETAILS }),
+    client.query<{ posts: PostType[] }>({ query: GET_POSTS })
+  ]);
+
+  const logs = CommentData.commentLogs;
   const categoriesDetail = CategoryData.categoriesWithDetails;
   const posts = PostTitle.posts;
+
   return {
     props: {
       logs,

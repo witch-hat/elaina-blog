@@ -1,21 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { useMutation } from '@apollo/client';
 
-import { RootState } from 'src/redux/rootReducer';
-import { ThemeMode } from 'src/redux/common/type';
-import { ModalWrapper, AlertStateType } from 'src/components';
-import { DELETE_CATEGORY, CategoryDetails } from 'src/query/category';
-import { theme } from 'src/styles';
+import { ModalWrapper } from 'src/components';
+import { DELETE_CATEGORY, DeleteCategoryVars, DeleteCategoryQueryType } from 'src/query/category';
 import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';
 
-const ModalContainer = styled.div((props) => ({
+const ModalContainer = styled.div({
   width: '25rem',
   padding: '.5rem'
-}));
+});
 
 const ModalParagraph = styled.p({
   width: '100%'
@@ -41,7 +37,6 @@ const ModalButton = styled.button<{ delete?: boolean }>((props) => ({
 export interface DeleteModalProps {
   visible: boolean;
   index: number;
-  defaultCategoryTitle: string;
   deleteCategory: (index: number) => void;
   setGreenAlert: (msg: string) => void;
   setRedAlert: (err: any) => void;
@@ -52,7 +47,7 @@ export function DeleteCategoryModal(props: DeleteModalProps) {
   const router = useRouter();
 
   const client = useApollo();
-  const [deleteCategory] = useMutation(DELETE_CATEGORY);
+  const [deleteCategory] = useMutation<DeleteCategoryQueryType, DeleteCategoryVars>(DELETE_CATEGORY);
 
   async function handleDeleteCategory() {
     const authResponse = await client.query({ query: IS_AUTH });
@@ -74,6 +69,11 @@ export function DeleteCategoryModal(props: DeleteModalProps) {
       });
 
       // response check
+      if (!data) {
+        alert('No server response...');
+        return;
+      }
+
       if (data.deleteCategory.isSuccess) {
         props.deleteCategory(props.index);
         props.setGreenAlert('Category deleted successfully.');
@@ -88,7 +88,7 @@ export function DeleteCategoryModal(props: DeleteModalProps) {
   return (
     <ModalWrapper visible={props.visible}>
       <ModalContainer>
-        <ModalParagraph>{`정말 삭제하시겠습니까?\n 글은 "${props.defaultCategoryTitle}" 카테로리로 이동됩니다.`}</ModalParagraph>
+        <ModalParagraph>{`정말 삭제하시겠습니까?\n 글은 최신글로 이동됩니다.`}</ModalParagraph>
         <ModalButtonContainer>
           <ModalButton
             onClick={() => {

@@ -5,7 +5,7 @@ import { useMutation } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGripVertical, faPen, faTrash, faSave, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 
-import { UPDATE_CATEGORY } from 'src/query/category';
+import { UPDATE_CATEGORY, UpdateCategoryVars, UpdateCategoryQueryType } from 'src/query/category';
 
 import { DeleteModalProps } from './DeleteCategoryModal';
 
@@ -39,7 +39,6 @@ interface Props {
   title: string;
   isDefault: boolean;
   index: number;
-  defaultCategoryTitle: string;
   enterEditMode: () => void;
   endEditMode: () => void;
   updateTitle: (title: string) => void;
@@ -54,7 +53,7 @@ interface Props {
 export function CategoryMenu(props: Props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [updateCategory] = useMutation(UPDATE_CATEGORY);
+  const [updateCategory] = useMutation<UpdateCategoryQueryType, UpdateCategoryVars>(UPDATE_CATEGORY);
 
   async function onSaveClick() {
     if (!props.title) {
@@ -62,22 +61,26 @@ export function CategoryMenu(props: Props) {
       return;
     }
 
-    const { data } = await updateCategory({
-      variables: {
-        id: props.id,
-        title: props.title
-      }
-    });
-
-    // response null-check
-    if (data.updateCategory) {
-      props.updateTitle(data.updateCategory.title);
-      props.setGreenAlert('Update category successfully.');
-    } else {
-      props.setRedAlert({ message: 'Cannot update category' });
-    }
-
     try {
+      const { data } = await updateCategory({
+        variables: {
+          id: props.id,
+          title: props.title
+        }
+      });
+
+      if (!data) {
+        alert('No server response...');
+        return;
+      }
+
+      // response null-check
+      if (data.updateCategory) {
+        props.updateTitle(data.updateCategory.title);
+        props.setGreenAlert('Update category successfully.');
+      } else {
+        props.setRedAlert({ message: 'Cannot update category' });
+      }
     } catch (err) {
       props.setRedAlert(err);
     }
@@ -107,38 +110,39 @@ export function CategoryMenu(props: Props) {
 
   return (
     <MenuContainer>
-      <IconWrapper onClick={() => props.enterEditMode()}>
-        <FontAwesomeIcon icon={faPen} style={{ fontSize: '1.25rem' }} />
-      </IconWrapper>
       {!props.isDefault && (
-        <IconWrapper onClick={() => setIsModalOpen(true)}>
-          <FontAwesomeIcon icon={faTrash} style={{ fontSize: '1.25rem' }} />
-        </IconWrapper>
+        <>
+          <IconWrapper onClick={() => props.enterEditMode()}>
+            <FontAwesomeIcon icon={faPen} style={{ fontSize: '1.25rem' }} />
+          </IconWrapper>
+          <IconWrapper onClick={() => setIsModalOpen(true)}>
+            <FontAwesomeIcon icon={faTrash} style={{ fontSize: '1.25rem' }} />
+          </IconWrapper>
+          <IconWrapper
+            drag
+            onMouseDown={(e: React.MouseEvent<HTMLDivElement>) => {
+              if (e.button === 0) {
+                props.grabElement(props.index);
+              } else {
+                props.releaseElement();
+              }
+            }}
+            onMouseUp={() => props.releaseElement()}
+            onTouchStart={() => props.grabElement(props.index)}
+            onTouchEnd={() => props.releaseElement()}
+          >
+            <FontAwesomeIcon icon={faGripVertical} style={{ fontSize: '1.25rem' }} />
+          </IconWrapper>
+          <DynamicDeleteModal
+            visible={isModalOpen}
+            index={props.index}
+            deleteCategory={props.deleteCategory}
+            setGreenAlert={props.setGreenAlert}
+            setRedAlert={props.setRedAlert}
+            endDeleteModal={endDeleteModal}
+          />
+        </>
       )}
-      <IconWrapper
-        drag
-        onMouseDown={(e: React.MouseEvent<HTMLDivElement>) => {
-          if (e.button === 0) {
-            props.grabElement(props.index);
-          } else {
-            props.releaseElement();
-          }
-        }}
-        onMouseUp={() => props.releaseElement()}
-        onTouchStart={() => props.grabElement(props.index)}
-        onTouchEnd={() => props.releaseElement()}
-      >
-        <FontAwesomeIcon icon={faGripVertical} style={{ fontSize: '1.25rem' }} />
-      </IconWrapper>
-      <DynamicDeleteModal
-        visible={isModalOpen}
-        index={props.index}
-        defaultCategoryTitle={props.defaultCategoryTitle}
-        deleteCategory={props.deleteCategory}
-        setGreenAlert={props.setGreenAlert}
-        setRedAlert={props.setRedAlert}
-        endDeleteModal={endDeleteModal}
-      />
     </MenuContainer>
   );
 }

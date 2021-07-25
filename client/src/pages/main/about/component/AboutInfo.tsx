@@ -6,7 +6,8 @@ import { faUser, faClock } from '@fortawesome/free-solid-svg-icons';
 import { FormatUnifier } from 'src/utils';
 
 const Container = styled.div({
-  display: 'flex'
+  display: 'flex',
+  marginLeft: '1rem'
 });
 
 const Author = styled.span({

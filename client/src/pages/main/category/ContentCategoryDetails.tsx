@@ -1,20 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock, faBook } from '@fortawesome/free-solid-svg-icons';
 
 import { FormatUnifier } from 'src/utils';
-import { theme } from 'src/styles';
-import { RootState } from 'src/redux/rootReducer';
-import { ThemeMode } from 'src/redux/common/type';
 
 const Container = styled.div((props) => ({
   display: 'flex',
   width: '100%',
   marginTop: '.4rem',
   color: props.theme.detailText,
-  fontSize: '.8rem'
+  fontSize: '.85rem'
 }));
 
 const LatestTime = styled.span({
@@ -30,9 +26,8 @@ const CategoryTitleContainer = styled.span({
   flex: 1
 });
 
-const CategoryTitle = styled.p({
+const PostCount = styled.p({
   display: '-webkit-box',
-  width: '400px',
   wordBreak: 'break-all',
   overflow: 'hidden',
   WebkitLineClamp: 1,
@@ -41,13 +36,10 @@ const CategoryTitle = styled.p({
 
 interface Props {
   time: number | null;
-  // count: number;
-  categoryTitle: string;
+  count: number;
 }
 
 export function ContentCategoryDetails(props: Props) {
-  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
-
   return (
     <Container>
       <LatestTime>
@@ -56,7 +48,7 @@ export function ContentCategoryDetails(props: Props) {
       </LatestTime>
       <CategoryTitleContainer>
         <FontAwesomeIcon icon={faBook} style={{ marginRight: '5px' }} />
-        <CategoryTitle>{props.categoryTitle}</CategoryTitle>
+        <PostCount>{props.count}</PostCount>
       </CategoryTitleContainer>
     </Container>
   );

@@ -5,11 +5,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import { AlertStateType, AlertProps } from 'src/components';
-import { CategoryDetails } from 'src/query/category';
+import { CategoryDetailType } from 'src/query/category';
 
 import { CategoryViewer } from './CategoryViewer';
 import { NewCategory } from './NewCategory';
-import { DeleteModalProps } from './DeleteCategoryModal';
 
 const DynamicAlertBox = dynamic<AlertProps>(() => import('src/components').then((mod) => mod.AlertBox));
 
@@ -28,7 +27,7 @@ const AddCategory = styled.button((props) => ({
 }));
 
 interface Props {
-  categories: CategoryDetails[];
+  categories: CategoryDetailType[];
   isAddModalOpen: boolean;
   setIsAddModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -37,11 +36,9 @@ export function CategoryContainer(props: Props) {
   const initAlertState: AlertStateType = { msg: '', isPop: false, isError: false };
 
   const [isAdd, setIsAdd] = useState(false);
-  const [categories, setCategories] = useState<CategoryDetails[]>(props.categories);
+  const [categories, setCategories] = useState<CategoryDetailType[]>(props.categories);
   const [alertState, setAlertState] = useState<AlertStateType>(initAlertState);
   const [grabbingCategoryIndex, setGrabbingCategoryIndex] = useState<number>(-1);
-
-  const defaultCategoryTitle = `${categories.find((category) => category._id === 0)?.title}`;
 
   const grabElement = (index: number) => {
     setGrabbingCategoryIndex(index);
@@ -55,16 +52,16 @@ export function CategoryContainer(props: Props) {
 
   const setRedAlert = (err: any) => setAlertState({ msg: err.message, isPop: true, isError: true });
 
-  const updateCategories = (newCategories: CategoryDetails[]) => setCategories(newCategories);
+  const updateCategories = (newCategories: CategoryDetailType[]) => setCategories(newCategories);
 
   const cancelCreateCategory = () => {
     setIsAdd(false);
   };
 
-  const addNewCategory = (category: CategoryDetails) => setCategories((prev) => [...prev, category]);
+  const addNewCategory = (category: CategoryDetailType) => setCategories((prev) => [...prev, category]);
 
   const deleteCategory = (index: number) => {
-    const remainCategories = categories.filter((category) => category.order != index);
+    const remainCategories = categories.filter((category) => category.order !== index);
     const reorderedCategories = remainCategories.map((category) => {
       if (category.order > index) {
         return { ...category, order: category.order - 1 };
@@ -88,7 +85,6 @@ export function CategoryContainer(props: Props) {
               index={index}
               grabbingCategoryIndex={grabbingCategoryIndex}
               initAlertState={initAlertState}
-              defaultCategoryTitle={defaultCategoryTitle}
               updateCategories={updateCategories}
               deleteCategory={deleteCategory}
               grabElement={grabElement}

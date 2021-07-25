@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { LoginDevice } from 'src/query/user';
+import { LoginDeviceType } from 'src/query/user';
 
 const Container = styled.div({
   display: 'flex',
@@ -12,7 +12,7 @@ const Container = styled.div({
 });
 
 interface Props {
-  device: LoginDevice;
+  device: LoginDeviceType;
 }
 
 export function DeviceItem(props: Props) {

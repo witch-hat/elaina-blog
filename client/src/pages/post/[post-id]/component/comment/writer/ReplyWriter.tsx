@@ -1,10 +1,9 @@
 import { useMutation } from '@apollo/client';
-import { useRouter } from 'next/router';
 
-import { Reply, WRITE_REPLY } from 'src/query/comment';
+import { ReplyType, WRITE_REPLY, WriteReplyVars, WriteReplyQueryType } from 'src/query/comment';
 import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';
-import { PUSH_COMMENT_LOG, CommentEvent } from 'src/query/comment-log';
+import { PUSH_COMMENT_LOG, CommentEvent, PushCommentLogVars, PushCommentLogQueryType } from 'src/query/comment-log';
 
 import { Writer } from './Writer';
 
@@ -14,13 +13,13 @@ interface Props {
   postId: number;
   commentIndex: number;
   replyIndex: number;
-  onAddReply: (newReply: Reply) => void;
+  onAddReply: (newReply: ReplyType) => void;
 }
 
 export function ReplyWriter(props: Props) {
   const client = useApollo();
-  const [writeReply] = useMutation(WRITE_REPLY);
-  const [pushCommentLog] = useMutation(PUSH_COMMENT_LOG);
+  const [writeReply] = useMutation<WriteReplyQueryType, WriteReplyVars>(WRITE_REPLY);
+  const [pushCommentLog] = useMutation<PushCommentLogQueryType, PushCommentLogVars>(PUSH_COMMENT_LOG);
 
   async function addReply(username: string, password: string, comment: string) {
     if (comment.length < 2) {
@@ -30,7 +29,7 @@ export function ReplyWriter(props: Props) {
 
     const AuthResponse = await client.query({ query: IS_AUTH });
     const isAdmin = AuthResponse.data.isAuth.isAuth;
-    const createdAt = new Date().getTime();
+    const createdAt = new Date();
 
     if (isAdmin) {
       try {
@@ -50,7 +49,7 @@ export function ReplyWriter(props: Props) {
           username,
           password,
           comment,
-          createdAt,
+          createdAt: createdAt.getTime(),
           isAdmin
         });
       } catch (err) {
@@ -91,7 +90,7 @@ export function ReplyWriter(props: Props) {
           username,
           password,
           comment,
-          createdAt: createdAt,
+          createdAt: createdAt.getTime(),
           isAdmin
         });
       } catch (err) {

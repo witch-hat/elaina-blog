@@ -1,11 +1,11 @@
 import { gql } from '@apollo/client';
 
-export interface User {
+export interface UserType {
   emailId?: string;
   password?: string;
 }
 
-export interface LoginDevice {
+export interface LoginDeviceType {
   userUniqueId: string;
   latestLogin: number;
 }

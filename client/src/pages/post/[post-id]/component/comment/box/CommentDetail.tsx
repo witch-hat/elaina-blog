@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faClock } from '@fortawesome/free-solid-svg-icons';
 
 import { FormatUnifier } from 'src/utils';
-import { Comment, Reply } from 'src/query/comment';
+import { CommentType, ReplyType } from 'src/query/comment';
 
 const InformationContainer = styled.div({
   display: 'flex',
@@ -31,7 +31,7 @@ const Time = styled.span({
 });
 
 interface Props {
-  comment: Comment | Reply;
+  comment: CommentType | ReplyType;
   author: string;
 }
 

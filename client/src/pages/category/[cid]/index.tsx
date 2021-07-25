@@ -1,39 +1,104 @@
 import { GetServerSideProps } from 'next';
-import { useRouter } from 'next/router';
 import styled from 'styled-components';
+import { useRouter } from 'next/router';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
-import { GET_CATEGORIES_WITH_DETAILS, CategoryDetails } from 'src/query/category';
 import { initApolloClient } from 'src/apollo/withApollo';
-import { FIND_SAME_CATEGORY_POSTS, Post } from 'src/query/post';
+import { FIND_SAME_CATEGORY_POSTS, LatestPostQueryReturnType } from 'src/query/post';
 
-import { PostContainer } from './component/PostContainer';
-import { CategoryContainer } from './component/CategoryContainer';
+import { PostItem } from '../../main/post/PostItem';
+import { AppCommonProps } from 'src/pages/_app';
 
 const Container = styled.div({
   display: 'flex',
-  width: '1200px',
+  width: '900px',
   margin: '0 auto',
-  alignItems: 'flex-start',
-  justifyContent: 'center'
+  minHeight: 'calc(100vh - 4rem - 20px)',
+  flexDirection: 'column'
+});
+
+const InfoWrapper = styled.div({
+  display: 'flex',
+  height: '2rem',
+  marginBottom: '.5rem',
+  alignItems: 'center',
+  justifyContent: 'space-between'
+});
+
+const CategoryTitle = styled.p({
+  fontSize: '1.4rem',
+  fontWeight: 'bold'
+});
+
+const WriteButton = styled.button({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  padding: '4px 5px',
+  borderRadius: '50%',
+  '&:hover': {
+    backgroundColor: '#eee'
+  }
+});
+
+const StyledHr = styled.hr((props) => ({
+  width: '100%',
+  margin: '0',
+  border: 'none',
+  borderBottom: `1px solid ${props.theme.borderColor}`
+}));
+
+const PostWrapper = styled.div<{ isEmpty: boolean }>((props) => ({
+  display: 'flex',
+  width: '100%',
+  padding: '0 1rem',
+  flex: props.isEmpty ? 1 : 'none'
+}));
+
+const NoPosts = styled.div({
+  display: 'flex',
+  width: '100%',
+  flex: 1,
+  alignItems: 'center',
+  justifyContent: 'center',
+  alignSelf: 'stretch'
 });
 
 interface ServerSideProps {
-  categoryData: CategoryDetails[];
-  postData: { _id: number; title: string; article: string }[];
+  categoryTitle: string;
+  posts: LatestPostQueryReturnType[];
 }
 
-interface Props extends ServerSideProps {}
+interface Props extends ServerSideProps, AppCommonProps {}
 
 export default function CategoryPage(props: Props) {
   const router = useRouter();
 
-  const cid = router.asPath.split('/')[2];
-  const postCount = props.categoryData.filter((category) => category._id === +cid)[0].postCount;
+  function handleWriteButtonClick() {
+    router.push({ pathname: '/admin/writer', query: { category: props.categoryTitle } });
+  }
 
   return (
     <Container>
-      <CategoryContainer categories={props.categoryData} />
-      <PostContainer posts={props.postData} postCount={postCount || 0} />
+      <InfoWrapper>
+        <CategoryTitle>{props.categoryTitle}</CategoryTitle>
+        {props.app.isLogin && (
+          <WriteButton onClick={() => handleWriteButtonClick()}>
+            <FontAwesomeIcon icon={faPlus} />
+          </WriteButton>
+        )}
+      </InfoWrapper>
+      <StyledHr />
+      <PostWrapper isEmpty={!props.posts.length}>
+        {props.posts.length ? (
+          props.posts.map((post) => {
+            return <PostItem key={post._id} post={post} />;
+          })
+        ) : (
+          <NoPosts>No Posts....</NoPosts>
+        )}
+      </PostWrapper>
     </Container>
   );
 }
@@ -44,16 +109,18 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
   const categoryId = context.resolvedUrl.split('/')[2];
   const apolloClient = initApolloClient({}, context);
 
-  const { data: categoryData } = await apolloClient.query({ query: GET_CATEGORIES_WITH_DETAILS });
-  const { data: postData } = await apolloClient.query({
+  const sameCategoryPostsQueryResult = await apolloClient.query({
     query: FIND_SAME_CATEGORY_POSTS,
     variables: { categoryId: Number.parseInt(categoryId) }
   });
 
+  const categoryTitle = sameCategoryPostsQueryResult.data.findSameCategoryPosts.category.title;
+  const posts: LatestPostQueryReturnType[] = sameCategoryPostsQueryResult.data.findSameCategoryPosts.post;
+
   return {
     props: {
-      categoryData: categoryData.categoriesWithDetails,
-      postData: postData.findSameCategoryPosts.post
+      categoryTitle,
+      posts
     }
   };
 };

@@ -7,7 +7,7 @@ import { appCommponProps } from 'src/pages/_app';
 import { trans, Lang } from 'src/resources/languages';
 
 import { AdminPageLayout } from '../component/AdminPageLayout';
-import { GET_DEVICES, LoginDevice } from 'src/query/user';
+import { GET_DEVICES, LoginDeviceType } from 'src/query/user';
 
 import { PageTitle } from '../component/PageTitle';
 import { DeviceItem } from './component/DeviceItem';
@@ -25,7 +25,7 @@ const DeviceContainer = styled.div({
 });
 
 interface ServerSideProps {
-  loginDevices: LoginDevice[];
+  loginDevices: LoginDeviceType[];
 }
 
 interface Props extends ServerSideProps {}
@@ -37,7 +37,7 @@ export default function DevicePage(props: Props) {
         <PageTitle title={trans(Lang.DeviceManage)} />
         <DeviceContainer>
           {props.loginDevices.map((device) => {
-            return <DeviceItem device={device} />;
+            return <DeviceItem key={device.userUniqueId} device={device} />;
           })}
         </DeviceContainer>
       </Container>
@@ -55,9 +55,11 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
     };
   }
 
+  context.res.setHeader('Cache-Control', 'max-age=0, public, must-revalidate');
+
   const client = initApolloClient({}, context);
-  const { data } = await client.query({ query: GET_DEVICES });
-  const loginDevices: LoginDevice[] = data.findDevices;
+  const { data } = await client.query<{ findDevices: LoginDeviceType[] }>({ query: GET_DEVICES });
+  const loginDevices = data.findDevices;
 
   return {
     props: {

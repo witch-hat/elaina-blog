@@ -4,7 +4,7 @@ import { useMutation } from '@apollo/client';
 
 import { AlertStateType } from 'src/components';
 import { ProfileType, UPDATE_PROFILE } from 'src/query/profile';
-import { FileType, UPLOAD_FILE } from 'src/query/file';
+import { UploadFileQueryType, UploadFileVars, UPLOAD_FILE } from 'src/query/file';
 import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';
 
@@ -15,7 +15,7 @@ import { ButtonContainer } from './ButtonContainer';
 interface CropperProps {
   imageFile: File;
   onSave: (blob: Blob) => void;
-  onCancel: Function;
+  onCancel: () => void;
   visible: boolean;
 }
 
@@ -38,7 +38,7 @@ export function ProfileEditor(props: Props) {
   const [editingProfile, setEditingProfile] = useState<ProfileType>(props.profile);
 
   const client = useApollo();
-  const [uploadFile] = useMutation<{ uploadFile: FileType }>(UPLOAD_FILE);
+  const [uploadFile] = useMutation<UploadFileQueryType, UploadFileVars>(UPLOAD_FILE);
   const [updateProfile] = useMutation<{ updateProfile: ProfileType }>(UPDATE_PROFILE);
 
   const setEditModeFalse = useCallback(() => props.setEditMode(false), []);

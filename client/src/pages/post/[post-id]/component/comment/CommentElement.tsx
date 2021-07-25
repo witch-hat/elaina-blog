@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { cloneDeep } from 'lodash';
 
 import { BorderBox } from 'src/components';
-import { Reply, Comment, Comments } from 'src/query/comment';
+import { ReplyType, CommentType, CommentContainerType } from 'src/query/comment';
 import { trans, Lang } from 'src/resources/languages';
 
 import { CommentBox } from './box/CommentBox';
@@ -41,25 +41,25 @@ const ReplyContainer = styled.div({
 });
 
 interface Props {
-  comment: Comment;
+  comment: CommentType;
   isLogin: boolean;
   author: string;
   isCommentFromAdmin: boolean;
   count: number;
-  commentContainer: Comments;
+  commentContainer: CommentContainerType;
   categoryId: number;
   postId: number;
   commentIndex: number;
   editComment: (index: number, comment: string) => void;
   deleteComment: (index: number) => void;
-  setCommentContainer: React.Dispatch<React.SetStateAction<Comments>>;
+  setCommentContainer: React.Dispatch<React.SetStateAction<CommentContainerType>>;
 }
 
 export function CommentElement(props: Props) {
   const [isShowingReply, setIsShowingReply] = useState(false);
   const [isAddReply, setIsAddReply] = useState(false);
 
-  function onAddReply(newReply: Reply) {
+  function onAddReply(newReply: ReplyType) {
     const copiedComments = cloneDeep(props.commentContainer.comments);
     copiedComments[props.commentIndex].replies.push(newReply);
 
@@ -116,7 +116,7 @@ export function CommentElement(props: Props) {
             )}
             <ReplyContainer>
               {isShowingReply
-                ? props.comment.replies.map((reply: Reply, index: number) => {
+                ? props.comment.replies.map((reply: ReplyType, index: number) => {
                     return (
                       <ReplyElement
                         key={index}

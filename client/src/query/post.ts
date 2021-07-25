@@ -1,11 +1,13 @@
 import { gql } from '@apollo/client';
 
-export interface Post {
+export interface PostType {
   _id: number;
   title: string;
   createdAt: number;
   article: string;
   categoryId: number;
+  likeCount: number;
+  commentCount: number;
 }
 
 export const GET_POSTS = gql`
@@ -51,6 +53,9 @@ export const FIND_SAME_CATEGORY_POSTS = gql`
         _id
         title
         article
+        createdAt
+        likeCount
+        commentCount
       }
       category {
         title
@@ -59,7 +64,7 @@ export const FIND_SAME_CATEGORY_POSTS = gql`
   }
 `;
 
-export const GET_LASTEST_POSTS = gql`
+export const GET_LATEST_POSTS_PER_CATEGORY = gql`
   query {
     getLatestPostsEachCategory {
       _id
@@ -105,6 +110,28 @@ export const SEARCH = gql`
         }
         content
       }
+    }
+  }
+`;
+
+export interface LatestPostQueryReturnType {
+  _id: number;
+  title: string;
+  createdAt: number;
+  article: string;
+  likeCount: number;
+  commentCount: number;
+}
+
+export const GET_LATEST_POSTS = gql`
+  query ($page: Int!) {
+    getLatestPosts(page: $page) {
+      _id
+      title
+      createdAt
+      article
+      likeCount
+      commentCount
     }
   }
 `;

@@ -5,13 +5,9 @@ import ReactMarkdown from 'react-markdown';
 import styled from 'styled-components';
 import gfm from 'remark-gfm';
 import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
 
 import { RefInputBox, useWidth, Loading } from 'src/components';
-import { theme } from 'src/styles';
-import { RootState } from 'src/redux/rootReducer';
-import { ThemeMode } from 'src/redux/common/type';
-import { CategoryDetails } from 'src/query/category';
+import { CategoryDetailType } from 'src/query/category';
 import { EDIT_POST, WRITE_POST } from 'src/query/post';
 import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';
@@ -36,7 +32,7 @@ const EditorContainer = styled.div({
   flex: '1'
 });
 
-const Editor = styled.div((props) => ({
+const Editor = styled.textarea((props) => ({
   display: 'flex',
   width: '100%',
   flexDirection: 'column',
@@ -65,12 +61,12 @@ const PreviewContainer = styled.div({
   }
 });
 
-const Paragraph = styled.p({
-  display: 'inline-block',
-  width: '100%',
-  wordBreak: 'break-word',
-  whiteSpace: 'pre-wrap'
-});
+// const Paragraph = styled.p({
+//   display: 'inline-block',
+//   width: '100%',
+//   wordBreak: 'break-word',
+//   whiteSpace: 'pre-wrap'
+// });
 
 const MoblieModeButton = styled.button({
   borderRadius: '.5rem',
@@ -95,20 +91,20 @@ const WriteButton = styled.button<{ available: boolean }>((props) => ({
   cursor: props.available ? 'pointer' : 'not-allowed'
 }));
 
-function Text(props: { children?: string }) {
-  return <Paragraph>{props.children !== undefined ? props.children : <br></br>}</Paragraph>;
-}
+// function Text(props: { children?: string }) {
+//   return <Paragraph>{props.children !== undefined ? props.children : <br></br>}</Paragraph>;
+// }
 
 enum Mode {
-  write = 'Editor',
-  preview = 'Preview'
+  Write = 'Editor',
+  Preview = 'Preview'
 }
 
-const DEFAULT_CATEGORY = '카테고리를 선택해 주세요';
+const DEFAULT_CATEGORY = '최신글';
 
 interface Props {
   author: string;
-  categories: CategoryDetails[];
+  categories: CategoryDetailType[];
   category?: string;
   title?: string;
   article?: string;
@@ -116,13 +112,11 @@ interface Props {
 }
 
 export function Writer(props: Props) {
-  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
-
   const width = useWidth();
   const router = useRouter();
-  const editor = useRef<HTMLDivElement>(null);
+  const editor = useRef<HTMLTextAreaElement>(null);
   const titleRef = useRef<HTMLInputElement>(null);
-  const [mode, setMode] = useState(Mode.write);
+  const [mode, setMode] = useState(Mode.Write);
   const [title, setTitle] = useState('');
   const [article, setArticle] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState(DEFAULT_CATEGORY);
@@ -133,7 +127,7 @@ export function Writer(props: Props) {
   const [editPost, { loading: editLoading }] = useMutation(EDIT_POST);
 
   useEffect(() => {
-    if (mode == Mode.write) {
+    if (mode == Mode.Write) {
       editor.current?.focus();
     }
   }, [mode]);
@@ -154,13 +148,11 @@ export function Writer(props: Props) {
     }
   }, []);
 
-  function parseTextContent() {
-    if (editor.current !== null) {
-      setArticle(editor.current.innerText.replaceAll('\n\n', '  \n').replaceAll('\n  \n', '\n&#8203;  \n').replaceAll('\n\n', '\n'));
-    }
+  function parseTextContent(e: React.ChangeEvent<HTMLTextAreaElement>) {
+    setArticle(e.target.value.replaceAll('\n\n', '  \n').replaceAll('\n  \n', '\n&#8203;  \n').replaceAll('\n\n', '\n'));
   }
 
-  function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
+  function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === 'Backspace') {
       if (editor.current?.textContent?.length === 0 && editor.current.childNodes.length === 1) {
         e.preventDefault();
@@ -168,18 +160,17 @@ export function Writer(props: Props) {
     }
   }
 
-  function handlePaste(e: React.ClipboardEvent<HTMLDivElement>) {
+  function handlePaste(e: React.ClipboardEvent<HTMLTextAreaElement>) {
     e.preventDefault();
     const clipedData = e.clipboardData.getData('text/plain').replaceAll('&#8203;', '');
-    console.log(clipedData.split('').map((t) => t === ''));
     document.execCommand('insertText', false, clipedData);
   }
 
   function handleButtonClick() {
-    if (mode === Mode.write) {
-      setMode(Mode.preview);
+    if (mode === Mode.Write) {
+      setMode(Mode.Preview);
     } else {
-      setMode(Mode.write);
+      setMode(Mode.Write);
     }
   }
 
@@ -190,12 +181,12 @@ export function Writer(props: Props) {
   async function handleCreatePost() {
     setVisibleSubmitBtn(false);
 
-    if (selectedCategory === DEFAULT_CATEGORY) {
-      window.scrollTo(0, 0);
-      alert('카테고리를 선택해 주세요');
-      setVisibleSubmitBtn(true);
-      return;
-    }
+    // if (selectedCategory === DEFAULT_CATEGORY) {
+    //   window.scrollTo(0, 0);
+    //   alert('카테고리를 선택해 주세요');
+    //   setVisibleSubmitBtn(true);
+    //   return;
+    // }
 
     if (!title) {
       window.scrollTo(0, 0);
@@ -227,7 +218,7 @@ export function Writer(props: Props) {
           title,
           createdAt: new Date().toISOString(),
           article,
-          category: selectedCategory
+          category: selectedCategory === DEFAULT_CATEGORY ? '' : selectedCategory
         }
       });
 
@@ -256,7 +247,7 @@ export function Writer(props: Props) {
       return router.push('/admin/login');
     }
 
-    const id = +router.query['post-id'];
+    const id = +router.query['post-id']!;
 
     try {
       await editPost({
@@ -283,10 +274,15 @@ export function Writer(props: Props) {
   return (
     <Container>
       <EditorContainer>
-        <MoblieModeButton onClick={() => handleButtonClick()}>{mode === Mode.write ? Mode.preview : Mode.write}</MoblieModeButton>
-        {((width <= 767 && mode === Mode.write) || width > 767) && (
+        <MoblieModeButton onClick={() => handleButtonClick()}>{mode === Mode.Write ? Mode.Preview : Mode.Write}</MoblieModeButton>
+        {((width <= 767 && mode === Mode.Write) || width > 767) && (
           <>
-            <CategorySelector categories={props.categories} selectedCategory={selectedCategory} changeCategory={changeCategory} />
+            <CategorySelector
+              categories={props.categories}
+              default={DEFAULT_CATEGORY}
+              selectedCategory={selectedCategory}
+              changeCategory={changeCategory}
+            />
             <Title>
               <RefInputBox
                 ref={titleRef}
@@ -302,16 +298,7 @@ export function Writer(props: Props) {
               />
             </Title>
             <Menu ref={editor} setArticle={setArticle} />
-            <Editor
-              ref={editor}
-              contentEditable={true}
-              suppressContentEditableWarning={true}
-              onKeyDown={handleKeyDown}
-              onPaste={handlePaste}
-              onInput={parseTextContent}
-            >
-              <Text></Text>
-            </Editor>
+            <Editor ref={editor} onKeyDown={handleKeyDown} onPaste={handlePaste} onChange={parseTextContent} value={article} />
             <ButtonContainer>
               <WriteButton
                 available={visibleSubmitBtn}
@@ -326,12 +313,16 @@ export function Writer(props: Props) {
             </ButtonContainer>
           </>
         )}
-        {width <= 767 && mode === Mode.preview && (
-          <ReactMarkdown plugins={[gfm]} className={styles['markdown-body']} children={article}></ReactMarkdown>
+        {width <= 767 && mode === Mode.Preview && (
+          <ReactMarkdown plugins={[gfm]} className={styles['markdown-body']}>
+            {article}
+          </ReactMarkdown>
         )}
       </EditorContainer>
       <PreviewContainer>
-        <ReactMarkdown plugins={[gfm]} className={styles['markdown-body']} children={article}></ReactMarkdown>
+        <ReactMarkdown plugins={[gfm]} className={styles['markdown-body']}>
+          {article}
+        </ReactMarkdown>
       </PreviewContainer>
     </Container>
   );

@@ -85,7 +85,7 @@ export const theme: { light: DefaultTheme; dark: DefaultTheme } = {
     // Others
     navUnderBar: '#ddd',
     navHoverUnderBar: '#888',
-    shadowColor: 'rgba(0, 0, 0, 0.9)',
+    shadowColor: 'rgba(200, 200, 200, 0.9)',
     inputOutline: 'rgba(134, 125, 255, .7)',
 
     // submit

@@ -17,8 +17,7 @@ export const categorySchema = new Schema<Category>(
       required: true
     },
     order: {
-      type: Number,
-      required: true
+      type: Number
     }
   },
   {

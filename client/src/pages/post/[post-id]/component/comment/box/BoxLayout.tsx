@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import dynamic from 'next/dynamic';
 
-import { Comment, Reply } from 'src/query/comment';
+import { CommentType, ReplyType } from 'src/query/comment';
 
 import { CommentEditor } from './CommentEditor';
 import { MemoizedCommentDetail } from './CommentDetail';
@@ -44,7 +44,7 @@ const CommentContent = styled.p({
 
 interface Props {
   isLogin: boolean;
-  comment: Comment | Reply;
+  comment: CommentType | ReplyType;
   author: string;
   onEdit: (commentContent: string, password: string) => Promise<void>;
   onDelete: (password: string) => Promise<void>;

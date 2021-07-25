@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { Reply } from 'src/query/comment';
+import { ReplyType } from 'src/query/comment';
 
 import { ReplyBox } from './box/ReplyBox';
 
@@ -14,7 +14,7 @@ const ReplyContainer = styled.div<{ isAdmin: boolean }>((props) => ({
 }));
 
 interface Props {
-  reply: Reply;
+  reply: ReplyType;
   postId: number;
   isLogin: boolean;
   author: string;

@@ -4,7 +4,7 @@ import { useMutation } from '@apollo/client';
 import { cloneDeep, throttle } from 'lodash';
 
 import { BorderBox, AlertStateType } from 'src/components';
-import { CategoryDetails, ORDER_CATEGORY } from 'src/query/category';
+import { CategoryDetailType, ORDER_CATEGORY, OrderCategoryVars, OrderCategoryQueryType } from 'src/query/category';
 import { CategoryTitle } from './CategoryTitle';
 import { CategoryMenu } from './CategoryMenu';
 
@@ -22,13 +22,12 @@ const Wrapper = styled.div({
 });
 
 interface Props {
-  categories: CategoryDetails[];
+  categories: CategoryDetailType[];
   index: number;
   title: string;
   grabbingCategoryIndex: number;
   initAlertState: AlertStateType;
-  defaultCategoryTitle: string;
-  updateCategories: (newCategories: CategoryDetails[]) => void;
+  updateCategories: (newCategories: CategoryDetailType[]) => void;
   deleteCategory: (index: number) => void;
   grabElement: (index: number) => void;
   releaseElement: () => void;
@@ -42,7 +41,7 @@ export function CategoryViewer(props: Props) {
   const [title, setTitle] = useState(props.title);
   const initialCategoryOrder = useRef<number[] | null>(null);
 
-  const [orderCategory] = useMutation(ORDER_CATEGORY);
+  const [orderCategory] = useMutation<OrderCategoryQueryType, OrderCategoryVars>(ORDER_CATEGORY);
 
   const handleEditTitle = (e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value);
 
@@ -55,6 +54,7 @@ export function CategoryViewer(props: Props) {
   const enterEditMode = () => setIsEdit(true);
 
   const onDragStart = (e: React.DragEvent<HTMLDivElement>) => {
+    e.stopPropagation();
     initialCategoryOrder.current = props.categories.map((category) => category._id);
   };
 
@@ -73,6 +73,7 @@ export function CategoryViewer(props: Props) {
   }, 400);
 
   const onDrop = async (e: React.DragEvent<HTMLDivElement>) => {
+    e.stopPropagation();
     try {
       const changedOrder = props.categories.map((category) => category._id);
       if (initialCategoryOrder.current) {
@@ -107,14 +108,13 @@ export function CategoryViewer(props: Props) {
     >
       <BorderBox isHoverEffect={false} styles={{ width: '100%', margin: '.8rem 0' }}>
         <Wrapper>
-          <CategoryTitle title={title} isEdit={isEdit} handleChange={handleEditTitle} />
+          <CategoryTitle isDefault={props.categories[props.index]._id === 0} title={title} isEdit={isEdit} handleChange={handleEditTitle} />
           <CategoryMenu
             isEdit={isEdit}
             id={props.categories[props.index]._id}
             title={title}
             isDefault={props.categories[props.index]._id === 0}
             index={props.index}
-            defaultCategoryTitle={props.defaultCategoryTitle}
             enterEditMode={enterEditMode}
             endEditMode={endEditMode}
             updateTitle={updateTitle}
