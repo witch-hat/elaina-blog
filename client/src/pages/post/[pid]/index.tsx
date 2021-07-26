@@ -94,7 +94,7 @@ export default function PostId(props: Props) {
 export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (context: GetServerSidePropsContext) => {
   context.res.setHeader('Cache-Control', 'max-age=0, public, must-revalidate');
 
-  const id = context.query['post-id'];
+  const id = context.query['pid'];
 
   try {
     const client = initApolloClient({}, context);

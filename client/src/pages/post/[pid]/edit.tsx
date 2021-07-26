@@ -39,7 +39,8 @@ export default function PostEdit(props: Props) {
 }
 
 export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (context) => {
-  const postId = context.query['post-id'];
+  const postId = context.query['pid'];
+  console.log(postId);
 
   if (!appCommponProps.app.isLogin) {
     return {
@@ -54,14 +55,16 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
 
   const [profile, findPostResult, categoriesQuery] = await Promise.all([
     client.query({ query: GET_PROFILE }),
-    client.query({ query: FIND_POST_BY_ID, variables: { requestUrl: postId } }),
+    client.query({ query: FIND_POST_BY_ID, variables: { id: postId } }),
     client.query<CategoryDetailsQueryType>({ query: GET_CATEGORIES_WITH_DETAILS })
   ]);
   const author = profile.data.profile.name;
-  const article = findPostResult.data.findPostByUrl.article;
-  const title = findPostResult.data.findPostByUrl.title;
-  const categoryId = findPostResult.data.findPostByUrl.categoryId;
+  const article = findPostResult.data.findPostById.article;
+  const title = findPostResult.data.findPostById.title;
+  const categoryId = findPostResult.data.findPostById.categoryId;
   const categories = categoriesQuery.data.categoriesWithDetails;
+
+  console.log(categoryId);
 
   const category = await client.query<FindCategoryByIdQueryType, FindCategoryByIdVars>({
     query: FIND_CATEGORY_BY_ID,

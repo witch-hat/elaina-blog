@@ -18,7 +18,7 @@ export interface CommentLogDataType {
 }
 
 export interface CommentLogQueryType {
-  commentLogs: CommentLogDataType;
+  commentLogs: CommentLogDataType[];
 }
 
 export const GET_COMMENT_LOGS = gql`
