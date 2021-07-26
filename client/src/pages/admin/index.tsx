@@ -2,16 +2,13 @@ import React from 'react';
 import styled from 'styled-components';
 import { GetServerSideProps } from 'next';
 
-import { initApolloClient } from 'src/apollo/withApollo';
-import { CommentLogDataType, GET_COMMENT_LOGS, CommentLogQueryType } from 'src/query/comment-log';
-import CommnetLogBox from 'src/pages/admin/component/CommentLogItem/CommentLogBox';
-import { GET_CATEGORIES_WITH_DETAILS, CategoryDetailType, CategoryDetailsQueryType } from 'src/query/category';
 import { PostType, GET_POSTS } from 'src/query/post';
 import { trans, Lang } from 'src/resources/languages';
-
-import { AdminPageLayout } from './component/AdminPageLayout';
-import { PageTitle } from './component/PageTitle';
-import { AppCommonProps, appCommponProps } from '../_app';
+import { initApolloClient } from 'src/apollo/withApollo';
+import { AppCommonProps, appCommponProps } from 'src/pages/_app';
+import { AdminPageLayout, PageTitle, CommentLogBox } from 'src/components/pages/admin';
+import { CommentLogDataType, GET_COMMENT_LOGS, CommentLogQueryType } from 'src/query/comment-log';
+import { GET_CATEGORIES_WITH_DETAILS, CategoryDetailType, CategoryDetailsQueryType } from 'src/query/category';
 
 interface ServerSideProps {
   logs: CommentLogDataType[];
@@ -35,7 +32,7 @@ export default function Admin(props: Props) {
           const findCategoryTitle = props.categoriesDetail.find((category) => category._id === log.categoryId)?.title!;
           const findPostTitle = props.posts.find((post) => post._id === log._id)?.title!;
           return (
-            <CommnetLogBox
+            <CommentLogBox
               key={log._id}
               isEvent={log.replyIndex}
               time={log.time}

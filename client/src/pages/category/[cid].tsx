@@ -4,11 +4,10 @@ import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
-import { initApolloClient } from 'src/apollo/withApollo';
-import { FIND_SAME_CATEGORY_POSTS, LatestPostQueryReturnType } from 'src/query/post';
-
-import { PostItem } from '../../main/post/PostItem';
 import { AppCommonProps } from 'src/pages/_app';
+import { initApolloClient } from 'src/apollo/withApollo';
+import { PostItem } from 'src/components/pages/main/post/PostItem';
+import { FIND_SAME_CATEGORY_POSTS, LatestPostQueryReturnType } from 'src/query/post';
 
 const Container = styled.div({
   display: 'flex',

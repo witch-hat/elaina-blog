@@ -2,15 +2,12 @@ import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 
+import { AppCommonProps } from 'src/pages/_app';
 import { initApolloClient } from 'src/apollo/withApollo';
 import { FIND_POST_BY_ID, PostType } from 'src/query/post';
-import { GET_COMMENTS, CommentContainerType, GetCommentsQueryType } from 'src/query/comment';
 import { GET_PROFILE, ProfileType } from 'src/query/profile';
-import { AppCommonProps } from 'src/pages/_app';
-
-import { ArticleContainer } from './component/article/ArticleContainer';
-import { CommentContainer } from './component/comment/CommentContainer';
-import { RightSideContainer } from './component/rightside/RightSideContainer';
+import { GET_COMMENTS, CommentContainerType, GetCommentsQueryType } from 'src/query/comment';
+import { ArticleContainer, CommentContainer, RightSideContainer } from 'src/components/pages/post';
 
 const Container = styled.div({
   display: 'flex',
@@ -97,7 +94,7 @@ export default function PostId(props: Props) {
 export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (context: GetServerSidePropsContext) => {
   context.res.setHeader('Cache-Control', 'max-age=0, public, must-revalidate');
 
-  const id = context.query['post-id'];
+  const id = context.query['pid'];
 
   try {
     const client = initApolloClient({}, context);

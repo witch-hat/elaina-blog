@@ -2,14 +2,11 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { GetServerSideProps } from 'next';
 
+import { trans, Lang } from 'src/resources/languages';
 import { initApolloClient } from 'src/apollo/withApollo';
 import { appCommponProps, AppCommonProps } from 'src/pages/_app';
+import { AdminPageLayout, PageTitle, CategoryContainer } from 'src/components/pages/admin';
 import { CategoryDetailsQueryType, CategoryDetailType, GET_CATEGORIES_WITH_DETAILS } from 'src/query/category';
-import { trans, Lang } from 'src/resources/languages';
-
-import { AdminPageLayout } from '../component/AdminPageLayout';
-import { CategoryContainer } from './component/CategoryContainer';
-import { PageTitle } from '../component/PageTitle';
 
 const Container = styled.div({
   width: '100%'

@@ -5,15 +5,12 @@ import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
-import { BorderBox } from 'src/components';
-import { CircleRippleWrapper } from 'src/components/common/wrapper/CircleRippleWrapper';
-import { initApolloClient } from 'src/apollo/withApollo';
-import { appCommponProps, AppCommonProps } from 'src/pages/_app';
 import { PostType, GET_POSTS } from 'src/query/post';
-import { AdminPageLayout } from 'src/pages/admin/component/AdminPageLayout';
 import { trans, Lang } from 'src/resources/languages';
-
-import { PageTitle } from '../component/PageTitle';
+import { initApolloClient } from 'src/apollo/withApollo';
+import { BorderBox, CircleRippleWrapper } from 'src/components';
+import { appCommponProps, AppCommonProps } from 'src/pages/_app';
+import { AdminPageLayout, PageTitle } from 'src/components/pages/admin';
 
 const Container = styled.div({
   width: '100%'

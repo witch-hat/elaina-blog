@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 
-import { AboutQueryReturnType } from 'src/query/about';
+import { AboutDataType } from 'src/query/about';
 
-import { MemoizedAboutContent } from './component/AboutContent';
-import { AboutMenu } from './component/AboutMenu';
-import { AboutEditor } from './component/AboutEditor';
+import { MemoizedAboutContent } from './AboutContent';
+import { AboutMenu } from './AboutMenu';
+import { AboutEditor } from './AboutEditor';
 
 const Container = styled.section({
   width: '100%',
@@ -15,16 +15,16 @@ const Container = styled.section({
 });
 
 interface Props {
-  about: AboutQueryReturnType;
+  about: AboutDataType;
   name: string;
   isLogin: boolean;
 }
 
 export function AboutPage(props: Props) {
-  const [about, setAbout] = useState<AboutQueryReturnType>(props.about);
+  const [about, setAbout] = useState<AboutDataType>(props.about);
   const router = useRouter();
 
-  function onUpdate(updatedAbout: AboutQueryReturnType) {
+  function onUpdate(updatedAbout: AboutDataType) {
     setAbout(updatedAbout);
   }
 

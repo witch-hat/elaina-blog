@@ -54,7 +54,7 @@ interface Props {
   isEvent: number | null;
 }
 
-export default function CommentLogBox(props: Props) {
+export function CommentLogBox(props: Props) {
   const dateDifferent = FormatUnifier.calculateDate(new Date(props.time));
   const event = props.isEvent === null ? `User upload new comment ${dateDifferent}` : `User upload new reply ${dateDifferent}`;
   return (

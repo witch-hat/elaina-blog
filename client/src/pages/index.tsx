@@ -7,12 +7,9 @@ import { GET_LATEST_POSTS, GET_LATEST_POSTS_PER_CATEGORY, LatestPostQueryReturnT
 import { GET_CATEGORIES_WITH_DETAILS, CategoryDetailType, CategoryDetailsQueryType } from 'src/query/category';
 import { GET_PROFILE, ProfileType } from 'src/query/profile';
 import { AboutDataType, AboutQueryType, GET_ABOUT } from 'src/query/about';
+import { AppCommonProps, appCommponProps } from 'src/pages/_app';
 
-import { AppCommonProps, appCommponProps } from './_app';
-import { MainPageLayout } from './main/component/MainPageLayout';
-import { AboutPage } from './main/about/About';
-import { MemoizedContentCategory } from './main/category/ContentCategory';
-import { MemoizedPostContainer } from './main/post/PostContainer';
+import { MainPageLayout, MemoizedContentCategory, MemoizedPostContainer, AboutPage } from 'src/components/pages/main';
 
 interface ServerSideProps {
   categoryLatestPosts: ({ _id: number; categoryId: number; title: string; article: string } | null)[]; // This will be deprecated
