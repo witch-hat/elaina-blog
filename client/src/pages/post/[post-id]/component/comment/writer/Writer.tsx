@@ -6,7 +6,7 @@ import { MemoizedInputContainer } from './InputContainer';
 
 const EditorContainer = styled.form({
   width: '100%',
-  margin: '1rem 0 2rem'
+  margin: '1rem 0 .5rem'
 });
 
 const InputWrapper = styled.div({
@@ -35,12 +35,20 @@ const Editor = styled.textarea((props) => ({
   color: props.theme.inputText
 }));
 
+const ButtonContainer = styled.div({
+  position : 'relative',
+  width : '100%',
+  height : '2.5rem',
+  margin: '1rem 0 0'
+});
+
 const SubmitButton = styled.button((props) => ({
+  position: 'absolute',
+  right : 0,
   display: 'flex',
-  width: '8rem',
-  height: '3rem',
+  width: '6rem',
+  height: '100%',
   padding: '.5rem',
-  margin: '1rem 0 0',
   border: '1px solid #ddd',
   borderRadius: '.5rem',
   alignItems: 'center',
@@ -110,7 +118,9 @@ export function Writer(props: WriterProps) {
         value={comment}
         onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setComment(e.target.value)}
       />
-      <SubmitButton type='submit'>{trans(Lang.Save)}</SubmitButton>
+      <ButtonContainer>
+        <SubmitButton type='submit'>{trans(Lang.Save)}</SubmitButton>
+      </ButtonContainer>
     </EditorContainer>
   );
 }

@@ -11,7 +11,7 @@ export const theme: { light: DefaultTheme; dark: DefaultTheme } = {
     articleBackground: '#fff',
     secondaryContentBackground: '#eee',
     editorBackground: '#fff',
-    adminCommentColor: 'rgba(145, 255, 0, 0.05)',
+    adminCommentColor: '#333',
     adminReplyColor: 'rgba(145, 255, 0, 0.15)',
     loadingBackground: 'rgba(255, 255, 255, .8)',
     selectedButton: 'rgba(200, 200, 200, .8)',
@@ -22,6 +22,9 @@ export const theme: { light: DefaultTheme; dark: DefaultTheme } = {
     hoverText: '',
     placeholderText: '#888',
     inputText: '#121314',
+    adminCommentTextColor: '#fff',
+    // Text Weight
+    adminCommentTextWeight: 300,
     // Border
     borderColor: '#ddd',
     inputBorder: '#ccc',
@@ -65,7 +68,7 @@ export const theme: { light: DefaultTheme; dark: DefaultTheme } = {
     articleBackground: '#252525',
     secondaryContentBackground: '#313131',
     editorBackground: '#313131',
-    adminCommentColor: 'rgba(77, 77, 77, 0.5)',
+    adminCommentColor: '#fff',
     adminReplyColor: 'rgba(77, 77, 77, 0.7)',
     loadingBackground: 'rgba(0, 0, 0, .7)',
     selectedButton: 'rgba(60, 60, 60, .8)',
@@ -76,6 +79,9 @@ export const theme: { light: DefaultTheme; dark: DefaultTheme } = {
     hoverText: '',
     placeholderText: '#f1f2f3',
     inputText: '#f1f2f3',
+    adminCommentTextColor: '#333',
+    // Text Weight
+    adminCommentTextWeight: 700,
     // Border
     borderColor: '#aaa',
     inputBorder: '#111',

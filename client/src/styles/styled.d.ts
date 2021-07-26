@@ -39,6 +39,9 @@ declare module 'styled-components' {
     hoverText: string;
     placeholderText: string;
     inputText: string;
+    adminCommentTextColor: string;
+    // Text Weight
+    adminCommentTextWeight: number;
     // Border
     borderColor: string;
     inputBorder: string;

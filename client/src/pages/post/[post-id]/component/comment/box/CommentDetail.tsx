@@ -34,8 +34,9 @@ const Time = styled.span({
 const AuthorCommentSign = styled.div<{isAdmin:boolean}>((props)=>({
   display: props.isAdmin? 'block':'none',
   padding: '.1rem .5rem',
-  backgroundColor: '#333',
-  color: '#fff',
+  backgroundColor: props.theme.adminCommentColor,
+  color: props.theme.adminCommentTextColor,
+  fontWeight: props.theme.adminCommentTextWeight,
   overflow: 'hidden',
   borderRadius: '.5rem'
 }));
