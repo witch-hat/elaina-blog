@@ -13,7 +13,7 @@ const Container = styled.div({
   width: '100%',
   minHeight: '20rem',
   margin: '20px 0',
-  padding: '.5rem 1.5rem',
+  padding: '.5rem 3.5rem',
   flexDirection: 'column',
   jusitfyContent: 'flex-start',
   alignItems: 'center',

@@ -12,7 +12,7 @@ import { ReplyElement } from './ReplyElement';
 
 const Container = styled.div<{ isAdmin: boolean }>((props) => ({
   borderRadius: '.5rem',
-  backgroundColor: props.isAdmin ? props.theme.adminCommentColor : 'inherit'
+  //backgroundColor: props.isAdmin ? props.theme.adminCommentColor : 'inherit'
 }));
 
 const ReplyButtonContainer = styled.div({

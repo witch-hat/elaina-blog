@@ -6,11 +6,12 @@ import { ReplyType } from 'src/query/comment';
 import { ReplyBox } from './box/ReplyBox';
 
 const ReplyContainer = styled.div<{ isAdmin: boolean }>((props) => ({
-  width: '95%',
-  margin: '.5rem',
+  width: '100%',
+  margin: '.5rem 0',
   padding: '.5rem',
   borderRadius: '.5rem',
-  backgroundColor: props.isAdmin ? props.theme.adminReplyColor : 'rgba(0, 0, 0, .01)'
+  //backgroundColor: props.isAdmin ? props.theme.adminReplyColor : 'rgba(0, 0, 0, .01)'
+  backgroundColor: 'rgba(0, 0, 0, .01)'
 }));
 
 interface Props {
