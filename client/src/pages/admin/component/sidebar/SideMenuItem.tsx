@@ -2,30 +2,24 @@ import React from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
 
-import { theme } from 'src/styles';
-import { RootState } from 'src/redux/rootReducer';
-import { ThemeMode } from 'src/redux/common/type';
-
-const MenuContainer = styled.nav<{ currentNav: boolean; themeMode: ThemeMode }>((props) => ({
+const MenuContainer = styled.nav<{ currentNav: boolean }>((props) => ({
   listStyle: 'none',
   width: '100%',
   padding: '.5rem',
-  borderLeft: props.currentNav ? '2px solid #867dff' : 'none',
-  borderBottom: `1px solid ${theme[props.themeMode].borderColor}`,
+  borderLeft: props.currentNav ? props.theme.navList.selectedBorderLeft : 'none',
+  borderBottom: `1px solid ${props.theme.borderColor}`,
   cursor: 'pointer',
   fontWeight: props.currentNav ? 'bold' : 'normal',
-  color: props.currentNav ? '#867dff' : 'inherit',
+  color: props.currentNav ? props.theme.navList.selectedColor : 'inherit',
   textDecoration: props.currentNav ? 'underline' : 'none',
   transition: '.2s all',
   userSelect: 'none',
   '&:hover': {
-    color: theme[props.themeMode].mainText,
-    marginLeft: '.35rem',
-    borderLeft: `2px solid ${theme[props.themeMode].hoverBorderColor}`,
-    fontWeight: 'bolder',
-    textDecoration: 'underline'
+    color: props.theme.navList.hoverColor,
+    marginLeft: props.theme.navList.hoverMarginLeft,
+    borderLeft: props.theme.navList.hoverBorderLeft,
+    fontWeight: 'bolder'
   }
 }));
 
@@ -41,17 +35,17 @@ const Menu = styled.p({
 interface Props {
   menu: string;
   href?: string;
-  onClick?: Function;
+  onClick?: () => void;
 }
 
 export function SideMenuItem(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   const router = useRouter();
 
   if (props.href) {
     return (
-      <MenuContainer currentNav={router.pathname === props.href} themeMode={themeMode}>
+      <MenuContainer currentNav={router.pathname === props.href}>
         <Link href={props.href}>
           <a>
             <Menu>{props.menu}</Menu>
@@ -61,7 +55,7 @@ export function SideMenuItem(props: Props) {
     );
   } else {
     return (
-      <MenuContainer currentNav={false} themeMode={themeMode}>
+      <MenuContainer currentNav={false}>
         <Menu
           onClick={() => {
             if (props.onClick) {

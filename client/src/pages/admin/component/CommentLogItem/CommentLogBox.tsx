@@ -36,17 +36,17 @@ const EventAndDate = styled.p({
   opacity: '0.5'
 });
 
-const UserImage = styled.img({
-  display: 'block',
-  float: 'left',
-  width: '40px',
-  height: '40px',
-  marginRight: '5px',
-  objectFit: 'cover',
-  '@media screen and (max-width: 1380px)': {
-    width: '40px'
-  }
-});
+// const UserImage = styled.img({
+//   display: 'block',
+//   float: 'left',
+//   width: '40px',
+//   height: '40px',
+//   marginRight: '5px',
+//   objectFit: 'cover',
+//   '@media screen and (max-width: 1380px)': {
+//     width: '40px'
+//   }
+// });
 
 interface Props {
   time: number;
@@ -57,7 +57,7 @@ interface Props {
 }
 
 export default function CommentLogBox(props: Props) {
-  const dateDifferent = FormatUnifier.calculateDate(props.time);
+  const dateDifferent = FormatUnifier.calculateDate(new Date(props.time));
   const event = props.isEvent === null ? `User upload new comment ${dateDifferent}` : `User upload new reply ${dateDifferent}`;
   return (
     <div>

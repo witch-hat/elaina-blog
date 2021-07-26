@@ -1,10 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
-
-import { theme } from 'src/styles';
-import { RootState } from 'src/redux/rootReducer';
-import { ThemeMode } from 'src/redux/common/type';
 
 interface Styles {
   width?: string;
@@ -18,7 +13,6 @@ interface Styles {
 }
 
 interface InputProps {
-  themeMode: ThemeMode;
   isValid?: boolean;
   styles?: Styles;
 }
@@ -28,19 +22,19 @@ const Input = styled.input<InputProps>((props) => {
     width: props.styles?.width || '100px',
     height: props.styles?.height || '40px',
     margin: props.styles?.margin,
-    border: `1px solid ${theme[props.themeMode].inputBorder}`,
+    border: `1px solid ${props.theme.inputBorder}`,
     borderRadius: '.5rem',
-    backgroundColor: theme[props.themeMode].inputBackground,
+    backgroundColor: props.theme.inputBackground,
     fontSize: props.styles?.fontSize || '1rem',
-    color: theme[props.themeMode].inputText,
+    color: props.theme.inputText,
     '&:focus': {
       padding: '1px',
       borderWidth: '2px',
-      borderColor: props.isValid ? theme[props.themeMode].inputOutline : theme[props.themeMode].invalidBorder,
+      borderColor: props.isValid ? props.theme.inputOutline : props.theme.invalidBorder,
       outline: 'none'
     },
     '&::placeholder': {
-      color: theme[props.themeMode].placeholderText
+      color: props.theme.placeholderText
     },
     '@media screen and (max-width: 767px)': {
       width: props.styles?.small?.width || '100px',
@@ -55,8 +49,8 @@ interface Props {
   maxLength: number;
   value: string;
   id?: string;
-  onFocus?: Function;
-  onBlur?: Function;
+  onFocus?: () => void;
+  onBlur?: () => void;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   placeholder?: string;
   styles?: Styles;
@@ -65,8 +59,6 @@ interface Props {
 }
 
 export function NoRefInputBox(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
-
   return (
     <Input
       id={props.id}
@@ -75,8 +67,8 @@ export function NoRefInputBox(props: Props) {
       minLength={props.minLength}
       maxLength={props.maxLength}
       autoComplete='off'
+      value={props.value}
       styles={props.styles}
-      themeMode={themeMode}
       onFocus={() => {
         if (props.onFocus) {
           props.onFocus();

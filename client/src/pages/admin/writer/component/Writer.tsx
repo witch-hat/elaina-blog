@@ -3,47 +3,22 @@ import { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import ReactMarkdown from 'react-markdown';
 import styled from 'styled-components';
-import styles from 'src/styles/MarkdownStyles.module.css';
 import gfm from 'remark-gfm';
 import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
 
-import { RefInputBox, useWidth, FocusWrapper, Loading } from 'src/components';
-import { theme } from 'src/styles';
-import { RootState } from 'src/redux/rootReducer';
-import { ThemeMode } from 'src/redux/common/type';
-import { CategoryDetails } from 'src/query/category';
+import { RefInputBox, useWidth, Loading } from 'src/components';
+import { CategoryDetailType } from 'src/query/category';
 import { EDIT_POST, WRITE_POST } from 'src/query/post';
 import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';
+import styles from 'src/styles/markdown-styles.module.css';
 
 import { Menu } from './Menu';
+import { CategorySelector } from './CategorySelector';
 
-const Container = styled.div<{ themeMode: ThemeMode }>((props) => ({
+const Container = styled.div({
   display: 'flex',
   width: '100%'
-}));
-
-const CategoryContainer = styled.div({
-  position: 'relative',
-  cursor: 'pointer',
-  padding: '.5rem 0',
-  border: '1px solid #1f1f1f',
-  borderRadius: '.5rem'
-});
-
-const CategoryList = styled.div<{ themeMode: ThemeMode }>((props) => ({
-  position: 'absolute',
-  top: '.5rem',
-  left: '-1px',
-  border: '1px solid #1f1f1f',
-  backgroundColor: theme[props.themeMode].secondaryContentBackground,
-  zIndex: 1,
-  borderRadius: '.5rem'
-}));
-
-const CategoryTitle = styled.div({
-  padding: '.5rem .2rem'
 });
 
 const Title = styled.div({
@@ -57,7 +32,7 @@ const EditorContainer = styled.div({
   flex: '1'
 });
 
-const Editor = styled.div<{ themeMode: ThemeMode }>((props) => ({
+const Editor = styled.textarea((props) => ({
   display: 'flex',
   width: '100%',
   flexDirection: 'column',
@@ -66,12 +41,12 @@ const Editor = styled.div<{ themeMode: ThemeMode }>((props) => ({
   fontFamily: "'Nanum Gothic', sans-serif",
   outline: 'none',
   padding: '.5rem',
-  border: `1px solid ${theme[props.themeMode].borderColor}`,
+  border: `1px solid ${props.theme.borderColor}`,
   borderRadius: '.5rem',
   wordBreak: 'break-word',
   whiteSpace: 'pre-wrap',
   overflowY: 'auto',
-  backgroundColor: theme[props.themeMode].editorBackground
+  backgroundColor: props.theme.editorBackground
 }));
 
 const PreviewContainer = styled.div({
@@ -86,12 +61,12 @@ const PreviewContainer = styled.div({
   }
 });
 
-const Paragraph = styled.p({
-  display: 'inline-block',
-  width: '100%',
-  wordBreak: 'break-word',
-  whiteSpace: 'pre-wrap'
-});
+// const Paragraph = styled.p({
+//   display: 'inline-block',
+//   width: '100%',
+//   wordBreak: 'break-word',
+//   whiteSpace: 'pre-wrap'
+// });
 
 const MoblieModeButton = styled.button({
   borderRadius: '.5rem',
@@ -108,28 +83,28 @@ const ButtonContainer = styled.div({
   margin: '.5rem 0'
 });
 
-const WriteButton = styled.button<{ themeMode: ThemeMode; available: boolean }>((props) => ({
+const WriteButton = styled.button<{ available: boolean }>((props) => ({
   padding: '.5rem',
   borderRadius: '.5rem',
-  backgroundColor: theme[props.themeMode].submitButtonColor,
-  color: '#f1f2f3',
+  backgroundColor: props.theme.submitButton.buttonColor,
+  color: props.theme.submitButton.textColor,
   cursor: props.available ? 'pointer' : 'not-allowed'
 }));
 
-function Text(props: { children?: string }) {
-  return <Paragraph>{props.children !== undefined ? props.children : <br></br>}</Paragraph>;
-}
+// function Text(props: { children?: string }) {
+//   return <Paragraph>{props.children !== undefined ? props.children : <br></br>}</Paragraph>;
+// }
 
 enum Mode {
-  write = 'Editor',
-  preview = 'Preview'
+  Write = 'Editor',
+  Preview = 'Preview'
 }
 
-const DEFAULT_CATEGORY = '카테고리를 선택해 주세요';
+const DEFAULT_CATEGORY = '최신글';
 
 interface Props {
   author: string;
-  categories: CategoryDetails[];
+  categories: CategoryDetailType[];
   category?: string;
   title?: string;
   article?: string;
@@ -137,16 +112,13 @@ interface Props {
 }
 
 export function Writer(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
-
   const width = useWidth();
   const router = useRouter();
-  const editor = useRef<HTMLDivElement>(null);
+  const editor = useRef<HTMLTextAreaElement>(null);
   const titleRef = useRef<HTMLInputElement>(null);
-  const [mode, setMode] = useState(Mode.write);
+  const [mode, setMode] = useState(Mode.Write);
   const [title, setTitle] = useState('');
   const [article, setArticle] = useState<string>('');
-  const [isListOpen, setIsListOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(DEFAULT_CATEGORY);
   const [visibleSubmitBtn, setVisibleSubmitBtn] = useState(true);
 
@@ -155,7 +127,7 @@ export function Writer(props: Props) {
   const [editPost, { loading: editLoading }] = useMutation(EDIT_POST);
 
   useEffect(() => {
-    if (mode == Mode.write) {
+    if (mode == Mode.Write) {
       editor.current?.focus();
     }
   }, [mode]);
@@ -176,13 +148,11 @@ export function Writer(props: Props) {
     }
   }, []);
 
-  function parseTextContent() {
-    if (editor.current !== null) {
-      setArticle(editor.current.innerText.replaceAll('\n\n', '  \n').replaceAll('\n  \n', '\n&#8203;  \n').replaceAll('\n\n', '\n'));
-    }
+  function parseTextContent(e: React.ChangeEvent<HTMLTextAreaElement>) {
+    setArticle(e.target.value.replaceAll('\n\n', '  \n').replaceAll('\n  \n', '\n&#8203;  \n').replaceAll('\n\n', '\n'));
   }
 
-  function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
+  function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === 'Backspace') {
       if (editor.current?.textContent?.length === 0 && editor.current.childNodes.length === 1) {
         e.preventDefault();
@@ -190,30 +160,33 @@ export function Writer(props: Props) {
     }
   }
 
-  function handlePaste(e: React.ClipboardEvent<HTMLDivElement>) {
+  function handlePaste(e: React.ClipboardEvent<HTMLTextAreaElement>) {
     e.preventDefault();
     const clipedData = e.clipboardData.getData('text/plain').replaceAll('&#8203;', '');
-    console.log(clipedData.split('').map((t) => t === ''));
     document.execCommand('insertText', false, clipedData);
   }
 
   function handleButtonClick() {
-    if (mode === Mode.write) {
-      setMode(Mode.preview);
+    if (mode === Mode.Write) {
+      setMode(Mode.Preview);
     } else {
-      setMode(Mode.write);
+      setMode(Mode.Write);
     }
+  }
+
+  function changeCategory(newCategory: string) {
+    setSelectedCategory(newCategory);
   }
 
   async function handleCreatePost() {
     setVisibleSubmitBtn(false);
 
-    if (selectedCategory === DEFAULT_CATEGORY) {
-      window.scrollTo(0, 0);
-      alert('카테고리를 선택해 주세요');
-      setVisibleSubmitBtn(true);
-      return;
-    }
+    // if (selectedCategory === DEFAULT_CATEGORY) {
+    //   window.scrollTo(0, 0);
+    //   alert('카테고리를 선택해 주세요');
+    //   setVisibleSubmitBtn(true);
+    //   return;
+    // }
 
     if (!title) {
       window.scrollTo(0, 0);
@@ -245,7 +218,7 @@ export function Writer(props: Props) {
           title,
           createdAt: new Date().toISOString(),
           article,
-          category: selectedCategory
+          category: selectedCategory === DEFAULT_CATEGORY ? '' : selectedCategory
         }
       });
 
@@ -274,7 +247,7 @@ export function Writer(props: Props) {
       return router.push('/admin/login');
     }
 
-    const id = +router.query['post-id'];
+    const id = +router.query['post-id']!;
 
     try {
       await editPost({
@@ -299,33 +272,17 @@ export function Writer(props: Props) {
   }
 
   return (
-    <Container themeMode={themeMode}>
+    <Container>
       <EditorContainer>
-        <MoblieModeButton onClick={() => handleButtonClick()}>{mode === Mode.write ? Mode.preview : Mode.write}</MoblieModeButton>
-        {((width <= 767 && mode === Mode.write) || width > 767) && (
+        <MoblieModeButton onClick={() => handleButtonClick()}>{mode === Mode.Write ? Mode.Preview : Mode.Write}</MoblieModeButton>
+        {((width <= 767 && mode === Mode.Write) || width > 767) && (
           <>
-            <CategoryContainer>
-              <div onClick={() => setIsListOpen(!isListOpen)}>
-                <p style={{ padding: '.2rem' }}>{selectedCategory}</p>
-              </div>
-              <FocusWrapper visible={isListOpen} onClickOutside={() => setIsListOpen(false)}>
-                <CategoryList themeMode={themeMode}>
-                  {props.categories.map((category) => {
-                    return (
-                      <CategoryTitle
-                        key={category.title}
-                        onClick={() => {
-                          setSelectedCategory(category.title);
-                          setIsListOpen(false);
-                        }}
-                      >
-                        <p>{category.title}</p>
-                      </CategoryTitle>
-                    );
-                  })}
-                </CategoryList>
-              </FocusWrapper>
-            </CategoryContainer>
+            <CategorySelector
+              categories={props.categories}
+              default={DEFAULT_CATEGORY}
+              selectedCategory={selectedCategory}
+              changeCategory={changeCategory}
+            />
             <Title>
               <RefInputBox
                 ref={titleRef}
@@ -341,20 +298,9 @@ export function Writer(props: Props) {
               />
             </Title>
             <Menu ref={editor} setArticle={setArticle} />
-            <Editor
-              ref={editor}
-              contentEditable={true}
-              suppressContentEditableWarning={true}
-              onKeyDown={handleKeyDown}
-              onPaste={handlePaste}
-              onInput={parseTextContent}
-              themeMode={themeMode}
-            >
-              <Text></Text>
-            </Editor>
+            <Editor ref={editor} onKeyDown={handleKeyDown} onPaste={handlePaste} onChange={parseTextContent} value={article} />
             <ButtonContainer>
               <WriteButton
-                themeMode={themeMode}
                 available={visibleSubmitBtn}
                 onClick={() => {
                   if (visibleSubmitBtn) {
@@ -367,12 +313,16 @@ export function Writer(props: Props) {
             </ButtonContainer>
           </>
         )}
-        {width <= 767 && mode === Mode.preview && (
-          <ReactMarkdown plugins={[gfm]} className={styles['markdown-body']} children={article}></ReactMarkdown>
+        {width <= 767 && mode === Mode.Preview && (
+          <ReactMarkdown plugins={[gfm]} className={styles['markdown-body']}>
+            {article}
+          </ReactMarkdown>
         )}
       </EditorContainer>
       <PreviewContainer>
-        <ReactMarkdown plugins={[gfm]} className={styles['markdown-body']} children={article}></ReactMarkdown>
+        <ReactMarkdown plugins={[gfm]} className={styles['markdown-body']}>
+          {article}
+        </ReactMarkdown>
       </PreviewContainer>
     </Container>
   );

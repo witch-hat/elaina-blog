@@ -1,24 +1,16 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faLanguage } from '@fortawesome/free-solid-svg-icons';
 
-import { theme } from 'src/styles';
-import { RootState } from 'src/redux/rootReducer';
-import { ThemeMode } from 'src/redux/common/type';
 import { commonDispatch } from 'src/redux/common/dispatch';
-import { LangCode, changeLang, getCurrentLangCode, trans, Lang } from 'src/resources/languages';
+import { LangCode, changeLang } from 'src/resources/languages';
 
 import { DropDownMenu } from '../common/box/DropDownMenu';
 
-const RotateIcon = styled.span<{ isOpen: boolean }>((props) => {
-  return {
-    display: 'inline-block',
-    marginLeft: '.4rem',
-    transition: '.3s all',
-    transform: props.isOpen ? 'rotate(180deg)' : 'none'
-  };
+const RotateIcon = styled.span({
+  display: 'inline-block',
+  marginLeft: '.4rem'
 });
 
 const LanguageDropDown = styled.div({
@@ -28,7 +20,7 @@ const LanguageDropDown = styled.div({
   }
 });
 
-const LanguageItem = styled.p<{ themeMode: ThemeMode }>((props) => ({
+const LanguageItem = styled.p((props) => ({
   width: '100%',
   padding: '.5rem',
   borderRadius: '.5rem',
@@ -36,46 +28,38 @@ const LanguageItem = styled.p<{ themeMode: ThemeMode }>((props) => ({
   cursor: 'pointer',
   userSelect: 'none',
   '&:hover': {
-    backgroundColor: theme[props.themeMode].hoverBackground
+    backgroundColor: props.theme.hoverBackground
   }
 }));
 
 export function LanguageMenu() {
   const languages = {
-    [LangCode.ko]: '한국어',
-    [LangCode.en]: 'English'
+    [LangCode.KO]: '한국어',
+    [LangCode.EN]: 'English'
   };
-  const currentLangCode = getCurrentLangCode();
-  const lang: LangCode = useSelector<RootState, any>((state) => state.common.lang);
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
-
-  const [isLangMenuVisible, setIsLangMenuVisible] = useState(false);
 
   return (
     <LanguageDropDown>
       <DropDownMenu
-        visible={isLangMenuVisible}
         mainButton={
           <>
             <FontAwesomeIcon size={'lg'} icon={faLanguage} />
-            <RotateIcon isOpen={isLangMenuVisible}>
+            <RotateIcon>
               <FontAwesomeIcon icon={faCaretDown} />
             </RotateIcon>
           </>
         }
-        setVisible={setIsLangMenuVisible}
         dropMenu={
           <>
-            {Object.keys(languages).map((code: any) => {
+            {Object.keys(languages).map((code: string) => {
               return (
                 <LanguageItem
                   key={code}
                   onClick={() => {
                     changeLang(code as LangCode);
-                    commonDispatch.SetLanguage(code);
-                    setIsLangMenuVisible(false);
+                    commonDispatch.SetLanguage(code as LangCode);
                   }}
-                  themeMode={themeMode}
+                  // themeMode={themeMode}
                 >
                   {languages[code as LangCode]}
                 </LanguageItem>
@@ -87,3 +71,5 @@ export function LanguageMenu() {
     </LanguageDropDown>
   );
 }
+
+export const MemoizedLanguageMenu = React.memo(LanguageMenu);

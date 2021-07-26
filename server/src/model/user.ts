@@ -7,6 +7,7 @@ export interface Auth {
   userUniqueId: string;
   refreshToken: string;
   id: string;
+  latestLogin: Date;
 }
 
 export interface User extends Document {
@@ -24,6 +25,9 @@ const authSchema = new Schema({
   },
   id: {
     type: String
+  },
+  latestLogin: {
+    type: Date
   }
 });
 

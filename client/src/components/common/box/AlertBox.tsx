@@ -21,7 +21,8 @@ const Container = styled.div<{ isError: boolean }>(
     padding: '.5rem',
     backgroundColor: props.isError ? 'rgb(224, 103, 103)' : 'rgb(111, 178, 237)',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    zIndex: 9999
   }),
   css`
     animation: ${GoingDown} 0.3s forwards;
@@ -43,10 +44,10 @@ const CloseButton = styled.button({
   outline: 'none'
 });
 
-interface Props {
+export interface AlertProps {
   msg: string;
   isError: boolean;
-  onCloseButtonClick: Function;
+  onCloseButtonClick: () => void;
 }
 
 export interface AlertStateType {
@@ -55,7 +56,7 @@ export interface AlertStateType {
   isError: boolean;
 }
 
-export function AlertBox(props: Props) {
+export function AlertBox(props: AlertProps) {
   return (
     <Container isError={props.isError}>
       <MessageContainer>

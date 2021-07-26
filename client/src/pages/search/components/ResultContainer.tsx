@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { Post } from 'src/query/post';
+import { PostType } from 'src/query/post';
 import { ResultItem } from './ResultItem';
 
 const Container = styled.div({
@@ -10,7 +10,7 @@ const Container = styled.div({
 });
 
 interface Props {
-  searchResults: { post: Post; content: string }[];
+  searchResults: { post: PostType; content: string }[];
 }
 
 export function ResultContainer(props: Props) {

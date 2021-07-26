@@ -1,10 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
-
-import { theme } from 'src/styles';
-import { RootState } from 'src/redux/rootReducer';
-import { ThemeMode } from 'src/redux/common/type';
 
 interface Styles {
   width?: string;
@@ -18,7 +13,7 @@ interface Styles {
 }
 
 interface InputProps {
-  themeMode: ThemeMode;
+  // themeMode: ThemeMode;
   isValid?: boolean;
   styles?: Styles;
 }
@@ -28,19 +23,19 @@ const Input = styled.input<InputProps>((props) => {
     width: props.styles?.width || '100px',
     height: props.styles?.height || '40px',
     margin: props.styles?.margin,
-    border: `1px solid ${theme[props.themeMode].inputBorder}`,
+    border: `1px solid ${props.theme.inputBorder}`,
     borderRadius: '.5rem',
-    backgroundColor: theme[props.themeMode].inputBackground,
-    color: theme[props.themeMode].inputText,
+    backgroundColor: props.theme.inputBackground,
+    color: props.theme.inputText,
     fontSize: props.styles?.fontSize || '1rem',
     '&:focus': {
       padding: '1px',
       borderWidth: '2px',
-      borderColor: props.isValid ? theme[props.themeMode].inputOutline : theme[props.themeMode].invalidBorder,
+      borderColor: props.isValid ? props.theme.inputOutline : props.theme.invalidBorder,
       outline: 'none'
     },
     '&::placeholder': {
-      color: theme[props.themeMode].placeholderText
+      color: props.theme.placeholderText
     },
     '@media screen and (max-width: 767px)': {
       width: props.styles?.small?.width || '100px',
@@ -54,8 +49,8 @@ interface Props {
   minLength: number;
   maxLength: number;
   id?: string;
-  onFocus?: Function;
-  onBlur?: Function;
+  onFocus?: () => void;
+  onBlur?: () => void;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   placeholder?: string;
   styles?: Styles;
@@ -64,7 +59,7 @@ interface Props {
 }
 
 export const RefInputBox = React.forwardRef<HTMLInputElement, Props>((props, forwardedRef) => {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
 
   return (
     <Input
@@ -76,7 +71,7 @@ export const RefInputBox = React.forwardRef<HTMLInputElement, Props>((props, for
       maxLength={props.maxLength}
       autoComplete='off'
       styles={props.styles}
-      themeMode={themeMode}
+      // themeMode={themeMode}
       onFocus={() => {
         if (props.onFocus) {
           props.onFocus();
@@ -94,6 +89,8 @@ export const RefInputBox = React.forwardRef<HTMLInputElement, Props>((props, for
     />
   );
 });
+
+RefInputBox.displayName = 'RefInputBox';
 
 RefInputBox.defaultProps = {
   isValid: true

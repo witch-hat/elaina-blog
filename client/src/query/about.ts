@@ -1,8 +1,12 @@
 import { gql } from '@apollo/client';
 
-export interface About {
+export interface AboutDataType {
   article: string;
-  updatedAt: Date;
+  updatedAt: number;
+}
+
+export interface AboutQueryType {
+  about: AboutDataType;
 }
 
 export const GET_ABOUT = gql`
@@ -10,6 +14,23 @@ export const GET_ABOUT = gql`
     about {
       updatedAt
       article
+    }
+  }
+`;
+
+export interface UpdateAboutVars {
+  article: string;
+}
+
+export interface UpdateAboutQueryType {
+  updateAbout: AboutDataType;
+}
+
+export const UPDATE_ABOUT = gql`
+  mutation ($article: String) {
+    updateAbout(article: $article) {
+      article
+      updatedAt
     }
   }
 `;

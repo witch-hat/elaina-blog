@@ -1,219 +1,130 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGripVertical, faPen, faTrash, faSave, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { useMutation } from '@apollo/client';
+import { cloneDeep, throttle } from 'lodash';
 
 import { BorderBox, AlertStateType } from 'src/components';
-import { theme } from 'src/styles';
-import { RootState } from 'src/redux/rootReducer';
-import { ThemeMode } from 'src/redux/common/type';
-import { CircleRippleWrapper } from 'src/components/common/wrapper/CircleRippleWrapper';
-import { CategoryDetails, GET_CATEGORY, ORDER_CATEGORY, UPDATE_CATEGORY } from 'src/query/category';
+import { CategoryDetailType, ORDER_CATEGORY, OrderCategoryVars, OrderCategoryQueryType } from 'src/query/category';
+import { CategoryTitle } from './CategoryTitle';
+import { CategoryMenu } from './CategoryMenu';
 
 const Container = styled.div({
-  display: 'flex',
-  width: '100%',
-  alignItems: 'center'
+  width: '600px',
+  margin: '0 auto'
 });
 
 const Wrapper = styled.div({
   display: 'flex',
-  flex: 1,
-  flexDirection: 'column'
-});
-
-const Content = styled.div({
-  display: 'flex',
   width: '100%',
-  height: '10rem',
-  padding: '.8rem',
-  justifyContent: 'center',
-  alignItems: 'center'
-});
-
-const MenuContainer = styled.div({
-  display: 'flex',
-  padding: '4px 8px 0px 8px',
-  flex: 1,
-  flexDirection: 'row',
-  justifyContent: 'flex-end'
-});
-
-const PreviewImage = styled.img({
-  float: 'right',
-  width: '260px',
-  height: '8.4rem',
-  marginLeft: '1rem',
-  objectFit: 'cover',
-  '@media screen and (max-width: 1380px)': {
-    width: '32%',
-    marginLeft: '3%'
-  }
-});
-
-const PreviewTextWrapper = styled.div({
-  display: 'flex',
-  width: '100%',
-  height: '8.4rem',
-  flexDirection: 'column',
-  alignItems: 'flex-start'
-});
-
-const PreviewTitle = styled.span({
-  display: '-webkit-box',
-  height: '2rem',
-  width: '100%',
-  flexShrink: 0,
-  fontSize: '1.4rem',
-  fontWeight: 'bold',
-  textAlign: 'left',
-  wordBreak: 'break-all',
-  overflow: 'hidden',
-  WebkitLineClamp: 1,
-  WebkitBoxOrient: 'vertical',
-  '@media screen and (max-width: 1380px)': {
-    wordBreak: 'break-all'
-  }
-});
-
-const PreviewContent = styled.span({
-  display: '-webkit-box',
-  width: '100%',
-  height: '4.5rem',
-  margin: '.25rem 0 0',
-  flexShrink: 0,
-  fontSize: '1.1rem',
-  wordBreak: 'keep-all',
-  textAlign: 'left',
-  overflow: 'hidden',
-  WebkitLineClamp: 3,
-  WebkitBoxOrient: 'vertical'
-});
-
-const GrabButtonContainer = styled.div({
-  '&:hover > *': {
-    cursor: 'grab'
-  }
+  padding: '.5rem',
+  alignItems: 'center',
+  justifyContent: 'space-between'
 });
 
 interface Props {
-  categories: CategoryDetails[];
+  categories: CategoryDetailType[];
   index: number;
+  title: string;
   grabbingCategoryIndex: number;
-  grabbedElement: (EventTarget & HTMLDivElement) | null;
   initAlertState: AlertStateType;
-  setCategories: React.Dispatch<React.SetStateAction<CategoryDetails[]>>;
-  setEditingCategoryIndex: React.Dispatch<React.SetStateAction<number>>;
-  setGrabbingCategoryIndex: React.Dispatch<React.SetStateAction<number>>;
-  setDeletedCategory: React.Dispatch<React.SetStateAction<{ isModalOpen: boolean; index?: number | undefined }>>;
-  setGrabbedElement: React.Dispatch<React.SetStateAction<(EventTarget & HTMLDivElement) | null>>;
-  setAlertState: React.Dispatch<React.SetStateAction<AlertStateType>>;
+  updateCategories: (newCategories: CategoryDetailType[]) => void;
+  deleteCategory: (index: number) => void;
+  grabElement: (index: number) => void;
+  releaseElement: () => void;
+  setGreenAlert: (msg: string) => void;
+  setRedAlert: (err: any) => void;
+  setInitAlert: () => void;
 }
 
 export function CategoryViewer(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
+  const [isEdit, setIsEdit] = useState(false);
+  const [title, setTitle] = useState(props.title);
+  const initialCategoryOrder = useRef<number[] | null>(null);
 
-  const [orderCategory] = useMutation(ORDER_CATEGORY);
+  const [orderCategory] = useMutation<OrderCategoryQueryType, OrderCategoryVars>(ORDER_CATEGORY);
 
-  function onDragStart(e: React.DragEvent<HTMLDivElement>) {
-    props.setGrabbedElement(e.currentTarget);
-    e.dataTransfer.effectAllowed = 'move';
-    // @ts-ignore
-    e.dataTransfer.setData('text/html', e.currentTarget);
-  }
+  const handleEditTitle = (e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value);
 
-  function onDragOver(e: React.DragEvent<HTMLDivElement>) {
-    e.preventDefault();
-  }
+  const backupTitle = () => setTitle(props.title);
 
-  function onDragEnd(e: React.DragEvent<HTMLDivElement>) {
-    e.dataTransfer.dropEffect = 'move';
-  }
+  const updateTitle = (newTitle: string) => setTitle(newTitle);
 
-  function onDrop(e: React.DragEvent<HTMLDivElement>) {
-    let grabPosition = Number(props.grabbedElement?.dataset.position);
-    let dropPosition = Number(e.currentTarget.dataset.position);
+  const endEditMode = () => setIsEdit(false);
 
+  const enterEditMode = () => setIsEdit(true);
+
+  const onDragStart = (e: React.DragEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    initialCategoryOrder.current = props.categories.map((category) => category._id);
+  };
+
+  const onDragEnter = throttle((e: React.DragEvent<HTMLDivElement>) => {
+    let dragOverItemPosition = Number(e.currentTarget.dataset.position);
+
+    // props is immutable, splice() change data
+    const copiedCategory = cloneDeep(props.categories);
+
+    copiedCategory.splice(props.grabbingCategoryIndex, 1);
+    copiedCategory.splice(dragOverItemPosition, 0, props.categories[props.grabbingCategoryIndex]);
+
+    props.grabElement(dragOverItemPosition);
+    dragOverItemPosition = -1;
+    props.updateCategories(copiedCategory);
+  }, 400);
+
+  const onDrop = async (e: React.DragEvent<HTMLDivElement>) => {
+    e.stopPropagation();
     try {
-      const newCategories = [...props.categories];
-      newCategories[grabPosition] = newCategories.splice(dropPosition, 1, newCategories[grabPosition])[0];
+      const changedOrder = props.categories.map((category) => category._id);
+      if (initialCategoryOrder.current) {
+        if (initialCategoryOrder.current.every((id, index) => id === changedOrder[index])) {
+          // if order doesn't change, don't need to call mutation query
+          return;
+        }
+      }
 
-      props.setAlertState(props.initAlertState);
+      props.setInitAlert();
 
-      orderCategory({
+      await orderCategory({
         variables: {
-          ids: newCategories.map((category) => category._id)
+          ids: changedOrder
         }
       });
-      props.setCategories(newCategories);
-      props.setGrabbingCategoryIndex(-1);
     } catch (err) {
       const backUpCategories = [...props.categories];
-
-      props.setCategories(backUpCategories);
-      props.setAlertState({
-        msg: err.message,
-        isPop: true,
-        isError: true
-      });
+      props.updateCategories(backUpCategories);
+      props.setRedAlert(err);
     }
-  }
+  };
 
   return (
     <Container
       data-position={props.index}
       draggable={props.grabbingCategoryIndex === props.index}
-      onDragOver={(e: React.DragEvent<HTMLDivElement>) => onDragOver(e)}
-      onDragStart={(e: React.DragEvent<HTMLDivElement>) => props.grabbingCategoryIndex > -1 && onDragStart(e)}
-      onDragEnd={(e: React.DragEvent<HTMLDivElement>) => props.grabbingCategoryIndex > -1 && onDragEnd(e)}
-      onDrop={(e: React.DragEvent<HTMLDivElement>) => props.grabbingCategoryIndex > -1 && onDrop(e)}
+      onDragStart={(e) => props.grabbingCategoryIndex > -1 && onDragStart(e)}
+      onDragOver={(e) => e.preventDefault()}
+      onDragEnter={(e) => props.grabbingCategoryIndex > -1 && onDragEnter(e)}
+      onDrop={(e) => props.grabbingCategoryIndex > -1 && onDrop(e)}
     >
-      <BorderBox isTransform={false} styles={{ width: '100%', margin: '.8rem 0' }}>
+      <BorderBox isHoverEffect={false} styles={{ width: '100%', margin: '.8rem 0' }}>
         <Wrapper>
-          <MenuContainer>
-            <CircleRippleWrapper
-              onClick={() => {
-                props.setEditingCategoryIndex(props.index);
-              }}
-            >
-              <FontAwesomeIcon icon={faPen} style={{ fontSize: '1.25rem' }} />
-            </CircleRippleWrapper>
-            {props.categories[props.index]._id > 0 && (
-              <CircleRippleWrapper
-                onClick={() => {
-                  props.setDeletedCategory({ isModalOpen: true, index: props.index });
-                }}
-              >
-                <FontAwesomeIcon icon={faTrash} style={{ fontSize: '1.25rem' }} />
-              </CircleRippleWrapper>
-            )}
-            <GrabButtonContainer
-              onMouseDown={(e: React.MouseEvent<HTMLDivElement>) => {
-                if (e.button === 0) {
-                  props.setGrabbingCategoryIndex(props.index);
-                } else {
-                  props.setGrabbingCategoryIndex(-1);
-                }
-              }}
-              onMouseUp={() => {
-                props.setGrabbingCategoryIndex(-1);
-              }}
-              onTouchStart={() => props.setGrabbingCategoryIndex(props.index)}
-            >
-              <CircleRippleWrapper onClick={() => {}}>
-                <FontAwesomeIcon icon={faGripVertical} style={{ fontSize: '1.25rem' }} />
-              </CircleRippleWrapper>
-            </GrabButtonContainer>
-          </MenuContainer>
-          <Content>
-            <PreviewTextWrapper>
-              <PreviewTitle>{props.categories[props.index].title}</PreviewTitle>
-              <PreviewContent>{props.categories[props.index].description}</PreviewContent>
-            </PreviewTextWrapper>
-            <PreviewImage src={props.categories[props.index].previewImage} alt='preview image' />
-          </Content>
+          <CategoryTitle isDefault={props.categories[props.index]._id === 0} title={title} isEdit={isEdit} handleChange={handleEditTitle} />
+          <CategoryMenu
+            isEdit={isEdit}
+            id={props.categories[props.index]._id}
+            title={title}
+            isDefault={props.categories[props.index]._id === 0}
+            index={props.index}
+            enterEditMode={enterEditMode}
+            endEditMode={endEditMode}
+            updateTitle={updateTitle}
+            backupTitle={backupTitle}
+            deleteCategory={props.deleteCategory}
+            grabElement={props.grabElement}
+            releaseElement={props.releaseElement}
+            setGreenAlert={props.setGreenAlert}
+            setRedAlert={props.setRedAlert}
+          />
         </Wrapper>
       </BorderBox>
     </Container>

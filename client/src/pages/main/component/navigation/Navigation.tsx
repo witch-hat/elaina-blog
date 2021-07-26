@@ -1,60 +1,46 @@
 import React from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBook, faStream, faUser } from '@fortawesome/free-solid-svg-icons';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { useSelector } from 'react-redux';
-import { useRouter } from 'next/router';
+import { faStickyNote, faBook, faUser } from '@fortawesome/free-solid-svg-icons';
 
-import { RootState } from 'src/redux/rootReducer';
-import { ThemeMode } from 'src/redux/common/type';
 import { Lang, trans } from 'src/resources/languages';
 
 import { NavigationButton } from './NavigationButton';
 
-const Container = styled.nav({
+const Container = styled.nav((props) => ({
+  position: 'sticky',
+  top: '4rem',
   display: 'flex',
   width: '100%',
-  alignItems: 'center'
-});
+  backgroundColor: props.theme.mainBackground,
+  borderBottom: `1px solid ${props.theme.borderColor}`,
+  alignItems: 'center',
+  zIndex: 2
+}));
 
 const NavName = styled.span({
   fontSize: '1.1rem',
   fontWeight: 'bold'
 });
 
-interface IconProps {
-  icon: IconProp;
-}
-
-function NavigationIcon(props: IconProps) {
-  return <FontAwesomeIcon icon={props.icon} style={{ marginRight: '8px' }} />;
-}
-
-interface Props {}
-
-export function Navigation(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
-
-  const router = useRouter();
-
+export function Navigation() {
   return (
     <Container>
       <NavigationButton href='/'>
         <>
-          <NavigationIcon icon={faBook} />
-          <NavName>{trans(Lang.Board)}</NavName>
+          <FontAwesomeIcon icon={faStickyNote} style={{ marginRight: '.5rem' }} />
+          <NavName>{trans(Lang.LatestPost)}</NavName>
         </>
       </NavigationButton>
-      {/* <NavigationButton href='?tab=timeline'>
+      <NavigationButton query='category'>
         <>
-          <NavigationIcon icon={faStream} />
-          <NavName>{trans(Lang.TimeLine)}</NavName>
+          <FontAwesomeIcon icon={faBook} style={{ marginRight: '.5rem' }} />
+          <NavName>{trans(Lang.Category)}</NavName>
         </>
-      </NavigationButton> */}
+      </NavigationButton>
       <NavigationButton query='about'>
         <>
-          <NavigationIcon icon={faUser} />
+          <FontAwesomeIcon icon={faUser} style={{ marginRight: '.5rem' }} />
           <NavName>{trans(Lang.About)}</NavName>
         </>
       </NavigationButton>

@@ -4,14 +4,15 @@ import styled from 'styled-components';
 import { ClapBox } from './ClapBox';
 import { ContentNavigation } from './ContentNavigation';
 
-const Container = styled.nav({
+const Container = styled.aside((props) => ({
   display: 'flex',
-  position: 'sticky',
+  position: 'fixed',
   top: 'calc(5rem + 20px)',
-  width: '100%',
+  left: 'calc(50% + 500px)',
+  width: '300px',
   height: 'calc(100vh - 5rem - 20px)',
   padding: '.5rem',
-  flex: 1,
+  backgroundColor: props.theme.mainBackground,
   flexDirection: 'column',
   justifyContent: 'flex-start',
   alignItems: 'center',
@@ -23,7 +24,7 @@ const Container = styled.nav({
     display: 'none',
     opacity: 0
   }
-});
+}));
 
 const StyledHr = styled.hr({
   display: 'block',
@@ -37,7 +38,7 @@ const StyledHr = styled.hr({
 
 interface Props {
   commentsCount: number;
-  scrollToComment: Function;
+  scrollToComment: () => void;
 }
 
 export function RightSideContainer(props: Props) {

@@ -2,13 +2,8 @@ import React from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-
-import { theme } from 'src/styles';
-import { RootState } from 'src/redux/rootReducer';
-import { ThemeMode } from 'src/redux/common/type';
 
 const Move = keyframes({
   from: {
@@ -21,7 +16,7 @@ const Move = keyframes({
   }
 });
 
-const Container = styled.nav<{ themeMode: ThemeMode }>(
+const Container = styled.nav(
   (props) => ({
     display: 'flex',
     position: 'sticky',
@@ -49,9 +44,9 @@ const Container = styled.nav<{ themeMode: ThemeMode }>(
       width: '50%',
       minWidth: '250px',
       height: 'calc(100vh - 5rem)',
-      backgroundColor: theme[props.themeMode].secondaryContentBackground,
+      backgroundColor: props.theme.secondaryContentBackground,
       borderRadius: '0 .5rem .5rem 0',
-      boxShadow: `6px 0 6px -6px ${theme[props.themeMode].shadowColor}`,
+      boxShadow: `6px 0 6px -6px ${props.theme.shadowColor}`,
       zIndex: 1
     }
   }),
@@ -100,11 +95,11 @@ const TitleContainer = styled.ul({
   }
 });
 
-const TitleList = styled.li<{ currentNav: boolean; themeMode: ThemeMode }>((props) => ({
+const TitleList = styled.li<{ currentNav: boolean }>((props) => ({
   width: '100%',
   padding: '.5rem',
   borderLeft: props.currentNav ? '2px solid #867dff' : 'none',
-  borderBottom: `1px solid ${theme[props.themeMode].borderColor}`,
+  borderBottom: `1px solid ${props.theme.borderColor}`,
   cursor: 'pointer',
   listStyle: 'none',
   fontWeight: props.currentNav ? 'bold' : 'normal',
@@ -112,9 +107,9 @@ const TitleList = styled.li<{ currentNav: boolean; themeMode: ThemeMode }>((prop
   textDecoration: props.currentNav ? 'underline' : 'none',
   transition: '.2s all',
   '&:hover': {
-    color: theme[props.themeMode].mainText,
+    color: props.theme.mainText,
     marginLeft: '.35rem',
-    borderLeft: `2px solid ${theme[props.themeMode].hoverBorderColor}`,
+    borderLeft: `2px solid ${props.theme.hoverBorderColor}`,
     fontWeight: 'bolder',
     textDecoration: 'underline'
   }
@@ -135,8 +130,6 @@ interface Props {
 }
 
 export function PostCategory(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
-
   const router = useRouter();
 
   function handleWriteButtonClick() {
@@ -144,7 +137,7 @@ export function PostCategory(props: Props) {
   }
 
   return (
-    <Container themeMode={themeMode}>
+    <Container>
       <FlexWrapper>
         <CategoryName>{props.category.title}</CategoryName>
         {props.isLogin && (
@@ -156,7 +149,7 @@ export function PostCategory(props: Props) {
       <TitleContainer>
         {props.titles.map(({ title, _id }) => {
           return (
-            <TitleList key={`${title}${_id}`} currentNav={props.currentPostId === _id} themeMode={themeMode}>
+            <TitleList key={`${title}${_id}`} currentNav={props.currentPostId === _id}>
               <Link href={`/post/${_id}`} passHref>
                 <Title>{title}</Title>
               </Link>
