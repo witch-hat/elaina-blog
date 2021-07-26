@@ -28,6 +28,7 @@
     "nodemon": "^2.0.7",
     "os": "^0.1.1",
     "path": "^0.12.7",
+    "remove-markdown": "^0.3.0",
     "ts-node": "^9.1.1",
     "typeorm": "^0.2.31",
     "typescript": "4.0.3",
@@ -48,6 +49,7 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@types/remove-markdown": "^0.3.1",
     "@types/ua-parser-js": "^0.7.35",
     "@types/uuid": "^8.3.0",
     "dotenv": "^8.2.0",
