@@ -10,7 +10,7 @@ import {
   EditCommentQueryType,
   EditCommentVars
 } from 'src/query/comment';
-import { DELETE_COMMENT_LOG, DeleteCommentLogVars, DeleteCommentLogReturnType } from 'src/query/comment-log';
+import { DELETE_COMMENT_LOG, DeleteCommentLogVars, DeleteCommentLogQueryType } from 'src/query/comment-log';
 import { useApollo } from 'src/apollo/apolloClient';
 import { IS_AUTH } from 'src/query/user';
 
@@ -32,7 +32,7 @@ export function CommentBox(props: Props) {
   const client = useApollo();
   const [deleteComment] = useMutation<DeleteCommentQueryType, DeleteCommentVars>(DELETE_COMMENT);
   const [editComment] = useMutation<EditCommentQueryType, EditCommentVars>(EDIT_COMMENT);
-  const [deleteCommentLog] = useMutation<DeleteCommentLogReturnType, DeleteCommentLogVars>(DELETE_COMMENT_LOG);
+  const [deleteCommentLog] = useMutation<DeleteCommentLogQueryType, DeleteCommentLogVars>(DELETE_COMMENT_LOG);
 
   async function handleEditComment(commentContent: string, password: string) {
     if (!commentContent) {

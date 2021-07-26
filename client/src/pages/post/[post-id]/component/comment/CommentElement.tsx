@@ -10,10 +10,9 @@ import { CommentBox } from './box/CommentBox';
 import { ReplyWriter } from './writer/ReplyWriter';
 import { ReplyElement } from './ReplyElement';
 
-const Container = styled.div<{ isAdmin: boolean }>((props) => ({
-  borderRadius: '.5rem',
-  //backgroundColor: props.isAdmin ? props.theme.adminCommentColor : 'inherit'
-}));
+const Container = styled.div({
+  borderRadius: '.5rem'
+});
 
 const ReplyButtonContainer = styled.div({
   display: 'flex',
@@ -83,7 +82,7 @@ export function CommentElement(props: Props) {
   }
 
   return (
-    <Container isAdmin={props.isCommentFromAdmin}>
+    <Container>
       <BorderBox isHoverEffect={false} styles={{ margin: '1rem 0 0', width: '100%' }}>
         <CommentBox
           isLogin={props.isLogin}
