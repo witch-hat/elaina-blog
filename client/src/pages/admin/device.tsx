@@ -2,15 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 import { GetServerSideProps } from 'next';
 
-import { initApolloClient } from 'src/apollo/withApollo';
 import { appCommponProps } from 'src/pages/_app';
 import { trans, Lang } from 'src/resources/languages';
-
-import { AdminPageLayout } from '../component/AdminPageLayout';
+import { initApolloClient } from 'src/apollo/withApollo';
 import { GET_DEVICES, LoginDeviceType } from 'src/query/user';
-
-import { PageTitle } from '../component/PageTitle';
-import { DeviceItem } from './component/DeviceItem';
+import { PageTitle, AdminPageLayout, DeviceItem } from 'src/components/pages/admin';
 
 const Container = styled.div({
   width: '100%'

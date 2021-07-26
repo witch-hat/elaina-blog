@@ -3,7 +3,7 @@ import { GetServerSideProps } from 'next';
 
 import { appCommponProps } from 'src/pages/_app';
 import { initApolloClient } from 'src/apollo/withApollo';
-import { Writer } from 'src/pages/admin/writer/component/Writer';
+import { Writer } from 'src/components/pages/admin';
 import { GET_PROFILE } from 'src/query/profile';
 import { FIND_POST_BY_ID } from 'src/query/post';
 import {

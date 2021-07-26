@@ -4,7 +4,7 @@ import { GetServerSideProps } from 'next';
 
 import { PostType, SEARCH } from 'src/query/post';
 import { initApolloClient } from 'src/apollo/withApollo';
-import { ResultContainer } from './components/ResultContainer';
+import { ResultContainer } from 'src/components/pages/search';
 
 const Container = styled.div<{ isEmptyResult?: boolean }>((props) => ({
   display: 'flex',

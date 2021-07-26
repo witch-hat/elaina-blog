@@ -2,13 +2,10 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { GetServerSideProps } from 'next';
 
-import { AlertStateType, initAlert, AlertBox } from 'src/components';
 import { appCommponProps } from 'src/pages/_app';
 import { trans, Lang } from 'src/resources/languages';
-
-import { AdminPageLayout } from '../component/AdminPageLayout';
-import { PassowordInputContainer } from './component/PasswordInputContainer';
-import { PageTitle } from '../component/PageTitle';
+import { AlertStateType, initAlert, AlertBox } from 'src/components';
+import { PageTitle, AdminPageLayout, PassowordInputContainer } from 'src/components/pages/admin';
 
 const Container = styled.div({
   width: '100%'

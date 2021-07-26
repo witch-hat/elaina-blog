@@ -10,13 +10,12 @@ import '@fortawesome/fontawesome-svg-core/styles.css';
 import setCookie from 'set-cookie-parser';
 import { useTranslation } from 'react-i18next';
 
-import { Layout } from 'src/components/Layout';
-import { store, persistor } from 'src/redux';
-import { GlobalStyles } from 'src/styles';
-import { IS_AUTH } from 'src/query/user';
 import { theme } from 'src/styles';
-
-import { withApollo, initApolloClient } from '../apollo/withApollo';
+import { IS_AUTH } from 'src/query/user';
+import { GlobalStyles } from 'src/styles';
+import { store, persistor } from 'src/redux';
+import { Layout } from 'src/components/Layout';
+import { withApollo, initApolloClient } from 'src/apollo/withApollo';
 
 // Skip Adding FontAwesome CSS
 config.autoAddCss = false;

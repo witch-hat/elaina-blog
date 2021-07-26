@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import { InferGetServerSidePropsType, NextPageContext } from 'next';
 import { withRouter, NextRouter, useRouter } from 'next/router';
 
-import { Writer } from 'src/pages/admin/writer/component/Writer';
-import { AppCommonProps, appCommponProps } from 'src/pages/_app';
+import { Writer } from 'src/components/pages/admin';
 import { initApolloClient } from 'src/apollo/withApollo';
 import { GET_PROFILE, ProfileType } from 'src/query/profile';
+import { AppCommonProps, appCommponProps } from 'src/pages/_app';
 import { CategoryDetailType, GET_CATEGORIES_WITH_DETAILS, CategoryDetailsQueryType } from 'src/query/category';
 
 const Container = styled.div({
