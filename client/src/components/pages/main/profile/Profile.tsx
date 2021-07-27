@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import dynamic from 'next/dynamic';
 
 import { AlertStateType, AlertProps } from 'src/components';
-import { ProfileType } from 'src/query/profile';
+import { ProfileDataType } from 'src/query/profile';
 
 import { ProfileEditor } from './edit/ProfileEditor';
 import { ProfileViewer } from './view/ProfileViewer';
@@ -33,7 +33,7 @@ const Container = styled.aside({
 });
 
 interface Props {
-  profile: ProfileType;
+  profile: ProfileDataType;
   isLogin: boolean;
 }
 
@@ -41,10 +41,10 @@ export function Profile(props: Props) {
   const initAlertState: AlertStateType = { msg: '', isPop: false, isError: false };
 
   const [isEditMode, setIsEditMode] = useState(false);
-  const [profile, setProfile] = useState<ProfileType>(props.profile);
+  const [profile, setProfile] = useState<ProfileDataType>(props.profile);
   const [alertState, setAlertState] = useState<AlertStateType>(initAlertState);
 
-  function applyUpdatedProfile(profile: ProfileType) {
+  function applyUpdatedProfile(profile: ProfileDataType) {
     setProfile(profile);
   }
 

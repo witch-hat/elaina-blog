@@ -11,7 +11,7 @@ import setCookie from 'set-cookie-parser';
 import { useTranslation } from 'react-i18next';
 
 import { theme } from 'src/styles';
-import { IS_AUTH } from 'src/query/user';
+import { IS_AUTH, IsAuthQueryType } from 'src/query/user';
 import { GlobalStyles } from 'src/styles';
 import { store, persistor } from 'src/redux';
 import { Layout } from 'src/components/Layout';
@@ -101,8 +101,8 @@ export const appCommponProps: AppCommonProps = {
 ElainaBlog.getInitialProps = async (context: AppContext) => {
   const { ctx, Component } = context;
   const client = initApolloClient({}, ctx);
-  const { data } = await client.query({ query: IS_AUTH });
-  const isLogin = data.isAuth.isAuth;
+  const { data } = await client.query<IsAuthQueryType>({ query: IS_AUTH });
+  const isLogin = data.isAuth.isSuccess;
 
   const combinedCookieHeader = data.isAuth.cookie;
   const cookies = setCookie.splitCookiesString(combinedCookieHeader || '');

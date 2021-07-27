@@ -6,7 +6,7 @@ import { trans, Lang } from 'src/resources/languages';
 import { initApolloClient } from 'src/apollo/withApollo';
 import { AppCommonProps, appCommponProps } from 'src/pages/_app';
 import { AdminPageLayout, PageTitle, CommentLogBox } from 'src/components/pages/admin';
-import { CommentLogDataType, GET_COMMENT_LOGS, CommentLogQueryType } from 'src/query/comment-log';
+import { CommentLogDataType, GET_COMMENT_LOGS, CommentLogQueryType, CommentLogVars } from 'src/query/comment-log';
 
 interface ServerSideProps {
   logs: CommentLogDataType[];
@@ -33,8 +33,8 @@ export default function Admin(props: Props) {
               isEvent={log.replyIndex}
               time={log.time}
               postId={log.postId}
-              categoryTitle={'임시'}
-              postTitle={'임시'}
+              categoryTitle={'카테고리 제목은 없어도 될듯'}
+              postTitle={log.postTitle}
             />
           );
         })}
@@ -56,7 +56,10 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
   context.res.setHeader('Cache-Control', 'max-age=0, public, must-revalidate');
 
   const client = initApolloClient({}, context);
-  const { data: CommentData } = await client.query<CommentLogQueryType>({ query: GET_COMMENT_LOGS });
+  const { data: CommentData } = await client.query<CommentLogQueryType, CommentLogVars>({
+    query: GET_COMMENT_LOGS,
+    variables: { page: 1 }
+  });
 
   const logs = CommentData.commentLogs;
 

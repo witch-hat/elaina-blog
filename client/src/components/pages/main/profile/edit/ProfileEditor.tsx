@@ -3,10 +3,10 @@ import dynamic from 'next/dynamic';
 import { useMutation } from '@apollo/client';
 
 import { AlertStateType } from 'src/components';
-import { ProfileType, UPDATE_PROFILE } from 'src/query/profile';
+import { ProfileDataType, UpdateProfileQueryType, UpdateProfileVars, UPDATE_PROFILE } from 'src/query/profile';
 import { UploadFileQueryType, UploadFileVars, UPLOAD_FILE } from 'src/query/file';
 import { useApollo } from 'src/apollo/apolloClient';
-import { IS_AUTH } from 'src/query/user';
+import { IsAuthQueryType, IS_AUTH } from 'src/query/user';
 
 import { MemoizedProfileImageEditor } from './ProfileImageEditor';
 import { MemoizedProfileFormEditor } from './ProfileFormEditor';
@@ -24,22 +24,22 @@ const DynamicProfileImageCropper = dynamic<CropperProps>(() => import('./Profile
 });
 
 interface Props {
-  profile: ProfileType;
+  profile: ProfileDataType;
   alertState: AlertStateType;
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
   setAlertState: React.Dispatch<React.SetStateAction<AlertStateType>>;
-  updateProfile: (profile: ProfileType) => void;
+  updateProfile: (profile: ProfileDataType) => void;
 }
 
 export function ProfileEditor(props: Props) {
   const [isSelectImage, setIsSelectImage] = useState(false);
   const [croppedImageFile, setCroppedImageFile] = useState<Blob>();
   const [selectedImageFile, setSelectedImageFile] = useState<File>();
-  const [editingProfile, setEditingProfile] = useState<ProfileType>(props.profile);
+  const [editingProfile, setEditingProfile] = useState<ProfileDataType>(props.profile);
 
   const client = useApollo();
   const [uploadFile] = useMutation<UploadFileQueryType, UploadFileVars>(UPLOAD_FILE);
-  const [updateProfile] = useMutation<{ updateProfile: ProfileType }>(UPDATE_PROFILE);
+  const [updateProfile] = useMutation<UpdateProfileQueryType, UpdateProfileVars>(UPDATE_PROFILE);
 
   const setEditModeFalse = useCallback(() => props.setEditMode(false), []);
 
@@ -66,75 +66,78 @@ export function ProfileEditor(props: Props) {
     setEditingProfile((prev) => ({ ...prev, introduce: e.target.value }));
   }, []);
 
-  const handleSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>, oldProfile: ProfileType, newProfile: ProfileType) => {
-    e.preventDefault();
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent<HTMLFormElement>, oldProfile: ProfileDataType, newProfile: ProfileDataType) => {
+      e.preventDefault();
 
-    let uploadedImagePath: string | undefined;
-    const { data } = await client.query({ query: IS_AUTH });
+      let uploadedImagePath: string | undefined;
+      const { data } = await client.query<IsAuthQueryType>({ query: IS_AUTH });
 
-    const isAdmin = data.isAuth.isAuth;
+      const isAdmin = data.isAuth.isSuccess;
 
-    if (!isAdmin) {
-      props.setAlertState({
-        msg: 'Login Invalid: Please login',
-        isPop: true,
-        isError: true
-      });
-      setEditModeFalse();
-      return;
-    }
+      if (!isAdmin) {
+        props.setAlertState({
+          msg: 'Login Invalid: Please login',
+          isPop: true,
+          isError: true
+        });
+        setEditModeFalse();
+        return;
+      }
 
-    if (Object.entries(oldProfile).toString() === Object.entries(newProfile).toString()) {
-      setEditModeFalse();
-      return;
-    }
+      if (Object.entries(oldProfile).toString() === Object.entries(newProfile).toString()) {
+        setEditModeFalse();
+        return;
+      }
 
-    try {
-      if (newProfile.image !== oldProfile.image) {
-        const uploadResponse = await uploadFile({
+      try {
+        if (newProfile.image !== oldProfile.image) {
+          const uploadResponse = await uploadFile({
+            variables: {
+              file: croppedImageFile
+            }
+          });
+
+          uploadedImagePath = uploadResponse.data?.uploadFile.path || '';
+        }
+      } catch (err) {
+        alert(err.message);
+        return;
+      }
+
+      try {
+        const { data } = await updateProfile({
           variables: {
-            file: croppedImageFile
+            _id: newProfile._id,
+            image: uploadedImagePath ? uploadedImagePath : oldProfile.image,
+            name: newProfile.name,
+            introduce: newProfile.introduce,
+            link: newProfile.link || '',
+            company: newProfile.company || '',
+            location: newProfile.location || '',
+            email: newProfile.email || ''
           }
         });
 
-        uploadedImagePath = uploadResponse.data?.uploadFile.path || '';
+        props.updateProfile(data?.updateProfile!);
+        setEditModeFalse();
+        props.setAlertState({
+          msg: 'Profile changed successfully',
+          isPop: true,
+          isError: false
+        });
+      } catch (err) {
+        props.setAlertState({
+          msg: err.message,
+          isPop: true,
+          isError: true
+        });
+        setEditModeFalse();
+        setEditingProfile(oldProfile);
       }
-    } catch (err) {
-      alert(err.message);
-      return;
-    }
-
-    try {
-      const { data } = await updateProfile({
-        variables: {
-          id: newProfile._id,
-          image: uploadedImagePath ? uploadedImagePath : oldProfile.image,
-          name: newProfile.name,
-          introduce: newProfile.introduce,
-          link: newProfile.link,
-          company: newProfile.company,
-          location: newProfile.location,
-          email: newProfile.email
-        }
-      });
-
-      props.updateProfile(data?.updateProfile!);
-      setEditModeFalse();
-      props.setAlertState({
-        msg: 'Profile changed successfully',
-        isPop: true,
-        isError: false
-      });
-    } catch (err) {
-      props.setAlertState({
-        msg: err.message,
-        isPop: true,
-        isError: true
-      });
-      setEditModeFalse();
-      setEditingProfile(oldProfile);
-    }
-  }, []);
+    },
+    []
+  );
 
   return (
     <>

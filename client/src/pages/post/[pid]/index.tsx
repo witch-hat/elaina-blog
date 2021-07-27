@@ -4,9 +4,9 @@ import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 
 import { AppCommonProps } from 'src/pages/_app';
 import { initApolloClient } from 'src/apollo/withApollo';
-import { FIND_POST_BY_ID, PostType } from 'src/query/post';
-import { GET_PROFILE, ProfileType } from 'src/query/profile';
-import { GET_COMMENTS, CommentContainerType, GetCommentsQueryType } from 'src/query/comment';
+import { FindPostByIdQueryType, FindPostByIdVars, FIND_POST_BY_ID, PostDataType } from 'src/query/post';
+import { GET_PROFILE, ProfileDataType, GetProfileQueryType } from 'src/query/profile';
+import { GET_COMMENTS, CommentContainerType, GetCommentsQueryType, GetCommentVars } from 'src/query/comment';
 import { ArticleContainer, CommentContainer, RightSideContainer } from 'src/components/pages/post';
 
 const Container = styled.div({
@@ -48,9 +48,9 @@ const Comment = styled.section({
 
 interface ServerSideProps {
   categoryId: number;
-  post: PostType;
+  post: PostDataType;
   comment: CommentContainerType;
-  profile: ProfileType;
+  profile: ProfileDataType;
 }
 
 interface Props extends AppCommonProps, ServerSideProps {}
@@ -96,10 +96,22 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
 
   const id = context.query['pid'];
 
+  if (!id) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false
+      }
+    };
+  }
+
   try {
     const client = initApolloClient({}, context);
 
-    const postQueryResult = await client.query({ query: FIND_POST_BY_ID, variables: { id } });
+    const postQueryResult = await client.query<FindPostByIdQueryType, FindPostByIdVars>({
+      query: FIND_POST_BY_ID,
+      variables: { id: `${id}` }
+    });
     const findedPost = postQueryResult.data.findPostById;
 
     if (!findedPost) {
@@ -109,12 +121,12 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
     }
 
     const [commentQueryResult, profileQueryResult] = await Promise.all([
-      client.query<GetCommentsQueryType>({ query: GET_COMMENTS, variables: { _id: findedPost._id } }),
-      client.query({ query: GET_PROFILE })
+      client.query<GetCommentsQueryType, GetCommentVars>({ query: GET_COMMENTS, variables: { _id: findedPost._id } }),
+      client.query<GetProfileQueryType>({ query: GET_PROFILE })
     ]);
 
     const findedComment = commentQueryResult.data.comments;
-    const profile: ProfileType = profileQueryResult.data.profile;
+    const profile = profileQueryResult.data.profile;
 
     return {
       props: {

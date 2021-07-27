@@ -86,7 +86,6 @@ const CategoryTitle = styled.p<{ null?: boolean }>((props) => ({
 
 interface Props {
   category: CategoryDetailType;
-  latestPost: { _id: number; categoryId: number; title: string; article: string } | null;
   isLogin?: boolean;
   isEmpty?: boolean;
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { LatestPostQueryReturnType } from 'src/query/post';
+import { PostDetailDataType } from 'src/query/post';
 
 import { PostItem } from './PostItem';
 
@@ -12,7 +12,7 @@ const Container = styled.div({
 });
 
 interface Props {
-  posts: LatestPostQueryReturnType[];
+  posts: PostDetailDataType[];
 }
 
 export function PostContainer(props: Props) {

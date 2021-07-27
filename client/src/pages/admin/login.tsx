@@ -4,7 +4,7 @@ import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 
-import { LOGIN } from 'src/query/user';
+import { LOGIN, LoginQueryType, LoginVars } from 'src/query/user';
 import { RefInputBox } from 'src/components';
 import { appCommponProps } from 'src/pages/_app';
 
@@ -90,7 +90,7 @@ export default function Login() {
   const [isPasswordInputValid, setIsPasswordInputValid] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
-  const [login] = useMutation(LOGIN, {
+  const [login] = useMutation<LoginQueryType, LoginVars>(LOGIN, {
     onCompleted: () => {
       router.replace(router.asPath);
     },

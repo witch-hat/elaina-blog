@@ -1,11 +1,11 @@
-import { ProfileType } from 'src/query/profile';
+import { ProfileDataType } from 'src/query/profile';
 
 import { MemoizedProfileImageViewer } from './ProfileImageViewer';
 import { MemoizedProfileTextViewer } from './ProfileTextViewer';
 import { ButtonContainer } from './ButtonContainer';
 
 interface Props {
-  profile: ProfileType;
+  profile: ProfileDataType;
   isLogin: boolean;
   enterEditMode: () => void;
 }

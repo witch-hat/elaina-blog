@@ -6,7 +6,7 @@ import { useMutation } from '@apollo/client';
 import { ModalWrapper } from 'src/components';
 import { DELETE_CATEGORY, DeleteCategoryVars, DeleteCategoryQueryType } from 'src/query/category';
 import { useApollo } from 'src/apollo/apolloClient';
-import { IS_AUTH } from 'src/query/user';
+import { IsAuthQueryType, IS_AUTH } from 'src/query/user';
 
 const ModalContainer = styled.div({
   width: '25rem',
@@ -50,9 +50,9 @@ export function DeleteCategoryModal(props: DeleteModalProps) {
   const [deleteCategory] = useMutation<DeleteCategoryQueryType, DeleteCategoryVars>(DELETE_CATEGORY);
 
   async function handleDeleteCategory() {
-    const authResponse = await client.query({ query: IS_AUTH });
+    const authResponse = await client.query<IsAuthQueryType>({ query: IS_AUTH });
 
-    if (!authResponse.data.isAuth.isAuth) {
+    if (!authResponse.data.isAuth.isSuccess) {
       alert('auth failed');
       return router.push('/admin/login');
     }

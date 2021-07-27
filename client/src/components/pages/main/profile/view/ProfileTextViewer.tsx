@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBuilding, faEnvelope, faLink, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 
-import { ProfileType } from 'src/query/profile';
+import { ProfileDataType } from 'src/query/profile';
 
 const Name = styled.span({
   display: 'block',
@@ -70,7 +70,7 @@ const Paragraph = styled.p({
 });
 
 interface Props {
-  profile: ProfileType;
+  profile: ProfileDataType;
 }
 
 function ProfileTextViewer(props: Props) {

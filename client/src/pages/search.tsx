@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { GetServerSideProps } from 'next';
 
-import { PostType, SEARCH } from 'src/query/post';
+import { PostDataType, SEARCH, SearchPostQueryType, SearchPostVars } from 'src/query/post';
 import { initApolloClient } from 'src/apollo/withApollo';
 import { ResultContainer } from 'src/components/pages/search';
 
@@ -38,13 +38,13 @@ const Count = styled.p({
 });
 
 interface ServerSideProps {
-  searchResult: { post: PostType; content: string }[];
+  searchResult: { post: PostDataType; content: string }[];
 }
 
 interface Props extends ServerSideProps {}
 
 export default function SearchPage(props: Props) {
-  const searchResults: { post: PostType; content: string }[] = props.searchResult;
+  const searchResults: { post: PostDataType; content: string }[] = props.searchResult;
 
   if (searchResults.length === 0) {
     return (
@@ -68,9 +68,19 @@ export default function SearchPage(props: Props) {
 
 export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (context) => {
   const keyword = context.query['word'];
+
+  if (!keyword) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false
+      }
+    };
+  }
+
   const client = initApolloClient({}, context);
 
-  const { data } = await client.query({ query: SEARCH, variables: { keyword } });
+  const { data } = await client.query<SearchPostQueryType, SearchPostVars>({ query: SEARCH, variables: { keyword: `${keyword}` } });
 
   const searchResult = data.search.result;
 

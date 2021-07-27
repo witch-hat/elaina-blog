@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { useMutation } from '@apollo/client';
 
-import { UPDATE_PASSWORD } from 'src/query/user';
+import { UpdatePasswordQueryType, UpdatePasswordVars, UPDATE_PASSWORD } from 'src/query/user';
 import { trans, Lang } from 'src/resources/languages';
 
 import { PasswordInputItem } from './PasswordInputItem';
@@ -46,7 +46,7 @@ export function PassowordInputContainer(props: Props) {
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [isValidPassword, setIsValidPassword] = useState(false);
 
-  const [changePassword] = useMutation(UPDATE_PASSWORD, {
+  const [changePassword] = useMutation<UpdatePasswordQueryType, UpdatePasswordVars>(UPDATE_PASSWORD, {
     variables: {
       old: currentPassword,
       new: newPassword,

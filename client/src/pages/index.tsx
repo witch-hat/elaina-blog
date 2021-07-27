@@ -3,18 +3,17 @@ import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 
 import { initApolloClient } from 'src/apollo/withApollo';
-import { GET_LATEST_POSTS, GET_LATEST_POSTS_PER_CATEGORY, LatestPostQueryReturnType } from 'src/query/post';
+import { GET_LATEST_POSTS, GetLastestPostsQueryType, GetLatestPostsVars, PostDetailDataType } from 'src/query/post';
 import { GET_CATEGORIES_WITH_DETAILS, CategoryDetailType, CategoryDetailsQueryType } from 'src/query/category';
-import { GET_PROFILE, ProfileType } from 'src/query/profile';
+import { GET_PROFILE, ProfileDataType, GetProfileQueryType } from 'src/query/profile';
 import { AboutDataType, AboutQueryType, GET_ABOUT } from 'src/query/about';
 import { AppCommonProps, appCommponProps } from 'src/pages/_app';
 
 import { MainPageLayout, MemoizedContentCategory, MemoizedPostContainer, AboutPage } from 'src/components/pages/main';
 
 interface ServerSideProps {
-  categoryLatestPosts: ({ _id: number; categoryId: number; title: string; article: string } | null)[]; // This will be deprecated
-  latestPosts: LatestPostQueryReturnType[];
-  profile: ProfileType;
+  latestPosts: PostDetailDataType[];
+  profile: ProfileDataType;
   categories: CategoryDetailType[];
   about: AboutDataType;
 }
@@ -35,7 +34,7 @@ export default function Index(props: Props) {
   if (router.query.tab === 'category') {
     return (
       <MainPageLayout profile={props.profile} isLogin={props.app.isLogin}>
-        <MemoizedContentCategory categories={props.categories} latestPosts={props.categoryLatestPosts} isLogin={props.app.isLogin} />
+        <MemoizedContentCategory categories={props.categories} isLogin={props.app.isLogin} />
       </MainPageLayout>
     );
   }
@@ -71,29 +70,25 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
   }
 
   const apolloClient = initApolloClient({}, context);
-  const [profileQueryResult, categoryQueryResult, categoryLatestPostQueryResult, aboutQueryResult, latestPostsQueryResult] =
-    await Promise.all([
-      apolloClient.query<{ profile: ProfileType }>({ query: GET_PROFILE }),
-      apolloClient.query<CategoryDetailsQueryType>({ query: GET_CATEGORIES_WITH_DETAILS }),
-      apolloClient.query({ query: GET_LATEST_POSTS_PER_CATEGORY }), // this will be deprecated
-      apolloClient.query<AboutQueryType>({ query: GET_ABOUT }),
-      apolloClient.query<{ getLatestPosts: LatestPostQueryReturnType[] }>({
-        query: GET_LATEST_POSTS,
-        variables: {
-          page: 1
-        }
-      })
-    ]);
+  const [profileQueryResult, categoryQueryResult, aboutQueryResult, latestPostsQueryResult] = await Promise.all([
+    apolloClient.query<GetProfileQueryType>({ query: GET_PROFILE }),
+    apolloClient.query<CategoryDetailsQueryType>({ query: GET_CATEGORIES_WITH_DETAILS }),
+    apolloClient.query<AboutQueryType>({ query: GET_ABOUT }),
+    apolloClient.query<GetLastestPostsQueryType, GetLatestPostsVars>({
+      query: GET_LATEST_POSTS,
+      variables: {
+        page: 1
+      }
+    })
+  ]);
 
   const about = aboutQueryResult.data.about;
   const profile = profileQueryResult.data.profile;
   const categories = categoryQueryResult.data.categoriesWithDetails;
-  const categoryLatestPosts = categoryLatestPostQueryResult.data.getLatestPostsEachCategory;
   const latestPosts = latestPostsQueryResult.data.getLatestPosts;
 
   return {
     props: {
-      categoryLatestPosts,
       latestPosts,
       profile,
       categories,

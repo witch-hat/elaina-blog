@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faClock, faBuilding, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 
 import { FormatUnifier } from 'src/utils';
-import { ProfileType } from 'src/query/profile';
+import { ProfileDataType } from 'src/query/profile';
 
 const ContentInfoWrapper = styled.div({
   display: 'flex'
@@ -58,7 +58,7 @@ const Time = styled.span({
 });
 
 interface Props {
-  profile: ProfileType;
+  profile: ProfileDataType;
   time: Date;
 }
 

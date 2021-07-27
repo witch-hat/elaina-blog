@@ -18,7 +18,6 @@ const Container = styled.section({
 
 interface Props {
   categories: CategoryDetailType[];
-  latestPosts: ({ _id: number; categoryId: number; title: string; article: string } | null)[];
   isLogin: boolean;
 }
 
@@ -26,8 +25,8 @@ export function ContentCategory(props: Props) {
   return (
     <Container>
       {props.categories.length ? (
-        props.categories.map((category, index) => {
-          return <ContentCategoryItem key={category.title} category={category} latestPost={props.latestPosts[index]} />;
+        props.categories.map((category) => {
+          return <ContentCategoryItem key={category.title} category={category} />;
         })
       ) : (
         <NoCategory />

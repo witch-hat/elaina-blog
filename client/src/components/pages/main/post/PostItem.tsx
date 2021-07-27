@@ -5,7 +5,7 @@ import { faClock, faComment, faHeart } from '@fortawesome/free-solid-svg-icons';
 
 import { BorderBox } from 'src/components';
 import { FormatUnifier } from 'src/utils';
-import { LatestPostQueryReturnType } from 'src/query/post';
+import { PostDetailDataType } from 'src/query/post';
 
 const StyledA = styled.a({
   display: 'block',
@@ -49,7 +49,7 @@ const Detail = styled.span({
 });
 
 interface Props {
-  post: LatestPostQueryReturnType;
+  post: PostDetailDataType;
 }
 
 export function PostItem(props: Props) {

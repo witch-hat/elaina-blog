@@ -7,7 +7,7 @@ import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 
 import { trans, Lang } from 'src/resources/languages';
 
-import { LOGOUT } from 'src/query/user';
+import { LOGOUT, LogoutQueryType } from 'src/query/user';
 import { DropDownMenu } from '../common/box/DropDownMenu';
 
 const AdminDropDown = styled.div({});
@@ -38,7 +38,7 @@ interface Props {
 export function AdminMenu(props: Props) {
   const router = useRouter();
 
-  const [logout] = useMutation(LOGOUT, {
+  const [logout] = useMutation<LogoutQueryType>(LOGOUT, {
     onCompleted: () => {
       router.reload();
     }

@@ -1,12 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import { InferGetServerSidePropsType, NextPageContext } from 'next';
-import { withRouter, NextRouter, useRouter } from 'next/router';
+import { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
 
 import { Writer } from 'src/components/pages/admin';
 import { initApolloClient } from 'src/apollo/withApollo';
-import { GET_PROFILE, ProfileType } from 'src/query/profile';
-import { AppCommonProps, appCommponProps } from 'src/pages/_app';
+import { GetProfileQueryType, GET_PROFILE, ProfileDataType } from 'src/query/profile';
+import { appCommponProps } from 'src/pages/_app';
 import { CategoryDetailType, GET_CATEGORIES_WITH_DETAILS, CategoryDetailsQueryType } from 'src/query/category';
 
 const Container = styled.div({
@@ -16,20 +16,18 @@ const Container = styled.div({
   padding: '.5rem'
 });
 
-interface WithRouterProps {
-  router: NextRouter;
+interface ServerSideProps {
+  profile: ProfileDataType;
+  categories: CategoryDetailType[];
 }
 
-interface Props extends AppCommonProps, WithRouterProps {
-  profile: InferGetServerSidePropsType<typeof getServerSideProps>;
-  categories: InferGetServerSidePropsType<typeof getServerSideProps>;
-}
+interface Props extends ServerSideProps {}
 
-function WriterPage(props: Props) {
+export default function WriterPage(props: Props) {
   const router = useRouter();
 
-  const profile: ProfileType = props.profile;
-  const categoryTitleFromQuery = props.router.query.category as string | undefined;
+  const profile: ProfileDataType = props.profile;
+  const categoryTitleFromQuery = router.query.category as string | undefined;
   const categories: CategoryDetailType[] = props.categories;
 
   if (categoryTitleFromQuery && !categories.find((category) => category.title === categoryTitleFromQuery)) {
@@ -48,9 +46,7 @@ function WriterPage(props: Props) {
   );
 }
 
-export default withRouter(WriterPage);
-
-export async function getServerSideProps(context: NextPageContext) {
+export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (context) => {
   if (!appCommponProps.app.isLogin) {
     return {
       redirect: {
@@ -62,7 +58,7 @@ export async function getServerSideProps(context: NextPageContext) {
 
   const client = initApolloClient({}, context);
   const [profileQuery, categoryQuery] = await Promise.all([
-    client.query<{ profile: ProfileType }>({ query: GET_PROFILE }),
+    client.query<GetProfileQueryType>({ query: GET_PROFILE }),
     client.query<CategoryDetailsQueryType>({ query: GET_CATEGORIES_WITH_DETAILS })
   ]);
 
@@ -75,4 +71,4 @@ export async function getServerSideProps(context: NextPageContext) {
       categories
     }
   };
-}
+};

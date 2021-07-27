@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import styled from 'styled-components';
 import { faBuilding, faEnvelope, faLink, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 
-import { ProfileType } from 'src/query/profile';
+import { ProfileDataType } from 'src/query/profile';
 
 import { MemoizedProfileInput } from './ProfileInput';
 
@@ -35,10 +35,10 @@ const Editor = styled.textarea((props) => ({
 }));
 
 interface Props {
-  profile: ProfileType;
-  editingProfile: ProfileType;
+  profile: ProfileDataType;
+  editingProfile: ProfileDataType;
   updateEditingProfile: (profileProperty: string) => (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleSubmit: (e: React.FormEvent<HTMLFormElement>, oldProfile: ProfileType, newProfile: ProfileType) => Promise<void>;
+  handleSubmit: (e: React.FormEvent<HTMLFormElement>, oldProfile: ProfileDataType, newProfile: ProfileDataType) => Promise<void>;
   setEditModeFalse: () => void;
   onChangeIntroduce: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }

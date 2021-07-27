@@ -4,8 +4,8 @@ import { GetServerSideProps } from 'next';
 import { appCommponProps } from 'src/pages/_app';
 import { initApolloClient } from 'src/apollo/withApollo';
 import { Writer } from 'src/components/pages/admin';
-import { GET_PROFILE } from 'src/query/profile';
-import { FIND_POST_BY_ID } from 'src/query/post';
+import { GetProfileQueryType, GET_PROFILE } from 'src/query/profile';
+import { FindPostByIdQueryType, FindPostByIdVars, FIND_POST_BY_ID } from 'src/query/post';
 import {
   CategoryDetailType,
   FIND_CATEGORY_BY_ID,
@@ -40,7 +40,15 @@ export default function PostEdit(props: Props) {
 
 export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (context) => {
   const postId = context.query['pid'];
-  console.log(postId);
+
+  if (!postId) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false
+      }
+    };
+  }
 
   if (!appCommponProps.app.isLogin) {
     return {
@@ -54,8 +62,8 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
   const client = initApolloClient({}, context);
 
   const [profile, findPostResult, categoriesQuery] = await Promise.all([
-    client.query({ query: GET_PROFILE }),
-    client.query({ query: FIND_POST_BY_ID, variables: { id: postId } }),
+    client.query<GetProfileQueryType>({ query: GET_PROFILE }),
+    client.query<FindPostByIdQueryType, FindPostByIdVars>({ query: FIND_POST_BY_ID, variables: { id: `${postId}` } }),
     client.query<CategoryDetailsQueryType>({ query: GET_CATEGORIES_WITH_DETAILS })
   ]);
   const author = profile.data.profile.name;

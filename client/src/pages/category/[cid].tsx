@@ -7,7 +7,7 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { AppCommonProps } from 'src/pages/_app';
 import { initApolloClient } from 'src/apollo/withApollo';
 import { PostItem } from 'src/components/pages/main/post/PostItem';
-import { FIND_SAME_CATEGORY_POSTS, LatestPostQueryReturnType } from 'src/query/post';
+import { FindSameCategoryPostsQueryType, FindSameCategoryPostsVars, FIND_SAME_CATEGORY_POSTS, PostDetailDataType } from 'src/query/post';
 
 const Container = styled.div({
   display: 'flex',
@@ -66,7 +66,7 @@ const NoPosts = styled.div({
 
 interface ServerSideProps {
   categoryTitle: string;
-  posts: LatestPostQueryReturnType[];
+  posts: PostDetailDataType[];
 }
 
 interface Props extends ServerSideProps, AppCommonProps {}
@@ -108,13 +108,13 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
   const categoryId = context.resolvedUrl.split('/')[2];
   const apolloClient = initApolloClient({}, context);
 
-  const sameCategoryPostsQueryResult = await apolloClient.query({
+  const sameCategoryPostsQueryResult = await apolloClient.query<FindSameCategoryPostsQueryType, FindSameCategoryPostsVars>({
     query: FIND_SAME_CATEGORY_POSTS,
     variables: { categoryId: Number.parseInt(categoryId) }
   });
 
   const categoryTitle = sameCategoryPostsQueryResult.data.findSameCategoryPosts.category.title;
-  const posts: LatestPostQueryReturnType[] = sameCategoryPostsQueryResult.data.findSameCategoryPosts.post;
+  const posts = sameCategoryPostsQueryResult.data.findSameCategoryPosts.post;
 
   return {
     props: {

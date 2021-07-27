@@ -15,6 +15,11 @@ export interface CommentLogDataType {
   postId: number;
   commentIndex: number;
   replyIndex: number | null;
+  postTitle: string;
+}
+
+export interface CommentLogVars {
+  page: number;
 }
 
 export interface CommentLogQueryType {
@@ -22,8 +27,8 @@ export interface CommentLogQueryType {
 }
 
 export const GET_COMMENT_LOGS = gql`
-  query {
-    commentLogs {
+  query ($page: Int!) {
+    commentLogs(page: $page) {
       _id
       time
       event
@@ -31,6 +36,7 @@ export const GET_COMMENT_LOGS = gql`
       postId
       commentIndex
       replyIndex
+      postTitle
     }
   }
 `;

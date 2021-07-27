@@ -8,9 +8,9 @@ import { useRouter } from 'next/router';
 
 import { RefInputBox, useWidth, Loading } from 'src/components';
 import { CategoryDetailType } from 'src/query/category';
-import { EDIT_POST, WRITE_POST } from 'src/query/post';
+import { EditPostQueryType, EditPostVars, EDIT_POST, WritePostQueryType, WritePostVars, WRITE_POST } from 'src/query/post';
 import { useApollo } from 'src/apollo/apolloClient';
-import { IS_AUTH } from 'src/query/user';
+import { IsAuthQueryType, IS_AUTH } from 'src/query/user';
 import styles from 'src/styles/markdown-styles.module.css';
 
 import { Menu } from './Menu';
@@ -123,8 +123,8 @@ export function Writer(props: Props) {
   const [visibleSubmitBtn, setVisibleSubmitBtn] = useState(true);
 
   const client = useApollo();
-  const [writePost, { loading: writeLoading }] = useMutation(WRITE_POST);
-  const [editPost, { loading: editLoading }] = useMutation(EDIT_POST);
+  const [writePost, { loading: writeLoading }] = useMutation<WritePostQueryType, WritePostVars>(WRITE_POST);
+  const [editPost, { loading: editLoading }] = useMutation<EditPostQueryType, EditPostVars>(EDIT_POST);
 
   useEffect(() => {
     if (mode == Mode.Write) {
@@ -203,8 +203,8 @@ export function Writer(props: Props) {
       return;
     }
 
-    const { data } = await client.query({ query: IS_AUTH });
-    const isAdmin = data.isAuth.isAuth;
+    const { data } = await client.query<IsAuthQueryType>({ query: IS_AUTH });
+    const isAdmin = data.isAuth.isSuccess;
 
     if (!isAdmin) {
       alert('로그인에러. 다시 로그인해주세요.');
@@ -216,11 +216,16 @@ export function Writer(props: Props) {
       const mutateData = await writePost({
         variables: {
           title,
-          createdAt: new Date().toISOString(),
+          createdAt: new Date(),
           article,
           category: selectedCategory === DEFAULT_CATEGORY ? '' : selectedCategory
         }
       });
+
+      if (!mutateData.data) {
+        alert('Cannot create post... please retry!');
+        return;
+      }
 
       router.push(`/post/${mutateData.data.writePost._id}`);
     } catch (err) {
@@ -239,8 +244,8 @@ export function Writer(props: Props) {
       return;
     }
 
-    const { data } = await client.query({ query: IS_AUTH });
-    const isAdmin = data.isAuth.isAuth;
+    const { data } = await client.query<IsAuthQueryType>({ query: IS_AUTH });
+    const isAdmin = data.isAuth.isSuccess;
 
     if (!isAdmin) {
       alert('로그인에러. 다시 로그인해주세요.');

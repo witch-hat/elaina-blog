@@ -2,7 +2,7 @@ import { useMutation } from '@apollo/client';
 
 import { ReplyType, WRITE_REPLY, WriteReplyVars, WriteReplyQueryType } from 'src/query/comment';
 import { useApollo } from 'src/apollo/apolloClient';
-import { IS_AUTH } from 'src/query/user';
+import { IsAuthQueryType, IS_AUTH } from 'src/query/user';
 import { PUSH_COMMENT_LOG, CommentEvent, PushCommentLogVars, PushCommentLogQueryType } from 'src/query/comment-log';
 
 import { Writer } from './Writer';
@@ -27,8 +27,8 @@ export function ReplyWriter(props: Props) {
       return;
     }
 
-    const AuthResponse = await client.query({ query: IS_AUTH });
-    const isAdmin = AuthResponse.data.isAuth.isAuth;
+    const AuthResponse = await client.query<IsAuthQueryType>({ query: IS_AUTH });
+    const isAdmin = AuthResponse.data.isAuth.isSuccess;
     const createdAt = new Date();
 
     if (isAdmin) {

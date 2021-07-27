@@ -12,7 +12,7 @@ import {
 } from 'src/query/comment';
 import { DELETE_COMMENT_LOG, DeleteCommentLogQueryType, DeleteCommentLogVars } from 'src/query/comment-log';
 import { useApollo } from 'src/apollo/apolloClient';
-import { IS_AUTH } from 'src/query/user';
+import { IsAuthQueryType, IS_AUTH } from 'src/query/user';
 
 import { CommentBoxLayout } from './BoxLayout';
 
@@ -39,8 +39,8 @@ export function ReplyBox(props: Props) {
       throw new Error('내용을 입력해 주세요.');
     }
 
-    const AuthResponse = await client.query({ query: IS_AUTH });
-    const isAuth = AuthResponse.data.isAuth.isAuth;
+    const AuthResponse = await client.query<IsAuthQueryType>({ query: IS_AUTH });
+    const isAuth = AuthResponse.data.isAuth.isSuccess;
 
     if (isAuth) {
       try {
@@ -76,8 +76,8 @@ export function ReplyBox(props: Props) {
   }
 
   async function handleDeleteReply(password: string) {
-    const AuthResponse = await client.query({ query: IS_AUTH });
-    const isAuth = AuthResponse.data.isAuth.isAuth;
+    const AuthResponse = await client.query<IsAuthQueryType>({ query: IS_AUTH });
+    const isAuth = AuthResponse.data.isAuth.isSuccess;
 
     // Admin can delete all replies
     if (isAuth) {

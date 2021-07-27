@@ -57,10 +57,11 @@ interface Props {
 export function CommentLogBox(props: Props) {
   const dateDifferent = FormatUnifier.calculateDate(new Date(props.time));
   const event = props.isEvent === null ? `User upload new comment ${dateDifferent}` : `User upload new reply ${dateDifferent}`;
+  console.log(props.postId);
   return (
     <div>
       {/* <UserImage src='/public/images/FakeProfile.png'></UserImage> */}
-      <Link href={`post/${props.postId}`}>
+      <Link href={`/post/${props.postId}`}>
         <Context>
           <CategoryTitle>{props.categoryTitle}</CategoryTitle>
           <PostTitle>{props.postTitle}</PostTitle>

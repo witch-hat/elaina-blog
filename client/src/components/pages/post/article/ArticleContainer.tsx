@@ -4,13 +4,20 @@ import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 
-import { DELETE_POST, FIND_SAME_CATEGORY_POSTS } from 'src/query/post';
-import { IS_AUTH } from 'src/query/user';
+import {
+  DeletePostQueryType,
+  DeletePostVars,
+  DELETE_POST,
+  FindSameCategoryPostsQueryType,
+  FindSameCategoryPostsVars,
+  FIND_SAME_CATEGORY_POSTS
+} from 'src/query/post';
+import { IsAuthQueryType, IS_AUTH } from 'src/query/user';
 import { useApollo } from 'src/apollo/apolloClient';
-import { ProfileType } from 'src/query/profile';
+import { ProfileDataType } from 'src/query/profile';
 
 import { ArticleMenu } from './ArticleMenu';
-import { DELETE_POST_ALL_COMMENT_LOG } from 'src/query/comment-log';
+import { DeletePostAllCommentLogQueryType, DeletePostAllCommentLogVars, DELETE_POST_ALL_COMMENT_LOG } from 'src/query/comment-log';
 import { MemoizedArticle } from './Article';
 
 interface ModalProps {
@@ -46,7 +53,7 @@ const Title = styled.title({
 
 interface Props {
   title: string;
-  profile: ProfileType;
+  profile: ProfileDataType;
   createdAt: number;
   article: string;
   isLogin: boolean;
@@ -59,15 +66,15 @@ export function ArticleContainer(props: Props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const client = useApollo();
-  const [deletePost] = useMutation(DELETE_POST);
-  const [deletePostAllCommentLog] = useMutation(DELETE_POST_ALL_COMMENT_LOG);
+  const [deletePost] = useMutation<DeletePostQueryType, DeletePostVars>(DELETE_POST);
+  const [deletePostAllCommentLog] = useMutation<DeletePostAllCommentLogQueryType, DeletePostAllCommentLogVars>(DELETE_POST_ALL_COMMENT_LOG);
 
   const id = router.query['pid']!;
 
   async function handleDeleteButtonClick() {
-    const authResponse = await client.query({ query: IS_AUTH });
+    const authResponse = await client.query<IsAuthQueryType>({ query: IS_AUTH });
 
-    const isAdmin = authResponse.data.isAuth.isAuth;
+    const isAdmin = authResponse.data.isAuth.isSuccess;
 
     if (isAdmin) {
       try {
@@ -84,8 +91,21 @@ export function ArticleContainer(props: Props) {
           })
         ]);
 
-        const categoryId = deleteResponse.data.deletePost.categoryId;
-        const { data } = await client.query({ query: FIND_SAME_CATEGORY_POSTS, variables: { categoryId } });
+        if (!deleteResponse.data) {
+          alert('Cannot delete post...');
+          return;
+        }
+
+        if (!deleteResponse.data.deletePost.isSuccess) {
+          alert('Cannot delete post...');
+          return;
+        }
+
+        const categoryId = deleteResponse.data.deletePost.categoryId!;
+        const { data } = await client.query<FindSameCategoryPostsQueryType, FindSameCategoryPostsVars>({
+          query: FIND_SAME_CATEGORY_POSTS,
+          variables: { categoryId }
+        });
 
         if (data.findSameCategoryPosts.post.length === 0) {
           router.push('/');
