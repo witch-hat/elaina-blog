@@ -11,13 +11,7 @@ import { IsAuthQueryType, IS_AUTH } from 'src/query/user';
 import { MemoizedProfileImageEditor } from './ProfileImageEditor';
 import { MemoizedProfileFormEditor } from './ProfileFormEditor';
 import { ButtonContainer } from './ButtonContainer';
-
-interface CropperProps {
-  imageFile: File;
-  onSave: (blob: Blob) => void;
-  onCancel: () => void;
-  visible: boolean;
-}
+import { CropperProps } from './ProfileImageCropper';
 
 const DynamicProfileImageCropper = dynamic<CropperProps>(() => import('./ProfileImageCropper').then((mod) => mod.ProfileImageCropper), {
   ssr: false

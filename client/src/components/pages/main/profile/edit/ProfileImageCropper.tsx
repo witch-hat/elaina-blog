@@ -58,14 +58,14 @@ async function getCropImage(image: HTMLImageElement, imageName: string, imageTyp
   });
 }
 
-interface Props {
+export interface CropperProps {
   imageFile: File;
   onSave: (blob: Blob) => void;
   onCancel: () => void;
   visible: boolean;
 }
 
-export function ProfileImageCropper(props: Props) {
+export function ProfileImageCropper(props: CropperProps) {
   const [crop, setCrop] = useState<Crop>({ aspect: 1 / 1 });
   const [profileImage, setProfileImage] = useState<string>(props.imageFile ? URL.createObjectURL(props.imageFile) : '');
   const [profileHtmlImageElement, setProfileHtmlImageElement] = useState<HTMLImageElement>();
