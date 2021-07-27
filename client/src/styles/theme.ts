@@ -15,6 +15,7 @@ export const theme: { light: DefaultTheme; dark: DefaultTheme } = {
     adminReplyColor: 'rgba(145, 255, 0, 0.15)',
     loadingBackground: 'rgba(255, 255, 255, .8)',
     selectedButton: 'rgba(200, 200, 200, .8)',
+    replyBackground: '#eee',
     // Text Color
     blogName: '#121314',
     mainText: '#121314',
@@ -71,6 +72,7 @@ export const theme: { light: DefaultTheme; dark: DefaultTheme } = {
     adminReplyColor: 'rgba(77, 77, 77, 0.7)',
     loadingBackground: 'rgba(0, 0, 0, .7)',
     selectedButton: 'rgba(60, 60, 60, .8)',
+    replyBackground: '#333',
     // Text Color
     blogName: '#f1f2f3',
     mainText: '#f1f2f3',

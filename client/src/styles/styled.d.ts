@@ -32,6 +32,7 @@ declare module 'styled-components' {
     adminReplyColor: string;
     loadingBackground: string;
     selectedButton: string;
+    replyBackground: string;
     // Text Color
     blogName: string;
     mainText: string;
