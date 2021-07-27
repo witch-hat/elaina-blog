@@ -21,7 +21,7 @@ export const profileTypeDef = gql`
 
   extend type Mutation {
     updateProfile(
-      id: String
+      _id: String
       image: String
       name: String
       introduce: String
