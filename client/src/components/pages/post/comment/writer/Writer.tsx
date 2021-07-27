@@ -6,7 +6,8 @@ import { MemoizedInputContainer } from './InputContainer';
 
 const EditorContainer = styled.form({
   width: '100%',
-  margin: '1rem 0 .5rem'
+  margin: '1rem 0 .5rem 0',
+  padding: '0 1rem'
 });
 
 const InputWrapper = styled.div({
@@ -36,15 +37,14 @@ const Editor = styled.textarea((props) => ({
 }));
 
 const ButtonContainer = styled.div({
-  position : 'relative',
-  width : '100%',
-  height : '2.5rem',
-  margin: '1rem 0 0'
+  display: 'flex',
+  width: '100%',
+  height: '2.5rem',
+  margin: '1rem 0 0',
+  justifyContent: 'flex-end'
 });
 
 const SubmitButton = styled.button((props) => ({
-  position: 'absolute',
-  right : 0,
   display: 'flex',
   width: '6rem',
   height: '100%',

@@ -12,10 +12,10 @@ const Container = styled.div({
   display: 'flex',
   width: '100%',
   minHeight: '20rem',
-  margin: '20px 0',
+  margin: '20px',
   padding: '.5rem 3.5rem',
   flexDirection: 'column',
-  jusitfyContent: 'flex-start',
+  jusitfyContent: 'start',
   alignItems: 'center',
   '@media screen and (max-width: 767px)': {
     padding: '.5rem'

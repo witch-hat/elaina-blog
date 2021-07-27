@@ -27,19 +27,19 @@ const Author = styled.div({
 
 const Time = styled.span({
   display: 'flex',
-  alignItems: 'center',
-  marginRight: '.7rem'
+  marginRight: '.7rem',
+  alignItems: 'center'
 });
 
 const AuthorCommentSign = styled.div<{ isAdmin: boolean }>((props) => ({
   display: props.isAdmin ? 'block' : 'none',
   padding: '.1rem .5rem',
-  transition: '.2s all',
   backgroundColor: props.theme.adminCommentColor,
+  borderRadius: '.5rem',
   color: props.theme.adminCommentTextColor,
   fontWeight: props.theme.adminCommentTextWeight,
-  overflow: 'hidden',
-  borderRadius: '.5rem'
+  transition: '.2s all',
+  overflow: 'hidden'
 }));
 
 interface Props {
