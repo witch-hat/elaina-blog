@@ -9,8 +9,7 @@ const ReplyContainer = styled.div<{ isAdmin: boolean }>({
   width: '100%',
   margin: '.5rem 0',
   padding: '.5rem',
-  borderRadius: '.5rem',
-  backgroundColor: 'rgba(0, 0, 0, .01)'
+  borderLeft: '3px solid #727272'
 });
 
 interface Props {

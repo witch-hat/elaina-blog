@@ -11,7 +11,7 @@ export const theme: { light: DefaultTheme; dark: DefaultTheme } = {
     articleBackground: '#fff',
     secondaryContentBackground: '#eee',
     editorBackground: '#fff',
-    adminCommentColor: '#333',
+    adminCommentSignColor: '#333',
     adminReplyColor: 'rgba(145, 255, 0, 0.15)',
     loadingBackground: 'rgba(255, 255, 255, .8)',
     selectedButton: 'rgba(200, 200, 200, .8)',
@@ -36,7 +36,6 @@ export const theme: { light: DefaultTheme; dark: DefaultTheme } = {
     navHoverUnderBar: '#888',
     shadowColor: 'rgba(38, 38, 38, 0.4)',
     inputOutline: 'rgba(134, 125, 255, .7)',
-
     // submit
     submitButton: {
       buttonColor: '#2a9df4',
@@ -68,7 +67,7 @@ export const theme: { light: DefaultTheme; dark: DefaultTheme } = {
     articleBackground: '#252525',
     secondaryContentBackground: '#313131',
     editorBackground: '#313131',
-    adminCommentColor: '#fff',
+    adminCommentSignColor: '#fff',
     adminReplyColor: 'rgba(77, 77, 77, 0.7)',
     loadingBackground: 'rgba(0, 0, 0, .7)',
     selectedButton: 'rgba(60, 60, 60, .8)',

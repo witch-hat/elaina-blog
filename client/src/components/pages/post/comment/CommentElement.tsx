@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { cloneDeep } from 'lodash';
 
-import { BorderBox } from 'src/components';
 import { ReplyType, CommentType, CommentContainerType } from 'src/query/comment';
 import { trans, Lang } from 'src/resources/languages';
 
@@ -10,9 +9,15 @@ import { CommentBox } from './box/CommentBox';
 import { ReplyWriter } from './writer/ReplyWriter';
 import { ReplyElement } from './ReplyElement';
 
-const Container = styled.div({
-  borderRadius: '.5rem'
-});
+const Container = styled.div((props) => ({
+  display: 'flex',
+  width: '100%',
+  margin: '1rem 0 0',
+  borderTop: `3px solid ${props.theme.borderColor}`,
+  transition: '.2s all',
+  justifyContent: 'center',
+  alignItems: 'center'
+}));
 
 const ReplyButtonContainer = styled.div({
   display: 'flex',
@@ -83,58 +88,54 @@ export function CommentElement(props: Props) {
 
   return (
     <Container>
-      <BorderBox isHoverEffect={false} styles={{ margin: '1rem 0 0', width: '100%' }}>
-        <CommentBox
-          isLogin={props.isLogin}
-          postId={props.postId}
-          isCommentFromAdmin={props.isCommentFromAdmin}
-          comment={props.comment}
-          author={props.author}
-          commentIndex={props.commentIndex}
-          editComment={props.editComment}
-          deleteComment={props.deleteComment}
-        >
-          <>
-            <ReplyButtonContainer>
-              <ReplyButton onClick={() => props.comment.replies.length && setIsShowingReply(!isShowingReply)}>{`${
-                isShowingReply ? 'Hide' : `Show ${props.comment.replies.length}`
-              } Reply `}</ReplyButton>
-              <ReplyButton onClick={() => setIsAddReply(!isAddReply)}>
-                {isAddReply ? trans(Lang.Cancel) : trans(Lang.WriteReply)}
-              </ReplyButton>
-            </ReplyButtonContainer>
-            {isAddReply && (
-              <ReplyWriter
-                isLogin={props.isLogin}
-                onAddReply={onAddReply}
-                categoryId={props.categoryId}
-                postId={props.postId}
-                commentIndex={props.commentIndex}
-                replyIndex={props.comment.replies.length + 1}
-              />
-            )}
-            <ReplyContainer>
-              {isShowingReply
-                ? props.comment.replies.map((reply: ReplyType, index: number) => {
-                    return (
-                      <ReplyElement
-                        key={index}
-                        postId={props.postId}
-                        isLogin={props.isLogin}
-                        author={props.author}
-                        commentIndex={props.commentIndex}
-                        reply={reply}
-                        replyIndex={index}
-                        editReply={onEditReply}
-                        deleteReply={onDeleteReply}
-                      />
-                    );
-                  })
-                : null}
-            </ReplyContainer>
-          </>
-        </CommentBox>
-      </BorderBox>
+      <CommentBox
+        isLogin={props.isLogin}
+        postId={props.postId}
+        isCommentFromAdmin={props.isCommentFromAdmin}
+        comment={props.comment}
+        author={props.author}
+        commentIndex={props.commentIndex}
+        editComment={props.editComment}
+        deleteComment={props.deleteComment}
+      >
+        <>
+          <ReplyButtonContainer>
+            <ReplyButton onClick={() => props.comment.replies.length && setIsShowingReply(!isShowingReply)}>{`${
+              isShowingReply ? 'Hide' : `Show ${props.comment.replies.length}`
+            } Reply `}</ReplyButton>
+            <ReplyButton onClick={() => setIsAddReply(!isAddReply)}>{isAddReply ? trans(Lang.Cancel) : trans(Lang.WriteReply)}</ReplyButton>
+          </ReplyButtonContainer>
+          {isAddReply && (
+            <ReplyWriter
+              isLogin={props.isLogin}
+              onAddReply={onAddReply}
+              categoryId={props.categoryId}
+              postId={props.postId}
+              commentIndex={props.commentIndex}
+              replyIndex={props.comment.replies.length + 1}
+            />
+          )}
+          <ReplyContainer>
+            {isShowingReply
+              ? props.comment.replies.map((reply: ReplyType, index: number) => {
+                  return (
+                    <ReplyElement
+                      key={index}
+                      postId={props.postId}
+                      isLogin={props.isLogin}
+                      author={props.author}
+                      commentIndex={props.commentIndex}
+                      reply={reply}
+                      replyIndex={index}
+                      editReply={onEditReply}
+                      deleteReply={onDeleteReply}
+                    />
+                  );
+                })
+              : null}
+          </ReplyContainer>
+        </>
+      </CommentBox>
     </Container>
   );
 }

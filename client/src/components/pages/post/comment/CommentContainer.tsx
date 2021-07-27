@@ -15,7 +15,7 @@ const Container = styled.div({
   margin: '20px',
   padding: '.5rem 3.5rem',
   flexDirection: 'column',
-  jusitfyContent: 'start',
+  jusitfyContent: 'flex-start',
   alignItems: 'center',
   '@media screen and (max-width: 767px)': {
     padding: '.5rem'

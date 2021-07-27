@@ -28,7 +28,7 @@ declare module 'styled-components' {
     articleBackground: string;
     secondaryContentBackground: string;
     editorBackground: string;
-    adminCommentColor: string;
+    adminCommentSignColor: string;
     adminReplyColor: string;
     loadingBackground: string;
     selectedButton: string;
