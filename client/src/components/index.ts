@@ -8,16 +8,18 @@ export { RefInputBox } from './common/box/RefInputBox';
 export { NoRefInputBox } from './common/box/NoRefInputBox';
 export { BorderBox } from './common/box/BorderBox';
 export { AlertBox, initAlert } from './common/box/AlertBox';
-export type { AlertStateType } from './common/box/AlertBox';
+export type { AlertStateType, AlertProps } from './common/box/AlertBox';
 export { DropDownMenu } from './common/box/DropDownMenu';
 
 // Wrapper
 export { HorizontalScrollWrapper } from './common/wrapper/HorizontalScrollWrapper';
 export { FocusWrapper } from './common/wrapper/FocusWrapper';
 export { ModalWrapper } from './common/wrapper/ModalWrapper';
+export { CircleRippleWrapper } from './common/wrapper/CircleRippleWrapper';
 
 // Images
 export { RoundImage } from './common/image/RoundImage';
+export { NoImage } from './common/image/NoImage';
 
 // hook
 export { useWidth } from './common/hook/useWidth';

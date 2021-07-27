@@ -7,8 +7,20 @@ export interface FileType {
   path?: string;
 }
 
+export interface UploadFileDataType {
+  path: string;
+}
+
+export interface UploadFileVars {
+  file: Blob | any; // what is this type??
+}
+
+export interface UploadFileQueryType {
+  uploadFile: UploadFileDataType;
+}
+
 export const UPLOAD_FILE = gql`
-  mutation($file: Upload!) {
+  mutation ($file: Upload!) {
     uploadFile(file: $file) {
       path
     }

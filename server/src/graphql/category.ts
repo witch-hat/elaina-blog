@@ -1,4 +1,5 @@
 import { ApolloError, gql, UserInputError, ValidationError } from 'apollo-server';
+import { Query, UpdateWriteOpResult } from 'mongoose';
 
 import { CategoryModel, Category } from '../model/category';
 import { CommentModel } from '../model/comment';
@@ -9,24 +10,15 @@ export const categoryTypeDef = gql`
   type Category {
     _id: Int!
     title: String!
-    description: String!
-    previewImage: String!
-    order: Int!
+    order: Int
   }
 
   type CategoryWithDetails {
     _id: Int!
     title: String!
-    description: String!
-    previewImage: String!
     postCount: Int
     recentCreatedAt: DateTime
-    order: Int!
-  }
-
-  type AddResponse {
-    isSuccess: Boolean
-    _id: Int
+    order: Int
   }
 
   extend type Query {
@@ -36,28 +28,22 @@ export const categoryTypeDef = gql`
   }
 
   extend type Mutation {
-    addCategory(title: String!, description: String!, previewImage: String!): AddResponse
-    updateCategory(id: Int, title: String, description: String): Void
-    deleteCategory(index: Int!): Void
+    addCategory(title: String!): Category
+    updateCategory(id: Int, title: String): Category
+    deleteCategory(index: Int!): MutationResponse
     orderCategory(ids: [Int]): Void
   }
 `;
 
 export const categoryResolver = {
   Query: {
-    async categories() {
-      try {
-        const categoryList = await CategoryModel.find({}, {}, { sort: { order: 1 } });
-        return categoryList;
-      } catch (err) {
-        throw err;
-      }
-    },
-
     async categoriesWithDetails() {
       try {
-        const categories = await CategoryModel.find({}, {}, { sort: { order: 1 } });
-        const posts = await PostModel.find();
+        const [categories, posts]: [Category[], Post[]] = await Promise.all([
+          // exclude default category
+          CategoryModel.find({ $and: [{ _id: { $gte: 1 } }] }, {}, { sort: { order: 1 } }),
+          PostModel.find()
+        ]);
 
         const countMap: Map<number, number> = new Map<number, number>();
         const createdMap: Map<number, Date | null> = new Map<number, Date | null>();
@@ -84,8 +70,6 @@ export const categoryResolver = {
           return {
             _id: category._id,
             title: category.title,
-            description: category.description,
-            previewImage: category.previewImage,
             postCount,
             recentCreatedAt,
             order: category.order
@@ -98,9 +82,9 @@ export const categoryResolver = {
       }
     },
 
-    async findCategoryById(_: any, args: { id: number }, context: ContextType) {
+    async findCategoryById(_: any, args: { id: number }) {
       try {
-        const category = CategoryModel.findById(args.id);
+        const category: Category | null = await CategoryModel.findById(args.id);
         return category;
       } catch (err) {
         throw err;
@@ -109,98 +93,124 @@ export const categoryResolver = {
   },
 
   Mutation: {
-    async addCategory(_: any, args: { title: string; description: string; previewImage: string }, context: ContextType) {
+    async addCategory(_: any, args: { title: string }) {
       try {
-        const categoryList: Category[] = await CategoryModel.find();
+        if (!args.title) {
+          throw new UserInputError('카테고리 제목을 입력해주세요.');
+        }
 
-        if (!args.title || !args.description) {
-          throw new UserInputError('카테고리 제목 또는 소개를 입력해주세요.');
-        } else if (categoryList.filter((category) => category.title.toLowerCase() === args.title.toLowerCase()).length) {
+        const categories: Category[] = await CategoryModel.find({}, {}, { sort: { _id: -1 } });
+
+        const isDuplicated = categories.filter((category) => category.title.toLowerCase() === args.title.toLowerCase()).length > 0;
+        if (isDuplicated) {
           throw new ValidationError('이미 존재하는 제목입니다.');
         }
 
-        const newId = (categoryList[categoryList.length - 1]._id += 1);
-        const order = categoryList.length;
+        const lastCategory = categories[0];
+        let newCategory: Category;
 
-        CategoryModel.create({
-          _id: newId,
-          title: args.title,
-          description: args.description,
-          previewImage: args.previewImage,
-          order
-        });
+        if (lastCategory) {
+          const newId = (lastCategory._id += 1);
+          const order = categories.length;
 
-        return { isSuccess: true, _id: newId };
+          newCategory = await CategoryModel.create({
+            _id: newId,
+            title: args.title,
+            order
+          });
+        } else {
+          newCategory = await CategoryModel.create({
+            _id: 1,
+            title: args.title,
+            order: 1
+          });
+        }
+
+        return newCategory;
       } catch (err) {
         throw err;
       }
     },
 
-    async updateCategory(_: any, args: { id: number; title: string; description: string }, context: ContextType) {
+    async updateCategory(_: any, args: { id: number; title: string }) {
       try {
-        if (!args.title || !args.description) {
-          throw new UserInputError('카테고리 제목 또는 소개를 입력해주세요.');
+        if (!args.title) {
+          throw new UserInputError('카테고리 제목을 입력해주세요.');
         }
 
-        const categoryList: Category[] = await CategoryModel.find();
-        if (categoryList.find((category) => category._id !== args.id && category.title === args.title))
+        const categories: Category[] = await CategoryModel.find();
+        if (categories.find((category) => category._id !== args.id && category.title === args.title)) {
           throw new ValidationError('이미 존재하는 제목입니다.');
+        }
 
-        await CategoryModel.updateOne(
+        const updatedCategory: Category | null = await CategoryModel.findByIdAndUpdate(
+          args.id,
           {
-            _id: args.id
+            title: args.title
           },
-          {
-            title: args.title,
-            description: args.description
-          }
+          // new: true makes return update documents
+          { new: true }
         );
 
-        return null;
+        return updatedCategory;
       } catch (err) {
         throw err;
       }
     },
 
-    async deleteCategory(_: any, args: { index: number }, context: ContextType) {
+    async deleteCategory(_: any, args: { index: number }) {
       try {
         if (args.index === undefined) {
           throw new ValidationError('잘못된 index값 입니다.');
         }
 
-        const deletedCategory: Category = await CategoryModel.findOne({ order: args.index });
+        const foundCategory: Category | null = await CategoryModel.findOne({ order: args.index });
 
-        if (deletedCategory._id === 0) {
-          throw new ValidationError('기본 카테고리는 삭제할 수 없습니다.');
+        if (foundCategory) {
+          if (foundCategory._id === 0) {
+            throw new ValidationError('기본 카테고리는 삭제할 수 없습니다.');
+          }
+
+          const deletedCategory: Category | null = await CategoryModel.findOneAndDelete({ order: args.index });
+          if (deletedCategory === null) {
+            return { isSuccess: false };
+          }
+
+          // move posts to default category
+          const [posts, categories]: [Post[], Category[]] = await Promise.all([
+            PostModel.find({ categoryId: foundCategory._id }),
+            CategoryModel.find()
+          ]);
+
+          const postsToUpdate: Query<UpdateWriteOpResult, Post, {}>[] = posts.map((post) =>
+            PostModel.updateOne({ _id: post._id }, { categoryId: 0 })
+          );
+          const categoriesToUpdate: Query<UpdateWriteOpResult, Category, {}>[] = [];
+          for (const category of categories) {
+            categoriesToUpdate.push(CategoryModel.updateOne({ _id: category._id }, { order: category.order - 1 }));
+          }
+
+          await Promise.all([...postsToUpdate, ...categoriesToUpdate]);
         }
 
-        await CategoryModel.deleteOne({ order: args.index });
-
-        // move posts to default category
-        const posts: Post[] = await PostModel.find({ categoryId: deletedCategory._id });
-        posts.forEach(async (post) => {
-          await PostModel.findByIdAndUpdate(post._id, { categoryId: 0 });
-        });
-        const categories: Category[] = await CategoryModel.find();
-        categories.forEach(async (category) => {
-          if (category.order > args.index) {
-            await CategoryModel.findByIdAndUpdate(category._id, { order: category.order - 1 });
-          }
-        });
-
-        return null;
+        return { isSuccess: true };
       } catch (err) {
         throw err;
       }
     },
 
-    async orderCategory(_: any, args: { ids: number[] }, context: ContextType) {
+    async orderCategory(_: any, args: { ids: number[] }) {
       try {
+        const categoriesToUpdate: Query<UpdateWriteOpResult, Category, {}>[] = [];
+
         for (let i = 0; i <= CategoryModel.length; i++) {
           const currentId = args.ids[i];
-          const newOrder = args.ids.indexOf(currentId);
-          await CategoryModel.findByIdAndUpdate(currentId, { order: newOrder });
+          categoriesToUpdate.push(CategoryModel.updateOne({ _id: currentId }, { order: i }));
         }
+
+        await Promise.all(categoriesToUpdate);
+
+        // NEED TO FIX: return null is bad idea...
         return null;
       } catch (err) {
         throw err;

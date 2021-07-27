@@ -1,5 +1,3 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -7,9 +5,6 @@ import { useMutation } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 
-import { theme } from 'src/styles';
-import { RootState } from 'src/redux/rootReducer';
-import { ThemeMode } from 'src/redux/common/type';
 import { trans, Lang } from 'src/resources/languages';
 
 import { LOGOUT } from 'src/query/user';
@@ -17,7 +12,7 @@ import { DropDownMenu } from '../common/box/DropDownMenu';
 
 const AdminDropDown = styled.div({});
 
-const MenuItem = styled.a<{ themeMode: ThemeMode }>((props) => {
+const MenuItem = styled.a((props) => {
   return {
     padding: '.5rem',
     borderRadius: '.5rem',
@@ -26,18 +21,14 @@ const MenuItem = styled.a<{ themeMode: ThemeMode }>((props) => {
     userSelect: 'none',
     wordBreak: 'keep-all',
     '&:hover': {
-      backgroundColor: theme[props.themeMode].hoverBackground
+      backgroundColor: props.theme.hoverBackground
     }
   };
 });
 
-const RotateIcon = styled.span<{ isOpen: boolean }>((props) => {
-  return {
-    display: 'inline-block',
-    marginLeft: '.4rem',
-    transition: '.3s all',
-    transform: props.isOpen ? 'rotate(180deg)' : 'none'
-  };
+const RotateIcon = styled.span({
+  display: 'inline-block',
+  marginLeft: '.4rem'
 });
 
 interface Props {
@@ -45,10 +36,7 @@ interface Props {
 }
 
 export function AdminMenu(props: Props) {
-  const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
-
   const router = useRouter();
-  const [isAdminMenuOpen, setIsAdminMenuOpen] = useState(false);
 
   const [logout] = useMutation(LOGOUT, {
     onCompleted: () => {
@@ -59,26 +47,21 @@ export function AdminMenu(props: Props) {
   return (
     <AdminDropDown>
       <DropDownMenu
-        visible={isAdminMenuOpen}
         mainButton={
           <>
             {trans(Lang.Menu)}
-            <RotateIcon isOpen={isAdminMenuOpen}>
+            <RotateIcon>
               <FontAwesomeIcon icon={faCaretDown} />
             </RotateIcon>
           </>
         }
-        setVisible={setIsAdminMenuOpen}
         dropMenu={
           <>
             <Link href='/admin'>
-              <MenuItem themeMode={themeMode} onClick={() => setIsAdminMenuOpen(false)}>
-                {trans(Lang.Admin)}
-              </MenuItem>
+              <MenuItem>{trans(Lang.Admin)}</MenuItem>
             </Link>
             {props.isLogin ? (
               <MenuItem
-                themeMode={themeMode}
                 onClick={() => {
                   logout();
                 }}
@@ -87,9 +70,7 @@ export function AdminMenu(props: Props) {
               </MenuItem>
             ) : (
               <Link href={{ pathname: '/admin/login', query: { url: router.asPath } }}>
-                <MenuItem themeMode={themeMode} onClick={() => setIsAdminMenuOpen(false)}>
-                  {trans(Lang.Login)}
-                </MenuItem>
+                <MenuItem>{trans(Lang.Login)}</MenuItem>
               </Link>
             )}
           </>

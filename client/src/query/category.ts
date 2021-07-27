@@ -1,34 +1,24 @@
 import { gql } from '@apollo/client';
 
-export interface CategoryDetails {
+import { MutationCommonResponse } from '.';
+
+export interface CategoryDetailType {
   _id: number;
   title: string;
-  description: string;
-  previewImage: string;
-  recentCreatedAt: number;
+  recentCreatedAt: number | null;
   postCount: number;
   order: number;
 }
 
-export const GET_CATEGORY = gql`
-  query categories {
-    categories {
-      _id
-      title
-      description
-      previewImage
-      order
-    }
-  }
-`;
+export interface CategoryDetailsQueryType {
+  categoriesWithDetails: CategoryDetailType[];
+}
 
 export const GET_CATEGORIES_WITH_DETAILS = gql`
   query {
     categoriesWithDetails {
       _id
       title
-      description
-      previewImage
       postCount
       recentCreatedAt
       order
@@ -36,39 +26,97 @@ export const GET_CATEGORIES_WITH_DETAILS = gql`
   }
 `;
 
+export interface FindCategoryByIdDataType {
+  title: string;
+}
+
+export interface FindCategoryByIdVars {
+  id: number;
+}
+
+export interface FindCategoryByIdQueryType {
+  findCategoryById: FindCategoryByIdDataType;
+}
+
 export const FIND_CATEGORY_BY_ID = gql`
-  query($id: Int!) {
+  query ($id: Int!) {
     findCategoryById(id: $id) {
       title
-      description
-      previewImage
     }
   }
 `;
+
+export interface AddCategoryDataType {
+  _id: number;
+  title: string;
+  order: number;
+}
+
+export interface AddCategoryVars {
+  title: string;
+}
+
+export interface AddCategoryQueryType {
+  addCategory: AddCategoryDataType;
+}
 
 export const ADD_CATEGORY = gql`
-  mutation($title: String!, $description: String!, $previewImage: String!) {
-    addCategory(title: $title, description: $description, previewImage: $previewImage) {
-      isSuccess
+  mutation ($title: String!) {
+    addCategory(title: $title) {
       _id
+      title
+      order
     }
   }
 `;
 
+export interface UpdateCategoryDataType {
+  title: string;
+}
+
+export interface UpdateCategoryVars {
+  id: number;
+  title: string;
+}
+
+export interface UpdateCategoryQueryType {
+  updateCategory: UpdateCategoryDataType;
+}
+
 export const UPDATE_CATEGORY = gql`
-  mutation($id: Int, $title: String, $description: String) {
-    updateCategory(id: $id, title: $title, description: $description)
+  mutation ($id: Int, $title: String) {
+    updateCategory(id: $id, title: $title) {
+      title
+    }
   }
 `;
+
+export interface DeleteCategoryVars {
+  index: number;
+}
+
+export interface DeleteCategoryQueryType {
+  deleteCategory: MutationCommonResponse;
+}
 
 export const DELETE_CATEGORY = gql`
-  mutation($index: Int!) {
-    deleteCategory(index: $index)
+  mutation ($index: Int!) {
+    deleteCategory(index: $index) {
+      isSuccess
+    }
   }
 `;
 
+export interface OrderCategoryVars {
+  ids: number[];
+}
+
+export interface OrderCategoryQueryType {
+  orderCategory: void;
+}
+
 export const ORDER_CATEGORY = gql`
-  mutation($ids: [Int]) {
+  mutation ($ids: [Int]) {
     orderCategory(ids: $ids)
   }
 `;

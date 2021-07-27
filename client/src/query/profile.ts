@@ -49,10 +49,10 @@ export const UPDATE_PROFILE = gql`
 `;
 
 export interface ProfileType {
-  _id?: string;
-  image?: string;
-  name?: string;
-  introduce?: string;
+  _id: string;
+  image: string;
+  name: string;
+  introduce: string;
   link?: string;
   company?: string;
   location?: string;

@@ -1,4 +1,5 @@
 import { ApolloError, gql, UserInputError } from 'apollo-server';
+import removeMd from 'remove-markdown';
 
 import { PostModel, Post } from '../model/post';
 import { ContextType } from '../types/context';
@@ -13,6 +14,8 @@ export const postTypeDef = gql`
     createdAt: DateTime
     article: String!
     categoryId: Int!
+    likeCount: Int!
+    commentCount: Int!
   }
 
   type PostCategory {
@@ -37,10 +40,11 @@ export const postTypeDef = gql`
   extend type Query {
     posts: [Post]
     lastPost: Post!
-    findPostByUrl(requestUrl: String!): Post!
+    findPostById(id: String!): Post
     findSameCategoryPosts(categoryId: Int!): PostCategory
     getLatestPostsEachCategory: [Post]
     search(keyword: String!): SearchResponse
+    getLatestPosts(page: Int!): [Post]
   }
 
   extend type Mutation {
@@ -70,9 +74,9 @@ export const postResolver = {
       }
     },
 
-    async findPostByUrl(_: any, args: { requestUrl: string }, context: ContextType) {
+    async findPostById(_: any, args: { id: string }) {
       try {
-        const parsedUrl = Number.parseInt(args.requestUrl);
+        const parsedUrl = Number.parseInt(args.id);
         const findedPost = await PostModel.findOne({ _id: parsedUrl });
         return findedPost;
       } catch (err) {
@@ -80,10 +84,17 @@ export const postResolver = {
       }
     },
 
-    async findSameCategoryPosts(_: any, args: { categoryId: number }, context: ContextType) {
+    async findSameCategoryPosts(_: any, args: { categoryId: number }) {
       try {
-        const sameCategoryPosts: Post[] = await PostModel.find({ categoryId: args.categoryId });
-        const categoryFindResult = await CategoryModel.findById(args.categoryId);
+        const [sameCategoryPosts, categoryFindResult]: [Post[], any] = await Promise.all([
+          PostModel.find({ categoryId: args.categoryId }),
+          CategoryModel.findById(args.categoryId)
+        ]);
+
+        // Remove markdown from article preview
+        for (let posts of sameCategoryPosts) {
+          posts.article = removeMd(posts.article);
+        }
 
         return {
           post: sameCategoryPosts.reverse(),
@@ -95,17 +106,23 @@ export const postResolver = {
     },
 
     async getLatestPostsEachCategory() {
-      const categories = await CategoryModel.find({}, {}, { sort: { order: 1 } });
+      // exclude default category
+      const categories = await CategoryModel.find({ $and: [{ _id: { $gte: 1 } }] }, {}, { sort: { order: 1 } });
 
-      const posts: Post[] = categories.map(async (category: Category) => {
-        const post: Post = await PostModel.findOne({ categoryId: category._id }, {}, { sort: { _id: -1 } });
-        return post;
-      });
+      const posts: (Post | null)[] = [];
+      for (const category of categories) {
+        const post: Post | null = await PostModel.findOne({ categoryId: category._id }, {}, { sort: { _id: -1 } });
+        if (post) {
+          posts.push(post);
+        } else {
+          posts.push(null);
+        }
+      }
 
       return posts;
     },
 
-    async search(_: any, args: { keyword: string }, context: ContextType) {
+    async search(_: any, args: { keyword: string }) {
       try {
         if (args.keyword.length < 2 || args.keyword.length > 10) {
           throw new Error('2~10자 이내로 입력해 주세요');
@@ -147,15 +164,22 @@ export const postResolver = {
       } catch (err) {
         throw err;
       }
+    },
+
+    async getLatestPosts(_: any, args: { page: number }) {
+      try {
+        const pagedPosts: Post[] = await PostModel.find({}, {}, { sort: { _id: -1 }, skip: (args.page - 1) * 10, limit: 10 });
+
+        return pagedPosts;
+      } catch (err) {
+        throw err;
+      }
     }
   },
 
   Mutation: {
-    async writePost(_: any, args: { title: string; createdAt: Date; article: string; category: string }, context: ContextType) {
+    async writePost(_: any, args: { title: string; createdAt: Date; article: string; category: string }) {
       try {
-        if (!args.category) {
-          throw new UserInputError('카테고리를 설정해 주세요.');
-        }
         if (!args.title) {
           throw new UserInputError('글의 제목을 1자 이상 써주세요.');
         }
@@ -163,47 +187,97 @@ export const postResolver = {
           throw new UserInputError('글의 본문을 1자 이상 써주세요.');
         }
 
-        const lastPost: Post = await PostModel.findOne({}, {}, { sort: { _id: -1 } });
-        const _id = lastPost._id + 1;
+        const lastPost: Post | null = await PostModel.findOne({}, {}, { sort: { _id: -1 } });
 
-        const category = await CategoryModel.findOne({ title: args.category });
-        const categoryId = category._id;
+        if (lastPost) {
+          const _id = lastPost._id + 1;
 
-        CommentModel.create({ _id });
+          await CommentModel.create({ _id });
 
-        const result = await PostModel.create({ _id, title: args.title, createdAt: args.createdAt, categoryId, article: args.article });
-        return result;
+          if (args.category === '') {
+            const result = await PostModel.create({
+              _id,
+              title: args.title,
+              createdAt: args.createdAt,
+              article: args.article
+            });
+            return result;
+          }
+
+          const category: Category | null = await CategoryModel.findOne({ title: args.category });
+          if (category) {
+            const categoryId = category._id;
+
+            const result = await PostModel.create({ _id, title: args.title, createdAt: args.createdAt, categoryId, article: args.article });
+
+            return result;
+          } else {
+            throw new ApolloError('Cannot find category...');
+          }
+        } else {
+          // if first post
+
+          await CommentModel.create({ _id: 1 });
+
+          if (args.category === '') {
+            const result = await PostModel.create({
+              _id: 1,
+              title: args.title,
+              createdAt: args.createdAt,
+              article: args.article
+            });
+            return result;
+          }
+
+          const category: Category | null = await CategoryModel.findOne({ title: args.category });
+          if (category) {
+            const categoryId = category._id;
+
+            const result = await PostModel.create({
+              _id: 1,
+              title: args.title,
+              createdAt: args.createdAt,
+              categoryId,
+              article: args.article
+            });
+
+            return result;
+          } else {
+            throw new ApolloError('Cannot find category...');
+          }
+        }
       } catch (err) {
         throw err;
       }
     },
 
-    async deletePost(_: any, args: { id: number }, context: ContextType) {
+    async deletePost(_: any, args: { id: number }) {
       try {
         const deletedPost = await PostModel.findByIdAndDelete(args.id);
         await CommentModel.findByIdAndDelete(args.id);
-        return { isSuccess: true, categoryId: deletedPost.categoryId };
+        if (deletedPost) {
+          return { isSuccess: true, categoryId: deletedPost.categoryId };
+        } else {
+          return { isSuccess: false };
+        }
       } catch (err) {
         throw err;
       }
     },
 
-    async editPost(_: any, args: { id: number; title: string; article: string; category: string }, context: ContextType) {
+    async editPost(_: any, args: { id: number; title: string; article: string; category: string }) {
       try {
         if (!args.article || args.title.length < 2 || !args.category) {
           throw new UserInputError('카테고리, 제목 또는 본문을 입력해주세요');
         }
 
-        const editPost: Post = await PostModel.findById(args.id);
-        editPost.title = args.title;
-        editPost.article = args.article;
-
-        const category = await CategoryModel.findOne({ title: args.category });
-        const categoryId = category._id;
-
-        editPost.categoryId = categoryId;
-
-        editPost.save();
+        const [editPost, category] = await Promise.all([PostModel.findById(args.id), CategoryModel.findOne({ title: args.category })]);
+        if (editPost && category) {
+          editPost.title = args.title;
+          editPost.article = args.article;
+          editPost.categoryId = category._id;
+          editPost.save();
+        }
 
         return null;
       } catch (err) {

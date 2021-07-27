@@ -37,7 +37,7 @@ export const profileResolver = {
   Query: {
     async profile() {
       try {
-        const profile: Profile = await ProfileModel.findOne();
+        const profile: Profile | null = await ProfileModel.findOne();
         return profile;
       } catch (err) {
         throw new ApolloError('Server Error: Cannot find profile');
