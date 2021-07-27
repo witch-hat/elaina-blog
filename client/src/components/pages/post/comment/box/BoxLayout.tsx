@@ -18,10 +18,13 @@ interface ModalProps {
 const DynamicDeleteModal = dynamic<ModalProps>(() => import('./DeleteModal').then((mod) => mod.DeleteModal));
 
 const Container = styled.div({
+  display: 'flex',
   width: '100%',
   padding: '.5rem',
   margin: '.5rem',
-  borderRadius: '.5rem'
+  borderRadius: '.5rem',
+  justifyContent: 'center',
+  flexDirection: 'column'
 });
 
 const DetailsContainer = styled.div({
@@ -36,9 +39,9 @@ const DetailsContainer = styled.div({
 });
 
 const CommentContent = styled.p({
-  display: 'flex',
-  width: '100%',
+  width: '95%',
   margin: '2rem 1rem',
+  overflowWrap: 'anywhere',
   alignItems: 'center'
 });
 
