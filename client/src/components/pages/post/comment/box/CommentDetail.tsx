@@ -31,8 +31,8 @@ const Time = styled.span({
   marginRight: '.7rem'
 });
 
-const AuthorCommentSign = styled.div<{isAdmin:boolean}>((props)=>({
-  display: props.isAdmin? 'block':'none',
+const AuthorCommentSign = styled.div<{ isAdmin: boolean }>((props) => ({
+  display: props.isAdmin ? 'block' : 'none',
   padding: '.1rem .5rem',
   transition: '.2s all',
   backgroundColor: props.theme.adminCommentColor,
