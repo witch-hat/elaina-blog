@@ -37,7 +37,7 @@ export const profileResolver = {
   Query: {
     async profile() {
       try {
-        const profile: Profile | null = await ProfileModel.findOne();
+        const profile = await ProfileModel.findOne();
         return profile;
       } catch (err) {
         throw new ApolloError('Server Error: Cannot find profile');
@@ -47,7 +47,7 @@ export const profileResolver = {
   Mutation: {
     async updateProfile(_: any, args: any, context: ContextType) {
       try {
-        const updatedProfile: Profile = await ProfileModel.findByIdAndUpdate(
+        const updatedProfile = await ProfileModel.findByIdAndUpdate(
           args.id,
           {
             ...args

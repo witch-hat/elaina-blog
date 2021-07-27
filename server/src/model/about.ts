@@ -1,6 +1,6 @@
 import { Schema, model, Document } from 'mongoose';
 
-export interface About extends Document {
+export interface About {
   _id: number;
   updatedAt: Date;
   article: string;

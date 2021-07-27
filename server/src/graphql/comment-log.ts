@@ -2,6 +2,7 @@ import { gql } from 'apollo-server';
 import { Date } from 'mongoose';
 
 import { CommentEvent, CommentLog, CommentLogModel } from '../model/comment-log';
+import { PostModel } from '../model/post';
 import { ContextType } from '../types/context';
 
 export const commentLogTypeDef = gql`
@@ -13,6 +14,7 @@ export const commentLogTypeDef = gql`
     postId: Int
     commentIndex: Int
     replyIndex: Int
+    postTitle: String
   }
 
   extend type Query {
@@ -28,10 +30,14 @@ export const commentLogTypeDef = gql`
 
 export const commentLogResolver = {
   Query: {
-    async commentLogs() {
+    async commentLogs(_: any, args: { page: number }) {
       try {
-        const logList: CommentLog[] = await CommentLogModel.find();
-        return logList;
+        const commentLogs = await CommentLogModel.find({}, {}, { skip: (args.page - 1) * 10, limit: 10 });
+        const logPostTitles = await Promise.all(commentLogs.map((log) => PostModel.findById(log.postId)));
+
+        const logs = commentLogs.map((log, index) => ({ ...log, postTitle: logPostTitles[index] }));
+
+        return logs;
       } catch (err) {
         throw err;
       }

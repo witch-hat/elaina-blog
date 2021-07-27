@@ -2,16 +2,14 @@ import { ApolloError, gql, UserInputError } from 'apollo-server';
 import removeMd from 'remove-markdown';
 
 import { PostModel, Post } from '../model/post';
-import { ContextType } from '../types/context';
 import { CategoryModel, Category } from '../model/category';
 import { CommentModel } from '../model/comment';
-import { ProfileModel } from '../model/profile';
 
 export const postTypeDef = gql`
   type Post {
     _id: Int!
     title: String!
-    createdAt: DateTime
+    createdAt: DateTime!
     article: String!
     categoryId: Int!
     likeCount: Int!
@@ -38,13 +36,10 @@ export const postTypeDef = gql`
   }
 
   extend type Query {
-    posts: [Post]
-    lastPost: Post!
+    getLatestPosts(page: Int!): [Post]
     findPostById(id: String!): Post
     findSameCategoryPosts(categoryId: Int!): PostCategory
-    getLatestPostsEachCategory: [Post]
     search(keyword: String!): SearchResponse
-    getLatestPosts(page: Int!): [Post]
   }
 
   extend type Mutation {
@@ -56,19 +51,23 @@ export const postTypeDef = gql`
 
 export const postResolver = {
   Query: {
-    async posts() {
+    async getLatestPosts(_: any, args: { page: number }) {
       try {
-        const postList: Post[] = await PostModel.find({}, {}, { sort: { _id: -1 } });
-        return postList;
-      } catch (err) {
-        throw err;
-      }
-    },
+        const posts = await PostModel.find({}, {}, { sort: { _id: -1 }, skip: (args.page - 1) * 10, limit: 10 });
 
-    async lastPost() {
-      try {
-        const lastPost = await PostModel.findOne({}, {}, { sort: { _id: -1 } });
-        return lastPost;
+        const previewPosts: Post[] = posts.map((post) => {
+          return {
+            _id: post._id,
+            title: post.title,
+            createdAt: post.createdAt,
+            article: removeMd(post.article),
+            categoryId: post.categoryId,
+            likeCount: post.likeCount,
+            commentCount: post.commentCount
+          };
+        });
+
+        return previewPosts;
       } catch (err) {
         throw err;
       }
@@ -86,7 +85,7 @@ export const postResolver = {
 
     async findSameCategoryPosts(_: any, args: { categoryId: number }) {
       try {
-        const [sameCategoryPosts, categoryFindResult]: [Post[], any] = await Promise.all([
+        const [sameCategoryPosts, categoryFindResult] = await Promise.all([
           PostModel.find({ categoryId: args.categoryId }),
           CategoryModel.findById(args.categoryId)
         ]);
@@ -105,30 +104,13 @@ export const postResolver = {
       }
     },
 
-    async getLatestPostsEachCategory() {
-      // exclude default category
-      const categories = await CategoryModel.find({ $and: [{ _id: { $gte: 1 } }] }, {}, { sort: { order: 1 } });
-
-      const posts: (Post | null)[] = [];
-      for (const category of categories) {
-        const post: Post | null = await PostModel.findOne({ categoryId: category._id }, {}, { sort: { _id: -1 } });
-        if (post) {
-          posts.push(post);
-        } else {
-          posts.push(null);
-        }
-      }
-
-      return posts;
-    },
-
     async search(_: any, args: { keyword: string }) {
       try {
         if (args.keyword.length < 2 || args.keyword.length > 10) {
           throw new Error('2~10자 이내로 입력해 주세요');
         }
 
-        const posts: Post[] = await PostModel.find({}, {}, { sort: { _id: -1 } });
+        const posts = await PostModel.find({}, {}, { sort: { _id: -1 } });
         const keyword = RegExp(args.keyword, 'i');
 
         const searchResult: { post: Post; content: string }[] = [];
@@ -164,16 +146,6 @@ export const postResolver = {
       } catch (err) {
         throw err;
       }
-    },
-
-    async getLatestPosts(_: any, args: { page: number }) {
-      try {
-        const pagedPosts: Post[] = await PostModel.find({}, {}, { sort: { _id: -1 }, skip: (args.page - 1) * 10, limit: 10 });
-
-        return pagedPosts;
-      } catch (err) {
-        throw err;
-      }
     }
   },
 
@@ -187,7 +159,7 @@ export const postResolver = {
           throw new UserInputError('글의 본문을 1자 이상 써주세요.');
         }
 
-        const lastPost: Post | null = await PostModel.findOne({}, {}, { sort: { _id: -1 } });
+        const lastPost = await PostModel.findOne({}, {}, { sort: { _id: -1 } });
 
         if (lastPost) {
           const _id = lastPost._id + 1;
@@ -204,7 +176,7 @@ export const postResolver = {
             return result;
           }
 
-          const category: Category | null = await CategoryModel.findOne({ title: args.category });
+          const category = await CategoryModel.findOne({ title: args.category });
           if (category) {
             const categoryId = category._id;
 
@@ -229,7 +201,7 @@ export const postResolver = {
             return result;
           }
 
-          const category: Category | null = await CategoryModel.findOne({ title: args.category });
+          const category = await CategoryModel.findOne({ title: args.category });
           if (category) {
             const categoryId = category._id;
 
@@ -253,13 +225,16 @@ export const postResolver = {
 
     async deletePost(_: any, args: { id: number }) {
       try {
-        const deletedPost = await PostModel.findByIdAndDelete(args.id);
-        await CommentModel.findByIdAndDelete(args.id);
-        if (deletedPost) {
+        const [deletedPost, deletedComment] = await Promise.all([
+          PostModel.findByIdAndDelete(args.id),
+          CommentModel.findByIdAndDelete(args.id)
+        ]);
+
+        if (deletedPost && deletedComment) {
           return { isSuccess: true, categoryId: deletedPost.categoryId };
-        } else {
-          return { isSuccess: false };
         }
+
+        return { isSuccess: false };
       } catch (err) {
         throw err;
       }

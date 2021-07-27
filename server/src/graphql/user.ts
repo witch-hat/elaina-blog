@@ -90,7 +90,7 @@ export const userResolver = {
         return { isAuth: false };
       }
 
-      const me: User | null = await UserModel.findOne({}, {}, { sort: { _id: -1 } });
+      const me = await UserModel.findOne({}, {}, { sort: { _id: -1 } });
       if (me) {
         const authList: Array<Auth> = me.auth;
 
@@ -206,17 +206,17 @@ export const userResolver = {
           throw new UserInputError('잘못된 비밀번호 양식입니다.');
         }
 
-        const user: User | null = await UserModel.findById(1);
+        const me = await UserModel.findById(1);
 
-        if (user) {
-          const isMatch = await comparePassword(args.old, user.password);
+        if (me) {
+          const isMatch = await comparePassword(args.old, me.password);
 
           if (isMatch) {
             if (args.old === args.new) throw new UserInputError('이전과 동일한 비밀번호 입니다.');
 
-            user.password = args.new;
-            user.auth = user.auth.filter((auth) => auth.userUniqueId === userUniqueId);
-            user.save();
+            me.password = args.new;
+            me.auth = me.auth.filter((auth) => auth.userUniqueId === userUniqueId);
+            me.save();
           } else {
             throw new AuthenticationError('패스워드 정보가 일치하지 않습니다.');
           }
@@ -252,7 +252,7 @@ export const userResolver = {
 
       const cookies = new Cookies(context.req, context.res);
       try {
-        const me: User | null = await UserModel.findById(1);
+        const me = await UserModel.findById(1);
         if (me) {
           const authList = me.auth;
 
@@ -324,7 +324,7 @@ export const userResolver = {
       const cookies = new Cookies(context.req, context.res);
 
       try {
-        const me: User | null = await UserModel.findById(1);
+        const me = await UserModel.findById(1);
         if (me) {
           const deleteResultAuth = me.auth.filter((authInfo) => {
             return authInfo.userUniqueId !== userUniqueId;

@@ -39,7 +39,7 @@ export const categoryResolver = {
   Query: {
     async categoriesWithDetails() {
       try {
-        const [categories, posts]: [Category[], Post[]] = await Promise.all([
+        const [categories, posts] = await Promise.all([
           // exclude default category
           CategoryModel.find({ $and: [{ _id: { $gte: 1 } }] }, {}, { sort: { order: 1 } }),
           PostModel.find()
@@ -84,7 +84,7 @@ export const categoryResolver = {
 
     async findCategoryById(_: any, args: { id: number }) {
       try {
-        const category: Category | null = await CategoryModel.findById(args.id);
+        const category = await CategoryModel.findById(args.id);
         return category;
       } catch (err) {
         throw err;
@@ -99,7 +99,7 @@ export const categoryResolver = {
           throw new UserInputError('카테고리 제목을 입력해주세요.');
         }
 
-        const categories: Category[] = await CategoryModel.find({}, {}, { sort: { _id: -1 } });
+        const categories = await CategoryModel.find({}, {}, { sort: { _id: -1 } });
 
         const isDuplicated = categories.filter((category) => category.title.toLowerCase() === args.title.toLowerCase()).length > 0;
         if (isDuplicated) {
@@ -138,7 +138,7 @@ export const categoryResolver = {
           throw new UserInputError('카테고리 제목을 입력해주세요.');
         }
 
-        const categories: Category[] = await CategoryModel.find();
+        const categories = await CategoryModel.find();
         if (categories.find((category) => category._id !== args.id && category.title === args.title)) {
           throw new ValidationError('이미 존재하는 제목입니다.');
         }
@@ -164,23 +164,20 @@ export const categoryResolver = {
           throw new ValidationError('잘못된 index값 입니다.');
         }
 
-        const foundCategory: Category | null = await CategoryModel.findOne({ order: args.index });
+        const foundCategory = await CategoryModel.findOne({ order: args.index });
 
         if (foundCategory) {
           if (foundCategory._id === 0) {
             throw new ValidationError('기본 카테고리는 삭제할 수 없습니다.');
           }
 
-          const deletedCategory: Category | null = await CategoryModel.findOneAndDelete({ order: args.index });
+          const deletedCategory = await CategoryModel.findOneAndDelete({ order: args.index });
           if (deletedCategory === null) {
             return { isSuccess: false };
           }
 
           // move posts to default category
-          const [posts, categories]: [Post[], Category[]] = await Promise.all([
-            PostModel.find({ categoryId: foundCategory._id }),
-            CategoryModel.find()
-          ]);
+          const [posts, categories] = await Promise.all([PostModel.find({ categoryId: foundCategory._id }), CategoryModel.find()]);
 
           const postsToUpdate: Query<UpdateWriteOpResult, Post, {}>[] = posts.map((post) =>
             PostModel.updateOne({ _id: post._id }, { categoryId: 0 })

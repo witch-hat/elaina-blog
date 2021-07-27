@@ -1,6 +1,6 @@
-import { Schema, model, Document, SchemaType } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
-export interface Post extends Document {
+export interface Post {
   _id: number;
   title: string;
   createdAt: Date;

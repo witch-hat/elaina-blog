@@ -75,7 +75,7 @@ export const commentResolver = {
           throw new UserInputError('내용을 입력해 주세요.');
         }
 
-        const comments: CommentConatiner | null = await CommentModel.findById(args._id);
+        const comments = await CommentModel.findById(args._id);
 
         if (comments) {
           let newComment: Comment;
@@ -115,12 +115,11 @@ export const commentResolver = {
 
           const post = await PostModel.findByIdAndUpdate(args._id, { commentCount: comments.count });
 
-          if (post) {
-            await comments.save();
-          } else {
+          if (post === null) {
             throw new ApolloError('Cannot write comment.. please retry!');
           }
 
+          await comments.save();
           return newComment;
         }
 
@@ -142,7 +141,7 @@ export const commentResolver = {
           }
         }
 
-        const comments: CommentConatiner | null = await CommentModel.findById(args._id);
+        const comments = await CommentModel.findById(args._id);
 
         if (comments) {
           if (args.password) {
@@ -166,7 +165,7 @@ export const commentResolver = {
 
     async deleteComment(_: any, args: { _id: number; index: number; password?: string }) {
       try {
-        const comments: CommentConatiner | null = await CommentModel.findById(args._id);
+        const comments = await CommentModel.findById(args._id);
 
         if (comments) {
           if (args.password) {
@@ -208,7 +207,7 @@ export const commentResolver = {
       const passwordRegex = new RegExp('^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,20})');
 
       try {
-        const comments: CommentConatiner | null = await CommentModel.findById(args._id);
+        const comments = await CommentModel.findById(args._id);
 
         if (comments) {
           let newReply: Reply;
@@ -274,7 +273,7 @@ export const commentResolver = {
           }
         }
 
-        const comments: CommentConatiner | null = await CommentModel.findById(args._id);
+        const comments = await CommentModel.findById(args._id);
 
         if (comments) {
           if (args.password) {
@@ -298,7 +297,7 @@ export const commentResolver = {
 
     async deleteReply(_: any, args: { _id: number; commentIndex: number; replyIndex: number; password?: string }) {
       try {
-        const comments: CommentConatiner | null = await CommentModel.findById(args._id);
+        const comments = await CommentModel.findById(args._id);
 
         if (comments) {
           if (args.password) {
