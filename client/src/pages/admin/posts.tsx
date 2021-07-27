@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
-import { PostType, GET_POSTS } from 'src/query/post';
+import { GET_LATEST_POSTS, GetLastestPostsQueryType, GetLatestPostsVars, PostDetailDataType } from 'src/query/post';
 import { trans, Lang } from 'src/resources/languages';
 import { initApolloClient } from 'src/apollo/withApollo';
 import { BorderBox, CircleRippleWrapper } from 'src/components';
@@ -78,7 +78,7 @@ const PreviewContent = styled.span({
 });
 
 interface ServerSideProps {
-  posts: PostType[];
+  posts: PostDetailDataType[];
 }
 
 interface Props extends AppCommonProps, ServerSideProps {}
@@ -135,8 +135,13 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
   }
 
   const client = initApolloClient({}, context);
-  const { data } = await client.query<{ posts: PostType[] }>({ query: GET_POSTS });
-  const posts = data.posts;
+  const { data } = await client.query<GetLastestPostsQueryType, GetLatestPostsVars>({
+    query: GET_LATEST_POSTS,
+    variables: {
+      page: 1
+    }
+  });
+  const posts = data.getLatestPosts;
 
   return {
     props: {
