@@ -38,7 +38,7 @@ const DetailsContainer = styled.div({
 const CommentContent = styled.p({
   display: 'flex',
   width: '100%',
-  margin: '2rem 0',
+  margin: '2rem 1rem',
   alignItems: 'center'
 });
 

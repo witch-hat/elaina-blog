@@ -38,8 +38,7 @@ const AuthorCommentSign = styled.div<{ isAdmin: boolean }>((props) => ({
   borderRadius: '.5rem',
   color: props.theme.adminCommentTextColor,
   fontWeight: props.theme.adminCommentTextWeight,
-  transition: '.2s all',
-  overflow: 'hidden'
+  transition: '.2s all'
 }));
 
 interface Props {
