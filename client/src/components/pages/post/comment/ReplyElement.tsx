@@ -7,7 +7,7 @@ import { ReplyBox } from './box/ReplyBox';
 
 const ReplyContainer = styled.div<{ isAdmin: boolean }>((props) => ({
   display: 'flex',
-  width: '100%',
+  width: '90%',
   margin: '.5rem 0',
   padding: '.5rem 1rem 0 1rem',
   backgroundColor: props.theme.replyBackground,

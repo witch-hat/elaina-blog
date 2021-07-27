@@ -15,7 +15,7 @@ export const theme: { light: DefaultTheme; dark: DefaultTheme } = {
     adminReplyColor: 'rgba(145, 255, 0, 0.15)',
     loadingBackground: 'rgba(255, 255, 255, .8)',
     selectedButton: 'rgba(200, 200, 200, .8)',
-    replyBackground: '#eee',
+    replyBackground: '#fafafa',
     // Text Color
     blogName: '#121314',
     mainText: '#121314',
