@@ -45,12 +45,18 @@ export const profileResolver = {
     }
   },
   Mutation: {
-    async updateProfile(_: any, args: any, context: ContextType) {
+    async updateProfile(_: any, args: Profile, context: ContextType) {
       try {
         const updatedProfile = await ProfileModel.findByIdAndUpdate(
-          args.id,
+          args._id,
           {
-            ...args
+            image: args.image,
+            name: args.name,
+            introduce: args.introduce,
+            link: args.link,
+            company: args.company,
+            location: args.location,
+            email: args.email
           },
           { new: true, upsert: true }
         );

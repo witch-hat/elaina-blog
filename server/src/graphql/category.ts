@@ -143,7 +143,7 @@ export const categoryResolver = {
           throw new ValidationError('이미 존재하는 제목입니다.');
         }
 
-        const updatedCategory: Category | null = await CategoryModel.findByIdAndUpdate(
+        const updatedCategory = await CategoryModel.findByIdAndUpdate(
           args.id,
           {
             title: args.title

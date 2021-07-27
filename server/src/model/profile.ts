@@ -1,6 +1,7 @@
 import { Schema, model, Document } from 'mongoose';
 
 export interface Profile {
+  _id: string;
   image: string;
   name: string;
   introduce: string;

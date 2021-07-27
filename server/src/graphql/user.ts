@@ -30,7 +30,7 @@ export const userTypeDef = gql`
   }
 
   type AuthResponse {
-    isAuth: Boolean
+    isSuccess: Boolean
     cookie: [String]
   }
 
@@ -47,10 +47,9 @@ export const userTypeDef = gql`
   }
 
   extend type Mutation {
-    updatePassword(old: String!, new: String!, confirm: String!): Void
+    updatePassword(old: String!, new: String!, confirm: String!): MutationResponse
     login(emailId: String!, password: String!): MutationResponse
-    logout: Void
-    refreshUserToken(userId: ID!): User
+    logout: MutationResponse
   }
 `;
 
@@ -61,10 +60,9 @@ export const userResolver = {
   Query: {
     async me() {
       try {
-        const user: User | null = await UserModel.findById(1);
+        const user = await UserModel.findById(1);
         return user;
       } catch (err) {
-        console.log(err);
         throw err;
       }
     },
@@ -87,7 +85,7 @@ export const userResolver = {
 
       // token undefined error
       if (!accessToken || !refreshToken) {
-        return { isAuth: false };
+        return { isSuccess: false };
       }
 
       const me = await UserModel.findOne({}, {}, { sort: { _id: -1 } });
@@ -95,13 +93,13 @@ export const userResolver = {
         const authList: Array<Auth> = me.auth;
 
         try {
-          // 기기 id가 리스트에 없으면 re-login 유도(isAuth false)
+          // 기기 id가 리스트에 없으면 re-login 유도(isSuccess false)
           if (authList.find((auth) => auth.userUniqueId === userUniqueId) === undefined) {
-            return { isAuth: false };
+            return { isSuccess: false };
           } else {
-            // 기기 id가 리스트에 있고, verify success시 isAuth true
+            // 기기 id가 리스트에 있고, verify success시 isSuccess true
             jwt.verify(accessToken, config.secret);
-            return { isAuth: true };
+            return { isSuccess: true };
           }
         } catch (err) {
           // 만약 authlist에 id가 있으면 refreshToken check 후 accessToken, refreshToken 발급
@@ -132,7 +130,7 @@ export const userResolver = {
 
                 me.auth[authIndex].refreshToken = refreshToken;
                 me.auth[authIndex].latestLogin = new Date();
-                me.save();
+                await me.save();
 
                 cookies.set('a_access', accessToken, {
                   httpOnly: false,
@@ -141,23 +139,23 @@ export const userResolver = {
                 });
 
                 // context.res.getHeader('set-cookie') return Array<string> type
-                return { isAuth: true, cookie: context.res.getHeader('set-cookie') };
+                return { isSuccess: true, cookie: context.res.getHeader('set-cookie') };
               } else {
                 context.res.clearCookie('a_access');
                 context.res.clearCookie('a_refresh');
 
-                return { isAuth: false };
+                return { isSuccess: false };
               }
             } catch (err) {
               context.res.clearCookie('a_access');
               context.res.clearCookie('a_refresh');
 
-              return { isAuth: false };
+              return { isSuccess: false };
             }
           } else {
             context.res.clearCookie('a_access');
             context.res.clearCookie('a_refresh');
-            return { isAuth: false };
+            return { isSuccess: false };
             // malformed error is prior than expired error
           }
         }
@@ -166,7 +164,7 @@ export const userResolver = {
 
     async findDevices(_: any, args: any, context: ContextType) {
       try {
-        const user: User | null = await UserModel.findById(1);
+        const user = await UserModel.findById(1);
 
         if (user) {
           const result = user.auth.map((device) => {
@@ -216,11 +214,15 @@ export const userResolver = {
 
             me.password = args.new;
             me.auth = me.auth.filter((auth) => auth.userUniqueId === userUniqueId);
-            me.save();
+            await me.save();
+
+            return { isSuccess: true };
           } else {
             throw new AuthenticationError('패스워드 정보가 일치하지 않습니다.');
           }
         }
+
+        return { isSuccess: false };
       } catch (err) {
         throw err;
       }
@@ -278,7 +280,7 @@ export const userResolver = {
                 me.auth[authIndex].id = id;
                 me.auth[authIndex].latestLogin = latestLogin;
               }
-              me.save();
+              await me.save();
 
               await bcrypt
                 .hash(refreshToken, SALT)
@@ -325,13 +327,14 @@ export const userResolver = {
 
       try {
         const me = await UserModel.findById(1);
+
         if (me) {
           const deleteResultAuth = me.auth.filter((authInfo) => {
             return authInfo.userUniqueId !== userUniqueId;
           });
 
           me.auth = deleteResultAuth;
-          me.save();
+          await me.save();
 
           cookies.set('a_refresh', '', {
             expires: new Date(0)
@@ -339,9 +342,11 @@ export const userResolver = {
           cookies.set('a_access', '', {
             expires: new Date(0)
           });
+
+          return { isSuccess: true };
         }
 
-        return null;
+        return { isSuccess: false };
       } catch (err) {
         throw err;
       }

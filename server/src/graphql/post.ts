@@ -251,7 +251,7 @@ export const postResolver = {
           editPost.title = args.title;
           editPost.article = args.article;
           editPost.categoryId = category._id;
-          editPost.save();
+          await editPost.save();
         }
 
         return null;
