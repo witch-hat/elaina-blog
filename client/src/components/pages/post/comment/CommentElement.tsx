@@ -22,6 +22,7 @@ const Container = styled.div((props) => ({
 const ReplyButtonContainer = styled.div({
   display: 'flex',
   width: '100%',
+  marginBottom: '1rem',
   justifyContent: 'space-between',
   alignItems: 'center'
 });

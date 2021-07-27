@@ -8,9 +8,10 @@ import { ReplyBox } from './box/ReplyBox';
 const ReplyContainer = styled.div<{ isAdmin: boolean }>((props) => ({
   width: '100%',
   margin: '.5rem 0',
-  padding: '.5rem',
+  padding: '.5rem 1rem 0 2rem',
   backgroundColor: props.theme.replyBackground,
-  borderLeft: '3px solid #727272'
+  borderLeft: '3px solid #727272',
+  borderRadius: '0 .5rem .5rem 0'
 }));
 
 interface Props {
