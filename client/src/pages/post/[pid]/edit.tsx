@@ -2,7 +2,7 @@ import React from 'react';
 import { GetServerSideProps } from 'next';
 
 import { appCommponProps } from 'src/pages/_app';
-import { initApolloClient } from 'src/apollo/withApollo';
+import { initApolloClient } from 'src/lib/withApollo';
 import { Writer } from 'src/components/pages/admin';
 import { GetProfileQueryType, GET_PROFILE } from 'src/query/profile';
 import { FindPostByIdQueryType, FindPostByIdVars, FIND_POST_BY_ID } from 'src/query/post';

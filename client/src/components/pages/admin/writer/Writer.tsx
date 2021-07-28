@@ -9,7 +9,7 @@ import { useRouter } from 'next/router';
 import { RefInputBox, useWidth, Loading } from 'src/components';
 import { CategoryDetailType } from 'src/query/category';
 import { EditPostQueryType, EditPostVars, EDIT_POST, WritePostQueryType, WritePostVars, WRITE_POST } from 'src/query/post';
-import { useApollo } from 'src/apollo/apolloClient';
+import { useApollo } from 'src/lib/apolloClient';
 import { IsAuthQueryType, IS_AUTH } from 'src/query/user';
 import styles from 'src/styles/markdown-styles.module.css';
 

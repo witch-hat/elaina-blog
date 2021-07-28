@@ -15,7 +15,7 @@ import { IS_AUTH, IsAuthQueryType } from 'src/query/user';
 import { GlobalStyles } from 'src/styles';
 import { store, persistor } from 'src/redux';
 import { Layout } from 'src/components/Layout';
-import { withApollo, initApolloClient } from 'src/apollo/withApollo';
+import { withApollo, initApolloClient } from 'src/lib/withApollo';
 
 // Skip Adding FontAwesome CSS
 config.autoAddCss = false;

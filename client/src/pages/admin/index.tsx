@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { GetServerSideProps } from 'next';
 
 import { trans, Lang } from 'src/resources/languages';
-import { initApolloClient } from 'src/apollo/withApollo';
+import { initApolloClient } from 'src/lib/withApollo';
 import { AppCommonProps, appCommponProps } from 'src/pages/_app';
 import { AdminPageLayout, PageTitle, CommentLogBox } from 'src/components/pages/admin';
 import { CommentLogDataType, GET_COMMENT_LOGS, CommentLogQueryType, CommentLogVars } from 'src/query/comment-log';

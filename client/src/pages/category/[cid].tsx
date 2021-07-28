@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import { AppCommonProps } from 'src/pages/_app';
-import { initApolloClient } from 'src/apollo/withApollo';
+import { initApolloClient } from 'src/lib/withApollo';
 import { PostItem } from 'src/components/pages/main/post/PostItem';
 import { FindSameCategoryPostsQueryType, FindSameCategoryPostsVars, FIND_SAME_CATEGORY_POSTS, PostDetailDataType } from 'src/query/post';
 

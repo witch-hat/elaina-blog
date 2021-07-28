@@ -5,7 +5,7 @@ import { useMutation } from '@apollo/client';
 import { AlertStateType } from 'src/components';
 import { ProfileDataType, UpdateProfileQueryType, UpdateProfileVars, UPDATE_PROFILE } from 'src/query/profile';
 import { UploadFileQueryType, UploadFileVars, UPLOAD_FILE } from 'src/query/file';
-import { useApollo } from 'src/apollo/apolloClient';
+import { useApollo } from 'src/lib/apolloClient';
 import { IsAuthQueryType, IS_AUTH } from 'src/query/user';
 
 import { MemoizedProfileImageEditor } from './ProfileImageEditor';

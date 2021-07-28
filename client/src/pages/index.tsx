@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 
-import { initApolloClient } from 'src/apollo/withApollo';
+import { initApolloClient } from 'src/lib/withApollo';
 import { GET_LATEST_POSTS, GetLastestPostsQueryType, GetLatestPostsVars, PostDetailDataType } from 'src/query/post';
 import { GET_CATEGORIES_WITH_DETAILS, CategoryDetailType, CategoryDetailsQueryType } from 'src/query/category';
 import { GET_PROFILE, ProfileDataType, GetProfileQueryType } from 'src/query/profile';

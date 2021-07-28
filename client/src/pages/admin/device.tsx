@@ -4,7 +4,7 @@ import { GetServerSideProps } from 'next';
 
 import { appCommponProps } from 'src/pages/_app';
 import { trans, Lang } from 'src/resources/languages';
-import { initApolloClient } from 'src/apollo/withApollo';
+import { initApolloClient } from 'src/lib/withApollo';
 import { GetDeviceQueryType, GET_DEVICES, LoginDeviceType } from 'src/query/user';
 import { PageTitle, AdminPageLayout, DeviceItem } from 'src/components/pages/admin';
 

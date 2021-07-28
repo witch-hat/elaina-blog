@@ -4,7 +4,7 @@ import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 
 import { Writer } from 'src/components/pages/admin';
-import { initApolloClient } from 'src/apollo/withApollo';
+import { initApolloClient } from 'src/lib/withApollo';
 import { GetProfileQueryType, GET_PROFILE, ProfileDataType } from 'src/query/profile';
 import { appCommponProps } from 'src/pages/_app';
 import { CategoryDetailType, GET_CATEGORIES_WITH_DETAILS, CategoryDetailsQueryType } from 'src/query/category';

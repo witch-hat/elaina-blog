@@ -89,7 +89,7 @@ function createApolloClient(
   initialState: NormalizedCacheObject = {},
   ctx: NextPageContext | GetServerSidePropsContext | null = null
 ): ApolloClient<NormalizedCacheObject> {
-  const enhancedFetch = (url: string, init: any) => {
+  const enhancedFetch = async (url: string, init: any) => {
     return fetch(url, {
       ...init,
       headers: {

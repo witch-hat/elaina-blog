@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { ApolloClient, ApolloLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client';
 import { createUploadLink } from 'apollo-upload-client';
 import { onError } from 'apollo-link-error';
-// import { merge } from 'lodash';
+import { merge } from 'lodash';
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
@@ -35,7 +35,9 @@ export function initializeApollo(initialState: any = null) {
   const _apolloClient: ApolloClient<NormalizedCacheObject> = apolloClient ?? createApolloClient();
 
   if (initialState) {
-    _apolloClient.cache.restore(initialState);
+    const existingCache = _apolloClient.extract();
+    const data = merge(initialState, existingCache);
+    _apolloClient.cache.restore(data);
   }
   if (typeof window === 'undefined') {
     return _apolloClient;

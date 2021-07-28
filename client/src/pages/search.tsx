@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { GetServerSideProps } from 'next';
 
 import { PostDataType, SEARCH, SearchPostQueryType, SearchPostVars } from 'src/query/post';
-import { initApolloClient } from 'src/apollo/withApollo';
+import { initApolloClient } from 'src/lib/withApollo';
 import { ResultContainer } from 'src/components/pages/search';
 
 const Container = styled.div<{ isEmptyResult?: boolean }>((props) => ({

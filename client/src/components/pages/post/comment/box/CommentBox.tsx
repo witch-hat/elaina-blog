@@ -11,7 +11,7 @@ import {
   EditCommentVars
 } from 'src/query/comment';
 import { DELETE_COMMENT_LOG, DeleteCommentLogVars, DeleteCommentLogQueryType } from 'src/query/comment-log';
-import { useApollo } from 'src/apollo/apolloClient';
+import { useApollo } from 'src/lib/apolloClient';
 import { IsAuthQueryType, IS_AUTH } from 'src/query/user';
 
 import { CommentBoxLayout } from './BoxLayout';

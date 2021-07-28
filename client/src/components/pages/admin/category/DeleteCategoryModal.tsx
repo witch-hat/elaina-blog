@@ -5,7 +5,7 @@ import { useMutation } from '@apollo/client';
 
 import { ModalWrapper } from 'src/components';
 import { DELETE_CATEGORY, DeleteCategoryVars, DeleteCategoryQueryType } from 'src/query/category';
-import { useApollo } from 'src/apollo/apolloClient';
+import { useApollo } from 'src/lib/apolloClient';
 import { IsAuthQueryType, IS_AUTH } from 'src/query/user';
 
 const ModalContainer = styled.div({

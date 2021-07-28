@@ -13,7 +13,7 @@ import {
   FIND_SAME_CATEGORY_POSTS
 } from 'src/query/post';
 import { IsAuthQueryType, IS_AUTH } from 'src/query/user';
-import { useApollo } from 'src/apollo/apolloClient';
+import { useApollo } from 'src/lib/apolloClient';
 import { ProfileDataType } from 'src/query/profile';
 
 import { ArticleMenu } from './ArticleMenu';

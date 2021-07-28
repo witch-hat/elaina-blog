@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 
 import { AppCommonProps } from 'src/pages/_app';
-import { initApolloClient } from 'src/apollo/withApollo';
+import { initApolloClient } from 'src/lib/withApollo';
 import { FindPostByIdQueryType, FindPostByIdVars, FIND_POST_BY_ID, PostDataType } from 'src/query/post';
 import { GET_PROFILE, ProfileDataType, GetProfileQueryType } from 'src/query/profile';
 import { GET_COMMENTS, CommentContainerType, GetCommentsQueryType, GetCommentVars } from 'src/query/comment';
