@@ -51,6 +51,10 @@ export function SearchMenu() {
   const router = useRouter();
   const [searchKeyword, setSearchKeyWord] = useState('');
 
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setSearchKeyWord(e.target.value);
+  }
+
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
@@ -63,7 +67,7 @@ export function SearchMenu() {
   }
 
   return (
-    <SearchForm onSubmit={(e: React.FormEvent<HTMLFormElement>) => handleSubmit(e)}>
+    <SearchForm onSubmit={handleSubmit}>
       <NoRefInputBox
         type='text'
         placeholder={trans(Lang.Search)}
@@ -72,7 +76,7 @@ export function SearchMenu() {
         maxLength={10}
         value={searchKeyword}
         styles={{ width: '180px', small: { width: '120px', height: '32px' } }}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchKeyWord(e.currentTarget.value)}
+        onChange={handleChange}
       />
       <MemoizedSearchButton />
     </SearchForm>

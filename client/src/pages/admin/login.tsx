@@ -90,18 +90,11 @@ export default function Login() {
   const [isPasswordInputValid, setIsPasswordInputValid] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
-  const [login] = useMutation<LoginQueryType, LoginVars>(LOGIN, {
-    onCompleted: () => {
-      router.replace(router.asPath);
-    },
-    onError: (err: Error) => {
-      handleSubmitError(err.message);
-    }
-  });
+  const [login] = useMutation<LoginQueryType, LoginVars>(LOGIN);
 
   // prefetch
   useEffect(() => {
-    const prefetchURL = `${router.query.url}`.replaceAll('%2F', '/');
+    const prefetchURL = `${router.query.url}`;
     router.prefetch(prefetchURL);
   }, []);
 
@@ -135,12 +128,25 @@ export default function Login() {
         setIsEamilInputValid(false);
         setErrorMessage('Please Input Email');
       } else {
-        login({
-          variables: {
-            emailId: emailInputRef.current.value,
-            password: passwordInputRef.current.value
+        try {
+          const { data } = await login({
+            variables: {
+              emailId: emailInputRef.current.value,
+              password: passwordInputRef.current.value
+            }
+          });
+
+          if (!data) {
+            alert('Login response error...');
+            return;
           }
-        });
+
+          if (data.login.isSuccess) {
+            router.push((router.query.url as string) || '/');
+          }
+        } catch (err) {
+          handleSubmitError(err.message);
+        }
       }
     }
   }
