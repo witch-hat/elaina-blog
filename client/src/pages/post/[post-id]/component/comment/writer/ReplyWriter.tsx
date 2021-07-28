@@ -6,6 +6,17 @@ import { IS_AUTH } from 'src/query/user';
 import { PUSH_COMMENT_LOG, CommentEvent, PushCommentLogVars, PushCommentLogQueryType } from 'src/query/comment-log';
 
 import { Writer } from './Writer';
+import styled from 'styled-components';
+
+const Container = styled.div({
+  display: 'flex',
+  width: '100%',
+  justifyContent: 'center'
+});
+
+const Inner = styled.div({
+  width: '95%'
+});
 
 interface Props {
   isLogin: boolean;
@@ -99,5 +110,11 @@ export function ReplyWriter(props: Props) {
     }
   }
 
-  return <Writer isLogin={props.isLogin} addComment={addReply} />;
+  return (
+    <Container>
+      <Inner>
+        <Writer isLogin={props.isLogin} addComment={addReply} />
+      </Inner>
+    </Container>
+  );
 }
