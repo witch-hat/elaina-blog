@@ -79,6 +79,8 @@ export interface LogoutQueryType {
 
 export const LOGOUT = gql`
   mutation Logout {
-    logout
+    logout {
+      isSuccess
+    }
   }
 `;
