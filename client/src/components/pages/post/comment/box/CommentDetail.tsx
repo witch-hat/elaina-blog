@@ -27,8 +27,19 @@ const Author = styled.div({
 
 const Time = styled.span({
   display: 'flex',
+  marginRight: '.7rem',
   alignItems: 'center'
 });
+
+const AuthorCommentSign = styled.div<{ isAdmin: boolean }>((props) => ({
+  display: props.isAdmin ? 'block' : 'none',
+  padding: '.1rem .5rem',
+  backgroundColor: props.theme.adminCommentSignColor,
+  borderRadius: '.5rem',
+  color: props.theme.adminCommentTextColor,
+  fontWeight: props.theme.adminCommentTextWeight,
+  transition: '.2s all'
+}));
 
 interface Props {
   comment: CommentType | ReplyType;
@@ -48,6 +59,7 @@ function CommentDetail(props: Props) {
         <FontAwesomeIcon icon={faClock} style={{ marginRight: '.5rem' }} />
         <p>{FormatUnifier.getFullFormatDate(createdAt)}</p>
       </Time>
+      <AuthorCommentSign isAdmin={props.comment.isAdmin}>AUTHOR</AuthorCommentSign>
     </InformationContainer>
   );
 }

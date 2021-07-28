@@ -10,12 +10,12 @@ import { CommentElement } from './CommentElement';
 
 const Container = styled.div({
   display: 'flex',
-  width: '100%',
+  width: '95%',
   minHeight: '20rem',
-  margin: '20px 0',
-  padding: '.5rem 1.5rem',
+  margin: '20px',
+  padding: '.5rem 3.5rem',
   flexDirection: 'column',
-  jusitfyContent: 'flex-start',
+  justifyContent: 'center',
   alignItems: 'center',
   '@media screen and (max-width: 767px)': {
     padding: '.5rem'

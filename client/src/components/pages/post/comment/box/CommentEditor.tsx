@@ -18,7 +18,7 @@ const Editor = styled.textarea({
   backgroundColor: '#fff',
   outline: 'none',
   cursor: 'text',
-  resize: 'vertical',
+  resize: 'none',
   overflow: 'auto'
 });
 

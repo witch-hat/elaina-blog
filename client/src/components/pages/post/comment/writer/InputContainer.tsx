@@ -36,7 +36,11 @@ function InputContainer(props: Props) {
         minLength={props.minLength}
         placeholder={props.placeholder}
         value={props.value}
-        styles={{ width: '100px', height: '2rem', small: { width: '100px', height: '2rem' } }}
+        styles={{
+          width: '100px',
+          height: '2rem',
+          small: { width: '100px', height: '2rem' }
+        }}
         onChange={props.onChange}
       />
     </Container>
