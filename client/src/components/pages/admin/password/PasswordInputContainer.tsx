@@ -5,7 +5,7 @@ import { useMutation } from '@apollo/client';
 import { UpdatePasswordQueryType, UpdatePasswordVars, UPDATE_PASSWORD } from 'src/query/user';
 import { trans, Lang } from 'src/resources/languages';
 
-import { PasswordInputItem } from './PasswordInputItem';
+import { MemoizedPasswordInputItem } from './PasswordInputItem';
 
 const Container = styled.div({
   width: '100%'
@@ -30,6 +30,12 @@ const ForgotPassword = styled.p({
   }
 });
 
+interface Passwords {
+  current: string;
+  new: string;
+  confirm: string;
+}
+
 interface Props {
   resetAlert: () => void;
   setSuccessAlert: () => void;
@@ -37,56 +43,44 @@ interface Props {
 }
 
 export function PassowordInputContainer(props: Props) {
-  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
   const newPasswordRegex = new RegExp('^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,20})');
+  const initPasswords: Passwords = { current: '', new: '', confirm: '' };
 
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwords, setPasswords] = useState<Passwords>(initPasswords);
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [isValidPassword, setIsValidPassword] = useState(false);
 
   const [changePassword] = useMutation<UpdatePasswordQueryType, UpdatePasswordVars>(UPDATE_PASSWORD, {
     variables: {
-      old: currentPassword,
-      new: newPassword,
-      confirm: confirmPassword
+      old: passwords.current,
+      new: passwords.new,
+      confirm: passwords.confirm
     }
   });
 
-  const onCurrentPasswordChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setCurrentPassword(e.target.value);
-    },
-    [currentPassword]
-  );
+  const onCurrentPasswordChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setPasswords((prev) => ({ ...prev, current: e.target.value }));
+  }, []);
 
-  const onNewPasswordChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setNewPassword(e.target.value);
-    },
-    [newPassword]
-  );
+  const onNewPasswordChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setPasswords((prev) => ({ ...prev, new: e.target.value }));
+  }, []);
 
-  const onConfirmPasswordChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setConfirmPassword(e.target.value);
-    },
-    [currentPassword]
-  );
+  const onConfirmPasswordChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setPasswords((prev) => ({ ...prev, confirm: e.target.value }));
+  }, []);
 
   useEffect(() => {
-    console.log(newPassword);
-    if (newPassword.match(newPasswordRegex) === null) {
+    if (passwords.new.match(newPasswordRegex) === null) {
       setIsValidPassword(false);
     } else {
       setIsValidPassword(true);
     }
-  }, [newPassword]);
+  }, [passwords.new]);
 
   useEffect(() => {
-    if (confirmPassword.length >= 8) {
-      if (newPassword === confirmPassword) {
+    if (passwords.confirm.length >= 8) {
+      if (passwords.new === passwords.confirm) {
         setIsConfirmed(true);
       } else {
         setIsConfirmed(false);
@@ -94,7 +88,7 @@ export function PassowordInputContainer(props: Props) {
     } else {
       setIsConfirmed(false);
     }
-  }, [confirmPassword, newPassword]);
+  }, [passwords.confirm, passwords.new]);
 
   async function handleSubmitClick() {
     // check new password
@@ -103,7 +97,7 @@ export function PassowordInputContainer(props: Props) {
       return;
     }
 
-    if (newPassword.match(newPasswordRegex) === null) {
+    if (passwords.new.match(newPasswordRegex) === null) {
       alert('Password: aphabet, number, special character with 8~20 length');
       return;
     }
@@ -113,9 +107,7 @@ export function PassowordInputContainer(props: Props) {
       await changePassword();
 
       props.setSuccessAlert();
-      setCurrentPassword('');
-      setNewPassword('');
-      setConfirmPassword('');
+      setPasswords(initPasswords);
     } catch (err) {
       props.setErrorAlert(err);
     }
@@ -123,28 +115,28 @@ export function PassowordInputContainer(props: Props) {
 
   return (
     <Container>
-      <PasswordInputItem
+      <MemoizedPasswordInputItem
         description={trans(Lang.CurrentPassword)}
         placeholder='Current password'
-        value={currentPassword}
-        onChange={(e) => onCurrentPasswordChange(e)}
+        value={passwords.current}
+        onChange={onCurrentPasswordChange}
       />
-      <PasswordInputItem
+      <MemoizedPasswordInputItem
         description={trans(Lang.NewPassword)}
         placeholder='New password'
-        value={newPassword}
-        onChange={(e) => onNewPasswordChange(e)}
-        isValid={newPassword.length ? isValidPassword : undefined}
+        value={passwords.new}
+        onChange={onNewPasswordChange}
+        isValid={passwords.new.length ? isValidPassword : undefined}
       />
-      <PasswordInputItem
+      <MemoizedPasswordInputItem
         description={trans(Lang.ConfirmPassword)}
         placeholder='Confirm password'
-        value={confirmPassword}
-        onChange={(e) => onConfirmPasswordChange(e)}
-        isValid={confirmPassword.length ? isConfirmed : undefined}
+        value={passwords.confirm}
+        onChange={onConfirmPasswordChange}
+        isValid={passwords.confirm.length ? isConfirmed : undefined}
       />
       <ButtonContainer>
-        <SubmitButton onClick={() => handleSubmitClick()}>{trans(Lang.ChangePassword)}</SubmitButton>
+        <SubmitButton onClick={handleSubmitClick}>{trans(Lang.ChangePassword)}</SubmitButton>
         <ForgotPassword>{trans(Lang.ForgotPassword)}</ForgotPassword>
       </ButtonContainer>
     </Container>

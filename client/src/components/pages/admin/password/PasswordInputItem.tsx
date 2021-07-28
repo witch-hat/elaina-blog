@@ -58,10 +58,12 @@ export function PasswordInputItem(props: Props) {
           value={props.value}
           placeholder={props.placeholder}
           styles={{ width: '400px' }}
-          onChange={(e) => props.onChange(e)}
+          onChange={props.onChange}
         />
         {props.isValid !== undefined && <ValidIcon isValid={props.isValid} />}
       </Flex>
     </InputContainer>
   );
 }
+
+export const MemoizedPasswordInputItem = React.memo(PasswordInputItem);
