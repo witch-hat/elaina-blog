@@ -13,7 +13,7 @@ const Container = styled.div({
   width: '95%',
   minHeight: '20rem',
   margin: '20px',
-  padding: '.5rem 3.5rem',
+  padding: '.5rem 1.5rem',
   flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'center',
@@ -22,17 +22,15 @@ const Container = styled.div({
   }
 });
 
-const Title = styled.span({
-  display: 'block',
+const Title = styled.p({
   width: '100%',
-  fontSize: '1.4rem',
+  marginBottom: '.5rem',
+  fontSize: '1.25rem',
   fontWeight: 'bold'
 });
 
-const Counter = styled.p({
-  width: '100%',
-  fontSize: '1.15rem',
-  fontWeight: 'bold'
+const Comments = styled.div({
+  width: 'calc(100% - 6rem)'
 });
 
 interface Props {
@@ -78,7 +76,7 @@ export function CommentContainer(props: Props) {
 
   return (
     <Container>
-      <Title>{trans(Lang.Comments)}</Title>
+      <Title>{`덧글 수: ${commentContainer.count}개`}</Title>
       <CommentWriter
         isLogin={props.isLogin}
         onAddComment={addNewComment}
@@ -86,8 +84,7 @@ export function CommentContainer(props: Props) {
         postId={props.postId}
         commentIndex={commentContainer.comments.length + 1}
       />
-      <div style={{ width: '100%' }}>
-        <Counter>{`덧글 수: ${commentContainer.count}개`}</Counter>
+      <Comments>
         {commentContainer &&
           commentContainer.comments.map((comment: CommentType, index: number) => {
             return (
@@ -108,7 +105,7 @@ export function CommentContainer(props: Props) {
               />
             );
           })}
-      </div>
+      </Comments>
     </Container>
   );
 }

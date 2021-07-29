@@ -6,8 +6,7 @@ import { MemoizedInputContainer } from './InputContainer';
 
 const EditorContainer = styled.form({
   width: '100%',
-  margin: '1rem 0 .5rem 0',
-  padding: '0 1rem'
+  margin: '1rem 0 .5rem 0'
 });
 
 const InputWrapper = styled.div({

@@ -1,3 +1,4 @@
+import styled from 'styled-components';
 import { useMutation, useApolloClient } from '@apollo/client';
 
 import { WRITE_COMMENT, CommentType, WriteCommentVars, WriteCommentQueryType } from 'src/query/comment';
@@ -5,6 +6,10 @@ import { IsAuthQueryType, IS_AUTH } from 'src/query/user';
 import { PUSH_COMMENT_LOG, CommentEvent, PushCommentLogVars, PushCommentLogQueryType } from 'src/query/comment-log';
 
 import { Writer } from './Writer';
+
+const Container = styled.div({
+  width: 'calc(100% - 6rem)'
+});
 
 interface Props {
   isLogin: boolean;
@@ -96,5 +101,9 @@ export function CommentWriter(props: Props) {
     }
   }
 
-  return <Writer isLogin={props.isLogin} addComment={addComment} isComment />;
+  return (
+    <Container>
+      <Writer isLogin={props.isLogin} addComment={addComment} isComment />
+    </Container>
+  );
 }

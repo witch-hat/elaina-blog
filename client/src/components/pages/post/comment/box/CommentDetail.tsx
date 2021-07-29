@@ -9,7 +9,7 @@ import { CommentType, ReplyType } from 'src/query/comment';
 const InformationContainer = styled.div({
   display: 'flex',
   alignItems: 'center',
-  fontSize: '.8rem',
+  fontSize: '.85rem',
   '@media screen and (max-width: 767px)': {
     flexDirection: 'column',
     alignItems: 'flex-start'

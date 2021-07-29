@@ -1,3 +1,4 @@
+import styled from 'styled-components';
 import { useMutation, useApolloClient } from '@apollo/client';
 
 import { ReplyType, WRITE_REPLY, WriteReplyVars, WriteReplyQueryType } from 'src/query/comment';
@@ -5,6 +6,11 @@ import { IsAuthQueryType, IS_AUTH } from 'src/query/user';
 import { PUSH_COMMENT_LOG, CommentEvent, PushCommentLogVars, PushCommentLogQueryType } from 'src/query/comment-log';
 
 import { Writer } from './Writer';
+
+const Container = styled.div({
+  width: '90%',
+  margin: '0 auto'
+});
 
 interface Props {
   isLogin: boolean;
@@ -98,5 +104,9 @@ export function ReplyWriter(props: Props) {
     }
   }
 
-  return <Writer isLogin={props.isLogin} addComment={addReply} />;
+  return (
+    <Container>
+      <Writer isLogin={props.isLogin} addComment={addReply} />
+    </Container>
+  );
 }
