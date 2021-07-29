@@ -42,10 +42,6 @@ const ContentContainer = styled.section((props) => ({
   }
 }));
 
-const Comment = styled.section({
-  width: '100%'
-});
-
 interface ServerSideProps {
   categoryId: number;
   post: PostDataType;
@@ -76,15 +72,13 @@ export default function PostId(props: Props) {
           article={props.post.article}
           isLogin={props.app.isLogin}
         />
-        <Comment ref={commentRef}>
-          <CommentContainer
-            comments={props.comment}
-            isLogin={props.app.isLogin}
-            author={props.profile.name!}
-            categoryId={props.categoryId}
-            postId={props.post._id}
-          />
-        </Comment>
+        <CommentContainer
+          comments={props.comment}
+          isLogin={props.app.isLogin}
+          author={props.profile.name!}
+          categoryId={props.categoryId}
+          postId={props.post._id}
+        />
       </ContentContainer>
       <RightSideContainer commentsCount={props.comment.count} scrollToComment={scrollToComment} />
     </Container>

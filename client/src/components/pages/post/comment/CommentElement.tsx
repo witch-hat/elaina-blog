@@ -12,7 +12,6 @@ import { ReplyElement } from './ReplyElement';
 const Container = styled.div((props) => ({
   display: 'flex',
   width: '100%',
-  margin: '1rem 0 0',
   borderTop: `2px solid ${props.theme.borderColor}`,
   transition: '.2s all',
   justifyContent: 'center',

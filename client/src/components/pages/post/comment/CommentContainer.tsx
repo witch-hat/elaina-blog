@@ -8,12 +8,11 @@ import { trans, Lang } from 'src/resources/languages';
 import { CommentWriter } from './writer/CommentWriter';
 import { CommentElement } from './CommentElement';
 
-const Container = styled.div({
+const Container = styled.section({
   display: 'flex',
-  width: '95%',
+  width: '100%',
   minHeight: '20rem',
-  margin: '20px',
-  padding: '.5rem 1.5rem',
+  padding: '.5rem 3rem',
   flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'center',
@@ -28,6 +27,13 @@ const Title = styled.p({
   fontSize: '1.25rem',
   fontWeight: 'bold'
 });
+
+const StyleHr = styled.hr((props) => ({
+  width: '100%',
+  border: 'none',
+  margin: '0',
+  borderBottom: `2px solid ${props.theme.borderColor}`
+}));
 
 const Comments = styled.div({
   width: 'calc(100% - 6rem)'
@@ -77,6 +83,7 @@ export function CommentContainer(props: Props) {
   return (
     <Container>
       <Title>{`덧글 수: ${commentContainer.count}개`}</Title>
+      <StyleHr />
       <CommentWriter
         isLogin={props.isLogin}
         onAddComment={addNewComment}
