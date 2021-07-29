@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useEffect, useRef } from 'react';
 import { useState } from 'react';
-import { useMutation } from '@apollo/client';
+import { useMutation, useApolloClient } from '@apollo/client';
 import ReactMarkdown from 'react-markdown';
 import styled from 'styled-components';
 import gfm from 'remark-gfm';
@@ -9,7 +9,6 @@ import { useRouter } from 'next/router';
 import { RefInputBox, useWidth, Loading } from 'src/components';
 import { CategoryDetailType } from 'src/query/category';
 import { EditPostQueryType, EditPostVars, EDIT_POST, WritePostQueryType, WritePostVars, WRITE_POST } from 'src/query/post';
-import { useApollo } from 'src/lib/apolloClient';
 import { IsAuthQueryType, IS_AUTH } from 'src/query/user';
 import styles from 'src/styles/markdown-styles.module.css';
 
@@ -122,7 +121,7 @@ export function Writer(props: Props) {
   const [selectedCategory, setSelectedCategory] = useState(DEFAULT_CATEGORY);
   const [visibleSubmitBtn, setVisibleSubmitBtn] = useState(true);
 
-  const client = useApollo();
+  const client = useApolloClient();
   const [writePost, { loading: writeLoading }] = useMutation<WritePostQueryType, WritePostVars>(WRITE_POST);
   const [editPost, { loading: editLoading }] = useMutation<EditPostQueryType, EditPostVars>(EDIT_POST);
 

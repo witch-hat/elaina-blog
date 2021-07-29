@@ -4,7 +4,7 @@ import { GetServerSideProps } from 'next';
 
 import { appCommponProps } from 'src/pages/_app';
 import { trans, Lang } from 'src/resources/languages';
-import { initApolloClient } from 'src/lib/withApollo';
+import { initializeApollo } from 'src/lib/apollo';
 import { GetDeviceQueryType, GET_DEVICES, LoginDeviceType } from 'src/query/user';
 import { PageTitle, AdminPageLayout, DeviceItem } from 'src/components/pages/admin';
 
@@ -53,7 +53,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
 
   context.res.setHeader('Cache-Control', 'max-age=0, public, must-revalidate');
 
-  const client = initApolloClient({}, context);
+  const client = initializeApollo({}, context);
   const { data } = await client.query<GetDeviceQueryType>({ query: GET_DEVICES });
   const loginDevices = data.findDevices;
 

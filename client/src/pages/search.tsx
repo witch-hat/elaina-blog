@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { GetServerSideProps } from 'next';
 
 import { PostDataType, SEARCH, SearchPostQueryType, SearchPostVars } from 'src/query/post';
-import { initApolloClient } from 'src/lib/withApollo';
+import { initializeApollo } from 'src/lib/apollo';
 import { ResultContainer } from 'src/components/pages/search';
 
 const Container = styled.div<{ isEmptyResult?: boolean }>((props) => ({
@@ -78,7 +78,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
     };
   }
 
-  const client = initApolloClient({}, context);
+  const client = initializeApollo({}, context);
 
   const { data } = await client.query<SearchPostQueryType, SearchPostVars>({ query: SEARCH, variables: { keyword: `${keyword}` } });
 

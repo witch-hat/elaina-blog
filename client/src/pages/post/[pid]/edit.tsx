@@ -2,7 +2,7 @@ import React from 'react';
 import { GetServerSideProps } from 'next';
 
 import { appCommponProps } from 'src/pages/_app';
-import { initApolloClient } from 'src/lib/withApollo';
+import { initializeApollo } from 'src/lib/apollo';
 import { Writer } from 'src/components/pages/admin';
 import { GetProfileQueryType, GET_PROFILE } from 'src/query/profile';
 import { FindPostByIdQueryType, FindPostByIdVars, FIND_POST_BY_ID } from 'src/query/post';
@@ -59,7 +59,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
     };
   }
 
-  const client = initApolloClient({}, context);
+  const client = initializeApollo({}, context);
 
   const [profile, findPostResult, categoriesQuery] = await Promise.all([
     client.query<GetProfileQueryType>({ query: GET_PROFILE }),

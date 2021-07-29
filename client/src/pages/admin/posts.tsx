@@ -7,7 +7,7 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 import { GET_LATEST_POSTS, GetLastestPostsQueryType, GetLatestPostsVars, PostDetailDataType } from 'src/query/post';
 import { trans, Lang } from 'src/resources/languages';
-import { initApolloClient } from 'src/lib/withApollo';
+import { initializeApollo } from 'src/lib/apollo';
 import { BorderBox, CircleRippleWrapper } from 'src/components';
 import { appCommponProps, AppCommonProps } from 'src/pages/_app';
 import { AdminPageLayout, PageTitle } from 'src/components/pages/admin';
@@ -134,7 +134,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
     };
   }
 
-  const client = initApolloClient({}, context);
+  const client = initializeApollo({}, context);
   const { data } = await client.query<GetLastestPostsQueryType, GetLatestPostsVars>({
     query: GET_LATEST_POSTS,
     variables: {

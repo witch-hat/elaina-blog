@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useMutation } from '@apollo/client';
+import { useMutation, useApolloClient } from '@apollo/client';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 
@@ -13,7 +13,6 @@ import {
   FIND_SAME_CATEGORY_POSTS
 } from 'src/query/post';
 import { IsAuthQueryType, IS_AUTH } from 'src/query/user';
-import { useApollo } from 'src/lib/apolloClient';
 import { ProfileDataType } from 'src/query/profile';
 
 import { ArticleMenu } from './ArticleMenu';
@@ -65,7 +64,7 @@ export function ArticleContainer(props: Props) {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const client = useApollo();
+  const client = useApolloClient();
   const [deletePost] = useMutation<DeletePostQueryType, DeletePostVars>(DELETE_POST);
   const [deletePostAllCommentLog] = useMutation<DeletePostAllCommentLogQueryType, DeletePostAllCommentLogVars>(DELETE_POST_ALL_COMMENT_LOG);
 

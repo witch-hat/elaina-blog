@@ -1,11 +1,10 @@
 import React, { useState, useCallback } from 'react';
 import dynamic from 'next/dynamic';
-import { useMutation } from '@apollo/client';
+import { useMutation, useApolloClient } from '@apollo/client';
 
 import { AlertStateType } from 'src/components';
 import { ProfileDataType, UpdateProfileQueryType, UpdateProfileVars, UPDATE_PROFILE } from 'src/query/profile';
 import { UploadFileQueryType, UploadFileVars, UPLOAD_FILE } from 'src/query/file';
-import { useApollo } from 'src/lib/apolloClient';
 import { IsAuthQueryType, IS_AUTH } from 'src/query/user';
 
 import { MemoizedProfileImageEditor } from './ProfileImageEditor';
@@ -31,7 +30,7 @@ export function ProfileEditor(props: Props) {
   const [selectedImageFile, setSelectedImageFile] = useState<File>();
   const [editingProfile, setEditingProfile] = useState<ProfileDataType>(props.profile);
 
-  const client = useApollo();
+  const client = useApolloClient();
   const [uploadFile] = useMutation<UploadFileQueryType, UploadFileVars>(UPLOAD_FILE);
   const [updateProfile] = useMutation<UpdateProfileQueryType, UpdateProfileVars>(UPDATE_PROFILE);
 

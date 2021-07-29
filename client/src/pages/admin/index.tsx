@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { GetServerSideProps } from 'next';
 
 import { trans, Lang } from 'src/resources/languages';
-import { initApolloClient } from 'src/lib/withApollo';
+import { initializeApollo } from 'src/lib/apollo';
 import { AppCommonProps, appCommponProps } from 'src/pages/_app';
 import { AdminPageLayout, PageTitle, CommentLogBox } from 'src/components/pages/admin';
 import { CommentLogDataType, GET_COMMENT_LOGS, CommentLogQueryType, CommentLogVars } from 'src/query/comment-log';
@@ -55,7 +55,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
 
   context.res.setHeader('Cache-Control', 'max-age=0, public, must-revalidate');
 
-  const client = initApolloClient({}, context);
+  const client = initializeApollo({}, context);
   const { data: CommentData } = await client.query<CommentLogQueryType, CommentLogVars>({
     query: GET_COMMENT_LOGS,
     variables: { page: 1 }

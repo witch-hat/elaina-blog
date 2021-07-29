@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { ThemeProvider } from 'styled-components';
-import type { AppContext } from 'next/app';
+import type { AppContext, AppProps } from 'next/app';
 import Head from 'next/head';
 import { ApolloProvider } from '@apollo/client';
 import { config } from '@fortawesome/fontawesome-svg-core';
@@ -15,7 +15,7 @@ import { IS_AUTH, IsAuthQueryType } from 'src/query/user';
 import { GlobalStyles } from 'src/styles';
 import { store, persistor } from 'src/redux';
 import { Layout } from 'src/components/Layout';
-import { withApollo, initApolloClient } from 'src/lib/withApollo';
+import { useApollo, initializeApollo } from 'src/lib/apollo';
 
 // Skip Adding FontAwesome CSS
 config.autoAddCss = false;
@@ -38,7 +38,11 @@ const FONT = `
   }
 `;
 
-function ElainaBlog({ Component, pageProps, apolloClient, cookies }: any) {
+interface Props extends AppProps {
+  cookies: string[];
+}
+
+export default function ElainaBlog({ Component, pageProps, cookies }: Props) {
   const [themeMode, setThemeMode] = useState(() => {
     if (typeof window !== 'undefined') {
       const initialState = window.localStorage.getItem('mode') || '';
@@ -56,6 +60,7 @@ function ElainaBlog({ Component, pageProps, apolloClient, cookies }: any) {
   }
 
   useTranslation();
+  const apolloClient = useApollo(pageProps);
 
   const changeThemeMode = useCallback((value: string) => setThemeMode(value), []);
 
@@ -100,7 +105,7 @@ export const appCommponProps: AppCommonProps = {
 
 ElainaBlog.getInitialProps = async (context: AppContext) => {
   const { ctx, Component } = context;
-  const client = initApolloClient({}, ctx);
+  const client = initializeApollo({}, ctx);
   const { data } = await client.query<IsAuthQueryType>({ query: IS_AUTH });
   const isLogin = data.isAuth.isSuccess;
 
@@ -121,5 +126,3 @@ ElainaBlog.getInitialProps = async (context: AppContext) => {
 
   return { pageProps, cookies };
 };
-
-export default withApollo(ElainaBlog);

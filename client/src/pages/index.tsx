@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 
-import { initApolloClient } from 'src/lib/withApollo';
+import { initializeApollo } from 'src/lib/apollo';
 import { GET_LATEST_POSTS, GetLastestPostsQueryType, GetLatestPostsVars, PostDetailDataType } from 'src/query/post';
 import { GET_CATEGORIES_WITH_DETAILS, CategoryDetailType, CategoryDetailsQueryType } from 'src/query/category';
 import { GET_PROFILE, ProfileDataType, GetProfileQueryType } from 'src/query/profile';
@@ -47,7 +47,7 @@ export default function Index(props: Props) {
 }
 
 export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (context) => {
-  context.res.setHeader('Cache-Control', 'max-age=0, public, must-revalidate');
+  // context.res.setHeader('Cache-Control', 'max-age=0, public, must-revalidate');
 
   const { edit } = context.query;
 
@@ -69,7 +69,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
     };
   }
 
-  const apolloClient = initApolloClient({}, context);
+  const apolloClient = initializeApollo({}, context);
   const [profileQueryResult, categoryQueryResult, aboutQueryResult, latestPostsQueryResult] = await Promise.all([
     apolloClient.query<GetProfileQueryType>({ query: GET_PROFILE }),
     apolloClient.query<CategoryDetailsQueryType>({ query: GET_CATEGORIES_WITH_DETAILS }),

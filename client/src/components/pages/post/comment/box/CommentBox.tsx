@@ -1,4 +1,4 @@
-import { useMutation } from '@apollo/client';
+import { useMutation, useApolloClient } from '@apollo/client';
 
 import {
   CommentType,
@@ -11,7 +11,6 @@ import {
   EditCommentVars
 } from 'src/query/comment';
 import { DELETE_COMMENT_LOG, DeleteCommentLogVars, DeleteCommentLogQueryType } from 'src/query/comment-log';
-import { useApollo } from 'src/lib/apolloClient';
 import { IsAuthQueryType, IS_AUTH } from 'src/query/user';
 
 import { CommentBoxLayout } from './BoxLayout';
@@ -29,7 +28,7 @@ interface Props {
 }
 
 export function CommentBox(props: Props) {
-  const client = useApollo();
+  const client = useApolloClient();
   const [deleteComment] = useMutation<DeleteCommentQueryType, DeleteCommentVars>(DELETE_COMMENT);
   const [editComment] = useMutation<EditCommentQueryType, EditCommentVars>(EDIT_COMMENT);
   const [deleteCommentLog] = useMutation<DeleteCommentLogQueryType, DeleteCommentLogVars>(DELETE_COMMENT_LOG);

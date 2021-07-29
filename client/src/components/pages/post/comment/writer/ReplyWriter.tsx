@@ -1,7 +1,6 @@
-import { useMutation } from '@apollo/client';
+import { useMutation, useApolloClient } from '@apollo/client';
 
 import { ReplyType, WRITE_REPLY, WriteReplyVars, WriteReplyQueryType } from 'src/query/comment';
-import { useApollo } from 'src/lib/apolloClient';
 import { IsAuthQueryType, IS_AUTH } from 'src/query/user';
 import { PUSH_COMMENT_LOG, CommentEvent, PushCommentLogVars, PushCommentLogQueryType } from 'src/query/comment-log';
 
@@ -17,7 +16,7 @@ interface Props {
 }
 
 export function ReplyWriter(props: Props) {
-  const client = useApollo();
+  const client = useApolloClient();
   const [writeReply] = useMutation<WriteReplyQueryType, WriteReplyVars>(WRITE_REPLY);
   const [pushCommentLog] = useMutation<PushCommentLogQueryType, PushCommentLogVars>(PUSH_COMMENT_LOG);
 

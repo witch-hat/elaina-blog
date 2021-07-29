@@ -4,7 +4,7 @@ import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 
 import { Writer } from 'src/components/pages/admin';
-import { initApolloClient } from 'src/lib/withApollo';
+import { initializeApollo } from 'src/lib/apollo';
 import { GetProfileQueryType, GET_PROFILE, ProfileDataType } from 'src/query/profile';
 import { appCommponProps } from 'src/pages/_app';
 import { CategoryDetailType, GET_CATEGORIES_WITH_DETAILS, CategoryDetailsQueryType } from 'src/query/category';
@@ -56,7 +56,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
     };
   }
 
-  const client = initApolloClient({}, context);
+  const client = initializeApollo({}, context);
   const [profileQuery, categoryQuery] = await Promise.all([
     client.query<GetProfileQueryType>({ query: GET_PROFILE }),
     client.query<CategoryDetailsQueryType>({ query: GET_CATEGORIES_WITH_DETAILS })

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 
 import { AppCommonProps } from 'src/pages/_app';
-import { initApolloClient } from 'src/lib/withApollo';
+import { initializeApollo } from 'src/lib/apollo';
 import { FindPostByIdQueryType, FindPostByIdVars, FIND_POST_BY_ID, PostDataType } from 'src/query/post';
 import { GET_PROFILE, ProfileDataType, GetProfileQueryType } from 'src/query/profile';
 import { GET_COMMENTS, CommentContainerType, GetCommentsQueryType, GetCommentVars } from 'src/query/comment';
@@ -92,7 +92,7 @@ export default function PostId(props: Props) {
 }
 
 export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (context: GetServerSidePropsContext) => {
-  context.res.setHeader('Cache-Control', 'max-age=0, public, must-revalidate');
+  // context.res.setHeader('Cache-Control', 'max-age=0, public, must-revalidate');
 
   const id = context.query['pid'];
 
@@ -106,7 +106,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
   }
 
   try {
-    const client = initApolloClient({}, context);
+    const client = initializeApollo({}, context);
 
     const postQueryResult = await client.query<FindPostByIdQueryType, FindPostByIdVars>({
       query: FIND_POST_BY_ID,

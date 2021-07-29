@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import { AppCommonProps } from 'src/pages/_app';
-import { initApolloClient } from 'src/lib/withApollo';
+import { initializeApollo } from 'src/lib/apollo';
 import { PostItem } from 'src/components/pages/main/post/PostItem';
 import { FindSameCategoryPostsQueryType, FindSameCategoryPostsVars, FIND_SAME_CATEGORY_POSTS, PostDetailDataType } from 'src/query/post';
 
@@ -106,7 +106,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
   context.res.setHeader('Cache-Control', 'max-age=0, public, must-revalidate');
 
   const categoryId = context.resolvedUrl.split('/')[2];
-  const apolloClient = initApolloClient({}, context);
+  const apolloClient = initializeApollo({}, context);
 
   const sameCategoryPostsQueryResult = await apolloClient.query<FindSameCategoryPostsQueryType, FindSameCategoryPostsVars>({
     query: FIND_SAME_CATEGORY_POSTS,
