@@ -12,7 +12,7 @@ const Container = styled.section({
   display: 'flex',
   width: '100%',
   minHeight: '20rem',
-  padding: '.5rem 3rem',
+  padding: '.5rem 2rem',
   flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'center',
@@ -82,7 +82,7 @@ export function CommentContainer(props: Props) {
 
   return (
     <Container>
-      <Title>{`덧글 수: ${commentContainer.count}개`}</Title>
+      <Title>{trans(Lang.Comments)}</Title>
       <StyleHr />
       <CommentWriter
         isLogin={props.isLogin}

@@ -1,12 +1,14 @@
 import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components';
+import { useRouter } from 'next/router';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
+import { useQuery } from '@apollo/client';
 
 import { AppCommonProps } from 'src/pages/_app';
 import { initializeApollo } from 'src/lib/apollo';
 import { FindPostByIdQueryType, FindPostByIdVars, FIND_POST_BY_ID, PostDataType } from 'src/query/post';
 import { GET_PROFILE, ProfileDataType, GetProfileQueryType } from 'src/query/profile';
-import { GET_COMMENTS, CommentContainerType, GetCommentsQueryType, GetCommentVars } from 'src/query/comment';
+import { GET_COMMENTS, GetCommentsQueryType, GetCommentVars } from 'src/query/comment';
 import { ArticleContainer, CommentContainer, RightSideContainer } from 'src/components/pages/post';
 
 const Container = styled.div({
@@ -45,14 +47,22 @@ const ContentContainer = styled.section((props) => ({
 interface ServerSideProps {
   categoryId: number;
   post: PostDataType;
-  comment: CommentContainerType;
   profile: ProfileDataType;
 }
 
 interface Props extends AppCommonProps, ServerSideProps {}
 
 export default function PostId(props: Props) {
+  const router = useRouter();
   const commentRef = useRef<HTMLElement>(null);
+
+  const _id = router.query['pid'] as string;
+
+  const { data, loading } = useQuery<GetCommentsQueryType, GetCommentVars>(GET_COMMENTS, {
+    variables: {
+      _id: +_id
+    }
+  });
 
   useEffect(() => {
     window.scroll(0, 0);
@@ -60,6 +70,10 @@ export default function PostId(props: Props) {
 
   function scrollToComment() {
     window.scrollTo(0, commentRef.current?.offsetTop!);
+  }
+
+  if (loading || !data) {
+    return null;
   }
 
   return (
@@ -73,14 +87,14 @@ export default function PostId(props: Props) {
           isLogin={props.app.isLogin}
         />
         <CommentContainer
-          comments={props.comment}
+          comments={data.comments}
           isLogin={props.app.isLogin}
           author={props.profile.name!}
           categoryId={props.categoryId}
           postId={props.post._id}
         />
       </ContentContainer>
-      <RightSideContainer commentsCount={props.comment.count} scrollToComment={scrollToComment} />
+      <RightSideContainer commentsCount={data.comments.count} scrollToComment={scrollToComment} />
     </Container>
   );
 }
@@ -114,24 +128,17 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
       };
     }
 
-    const [commentQueryResult, profileQueryResult] = await Promise.all([
-      client.query<GetCommentsQueryType, GetCommentVars>({ query: GET_COMMENTS, variables: { _id: findedPost._id } }),
-      client.query<GetProfileQueryType>({ query: GET_PROFILE })
-    ]);
-
-    const findedComment = commentQueryResult.data.comments;
+    const profileQueryResult = await client.query<GetProfileQueryType>({ query: GET_PROFILE });
     const profile = profileQueryResult.data.profile;
 
     return {
       props: {
         categoryId: findedPost.categoryId,
         post: findedPost,
-        comment: findedComment,
         profile
       }
     };
   } catch (err) {
-    console.log(err);
     return {
       redirect: {
         permanent: false,
