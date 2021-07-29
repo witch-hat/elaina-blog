@@ -69,14 +69,13 @@ export function Writer(props: WriterProps) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [comment, setComment] = useState('');
+  const textRef = useRef<HTMLTextAreaElement>(null);
 
   function reset() {
     setUsername('');
     setPassword('');
     setComment('');
   }
-
-  const textRef = useRef<HTMLTextAreaElement>(null);
 
   const resizeHeightHandler = useCallback(() => {
     if (textRef === null || textRef.current === null) {
@@ -85,7 +84,6 @@ export function Writer(props: WriterProps) {
     textRef.current.style.height = '5rem';
     textRef.current.style.height = `${textRef.current.scrollHeight}px`;
   }, []);
-
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     await props.addComment(username, password, comment);
@@ -125,8 +123,8 @@ export function Writer(props: WriterProps) {
         role='textbox'
         placeholder='Comment...'
         value={comment}
-        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setComment(e.target.value)}
         ref={textRef}
+        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setComment(e.target.value)}
         onInput={resizeHeightHandler}
       />
       <ButtonContainer>
