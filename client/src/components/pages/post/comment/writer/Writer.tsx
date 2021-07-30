@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, TextareaHTMLAttributes, RefObject, FormEvent, MutableRefObject, useEffect } from 'react';
 import styled from 'styled-components';
 
 import { Lang, trans } from 'src/resources/languages';
@@ -59,31 +59,73 @@ const SubmitButton = styled.button((props) => ({
   }
 }));
 
-export interface WriterProps {
+type RefFn = (node: HTMLTextAreaElement) => void;
+
+export const getHeight = (rows: number, el: HTMLTextAreaElement): number => {
+  const { borderBottomWidth, borderTopWidth, fontSize, lineHeight, paddingBottom, paddingTop } = window.getComputedStyle(el);
+
+  const lh = lineHeight === 'normal' ? parseFloat(fontSize) * 1.2 : parseFloat(lineHeight);
+
+  const rowHeight =
+    rows === 0
+      ? 0
+      : lh * rows + parseFloat(borderBottomWidth) + parseFloat(borderTopWidth) + parseFloat(paddingBottom) + parseFloat(paddingTop);
+
+  const scrollHeight = el.scrollHeight + parseFloat(borderBottomWidth) + parseFloat(borderTopWidth);
+
+  return Math.max(rowHeight, scrollHeight);
+};
+
+export const resize = (rows: number, el: HTMLTextAreaElement | null): void => {
+  if (el) {
+    let overflowY = 'hidden';
+    const { maxHeight } = window.getComputedStyle(el);
+
+    if (maxHeight !== 'none') {
+      const maxHeightN = parseFloat(maxHeight);
+
+      if (maxHeightN < el.scrollHeight) {
+        overflowY = '';
+      }
+    }
+
+    el.style.height = '0';
+    el.style.overflowY = overflowY;
+    el.style.height = `${getHeight(rows, el)}px`;
+  }
+};
+
+export interface TextareaProps extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'rows'> {
+  forwardedRef?: RefObject<HTMLTextAreaElement> | RefFn;
+  onChange?: (evt: FormEvent<HTMLTextAreaElement>) => void;
+  onInput?: (evt: FormEvent<HTMLTextAreaElement>) => void;
+  rows?: string | number | undefined;
+  value?: string;
   isLogin: boolean;
   addComment: (username: string, password: string, comment: string) => Promise<void>;
   isComment?: boolean;
 }
 
-export function Writer(props: WriterProps) {
+export function Writer({ forwardedRef, onChange, ...props }: TextareaProps) {
+  const rows = props.rows ? parseInt('' + props.rows, 10) : 0;
+  const isForwardedRefFn = typeof forwardedRef === 'function';
+  const internalRef = useRef<HTMLTextAreaElement>();
+  const ref = (isForwardedRefFn || !forwardedRef ? internalRef : forwardedRef) as MutableRefObject<HTMLTextAreaElement>;
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [comment, setComment] = useState('');
-  const textRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    resize(rows, ref.current);
+  }, [ref, rows, props.value]);
 
   function reset() {
     setUsername('');
     setPassword('');
     setComment('');
+    resize(rows, ref.current);
   }
-
-  const resizeHeightHandler = () => {
-    if (textRef === null || textRef.current === null) {
-      return;
-    }
-    textRef.current.style.height = '5rem';
-    textRef.current.style.height = `${textRef.current.scrollHeight}px`;
-  };
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -95,6 +137,27 @@ export function Writer(props: WriterProps) {
   const onIDChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value), []);
 
   const onPWChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value), []);
+
+  const handleInput = useCallback(
+    (e) => {
+      if (onChange) {
+        onChange(e);
+      }
+      resize(rows, ref.current);
+    },
+    [onChange, ref, rows]
+  );
+
+  const handleRef = useCallback(
+    (node) => {
+      ref.current = node;
+
+      if (isForwardedRefFn) {
+        (forwardedRef as RefFn)(node);
+      }
+    },
+    [forwardedRef, isForwardedRefFn, ref]
+  );
 
   return (
     <EditorContainer onSubmit={onSubmit}>
@@ -121,14 +184,16 @@ export function Writer(props: WriterProps) {
         </InputWrapper>
       )}
       <Editor
+        {...props}
         role='textbox'
         placeholder='Comment...'
         value={comment}
-        ref={textRef}
+        ref={handleRef}
         onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
           setComment(e.target.value);
-          resizeHeightHandler();
+          handleInput(e);
         }}
+        rows={rows}
       />
       <ButtonContainer>
         <SubmitButton type='submit'>{trans(Lang.Save)}</SubmitButton>
