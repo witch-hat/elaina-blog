@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef, TextareaHTMLAttributes, RefObject, FormEvent, MutableRefObject, useEffect } from 'react';
+import React, { useState, useCallback, useRef, TextareaHTMLAttributes, RefObject, MutableRefObject, useEffect, ChangeEvent } from 'react';
 import styled from 'styled-components';
 
 import { Lang, trans } from 'src/resources/languages';
@@ -97,8 +97,7 @@ export const resize = (rows: number, el: HTMLTextAreaElement | null): void => {
 
 export interface TextareaProps extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'rows'> {
   forwardedRef?: RefObject<HTMLTextAreaElement> | RefFn;
-  onChange?: (evt: FormEvent<HTMLTextAreaElement>) => void;
-  onInput?: (evt: FormEvent<HTMLTextAreaElement>) => void;
+  onChange?: (evt: ChangeEvent<HTMLTextAreaElement>) => void;
   rows?: string | number | undefined;
   value?: string;
   isLogin: boolean;
