@@ -18,7 +18,7 @@ interface Props {
   isLogin: boolean;
   postId: number;
   isCommentFromAdmin: boolean;
-  comment: ReplyType;
+  reply: ReplyType;
   author: string;
   commentIndex: number;
   commentId: string;
@@ -48,7 +48,7 @@ export function ReplyBox(props: Props) {
           variables: {
             pid: props.postId,
             commentId: props.commentId,
-            replyId: props.comment._id,
+            replyId: props.reply._id,
             newReply: commentContent
           }
         });
@@ -62,7 +62,7 @@ export function ReplyBox(props: Props) {
           variables: {
             pid: props.postId,
             commentId: props.commentId,
-            replyId: props.comment._id,
+            replyId: props.reply._id,
             newReply: commentContent,
             password
           }
@@ -86,7 +86,7 @@ export function ReplyBox(props: Props) {
           variables: {
             pid: props.postId,
             commentId: props.commentId,
-            replyId: props.comment._id
+            replyId: props.reply._id
           }
         });
       } catch (err) {
@@ -101,7 +101,7 @@ export function ReplyBox(props: Props) {
           variables: {
             pid: props.postId,
             commentId: props.commentId,
-            replyId: props.comment._id,
+            replyId: props.reply._id,
             password
           }
         });
@@ -129,7 +129,7 @@ export function ReplyBox(props: Props) {
   return (
     <CommentBoxLayout
       isLogin={props.isLogin}
-      comment={props.comment}
+      comment={props.reply}
       author={props.author}
       onEdit={handleEditReply}
       onDelete={handleDeleteReply}

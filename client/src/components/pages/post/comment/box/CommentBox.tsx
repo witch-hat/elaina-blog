@@ -73,7 +73,6 @@ export function CommentBox(props: Props) {
     const AuthResponse = await client.query<IsAuthQueryType>({ query: IS_AUTH });
     const isAuth = AuthResponse.data.isAuth.isSuccess;
 
-    console.log(props.comment._id);
     // Admin can delete all comments
     if (isAuth) {
       try {

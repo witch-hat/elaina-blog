@@ -63,9 +63,9 @@ export function CommentElement(props: Props) {
   const [isShowingReply, setIsShowingReply] = useState(false);
   const [isAddReply, setIsAddReply] = useState(false);
 
-  function onAddReply(newReply: ReplyType) {
+  function onAddReply(newComment: CommentType) {
     const copiedComments = cloneDeep(props.commentContainer.comments);
-    copiedComments[props.commentIndex].replies.push(newReply);
+    copiedComments[props.commentIndex] = newComment;
 
     props.setCommentContainer({ ...props.commentContainer, comments: copiedComments, count: props.count + 1 });
     setIsAddReply(false);
@@ -119,6 +119,7 @@ export function CommentElement(props: Props) {
           <ReplyContainer>
             {isShowingReply
               ? props.comment.replies.map((reply: ReplyType, index: number) => {
+                  console.log(reply);
                   return (
                     <ReplyElement
                       key={index}

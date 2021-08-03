@@ -37,7 +37,7 @@ export function ReplyElement(props: Props) {
         isLogin={props.isLogin}
         postId={props.postId}
         isCommentFromAdmin={props.reply.isAdmin}
-        comment={props.reply}
+        reply={props.reply}
         commentId={props.commentId}
         author={props.author}
         commentIndex={props.commentIndex}
