@@ -112,6 +112,7 @@ export function CommentElement(props: Props) {
               categoryId={props.categoryId}
               postId={props.postId}
               commentIndex={props.commentIndex}
+              commentId={props.comment._id}
               replyIndex={props.comment.replies.length + 1}
             />
           )}
@@ -125,6 +126,7 @@ export function CommentElement(props: Props) {
                       isLogin={props.isLogin}
                       author={props.author}
                       commentIndex={props.commentIndex}
+                      commentId={props.comment._id}
                       reply={reply}
                       replyIndex={index}
                       editReply={onEditReply}

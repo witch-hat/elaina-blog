@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useMutation, useApolloClient } from '@apollo/client';
 
-import { ReplyType, WRITE_REPLY, WriteReplyVars, WriteReplyQueryType } from 'src/query/comment';
+import { WRITE_REPLY, WriteReplyVars, WriteReplyQueryType, CommentType } from 'src/query/comment';
 import { IsAuthQueryType, IS_AUTH } from 'src/query/user';
 import { PUSH_COMMENT_LOG, CommentEvent, PushCommentLogVars, PushCommentLogQueryType } from 'src/query/comment-log';
 
@@ -17,8 +17,9 @@ interface Props {
   categoryId: number;
   postId: number;
   commentIndex: number;
+  commentId: string;
   replyIndex: number;
-  onAddReply: (newReply: ReplyType) => void;
+  onAddReply: (newReply: CommentType) => void;
 }
 
 export function ReplyWriter(props: Props) {
@@ -40,23 +41,22 @@ export function ReplyWriter(props: Props) {
       try {
         // BUG?
         // writeReply need to have response...
-        await writeReply({
+        const { data } = await writeReply({
           variables: {
-            _id: props.postId,
-            commentIndex: props.commentIndex,
+            pid: props.postId,
+            commentId: props.commentId,
             comment,
             createdAt,
             isAdmin
           }
         });
 
-        props.onAddReply({
-          username,
-          password,
-          comment,
-          createdAt: createdAt.getTime(),
-          isAdmin
-        });
+        if (!data) {
+          alert('Cannot write reply...');
+          return;
+        }
+
+        props.onAddReply(data.writeReply);
       } catch (err) {
         alert(err);
       }
@@ -67,11 +67,11 @@ export function ReplyWriter(props: Props) {
       }
 
       try {
-        await Promise.all([
+        const [{ data }] = await Promise.all([
           writeReply({
             variables: {
-              _id: props.postId,
-              commentIndex: props.commentIndex,
+              pid: props.postId,
+              commentId: props.commentId,
               username,
               password,
               comment,
@@ -91,13 +91,12 @@ export function ReplyWriter(props: Props) {
           })
         ]);
 
-        props.onAddReply({
-          username,
-          password,
-          comment,
-          createdAt: createdAt.getTime(),
-          isAdmin
-        });
+        if (!data) {
+          alert('Cannot write reply...');
+          return;
+        }
+
+        props.onAddReply(data.writeReply);
       } catch (err) {
         alert(err);
       }

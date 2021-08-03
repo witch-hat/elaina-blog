@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useMutation, useApolloClient } from '@apollo/client';
 
-import { WRITE_COMMENT, CommentType, WriteCommentVars, WriteCommentQueryType } from 'src/query/comment';
+import { WRITE_COMMENT, WriteCommentVars, WriteCommentQueryType, CommentContainerType } from 'src/query/comment';
 import { IsAuthQueryType, IS_AUTH } from 'src/query/user';
 import { PUSH_COMMENT_LOG, CommentEvent, PushCommentLogVars, PushCommentLogQueryType } from 'src/query/comment-log';
 
@@ -16,7 +16,7 @@ interface Props {
   categoryId: number;
   postId: number;
   commentIndex: number;
-  onAddComment: (newComment: CommentType) => void;
+  onAddComment: (response: CommentContainerType) => void;
 }
 
 export function CommentWriter(props: Props) {
@@ -38,23 +38,21 @@ export function CommentWriter(props: Props) {
       try {
         // BUG?
         // writeComment need to have response...
-        await writeComment({
+        const { data } = await writeComment({
           variables: {
-            _id: props.postId,
+            pid: props.postId,
             comment,
             createdAt,
             isAdmin
           }
         });
 
-        console.log('here');
+        if (!data) {
+          alert('Server Error.. please retry');
+          return;
+        }
 
-        props.onAddComment({
-          comment,
-          createdAt: createdAt.getTime(),
-          isAdmin,
-          replies: []
-        });
+        props.onAddComment(data.writeComment);
       } catch (err) {
         alert(err.msg);
       }
@@ -65,10 +63,10 @@ export function CommentWriter(props: Props) {
       }
 
       try {
-        await Promise.all([
+        const [{ data }] = await Promise.all([
           writeComment({
             variables: {
-              _id: props.postId,
+              pid: props.postId,
               username,
               password,
               comment,
@@ -87,14 +85,12 @@ export function CommentWriter(props: Props) {
           })
         ]);
 
-        props.onAddComment({
-          username,
-          password,
-          comment,
-          createdAt: createdAt.getTime(),
-          isAdmin,
-          replies: []
-        });
+        if (!data) {
+          alert('Server Error.. please retry');
+          return;
+        }
+
+        props.onAddComment(data.writeComment);
       } catch (err) {
         alert(err.message);
       }

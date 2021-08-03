@@ -50,12 +50,8 @@ interface Props {
 export function CommentContainer(props: Props) {
   const [commentContainer, setCommentContainer] = useState<CommentContainerType>(props.comments);
 
-  function addNewComment(newComment: CommentType) {
-    setCommentContainer({
-      ...commentContainer,
-      comments: [...commentContainer.comments, newComment],
-      count: commentContainer.count + 1
-    });
+  function addNewComment(response: CommentContainerType) {
+    setCommentContainer(response);
   }
 
   function editComment(editIndex: number, comment: string) {
@@ -92,7 +88,7 @@ export function CommentContainer(props: Props) {
         commentIndex={commentContainer.comments.length + 1}
       />
       <Comments>
-        {commentContainer &&
+        {commentContainer.comments.length ? (
           commentContainer.comments.map((comment: CommentType, index: number) => {
             return (
               <CommentElement
@@ -111,7 +107,10 @@ export function CommentContainer(props: Props) {
                 setCommentContainer={setCommentContainer}
               />
             );
-          })}
+          })
+        ) : (
+          <div>No Comments...</div>
+        )}
       </Comments>
     </Container>
   );

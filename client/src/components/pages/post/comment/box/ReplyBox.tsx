@@ -1,14 +1,13 @@
 import { useMutation, useApolloClient } from '@apollo/client';
 
 import {
-  CommentType,
   DELETE_REPLY,
   EDIT_REPLY,
-  ReplyType,
   DeleteReplyQueryType,
   DeleteReplyVars,
   EditReplyQueryType,
-  EditReplyVars
+  EditReplyVars,
+  ReplyType
 } from 'src/query/comment';
 import { DELETE_COMMENT_LOG, DeleteCommentLogQueryType, DeleteCommentLogVars } from 'src/query/comment-log';
 import { IsAuthQueryType, IS_AUTH } from 'src/query/user';
@@ -19,9 +18,10 @@ interface Props {
   isLogin: boolean;
   postId: number;
   isCommentFromAdmin: boolean;
-  comment: CommentType | ReplyType;
+  comment: ReplyType;
   author: string;
   commentIndex: number;
+  commentId: string;
   replyIndex: number;
   editReply: (index: number, reply: string) => void;
   deleteReply: (index: number) => void;
@@ -35,7 +35,8 @@ export function ReplyBox(props: Props) {
 
   async function handleEditReply(commentContent: string, password: string) {
     if (!commentContent) {
-      throw new Error('내용을 입력해 주세요.');
+      alert('내용을 입력해 주세요.');
+      return;
     }
 
     const AuthResponse = await client.query<IsAuthQueryType>({ query: IS_AUTH });
@@ -45,9 +46,9 @@ export function ReplyBox(props: Props) {
       try {
         await editReply({
           variables: {
-            _id: props.postId,
-            commentIndex: props.commentIndex,
-            replyIndex: props.replyIndex,
+            pid: props.postId,
+            commentId: props.commentId,
+            replyId: props.comment._id,
             newReply: commentContent
           }
         });
@@ -59,9 +60,9 @@ export function ReplyBox(props: Props) {
       try {
         await editReply({
           variables: {
-            _id: props.postId,
-            commentIndex: props.commentIndex,
-            replyIndex: props.replyIndex,
+            pid: props.postId,
+            commentId: props.commentId,
+            replyId: props.comment._id,
             newReply: commentContent,
             password
           }
@@ -83,9 +84,9 @@ export function ReplyBox(props: Props) {
       try {
         await deleteReply({
           variables: {
-            _id: props.postId,
-            commentIndex: props.commentIndex,
-            replyIndex: props.replyIndex
+            pid: props.postId,
+            commentId: props.commentId,
+            replyId: props.comment._id
           }
         });
       } catch (err) {
@@ -98,9 +99,9 @@ export function ReplyBox(props: Props) {
       try {
         await deleteReply({
           variables: {
-            _id: props.postId,
-            commentIndex: props.commentIndex,
-            replyIndex: props.replyIndex,
+            pid: props.postId,
+            commentId: props.commentId,
+            replyId: props.comment._id,
             password
           }
         });
@@ -111,7 +112,7 @@ export function ReplyBox(props: Props) {
     }
 
     try {
-      deleteCommentLog({
+      await deleteCommentLog({
         variables: {
           postId: props.postId,
           commentIndex: props.commentIndex + 1,

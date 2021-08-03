@@ -4,7 +4,6 @@ import {
   CommentType,
   DELETE_COMMENT,
   EDIT_COMMENT,
-  ReplyType,
   DeleteCommentVars,
   DeleteCommentQueryType,
   EditCommentQueryType,
@@ -19,7 +18,7 @@ interface Props {
   isLogin: boolean;
   postId: number;
   isCommentFromAdmin: boolean;
-  comment: CommentType | ReplyType;
+  comment: CommentType;
   author: string;
   commentIndex: number;
   editComment: (index: number, comment: string) => void;
@@ -35,62 +34,79 @@ export function CommentBox(props: Props) {
 
   async function handleEditComment(commentContent: string, password: string) {
     if (!commentContent) {
-      throw new Error('내용을 입력해 주세요.');
+      alert('내용을 입력해 주세요.');
+      return;
     }
 
     const AuthResponse = await client.query<IsAuthQueryType>({ query: IS_AUTH });
     const isAuth = AuthResponse.data.isAuth.isSuccess;
 
     if (isAuth) {
-      await editComment({
+      const { data } = await editComment({
         variables: {
-          _id: props.postId,
-          index: props.commentIndex,
+          pid: props.postId,
+          commentId: props.comment._id,
           newComment: commentContent
         }
       });
+
+      if (data?.editComment.isSuccess) {
+        props.editComment(props.commentIndex, commentContent);
+      }
     } else {
-      await editComment({
+      const { data } = await editComment({
         variables: {
-          _id: props.postId,
-          index: props.commentIndex,
+          pid: props.postId,
+          commentId: props.comment._id,
           newComment: commentContent,
           password
         }
       });
-    }
 
-    props.editComment(props.commentIndex, commentContent);
+      if (data?.editComment.isSuccess) {
+        props.editComment(props.commentIndex, commentContent);
+      }
+    }
   }
 
   async function handleDeleteComment(password: string) {
     const AuthResponse = await client.query<IsAuthQueryType>({ query: IS_AUTH });
     const isAuth = AuthResponse.data.isAuth.isSuccess;
 
+    console.log(props.comment._id);
     // Admin can delete all comments
     if (isAuth) {
       try {
-        await deleteComment({
+        const { data } = await deleteComment({
           variables: {
-            _id: props.postId,
-            index: props.commentIndex
+            pid: props.postId,
+            commentId: props.comment._id
           }
         });
+
+        if (data?.deleteComment.isSuccess) {
+          props.deleteComment(props.commentIndex);
+        }
       } catch (err) {
         alert(err.message);
         return;
       }
     }
+
     // common users can delete only their comment
     else {
       try {
-        await deleteComment({
+        const { data } = await deleteComment({
           variables: {
-            _id: props.postId,
-            index: props.commentIndex,
+            pid: props.postId,
+            commentId: props.comment._id,
             password
           }
         });
+
+        if (data?.deleteComment.isSuccess) {
+          props.deleteComment(props.commentIndex);
+        }
       } catch (err) {
         alert(err.message);
         return;
@@ -98,7 +114,7 @@ export function CommentBox(props: Props) {
     }
 
     try {
-      deleteCommentLog({
+      await deleteCommentLog({
         variables: {
           postId: props.postId,
           commentIndex: props.commentIndex + 1
@@ -107,8 +123,6 @@ export function CommentBox(props: Props) {
     } catch (err) {
       alert(err.message);
     }
-
-    props.deleteComment(props.commentIndex);
   }
 
   return (

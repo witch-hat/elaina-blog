@@ -60,7 +60,7 @@ export default function PostId(props: Props) {
 
   const { data, loading } = useQuery<GetCommentsQueryType, GetCommentVars>(GET_COMMENTS, {
     variables: {
-      _id: +_id
+      pid: +_id
     }
   });
 

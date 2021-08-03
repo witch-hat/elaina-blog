@@ -22,6 +22,7 @@ interface Props {
   isLogin: boolean;
   author: string;
   commentIndex: number;
+  commentId: string;
   replyIndex: number;
   editReply: (index: number, reply: string) => void;
   deleteReply: (index: number) => void;
@@ -37,6 +38,7 @@ export function ReplyElement(props: Props) {
         postId={props.postId}
         isCommentFromAdmin={props.reply.isAdmin}
         comment={props.reply}
+        commentId={props.commentId}
         author={props.author}
         commentIndex={props.commentIndex}
         replyIndex={props.replyIndex}
