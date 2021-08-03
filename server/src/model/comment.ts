@@ -4,20 +4,24 @@ import bcrypt from 'bcrypt';
 const saltRounds = 10;
 
 export interface Reply {
+  _id?: string;
   username?: string;
   password?: string;
   createdAt: Date;
   comment: string;
   isAdmin: boolean;
+  isEdited: boolean;
 }
 
 export interface Comment {
+  _id?: string;
   username?: string;
   password?: string;
   createdAt: Date;
   comment: string;
   replies: Reply[];
   isAdmin: boolean;
+  isEdited: boolean;
 }
 
 export interface CommentConatiner {
@@ -44,6 +48,11 @@ const replySchema = new Schema<Reply>({
   isAdmin: {
     type: Boolean,
     required: true
+  },
+  isEdited: {
+    type: Boolean,
+    require: true,
+    default: false
   }
 });
 
@@ -70,6 +79,11 @@ const commentSchema = new Schema<Comment>({
   isAdmin: {
     type: Boolean,
     required: true
+  },
+  isEdited: {
+    type: Boolean,
+    require: true,
+    default: false
   }
 });
 
