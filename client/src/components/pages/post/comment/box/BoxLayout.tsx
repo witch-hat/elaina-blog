@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import dynamic from 'next/dynamic';
 
 import { CommentType, ReplyType } from 'src/query/comment';
 
