@@ -17,12 +17,16 @@ const EditButtonItem = styled.button({
   borderRadius: '.5rem'
 });
 
+interface Button {
+  message: string;
+  onClick: () => void;
+  fontColor?: string;
+}
+
 interface Props {
-  onFirstButton: () => void;
-  onSecondButton: () => void;
+  firstButton: Button;
+  secondButton: Button;
   updatePassword: (password: string) => void;
-  firstMessage: string;
-  secondMessage: string;
   isCommentFromAdmin: boolean;
 }
 
@@ -40,8 +44,8 @@ export default function BottomMenu(props: Props) {
           }}
         />
       )}
-      <EditButtonItem onClick={() => props.onFirstButton()}>{props.firstMessage}</EditButtonItem>
-      <EditButtonItem onClick={() => props.onSecondButton()}>{props.secondMessage}</EditButtonItem>
+      <EditButtonItem onClick={() => props.firstButton.onClick()}>{props.firstButton.message}</EditButtonItem>
+      <EditButtonItem onClick={() => props.secondButton.onClick()}>{props.secondButton.message}</EditButtonItem>
     </Container>
   );
 }

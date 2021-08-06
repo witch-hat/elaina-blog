@@ -95,12 +95,16 @@ export function CommentBoxLayout(props: Props) {
       )}
       {mode === 'delete' ? (
         <BottomMenu
-          onFirstButton={cancelDelete}
-          onSecondButton={onDelete}
+          firstButton={{
+            message: 'Cancel',
+            onClick: cancelDelete
+          }}
+          secondButton={{
+            message: 'Delete',
+            onClick: onDelete
+          }}
           isCommentFromAdmin={props.comment.isAdmin}
-          updatePassword={(password: string) => setPassword(password)}
-          firstMessage='Cancel'
-          secondMessage='Delete'
+          updatePassword={async (password: string) => await setPassword(password)}
         />
       ) : (
         props.children

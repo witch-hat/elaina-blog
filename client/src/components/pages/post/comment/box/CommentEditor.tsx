@@ -66,12 +66,16 @@ export function CommentEditor(props: Props) {
         }}
       />
       <BottomMenu
-        onFirstButton={onCancel}
-        onSecondButton={async () => await onEdit()}
+        firstButton={{
+          message: 'Cancel',
+          onClick: onCancel
+        }}
+        secondButton={{
+          message: 'Edit',
+          onClick: () => onEdit()
+        }}
         isCommentFromAdmin={props.isCommentFromAdmin}
         updatePassword={(password: string) => setPassword(password)}
-        firstMessage='Cancel'
-        secondMessage='Edit'
       />
     </Container>
   );
