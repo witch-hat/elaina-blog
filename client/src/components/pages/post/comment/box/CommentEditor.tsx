@@ -72,7 +72,7 @@ export function CommentEditor(props: Props) {
         }}
         secondButton={{
           message: 'Edit',
-          onClick: () => onEdit()
+          onClick: async () => await onEdit()
         }}
         isCommentFromAdmin={props.isCommentFromAdmin}
         updatePassword={(password: string) => setPassword(password)}
