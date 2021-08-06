@@ -69,7 +69,6 @@ export function Writer(props: WriterProps) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [comment, setComment] = useState('');
-  const textRef = useRef<HTMLTextAreaElement>(null);
 
   function reset() {
     setUsername('');
@@ -77,13 +76,23 @@ export function Writer(props: WriterProps) {
     setComment('');
   }
 
+<<<<<<< HEAD
   const resizeHeightHandler = () => {
+=======
+  const textRef = useRef<HTMLTextAreaElement>(null);
+
+  const resizeHeightHandler = useCallback(() => {
+>>>>>>> parent of 7eeeb27 (Update Wirter.tsx)
     if (textRef === null || textRef.current === null) {
       return;
     }
     textRef.current.style.height = '5rem';
     textRef.current.style.height = `${textRef.current.scrollHeight}px`;
+<<<<<<< HEAD
   };
+=======
+  }, []);
+>>>>>>> parent of 7eeeb27 (Update Wirter.tsx)
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -124,11 +133,17 @@ export function Writer(props: WriterProps) {
         role='textbox'
         placeholder='Comment...'
         value={comment}
+<<<<<<< HEAD
         ref={textRef}
         onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
           setComment(e.target.value);
           resizeHeightHandler();
         }}
+=======
+        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setComment(e.target.value)}
+        ref={textRef}
+        onInput={resizeHeightHandler}
+>>>>>>> parent of 7eeeb27 (Update Wirter.tsx)
       />
       <ButtonContainer>
         <SubmitButton type='submit'>{trans(Lang.Save)}</SubmitButton>
