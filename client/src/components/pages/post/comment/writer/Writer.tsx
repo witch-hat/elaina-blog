@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import styled from 'styled-components';
 
 import { Lang, trans } from 'src/resources/languages';
@@ -69,12 +69,21 @@ export function Writer(props: WriterProps) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [comment, setComment] = useState('');
+  const textRef = useRef<HTMLTextAreaElement>(null);
 
   function reset() {
     setUsername('');
     setPassword('');
     setComment('');
   }
+
+  const resizeHeightHandler = () => {
+    if (textRef === null || textRef.current === null) {
+      return;
+    }
+    textRef.current.style.height = '5rem';
+    textRef.current.style.height = `${textRef.current.scrollHeight}px`;
+  };
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -115,7 +124,11 @@ export function Writer(props: WriterProps) {
         role='textbox'
         placeholder='Comment...'
         value={comment}
-        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setComment(e.target.value)}
+        ref={textRef}
+        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+          setComment(e.target.value);
+          resizeHeightHandler();
+        }}
       />
       <ButtonContainer>
         <SubmitButton type='submit'>{trans(Lang.Save)}</SubmitButton>

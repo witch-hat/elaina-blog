@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
+import BottomMenu from './BottomMenu';
 
 const Container = styled.div({
   width: '100%',
   margin: '1rem 0',
   borderRadius: '.5rem',
-  backgroundColor: '#eee'
+  backgroundColor: 'transparent'
 });
 
 const Editor = styled.textarea({
@@ -22,17 +23,6 @@ const Editor = styled.textarea({
   overflow: 'auto'
 });
 
-const EditMenuContainer = styled.div({
-  display: 'flex',
-  justifyContent: 'flex-end'
-});
-
-const EditButtonItem = styled.button({
-  padding: '.5rem',
-  margin: '.5rem 0 .5rem .5rem',
-  borderRadius: '.5rem'
-});
-
 interface Props {
   commentContent: string;
   isCommentFromAdmin: boolean;
@@ -42,8 +32,8 @@ interface Props {
 }
 
 export function CommentEditor(props: Props) {
-  const [password, setPassword] = useState('');
   const [editingCommentContent, setEditingCommentContent] = useState(props.commentContent);
+  const [password, setPassword] = useState('');
 
   async function onEdit() {
     if (editingCommentContent === props.commentContent) {
@@ -75,20 +65,18 @@ export function CommentEditor(props: Props) {
           setEditingCommentContent(e.target.value);
         }}
       />
-      <EditMenuContainer>
-        {props.isCommentFromAdmin || (
-          <input
-            placeholder='password'
-            type='password'
-            minLength={8}
-            maxLength={20}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        )}
-        <EditButtonItem onClick={() => onCancel()}>Cancel</EditButtonItem>
-        <EditButtonItem onClick={async () => await onEdit()}>Edit</EditButtonItem>
-      </EditMenuContainer>
+      <BottomMenu
+        firstButton={{
+          message: 'Cancel',
+          onClick: onCancel
+        }}
+        secondButton={{
+          message: 'Edit',
+          onClick: async () => await onEdit()
+        }}
+        isCommentFromAdmin={props.isCommentFromAdmin}
+        updatePassword={(password: string) => setPassword(password)}
+      />
     </Container>
   );
 }

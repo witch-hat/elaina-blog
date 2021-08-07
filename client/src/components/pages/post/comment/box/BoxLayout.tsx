@@ -1,21 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import dynamic from 'next/dynamic';
 
 import { CommentType, ReplyType } from 'src/query/comment';
 
 import { CommentEditor } from './CommentEditor';
 import { MemoizedCommentDetail } from './CommentDetail';
 import { CommentMenu } from './CommentMenu';
-
-interface ModalProps {
-  visible: boolean;
-  isLogin: boolean;
-  onDelete: (password: string) => Promise<void>;
-  onCancel: () => void;
-}
-
-const DynamicDeleteModal = dynamic<ModalProps>(() => import('./DeleteModal').then((mod) => mod.DeleteModal));
+import BottomMenu from './BottomMenu';
 
 const Container = styled.div({
   display: 'flex',
@@ -55,27 +46,27 @@ interface Props {
 }
 
 export function CommentBoxLayout(props: Props) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isAdminCommentEdit, setIsAdminCommentEdit] = useState(false);
-  const [isUserCommentEdit, setIsUserCommentEdit] = useState(false);
+  const [mode, setMode] = useState('content'); // mode 'content', 'edit' or 'delete'
+  const [password, setPassword] = useState('');
 
-  const onAdminEditClick = () => setIsAdminCommentEdit(true);
+  const onAdminEditClick = () => setMode('edit');
 
-  const onUserEditClick = () => setIsUserCommentEdit(true);
+  const onUserEditClick = () => setMode('edit');
 
-  const onDeleteMenuClick = () => setIsModalOpen(true);
+  const onDeleteMenuClick = () => setMode('delete');
 
-  const cancelEdit = () => {
-    isAdminCommentEdit ? setIsAdminCommentEdit(false) : setIsUserCommentEdit(false);
-  };
+  const cancelEdit = () => setMode('content');
 
-  const endEdit = () => {
-    isAdminCommentEdit ? setIsAdminCommentEdit(false) : setIsUserCommentEdit(false);
-  };
+  const endEdit = () => setMode('content');
 
-  const cancelDelete = () => {
-    setIsModalOpen(false);
-  };
+  const cancelDelete = () => setMode('content');
+
+  async function onDelete() {
+    await props.onDelete(password);
+
+    setPassword('');
+    cancelDelete();
+  }
 
   return (
     <Container>
@@ -91,7 +82,7 @@ export function CommentBoxLayout(props: Props) {
           />
         )}
       </DetailsContainer>
-      {isAdminCommentEdit || isUserCommentEdit ? (
+      {mode === 'edit' ? (
         <CommentEditor
           commentContent={props.comment.comment}
           isCommentFromAdmin={props.comment.isAdmin}
@@ -102,8 +93,22 @@ export function CommentBoxLayout(props: Props) {
       ) : (
         <CommentContent>{props.comment.comment}</CommentContent>
       )}
-      {props.children}
-      <DynamicDeleteModal visible={isModalOpen} isLogin={props.isLogin} onDelete={props.onDelete} onCancel={cancelDelete} />
+      {mode === 'delete' ? (
+        <BottomMenu
+          firstButton={{
+            message: 'Cancel',
+            onClick: cancelDelete
+          }}
+          secondButton={{
+            message: 'Delete',
+            onClick: onDelete
+          }}
+          isCommentFromAdmin={props.comment.isAdmin}
+          updatePassword={async (password: string) => await setPassword(password)}
+        />
+      ) : (
+        props.children
+      )}
     </Container>
   );
 }
