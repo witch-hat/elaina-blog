@@ -1,11 +1,13 @@
 import React from 'react';
 import { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
+import { useApolloClient, useMutation } from '@apollo/client';
 
 import { appCommponProps } from 'src/pages/_app';
 import { initializeApollo } from 'src/lib/apollo';
-import { Writer } from 'src/components/pages/admin';
+import { WriterLayout, PostInfo } from 'src/components/common/writer/WriterLayout';
 import { GetProfileQueryType, GET_PROFILE } from 'src/query/profile';
-import { FindPostByIdQueryType, FindPostByIdVars, FIND_POST_BY_ID } from 'src/query/post';
+import { FindPostByIdQueryType, FindPostByIdVars, FIND_POST_BY_ID, EDIT_POST, EditPostQueryType, EditPostVars } from 'src/query/post';
 import {
   CategoryDetailType,
   FIND_CATEGORY_BY_ID,
@@ -14,6 +16,8 @@ import {
   FindCategoryByIdQueryType,
   FindCategoryByIdVars
 } from 'src/query/category';
+import { IsAuthQueryType, IS_AUTH } from 'src/query/user';
+import { trans, Lang } from 'src/resources/languages';
 
 interface ServerSideProps {
   author: string;
@@ -26,15 +30,56 @@ interface ServerSideProps {
 interface Props extends ServerSideProps {}
 
 export default function PostEdit(props: Props) {
+  const router = useRouter();
+
+  const client = useApolloClient();
+  const [editPost] = useMutation<EditPostQueryType, EditPostVars>(EDIT_POST);
+
+  async function handleEditPost(postInfo: PostInfo, defaultCategory: string) {
+    if (postInfo.title.length === 0) {
+      alert('제목을 입력해주세요');
+      return;
+    }
+
+    const { data } = await client.query<IsAuthQueryType>({ query: IS_AUTH });
+    const isAdmin = data.isAuth.isSuccess;
+
+    if (!isAdmin) {
+      alert('로그인에러. 다시 로그인해주세요.');
+      return router.push('/admin/login');
+    }
+
+    const id = +router.query['pid']!;
+
+    try {
+      await editPost({
+        variables: {
+          id,
+          title: postInfo.title,
+          article: postInfo.article,
+          category: postInfo.category === defaultCategory ? '' : postInfo.category
+        }
+      });
+
+      router.push(`/post/${id}`);
+    } catch (err) {
+      alert(err.message);
+      return;
+    }
+
+    return;
+  }
+
   return (
-    <Writer
+    <WriterLayout
       author={props.author}
+      submitText={trans(Lang.Edit)}
+      handleSubmit={handleEditPost}
       categories={props.categories}
       category={props.category}
       title={props.title}
       article={props.article}
-      isEdit
-    ></Writer>
+    ></WriterLayout>
   );
 }
 
@@ -71,8 +116,6 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
   const title = findPostResult.data.findPostById.title;
   const categoryId = findPostResult.data.findPostById.categoryId;
   const categories = categoriesQuery.data.categoriesWithDetails;
-
-  console.log(categoryId);
 
   const category = await client.query<FindCategoryByIdQueryType, FindCategoryByIdVars>({
     query: FIND_CATEGORY_BY_ID,

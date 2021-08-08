@@ -242,7 +242,7 @@ export const postResolver = {
 
     async editPost(_: any, args: { id: number; title: string; article: string; category: string }) {
       try {
-        if (!args.article || args.title.length < 2 || !args.category) {
+        if (!args.article || args.title.length < 2) {
           throw new UserInputError('카테고리, 제목 또는 본문을 입력해주세요');
         }
 

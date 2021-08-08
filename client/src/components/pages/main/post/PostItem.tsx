@@ -9,6 +9,7 @@ import { PostDetailDataType } from 'src/query/post';
 
 const StyledA = styled.a({
   display: 'block',
+  width: '100%',
   margin: '1.6rem 0'
 });
 

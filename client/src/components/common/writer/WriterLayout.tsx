@@ -76,7 +76,7 @@ const DEFAULT_CATEGORY = '최신글';
 interface Props {
   author: string;
   categories: CategoryDetailType[];
-  handleSubmit: (postInfo: PostInfo, defaultCategory: string) => Promise<void>;
+  handleSubmit: (postInfo: PostInfo, defaultCategory: string) => Promise<any>;
   submitText: string;
   category?: string;
   title?: string;
