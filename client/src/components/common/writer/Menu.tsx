@@ -3,11 +3,19 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBold, faItalic, faFont, faCode, faListUl, faQuoteLeft, faImages } from '@fortawesome/free-solid-svg-icons';
 
+import { trans, Lang } from 'src/resources/languages';
+
 import { MenuButton } from './MenuButton';
+import { Mode } from './WriterLayout';
 
 const Container = styled.div({
   display: 'flex',
   width: '100%',
+  justifyContent: 'space-between'
+});
+
+const MenuContainer = styled.div({
+  display: 'flex',
   height: '3rem',
   alignItems: 'center',
   userSelect: 'none',
@@ -18,8 +26,20 @@ const Container = styled.div({
   }
 });
 
+const ModeButtonContainer = styled.div({
+  display: 'flex'
+});
+
+const ModeButton = styled.button<{ isClicked: boolean }>((props) => ({
+  width: '7rem',
+  borderRadius: '.5rem .5rem 0 0',
+  backgroundColor: props.isClicked ? props.theme.hoverBackground : 'inherit'
+}));
+
 interface Props {
   setArticle: React.Dispatch<React.SetStateAction<string>>;
+  mode: Mode;
+  changeMode: () => void;
 }
 
 export const Menu = React.forwardRef<HTMLTextAreaElement, Props>((props, forwardedRef) => {
@@ -133,27 +153,37 @@ export const Menu = React.forwardRef<HTMLTextAreaElement, Props>((props, forward
 
   return (
     <Container contentEditable={false}>
-      <MenuButton isActive desc='Bold' onClick={() => insertMarkdownStartAndEnd('**')}>
-        <FontAwesomeIcon icon={faBold} />
-      </MenuButton>
-      <MenuButton isActive desc='Italic' onClick={() => insertMarkdownStartAndEnd('*')}>
-        <FontAwesomeIcon icon={faItalic} />
-      </MenuButton>
-      <MenuButton isActive desc='Color' onClick={() => insertMarkdownStartAndEnd("<span style='color:#ccc'>", '</span>')}>
-        <FontAwesomeIcon icon={faFont} />
-      </MenuButton>
-      <MenuButton isActive desc='Code Block' onClick={() => insertMarkdownStartAndEnd('\n```\n')}>
-        <FontAwesomeIcon icon={faCode} />
-      </MenuButton>
-      <MenuButton isActive desc='List' onClick={() => insertMarkdownLineStart('* ')}>
-        <FontAwesomeIcon icon={faListUl} />
-      </MenuButton>
-      <MenuButton isActive desc='Quote' onClick={() => insertMarkdownLineStart('> ')}>
-        <FontAwesomeIcon icon={faQuoteLeft} />
-      </MenuButton>
-      <MenuButton isActive desc='Upload Image' onClick={() => alert('sorry...')}>
-        <FontAwesomeIcon icon={faImages} />
-      </MenuButton>
+      <ModeButtonContainer>
+        <ModeButton isClicked={props.mode === Mode.Write} onClick={props.changeMode}>
+          Write
+        </ModeButton>
+        <ModeButton isClicked={props.mode === Mode.Preview} onClick={props.changeMode}>
+          Preview
+        </ModeButton>
+      </ModeButtonContainer>
+      <MenuContainer>
+        <MenuButton isActive desc='Bold' onClick={() => insertMarkdownStartAndEnd('**')}>
+          <FontAwesomeIcon icon={faBold} />
+        </MenuButton>
+        <MenuButton isActive desc='Italic' onClick={() => insertMarkdownStartAndEnd('*')}>
+          <FontAwesomeIcon icon={faItalic} />
+        </MenuButton>
+        <MenuButton isActive desc='Color' onClick={() => insertMarkdownStartAndEnd("<span style='color:#ccc'>", '</span>')}>
+          <FontAwesomeIcon icon={faFont} />
+        </MenuButton>
+        <MenuButton isActive desc='Code Block' onClick={() => insertMarkdownStartAndEnd('\n```\n')}>
+          <FontAwesomeIcon icon={faCode} />
+        </MenuButton>
+        <MenuButton isActive desc='List' onClick={() => insertMarkdownLineStart('* ')}>
+          <FontAwesomeIcon icon={faListUl} />
+        </MenuButton>
+        <MenuButton isActive desc='Quote' onClick={() => insertMarkdownLineStart('> ')}>
+          <FontAwesomeIcon icon={faQuoteLeft} />
+        </MenuButton>
+        <MenuButton isActive desc='Upload Image' onClick={() => alert('sorry...')}>
+          <FontAwesomeIcon icon={faImages} />
+        </MenuButton>
+      </MenuContainer>
     </Container>
   );
 });
