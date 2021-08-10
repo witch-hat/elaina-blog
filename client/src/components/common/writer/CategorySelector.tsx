@@ -6,9 +6,19 @@ import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { DropDownMenu } from 'src/components';
 import { CategoryDetailType } from 'src/query/category';
 
-const CategoryDropDown = styled.div((props) => ({
+const Container = styled.div({
+  display: 'flex',
+  alignItems: 'center'
+});
+
+const Desc = styled.p({
+  marginRight: '.5rem',
+  fontWeight: 'bold'
+});
+
+const CategoryDropDown = styled.div({
   width: '16rem'
-}));
+});
 
 const MainButton = styled.div({
   display: 'flex',
@@ -42,33 +52,36 @@ interface Props {
 
 export function CategorySelector(props: Props) {
   return (
-    <CategoryDropDown>
-      <DropDownMenu
-        mainButton={
-          <MainButton>
-            <p>{props.selectedCategory}</p>
-            <FontAwesomeIcon icon={faCaretDown} />
-          </MainButton>
-        }
-        dropMenu={
-          <>
-            <CategoryTitle
-              onClick={() => {
-                props.changeCategory(props.default);
-              }}
-            >
-              {props.default}
-            </CategoryTitle>
-            {props.categories.map((category) => {
-              return (
-                <CategoryTitle key={category.title} onClick={() => props.changeCategory(category.title)}>
-                  {category.title}
-                </CategoryTitle>
-              );
-            })}
-          </>
-        }
-      />
-    </CategoryDropDown>
+    <Container>
+      <Desc>Category:</Desc>
+      <CategoryDropDown>
+        <DropDownMenu
+          mainButton={
+            <MainButton>
+              <p>{props.selectedCategory}</p>
+              <FontAwesomeIcon icon={faCaretDown} />
+            </MainButton>
+          }
+          dropMenu={
+            <>
+              <CategoryTitle
+                onClick={() => {
+                  props.changeCategory(props.default);
+                }}
+              >
+                {props.default}
+              </CategoryTitle>
+              {props.categories.map((category) => {
+                return (
+                  <CategoryTitle key={category.title} onClick={() => props.changeCategory(category.title)}>
+                    {category.title}
+                  </CategoryTitle>
+                );
+              })}
+            </>
+          }
+        />
+      </CategoryDropDown>
+    </Container>
   );
 }
