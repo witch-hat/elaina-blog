@@ -40,7 +40,11 @@ const Editor = styled.textarea((props) => ({
   wordBreak: 'break-word',
   whiteSpace: 'pre-wrap',
   overflowY: 'auto',
-  backgroundColor: props.theme.editorBackground
+  backgroundColor: props.theme.editorBackground,
+
+  '&:focus': {
+    border: `2px solid ${props.theme.focusBorder}`
+  }
 }));
 
 const ArticleContainer = styled.div({
@@ -118,12 +122,12 @@ export function WriterLayout(props: Props) {
     setSelectedCategory(newCategory);
   }
 
-  function changeMode() {
-    if (mode === Mode.Preview) {
-      setMode(Mode.Write);
-    } else {
-      setMode(Mode.Preview);
-    }
+  function setPreviewMode() {
+    setMode(Mode.Preview);
+  }
+
+  function setWriteMode() {
+    setMode(Mode.Write);
   }
 
   async function handleSubmit() {
@@ -158,7 +162,7 @@ export function WriterLayout(props: Props) {
             }}
           />
         </Title>
-        <Menu ref={editor} setArticle={setArticle} mode={mode} changeMode={changeMode} />
+        <Menu ref={editor} setArticle={setArticle} mode={mode} setPreviewMode={setPreviewMode} setWriteMode={setWriteMode} />
       </MenuContainer>
       <ArticleContainer>
         {mode === Mode.Write ? (

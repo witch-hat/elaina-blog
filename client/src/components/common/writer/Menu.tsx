@@ -3,8 +3,6 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBold, faItalic, faFont, faCode, faListUl, faQuoteLeft, faImages } from '@fortawesome/free-solid-svg-icons';
 
-import { trans, Lang } from 'src/resources/languages';
-
 import { MenuButton } from './MenuButton';
 import { Mode } from './WriterLayout';
 
@@ -32,14 +30,18 @@ const ModeButtonContainer = styled.div({
 
 const ModeButton = styled.button<{ isClicked: boolean }>((props) => ({
   width: '7rem',
-  borderRadius: '.5rem .5rem 0 0',
-  backgroundColor: props.isClicked ? props.theme.hoverBackground : 'inherit'
+  border: 'none',
+  boxShadow: props.isClicked ? `inset 0 -3px 0 ${props.theme.navUnderBar}` : 'none',
+  '&:hover': {
+    boxShadow: props.isClicked ? `inset 0 -3px 0 ${props.theme.navUnderBar}` : `inset 0 -3px 0 ${props.theme.navHoverUnderBar}`
+  }
 }));
 
 interface Props {
   setArticle: React.Dispatch<React.SetStateAction<string>>;
   mode: Mode;
-  changeMode: () => void;
+  setPreviewMode: () => void;
+  setWriteMode: () => void;
 }
 
 export const Menu = React.forwardRef<HTMLTextAreaElement, Props>((props, forwardedRef) => {
@@ -154,10 +156,10 @@ export const Menu = React.forwardRef<HTMLTextAreaElement, Props>((props, forward
   return (
     <Container contentEditable={false}>
       <ModeButtonContainer>
-        <ModeButton isClicked={props.mode === Mode.Write} onClick={props.changeMode}>
+        <ModeButton isClicked={props.mode === Mode.Write} onClick={props.setWriteMode}>
           Write
         </ModeButton>
-        <ModeButton isClicked={props.mode === Mode.Preview} onClick={props.changeMode}>
+        <ModeButton isClicked={props.mode === Mode.Preview} onClick={props.setPreviewMode}>
           Preview
         </ModeButton>
       </ModeButtonContainer>
