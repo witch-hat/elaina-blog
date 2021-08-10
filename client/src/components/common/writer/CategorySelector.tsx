@@ -1,45 +1,34 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 
-import { FocusWrapper } from 'src/components';
+import { DropDownMenu } from 'src/components';
 import { CategoryDetailType } from 'src/query/category';
 
-const CategoryContainer = styled.div((props) => ({
-  position: 'relative',
+const CategoryDropDown = styled.div((props) => ({
+  width: '16rem'
+}));
+
+const MainButton = styled.div({
+  display: 'flex',
   width: '100%',
-  padding: '.5rem 0',
-  border: `1px solid ${props.theme.borderColor}`,
-  borderRadius: '.5rem',
-  cursor: 'pointer',
-  wordBreak: 'break-all'
-}));
+  alignItems: 'center',
+  justifyContent: 'space-between'
+});
 
-const CategoryList = styled.ul((props) => ({
-  position: 'absolute',
-  top: '.125rem',
-  left: '0',
-  border: `1px solid ${props.theme.borderColor}`,
-  backgroundColor: props.theme.secondaryContentBackground,
-  borderRadius: '.5rem',
-  boxShadow: `0 6px 3px -3px ${props.theme.shadowColor}`,
-  userSelect: 'none',
-  zIndex: 1
-}));
-
-const CategoryTitle = styled.li((props) => ({
+const CategoryTitle = styled.p((props) => ({
   display: '-webkit-box',
   width: '100%',
   height: 'fit-content',
-  padding: '.25rem',
+  padding: '.5rem',
   borderRadius: '.5rem',
   overflow: 'hidden',
   wordBreak: 'break-all',
   WebkitLineClamp: 1,
   WebkitBoxOrient: 'vertical',
   '&:hover': {
-    backgroundColor: props.theme.hoverBackground
-  },
-  '&:hover > p': {
+    backgroundColor: props.theme.hoverBackground,
     cursor: 'pointer'
   }
 }));
@@ -52,38 +41,34 @@ interface Props {
 }
 
 export function CategorySelector(props: Props) {
-  const [isListOpen, setIsListOpen] = useState(false);
-
   return (
-    <CategoryContainer>
-      <div onClick={() => setIsListOpen(!isListOpen)}>
-        <p style={{ padding: '.2rem' }}>{props.selectedCategory}</p>
-      </div>
-      <FocusWrapper visible={isListOpen} onClickOutside={() => setIsListOpen(false)}>
-        <CategoryList>
-          <CategoryTitle
-            onClick={() => {
-              props.changeCategory(props.default);
-              setIsListOpen(false);
-            }}
-          >
-            <p>{props.default}</p>
-          </CategoryTitle>
-          {props.categories.map((category) => {
-            return (
-              <CategoryTitle
-                key={category.title}
-                onClick={() => {
-                  props.changeCategory(category.title);
-                  setIsListOpen(false);
-                }}
-              >
-                <p>{category.title}</p>
-              </CategoryTitle>
-            );
-          })}
-        </CategoryList>
-      </FocusWrapper>
-    </CategoryContainer>
+    <CategoryDropDown>
+      <DropDownMenu
+        mainButton={
+          <MainButton>
+            <p>{props.selectedCategory}</p>
+            <FontAwesomeIcon icon={faCaretDown} />
+          </MainButton>
+        }
+        dropMenu={
+          <>
+            <CategoryTitle
+              onClick={() => {
+                props.changeCategory(props.default);
+              }}
+            >
+              {props.default}
+            </CategoryTitle>
+            {props.categories.map((category) => {
+              return (
+                <CategoryTitle key={category.title} onClick={() => props.changeCategory(category.title)}>
+                  {category.title}
+                </CategoryTitle>
+              );
+            })}
+          </>
+        }
+      />
+    </CategoryDropDown>
   );
 }
