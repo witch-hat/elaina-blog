@@ -39,7 +39,7 @@ export interface FindPostByIdVars {
 }
 
 export interface FindPostByIdQueryType {
-  findPostById: PostDataType;
+  findPostById: PostDetailDataType;
 }
 
 export const FIND_POST_BY_ID = gql`
@@ -50,6 +50,8 @@ export const FIND_POST_BY_ID = gql`
       createdAt
       article
       categoryId
+      likeCount
+      commentCount
     }
   }
 `;
