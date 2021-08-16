@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp as regularThumbsUp, faComments } from '@fortawesome/free-regular-svg-icons';
+import { faThumbsUp as solidThumbsUp } from '@fortawesome/free-solid-svg-icons';
 
 const Container = styled.aside({
   width: '100%',
@@ -37,7 +38,8 @@ const Icon = styled.span({
 const Number = styled.p({
   display: 'inline-block',
   marginLeft: '.5rem',
-  fontSize: '.9rem'
+  fontSize: '.9rem',
+  userSelect: 'none'
 });
 
 interface Props {
@@ -46,13 +48,26 @@ interface Props {
 }
 
 export function ClapBox(props: Props) {
+  const [like, setLike] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
+
+  function updateLikeNumber() {
+    if (!like) setLikeCount((prev) => prev + 1);
+    else setLikeCount((prev) => prev - 1);
+  }
+
+  function onClick() {
+    setLike((prev) => !prev);
+    updateLikeNumber();
+  }
+
   return (
     <Container>
       <Box>
         <FlexWrapper>
           <Icon>
-            <FontAwesomeIcon icon={regularThumbsUp} />
-            <Number>14</Number>
+            <FontAwesomeIcon onClick={onClick} icon={like ? solidThumbsUp : regularThumbsUp} />
+            <Number>{likeCount}</Number>
           </Icon>
           <Icon>
             <FontAwesomeIcon icon={faComments} onClick={() => props.scrollToComment()} />
