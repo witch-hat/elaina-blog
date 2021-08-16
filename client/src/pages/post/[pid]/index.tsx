@@ -6,7 +6,7 @@ import { useQuery } from '@apollo/client';
 
 import { AppCommonProps } from 'src/pages/_app';
 import { initializeApollo } from 'src/lib/apollo';
-import { FindPostByIdQueryType, FindPostByIdVars, FIND_POST_BY_ID, PostDataType } from 'src/query/post';
+import { FindPostByIdQueryType, FindPostByIdVars, FIND_POST_BY_ID, PostDetailDataType } from 'src/query/post';
 import { GET_PROFILE, ProfileDataType, GetProfileQueryType } from 'src/query/profile';
 import { GET_COMMENTS, GetCommentsQueryType, GetCommentVars } from 'src/query/comment';
 import { ArticleContainer, CommentContainer, RightSideContainer } from 'src/components/pages/post';
@@ -47,7 +47,7 @@ const ContentContainer = styled.section((props) => ({
 
 interface ServerSideProps {
   categoryId: number;
-  post: PostDataType;
+  post: PostDetailDataType;
   profile: ProfileDataType;
 }
 
