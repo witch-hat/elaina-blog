@@ -33,7 +33,7 @@ const Container = styled.main({
   minHeight: 'calc(100vh - 5rem - 40px)',
   padding: '.5rem 1.5rem',
   flexDirection: 'column',
-  jusitfyContent: 'flex-start',
+  justifyContent: 'flex-start',
   alignItems: 'center',
   '@media screen and (max-width: 767px)': {
     padding: '.5rem'

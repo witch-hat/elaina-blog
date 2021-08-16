@@ -6,11 +6,7 @@ import { faThumbsUp as solidThumbsUp } from '@fortawesome/free-solid-svg-icons';
 
 const Container = styled.aside({
   width: '100%',
-  padding: '.5rem',
-  '@media screen and (max-width: 1380px)': {
-    display: 'none',
-    opacity: 0
-  }
+  padding: '.5rem'
 });
 
 const Box = styled.div({
@@ -23,7 +19,7 @@ const FlexWrapper = styled.div({
   display: 'flex',
   width: '100%',
   alignItems: 'center',
-  justifyContent: 'center'
+  justifyContent: 'left'
 });
 
 const Icon = styled.span({
@@ -44,21 +40,20 @@ const Number = styled.p({
 
 interface Props {
   commentsCount: number;
-  scrollToComment: () => void;
 }
 
 export function ClapBox(props: Props) {
   const [like, setLike] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
 
-  function updateLikeNumber() {
+  function updateLikeCount() {
     if (!like) setLikeCount((prev) => prev + 1);
     else setLikeCount((prev) => prev - 1);
   }
 
   function onClick() {
     setLike((prev) => !prev);
-    updateLikeNumber();
+    updateLikeCount();
   }
 
   return (
@@ -70,7 +65,7 @@ export function ClapBox(props: Props) {
             <Number>{likeCount}</Number>
           </Icon>
           <Icon>
-            <FontAwesomeIcon icon={faComments} onClick={() => props.scrollToComment()} />
+            <FontAwesomeIcon icon={faComments} />
             <Number>{props.commentsCount}</Number>
           </Icon>
         </FlexWrapper>

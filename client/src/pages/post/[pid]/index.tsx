@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
@@ -10,6 +10,7 @@ import { FindPostByIdQueryType, FindPostByIdVars, FIND_POST_BY_ID, PostDataType 
 import { GET_PROFILE, ProfileDataType, GetProfileQueryType } from 'src/query/profile';
 import { GET_COMMENTS, GetCommentsQueryType, GetCommentVars } from 'src/query/comment';
 import { ArticleContainer, CommentContainer, RightSideContainer } from 'src/components/pages/post';
+import { ClapBox } from 'src/components/pages/post/ClapBox';
 
 const Container = styled.div({
   display: 'flex',
@@ -54,7 +55,6 @@ interface Props extends AppCommonProps, ServerSideProps {}
 
 export default function PostId(props: Props) {
   const router = useRouter();
-  const commentRef = useRef<HTMLElement>(null);
 
   const _id = router.query['pid'] as string;
 
@@ -67,10 +67,6 @@ export default function PostId(props: Props) {
   useEffect(() => {
     window.scroll(0, 0);
   }, []);
-
-  function scrollToComment() {
-    window.scrollTo(0, commentRef.current?.offsetTop!);
-  }
 
   if (loading || !data) {
     return null;
@@ -86,6 +82,7 @@ export default function PostId(props: Props) {
           article={props.post.article}
           isLogin={props.app.isLogin}
         />
+        <ClapBox commentsCount={data.comments.count} />
         <CommentContainer
           comments={data.comments}
           isLogin={props.app.isLogin}
@@ -94,7 +91,7 @@ export default function PostId(props: Props) {
           postId={props.post._id}
         />
       </ContentContainer>
-      <RightSideContainer commentsCount={data.comments.count} scrollToComment={scrollToComment} />
+      <RightSideContainer />
     </Container>
   );
 }

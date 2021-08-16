@@ -25,7 +25,8 @@ const Title = styled.p({
   width: '100%',
   marginBottom: '.5rem',
   fontSize: '1.25rem',
-  fontWeight: 'bold'
+  fontWeight: 'bold',
+  userSelect: 'none'
 });
 
 const StyleHr = styled.hr((props) => ({

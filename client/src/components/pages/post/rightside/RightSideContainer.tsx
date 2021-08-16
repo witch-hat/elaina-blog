@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { ClapBox } from './ClapBox';
 import { ContentNavigation } from './ContentNavigation';
 
 const Container = styled.aside((props) => ({
@@ -36,17 +35,11 @@ const StyledHr = styled.hr({
   boxSizing: 'border-box'
 });
 
-interface Props {
-  commentsCount: number;
-  scrollToComment: () => void;
-}
-
-export function RightSideContainer(props: Props) {
+export function RightSideContainer() {
   return (
     <Container>
       <ContentNavigation />
       <StyledHr />
-      <ClapBox commentsCount={props.commentsCount} scrollToComment={props.scrollToComment} />
     </Container>
   );
 }
