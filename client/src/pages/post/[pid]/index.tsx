@@ -82,7 +82,7 @@ export default function PostId(props: Props) {
           article={props.post.article}
           isLogin={props.app.isLogin}
         />
-        <ClapBox commentsCount={data.comments.count} />
+        <ClapBox pid={parseInt(_id)} initLikeCount={props.post.likeCount} commentsCount={data.comments.count} />
         <CommentContainer
           comments={data.comments}
           isLogin={props.app.isLogin}

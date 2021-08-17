@@ -46,6 +46,7 @@ export const postTypeDef = gql`
     writePost(title: String!, createdAt: DateTime, article: String!, category: String!): Post
     deletePost(id: Int!): DeleteResponse
     editPost(id: Int!, title: String!, article: String!, category: String!): Void
+    editLikeCount(id: Int!, likeCount: Int!): Void
   }
 `;
 
@@ -255,6 +256,18 @@ export const postResolver = {
         }
 
         return null;
+      } catch (err) {
+        throw err;
+      }
+    },
+
+    async editLikeCount(_: any, args: { id: number; likeCount: number }) {
+      try {
+        const [editPost] = await Promise.all([PostModel.findById(args.id)]);
+        if (editPost) {
+          editPost.likeCount = args.likeCount;
+          await editPost.save();
+        }
       } catch (err) {
         throw err;
       }

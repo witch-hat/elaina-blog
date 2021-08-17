@@ -164,3 +164,18 @@ export const EDIT_POST = gql`
     editPost(id: $id, title: $title, article: $article, category: $category)
   }
 `;
+
+export interface EditLikeCountVars {
+  likeCount: number;
+  id: number;
+}
+
+export interface EditLikeCountQueryType {
+  editLikeCount: void;
+}
+
+export const EDIT_LIKE_COUNT = gql`
+  mutation ($id: Int!, $likeCount: Int!) {
+    editLikeCount(id: $id, likeCount: $likeCount)
+  }
+`;
