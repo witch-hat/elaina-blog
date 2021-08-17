@@ -44,37 +44,23 @@ const Number = styled.p({
 interface Props {
   initLikeCount: number;
   commentsCount: number;
-  pid: number;
+  id: number;
 }
 
-export function ClapBox(props: Props) {
+export function ClapBox({ id, ...props }: Props) {
   const [like, setLike] = useState(false); // localStorage에서 초기값을 가져오도록 바꿔야 합니다.
   const [likeCount, setLikeCount] = useState(props.initLikeCount);
   const [editLikeCount] = useMutation<EditLikeCountQueryType, EditLikeCountVars>(EDIT_LIKE_COUNT);
 
-  function updateLikeCount(nextLike: boolean) {
-    if (!props.pid) return;
-    if (nextLike) {
-      setLikeCount((prev) => prev + 1);
-    } else {
-      setLikeCount((prev) => prev - 1);
-    }
-  }
-
   useEffect(() => {
-    console.log(likeCount);
-    editLikeCount({
-      variables: {
-        id: props.pid,
-        likeCount
-      }
-    });
+    editLikeCount({ variables: { id, likeCount } });
   }, [likeCount]);
 
   function onClick() {
     const nextLike = !like;
     setLike(nextLike);
-    updateLikeCount(nextLike);
+    if (nextLike) setLikeCount(likeCount + 1);
+    else setLikeCount(likeCount - 1);
   }
 
   return (
