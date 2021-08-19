@@ -8,7 +8,7 @@ import rootReducer, { RootState } from './rootReducer';
 const persistConfig: PersistConfig<any> = {
   key: 'root',
   storage: storage,
-  whitelist: ['common']
+  whitelist: ['common', 'post']
 };
 
 const enhancedReducer = persistReducer(persistConfig, rootReducer);

@@ -6,6 +6,8 @@ import { faThumbsUp as solidThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { useMutation } from '@apollo/client';
 import { EditLikeCountQueryType, EditLikeCountVars, EDIT_LIKE_COUNT } from 'src/query/post';
 import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from 'src/redux/rootReducer';
 
 const Container = styled.aside({
   width: '100%',
@@ -47,20 +49,36 @@ interface Props {
   id: number;
 }
 
-export function ClapBox({ id, ...props }: Props) {
+export function ClapBox(props: Props) {
+  const likeIds = useSelector<RootState, number[]>((state) => state.post.likedIds);
   const [like, setLike] = useState(false); // localStorage에서 초기값을 가져오도록 바꿔야 합니다.
   const [likeCount, setLikeCount] = useState(props.initLikeCount);
   const [editLikeCount] = useMutation<EditLikeCountQueryType, EditLikeCountVars>(EDIT_LIKE_COUNT);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    editLikeCount({ variables: { id, likeCount } });
+    if (likeIds.find((id) => id === props.id)) {
+      setLike(true);
+    } else {
+      setLike(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    editLikeCount({ variables: { id: props.id, likeCount } });
   }, [likeCount]);
 
   function onClick() {
     const nextLike = !like;
     setLike(nextLike);
-    if (nextLike) setLikeCount(likeCount + 1);
-    else setLikeCount(likeCount - 1);
+
+    if (nextLike) {
+      setLikeCount(likeCount + 1);
+      dispatch({ type: 'AddLikedId', id: props.id });
+    } else {
+      setLikeCount(likeCount - 1);
+      dispatch({ type: 'DeleteLikedId', id: props.id });
+    }
   }
 
   return (
