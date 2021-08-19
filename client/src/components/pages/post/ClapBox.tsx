@@ -6,7 +6,7 @@ import { faThumbsUp as solidThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { useMutation } from '@apollo/client';
 import { EditLikeCountQueryType, EditLikeCountVars, EDIT_LIKE_COUNT } from 'src/query/post';
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/rootReducer';
 import { postDispatch } from 'src/redux/post/dispatch';
 
