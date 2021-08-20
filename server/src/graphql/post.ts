@@ -268,6 +268,8 @@ export const postResolver = {
           editPost.likeCount = args.likeCount;
           await editPost.save();
         }
+
+        return null;
       } catch (err) {
         throw err;
       }
