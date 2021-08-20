@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled, { DefaultTheme } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faThumbsUp as regularThumbsUp, faComments } from '@fortawesome/free-regular-svg-icons';
-import { faThumbsUp as solidThumbsUp } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons';
+import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons';
 import { useMutation } from '@apollo/client';
 import { EditLikeCountQueryType, EditLikeCountVars, EDIT_LIKE_COUNT } from 'src/query/post';
 import { useEffect } from 'react';
@@ -25,22 +25,26 @@ const FlexWrapper = styled.div({
   display: 'flex',
   width: '100%',
   alignItems: 'center',
-  justifyContent: 'left'
+  justifyContent: 'center'
 });
 
-const Icon = styled.span({
+const Icon = styled.span((props) => ({
   display: 'inline-flex',
   padding: '.5rem',
   marginRight: '.75rem',
   alignItems: 'center',
-  fontSize: '1.3rem',
+  border: `.15rem solid ${props.theme.likeColor}`,
+  borderRadius: '.5rem',
+  margin: '2rem 0',
+  color: props.theme.likeColor,
   cursor: 'pointer'
-});
+}));
 
 const Number = styled.p({
   display: 'inline-block',
+  fontSize: '2rem',
   marginLeft: '.5rem',
-  fontSize: '.9rem',
+  padding: '0 0 0 .5rem',
   userSelect: 'none'
 });
 
@@ -52,7 +56,7 @@ interface Props {
 
 export function ClapBox({ id, ...props }: Props) {
   const likeById = useSelector<RootState, { [id: number]: boolean }>((state) => state.post.likedById);
-  const [like, setLike] = useState(false); // localStorage에서 초기값을 가져오도록 바꿔야 합니다.
+  const [like, setLike] = useState(false);
   const [likeCount, setLikeCount] = useState(props.initLikeCount);
   const [editLikeCount] = useMutation<EditLikeCountQueryType, EditLikeCountVars>(EDIT_LIKE_COUNT);
 
@@ -83,13 +87,9 @@ export function ClapBox({ id, ...props }: Props) {
     <Container>
       <Box>
         <FlexWrapper>
-          <Icon>
-            <FontAwesomeIcon onClick={onClick} icon={like ? solidThumbsUp : regularThumbsUp} />
+          <Icon onClick={onClick}>
+            <FontAwesomeIcon icon={like ? solidHeart : regularHeart} style={{ fontSize: '3rem' }} />
             <Number>{likeCount}</Number>
-          </Icon>
-          <Icon>
-            <FontAwesomeIcon icon={faComments} />
-            <Number>{props.commentsCount}</Number>
           </Icon>
         </FlexWrapper>
       </Box>

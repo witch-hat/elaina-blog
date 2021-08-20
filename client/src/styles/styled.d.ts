@@ -54,7 +54,7 @@ declare module 'styled-components' {
     navHoverUnderBar: string;
     shadowColor: string;
     inputOutline: string;
-
+    likeColor: string;
     // submit btn
     submitButton: SubmitButton;
 

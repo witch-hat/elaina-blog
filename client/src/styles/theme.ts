@@ -37,6 +37,7 @@ export const theme: { light: DefaultTheme; dark: DefaultTheme } = {
     navHoverUnderBar: '#888',
     shadowColor: 'rgba(38, 38, 38, 0.4)',
     inputOutline: 'rgba(134, 125, 255, .7)',
+    likeColor: '#555',
     // submit
     submitButton: {
       buttonColor: '#2a9df4',
@@ -94,7 +95,7 @@ export const theme: { light: DefaultTheme; dark: DefaultTheme } = {
     navHoverUnderBar: '#888',
     shadowColor: 'rgba(200, 200, 200, 0.9)',
     inputOutline: 'rgba(134, 125, 255, .7)',
-
+    likeColor: '#ddd',
     // submit
     submitButton: {
       buttonColor: '#2a9df4',
