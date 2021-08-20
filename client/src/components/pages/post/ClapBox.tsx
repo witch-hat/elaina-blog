@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styled, { DefaultTheme } from 'styled-components';
+import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons';
@@ -31,20 +31,19 @@ const FlexWrapper = styled.div({
 const Icon = styled.span((props) => ({
   display: 'inline-flex',
   padding: '.5rem',
-  marginRight: '.75rem',
-  alignItems: 'center',
+  margin: '2rem 0',
   border: `.15rem solid ${props.theme.likeColor}`,
   borderRadius: '.5rem',
-  margin: '2rem 0',
   color: props.theme.likeColor,
+  alignItems: 'center',
   cursor: 'pointer'
 }));
 
 const Number = styled.p({
   display: 'inline-block',
-  fontSize: '2rem',
   marginLeft: '.5rem',
   padding: '0 0 0 .5rem',
+  fontSize: '2rem',
   userSelect: 'none'
 });
 
@@ -56,6 +55,7 @@ interface Props {
 
 export function ClapBox({ id, ...props }: Props) {
   const likeById = useSelector<RootState, { [id: number]: boolean }>((state) => state.post.likedById);
+
   const [like, setLike] = useState(false);
   const [likeCount, setLikeCount] = useState(props.initLikeCount);
   const [editLikeCount] = useMutation<EditLikeCountQueryType, EditLikeCountVars>(EDIT_LIKE_COUNT);

@@ -263,7 +263,7 @@ export const postResolver = {
 
     async editLikeCount(_: any, args: { id: number; likeCount: number }) {
       try {
-        const [editPost] = await Promise.all([PostModel.findById(args.id)]);
+        const editPost = await PostModel.findById(args.id);
         if (editPost) {
           editPost.likeCount = args.likeCount;
           await editPost.save();
