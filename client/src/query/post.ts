@@ -165,17 +165,30 @@ export const EDIT_POST = gql`
   }
 `;
 
-export interface EditLikeCountVars {
-  likeCount: number;
+export interface IncreaseLikeCountVars {
   id: number;
 }
 
-export interface EditLikeCountQueryType {
-  editLikeCount: void;
+export interface IncreaseLikeCountQueryType {
+  increaseLikeCount: number;
 }
 
-export const EDIT_LIKE_COUNT = gql`
-  mutation ($id: Int!, $likeCount: Int!) {
-    editLikeCount(id: $id, likeCount: $likeCount)
+export const INCREASE_LIKE_COUNT = gql`
+  mutation ($id: Int!) {
+    increaseLikeCount(id: $id)
+  }
+`;
+
+export interface DecreaseLikeCountVars {
+  id: number;
+}
+
+export interface DecreaseLikeCountQueryType {
+  decreaseLikeCount: number;
+}
+
+export const DECREASE_LIKE_COUNT = gql`
+  mutation ($id: Int!) {
+    decreaseLikeCount(id: $id)
   }
 `;

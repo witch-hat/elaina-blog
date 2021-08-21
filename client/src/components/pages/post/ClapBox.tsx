@@ -1,16 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons';
 import { useMutation } from '@apollo/client';
-import { EditLikeCountQueryType, EditLikeCountVars, EDIT_LIKE_COUNT } from 'src/query/post';
-import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import {
+  DecreaseLikeCountQueryType,
+  DecreaseLikeCountVars,
+  DECREASE_LIKE_COUNT,
+  IncreaseLikeCountQueryType,
+  IncreaseLikeCountVars,
+  INCREASE_LIKE_COUNT
+} from 'src/query/post';
 import { RootState } from 'src/redux/rootReducer';
 import { postDispatch } from 'src/redux/post/dispatch';
 
-const Container = styled.aside({
+const Container = styled.div({
   width: '100%',
   padding: '.5rem'
 });
@@ -58,7 +64,10 @@ export function ClapBox({ id, ...props }: Props) {
 
   const [like, setLike] = useState(false);
   const [likeCount, setLikeCount] = useState(props.initLikeCount);
-  const [editLikeCount] = useMutation<EditLikeCountQueryType, EditLikeCountVars>(EDIT_LIKE_COUNT);
+  const [increaseLikeCount] = useMutation<IncreaseLikeCountQueryType, IncreaseLikeCountVars>(INCREASE_LIKE_COUNT);
+  const [decreaseLikeCount] = useMutation<DecreaseLikeCountQueryType, DecreaseLikeCountVars>(DECREASE_LIKE_COUNT);
+
+  let isRunning = false;
 
   useEffect(() => {
     if (likeById && likeById.hasOwnProperty(id) && likeById[id]) {
@@ -68,26 +77,38 @@ export function ClapBox({ id, ...props }: Props) {
     }
   }, []);
 
-  useEffect(() => {
-    editLikeCount({ variables: { id, likeCount } });
-  }, [likeCount]);
-
-  function onClick() {
+  async function onClick() {
     const nextLike = !like;
-    setLike(nextLike);
-    postDispatch.setLikedId(id, nextLike);
+    const countAddition = nextLike ? 1 : -1;
+
     if (nextLike) {
-      setLikeCount(likeCount + 1);
+      await increaseLikeCount({ variables: { id } });
     } else {
-      setLikeCount(likeCount - 1);
+      await decreaseLikeCount({ variables: { id } });
     }
+
+    setLikeCount((prev) => prev + countAddition);
+    setLike(nextLike);
+
+    postDispatch.setLikedId(id, nextLike);
   }
 
   return (
     <Container>
       <Box>
         <FlexWrapper>
-          <Icon onClick={onClick}>
+          <Icon
+            onClick={() => {
+              setTimeout(async () => {
+                if (isRunning) return;
+                console.log('start');
+                isRunning = true;
+                await onClick();
+                isRunning = false;
+                console.log('end');
+              }, 500);
+            }}
+          >
             <FontAwesomeIcon icon={like ? solidHeart : regularHeart} style={{ fontSize: '3rem' }} />
             <Number>{likeCount}</Number>
           </Icon>

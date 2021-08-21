@@ -46,7 +46,8 @@ export const postTypeDef = gql`
     writePost(title: String!, createdAt: DateTime, article: String!, category: String!): Post
     deletePost(id: Int!): DeleteResponse
     editPost(id: Int!, title: String!, article: String!, category: String!): Void
-    editLikeCount(id: Int!, likeCount: Int!): Void
+    increaseLikeCount(id: Int!): Int!
+    decreaseLikeCount(id: Int!): Int!
   }
 `;
 
@@ -261,15 +262,27 @@ export const postResolver = {
       }
     },
 
-    async editLikeCount(_: any, args: { id: number; likeCount: number }) {
+    async increaseLikeCount(_: any, args: { id: number }) {
+      try {
+        const [editPost] = await Promise.all([PostModel.findById(args.id)]);
+        if (editPost) {
+          editPost.likeCount += 1;
+          await editPost.save();
+          return editPost.likeCount;
+        } else return -1;
+      } catch (err) {
+        throw err;
+      }
+    },
+
+    async decreaseLikeCount(_: any, args: { id: number }) {
       try {
         const editPost = await PostModel.findById(args.id);
         if (editPost) {
-          editPost.likeCount = args.likeCount;
+          editPost.likeCount -= 1;
           await editPost.save();
-        }
-
-        return null;
+          return editPost.likeCount;
+        } else return -1;
       } catch (err) {
         throw err;
       }
