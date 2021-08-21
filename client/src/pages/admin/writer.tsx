@@ -38,7 +38,7 @@ export default function WriterPage(props: Props) {
   return (
     <Container>
       {categoryTitleFromQuery ? (
-        <Writer author={profile.name || ''} categories={categories} category={categoryTitleFromQuery} />
+        <Writer author={profile.name || ''} categories={categories} />
       ) : (
         <Writer author={profile.name || ''} categories={categories} />
       )}
