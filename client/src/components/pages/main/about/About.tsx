@@ -10,7 +10,6 @@ import { AboutEditor } from './AboutEditor';
 
 const Container = styled.section({
   width: '100%',
-  minHeight: '100vh',
   marginTop: '2rem'
 });
 

@@ -7,7 +7,6 @@ import { PostItem } from './PostItem';
 
 const Container = styled.div({
   width: '100%',
-  minHeight: 'calc(100vh - 4rem)',
   padding: '0 1rem'
 });
 

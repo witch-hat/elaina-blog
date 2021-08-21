@@ -9,11 +9,10 @@ import { NoCategory } from './NoCategory';
 const Container = styled.section({
   display: 'flex',
   width: '100%',
-  minHeight: 'calc(100vh - 4rem)',
   padding: '.9rem 1rem',
   justifyContent: 'space-between',
   alignItems: 'flex-start',
-  flexWrap: 'wrap'
+  flexFlow: 'row wrap'
 });
 
 interface Props {

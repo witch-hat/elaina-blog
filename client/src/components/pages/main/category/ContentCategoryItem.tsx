@@ -8,13 +8,17 @@ import { CategoryDetailType } from 'src/query/category';
 import { ContentCategoryDetails } from './ContentCategoryDetails';
 
 const Container = styled.a({
-  display: 'flex',
-  width: '47.5%'
+  display: 'block',
+  width: '32%',
+  height: 'max-content'
 });
 
 const Content = styled.div({
+  display: 'flex',
   width: '100%',
-  padding: '.8rem'
+  padding: '1.5rem 1rem',
+  flexDirection: 'column',
+  justifyContent: 'space-between'
 });
 
 const ImageContainer = styled.div({
@@ -94,10 +98,10 @@ export function ContentCategoryItem(props: Props) {
   return (
     <Link href={`/category/${props.category._id}`}>
       <Container>
-        <BorderBox isHoverEffect={true} styles={{ width: '100%', margin: '.8rem 0' }}>
+        <BorderBox isHoverEffect={true} styles={{ width: '100%', margin: '4% 0' }}>
           <Content>
             <ImageContainer>
-              <NoImage width={250} height={250} />
+              <NoImage width={215} height={215} />
             </ImageContainer>
             <PreviewTextWrapper>
               <CategoryTitle>{props.category.title}</CategoryTitle>
