@@ -10,13 +10,13 @@ export interface Auth {
   latestLogin: Date;
 }
 
-export interface User extends Document {
+export interface User {
   emailId: string;
   password: string;
   auth: Auth[];
 }
 
-const authSchema = new Schema({
+const authSchema = new Schema<Auth>({
   userUniqueId: {
     type: String
   },
@@ -56,20 +56,11 @@ export const userSchema = new Schema<User>(
   }
 );
 
-userSchema.pre('save', function (next) {
+userSchema.pre('save', async function (next) {
   if (this.isModified('password')) {
-    bcrypt.genSalt(saltRounds, (err: Error, salt: string) => {
-      if (err) return next(err);
-
-      bcrypt.hash(this.password, salt, (err: Error, hash: string) => {
-        if (err) return next(err);
-        this.password = hash;
-        next();
-      });
-    });
-  } else {
-    next();
+    this.password = await bcrypt.hash(this.password, saltRounds);
   }
+  next();
 });
 
-export const UserModel: Model<User> = model('User', userSchema);
+export const UserModel = model<User>('User', userSchema);

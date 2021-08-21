@@ -1,5 +1,16 @@
 import { Schema, model, Document } from 'mongoose';
 
+export interface Profile {
+  _id: string;
+  image: string;
+  name: string;
+  introduce: string;
+  link: string;
+  company: string;
+  location: string;
+  email: string;
+}
+
 export const profileSchema = new Schema(
   {
     image: {
@@ -36,16 +47,4 @@ export const profileSchema = new Schema(
   }
 );
 
-export interface Profile {
-  image: string;
-  name: string;
-  introduce: string;
-  link: string;
-  company: string;
-  location: string;
-  email: string;
-}
-
-interface ProfileSchema extends Profile, Document {}
-
-export const ProfileModel = model<ProfileSchema>('Profile', profileSchema);
+export const ProfileModel = model<Profile>('Profile', profileSchema);

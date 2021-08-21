@@ -4,46 +4,33 @@ import bcrypt from 'bcrypt';
 const saltRounds = 10;
 
 export interface Reply {
+  _id?: string;
   username?: string;
   password?: string;
   createdAt: Date;
   comment: string;
   isAdmin: boolean;
+  isEdited: boolean;
 }
 
 export interface Comment {
+  _id?: string;
   username?: string;
   password?: string;
   createdAt: Date;
   comment: string;
   replies: Reply[];
   isAdmin: boolean;
+  isEdited: boolean;
 }
 
-interface ReplySchemaType extends Document {
-  username?: string;
-  password?: string;
-  createdAt: Date;
-  comment: string;
-  isAdmin: boolean;
-}
-
-interface CommentSchemaType extends Document {
-  username?: string;
-  password?: string;
-  createdAt: Date;
-  comment: string;
-  replies: Reply[];
-  isAdmin: boolean;
-}
-
-export interface CommentConatiner extends Document {
+export interface CommentConatiner {
   _id: number;
   count: number;
   comments: Comment[];
 }
 
-const replySchema = new Schema<ReplySchemaType>({
+const replySchema = new Schema<Reply>({
   username: {
     type: String
   },
@@ -61,10 +48,15 @@ const replySchema = new Schema<ReplySchemaType>({
   isAdmin: {
     type: Boolean,
     required: true
+  },
+  isEdited: {
+    type: Boolean,
+    require: true,
+    default: false
   }
 });
 
-const commentSchema = new Schema<CommentSchemaType>({
+const commentSchema = new Schema<Comment>({
   username: {
     type: String
   },
@@ -87,6 +79,11 @@ const commentSchema = new Schema<CommentSchemaType>({
   isAdmin: {
     type: Boolean,
     required: true
+  },
+  isEdited: {
+    type: Boolean,
+    require: true,
+    default: false
   }
 });
 
@@ -113,36 +110,18 @@ export const commentContainerSchema = new Schema<CommentConatiner>(
   }
 );
 
-replySchema.pre('save', function (next) {
-  if (this.isModified('password')) {
-    bcrypt.genSalt(saltRounds, (err: Error, salt: string) => {
-      if (err) return next(err);
-
-      bcrypt.hash(this.password, salt, (err: Error, hash: string) => {
-        if (err) return next(err);
-        this.password = hash;
-        next();
-      });
-    });
-  } else {
-    next();
+replySchema.pre('save', async function (next) {
+  if (this.password && this.isModified('password')) {
+    this.password = await bcrypt.hash(this.password, saltRounds);
   }
+  next();
 });
 
-commentSchema.pre('save', function (next) {
-  if (this.isModified('password')) {
-    bcrypt.genSalt(saltRounds, (err: Error, salt: string) => {
-      if (err) return next(err);
-
-      bcrypt.hash(this.password, salt, (err: Error, hash: string) => {
-        if (err) return next(err);
-        this.password = hash;
-        next();
-      });
-    });
-  } else {
-    next();
+commentSchema.pre('save', async function (next) {
+  if (this.password && this.isModified('password')) {
+    this.password = await bcrypt.hash(this.password, saltRounds);
   }
+  next();
 });
 
 export const CommentModel = model<CommentConatiner>('Comment', commentContainerSchema);

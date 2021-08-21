@@ -7,7 +7,7 @@ import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 
 import { trans, Lang } from 'src/resources/languages';
 
-import { LOGOUT } from 'src/query/user';
+import { LOGOUT, LogoutQueryType } from 'src/query/user';
 import { DropDownMenu } from '../common/box/DropDownMenu';
 
 const AdminDropDown = styled.div({});
@@ -38,11 +38,28 @@ interface Props {
 export function AdminMenu(props: Props) {
   const router = useRouter();
 
-  const [logout] = useMutation(LOGOUT, {
-    onCompleted: () => {
-      router.reload();
+  const [logout] = useMutation<LogoutQueryType>(LOGOUT);
+
+  async function handleLogout() {
+    try {
+      const { data } = await logout();
+
+      if (!data) {
+        alert('Try again...');
+        return;
+      }
+
+      if (data.logout.isSuccess) {
+        router.reload();
+        return;
+      } else {
+        alert('Try again...');
+        return;
+      }
+    } catch (err) {
+      alert(err.message);
     }
-  });
+  }
 
   return (
     <AdminDropDown>
@@ -61,13 +78,7 @@ export function AdminMenu(props: Props) {
               <MenuItem>{trans(Lang.Admin)}</MenuItem>
             </Link>
             {props.isLogin ? (
-              <MenuItem
-                onClick={() => {
-                  logout();
-                }}
-              >
-                {trans(Lang.Logout)}
-              </MenuItem>
+              <MenuItem onClick={handleLogout}>{trans(Lang.Logout)}</MenuItem>
             ) : (
               <Link href={{ pathname: '/admin/login', query: { url: router.asPath } }}>
                 <MenuItem>{trans(Lang.Login)}</MenuItem>

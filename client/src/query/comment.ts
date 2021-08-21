@@ -2,20 +2,24 @@ import { gql } from '@apollo/client';
 import { MutationCommonResponse } from '.';
 
 export interface ReplyType {
+  _id: string;
   username?: string;
   password?: string;
   createdAt: number;
   comment: string;
   isAdmin: boolean;
+  isEdited: boolean;
 }
 
 export interface CommentType {
+  _id: string;
   username?: string;
   password?: string;
   createdAt: number;
   comment: string;
   replies: ReplyType[];
   isAdmin: boolean;
+  isEdited: boolean;
 }
 
 export interface CommentContainerType {
@@ -25,7 +29,7 @@ export interface CommentContainerType {
 }
 
 export interface GetCommentVars {
-  _id: number;
+  pid: number;
 }
 
 export interface GetCommentsQueryType {
@@ -33,16 +37,18 @@ export interface GetCommentsQueryType {
 }
 
 export const GET_COMMENTS = gql`
-  query ($_id: Int!) {
-    comments(_id: $_id) {
+  query ($pid: Int!) {
+    comments(pid: $pid) {
       _id
       count
       comments {
+        _id
         username
         createdAt
         comment
         isAdmin
         replies {
+          _id
           username
           comment
           createdAt
@@ -60,7 +66,7 @@ export interface WriteCommentDataType {
 }
 
 export interface WriteCommentVars {
-  _id: number;
+  pid: number;
   comment: string;
   createdAt: Date;
   isAdmin: boolean;
@@ -69,22 +75,35 @@ export interface WriteCommentVars {
 }
 
 export interface WriteCommentQueryType {
-  writeComment: WriteCommentDataType;
+  writeComment: CommentContainerType;
 }
 
 export const WRITE_COMMENT = gql`
-  mutation ($_id: Int!, $username: String, $password: String, $comment: String!, $createdAt: DateTime!, $isAdmin: Boolean!) {
-    writeComment(_id: $_id, username: $username, password: $password, comment: $comment, createdAt: $createdAt, isAdmin: $isAdmin) {
-      createdAt
-      comment
-      isAdmin
+  mutation ($pid: Int!, $username: String, $password: String, $comment: String!, $createdAt: DateTime!, $isAdmin: Boolean!) {
+    writeComment(pid: $pid, username: $username, password: $password, comment: $comment, createdAt: $createdAt, isAdmin: $isAdmin) {
+      _id
+      count
+      comments {
+        _id
+        username
+        createdAt
+        comment
+        isAdmin
+        replies {
+          _id
+          username
+          comment
+          createdAt
+          isAdmin
+        }
+      }
     }
   }
 `;
 
 export interface DeleteCommentVars {
-  _id: number;
-  index: number;
+  pid: number;
+  commentId: string;
   password?: string;
 }
 
@@ -93,8 +112,8 @@ export interface DeleteCommentQueryType {
 }
 
 export const DELETE_COMMENT = gql`
-  mutation ($_id: Int!, $index: Int!, $password: String) {
-    deleteComment(_id: $_id, index: $index, password: $password) {
+  mutation ($pid: Int!, $commentId: String!, $password: String) {
+    deleteComment(pid: $pid, commentId: $commentId, password: $password) {
       isSuccess
     }
   }
@@ -109,16 +128,16 @@ export interface EditCommentQueryType {
 }
 
 export const EDIT_COMMENT = gql`
-  mutation ($_id: Int!, $index: Int!, $newComment: String!, $password: String) {
-    editComment(_id: $_id, index: $index, newComment: $newComment, password: $password) {
+  mutation ($pid: Int!, $commentId: String!, $newComment: String!, $password: String) {
+    editComment(pid: $pid, commentId: $commentId, newComment: $newComment, password: $password) {
       isSuccess
     }
   }
 `;
 
 export interface WriteReplyVars {
-  _id: number;
-  commentIndex: number;
+  pid: number;
+  commentId: string;
   comment: string;
   createdAt: Date;
   isAdmin: boolean;
@@ -127,13 +146,13 @@ export interface WriteReplyVars {
 }
 
 export interface WriteReplyQueryType {
-  writeReply: WriteCommentDataType;
+  writeReply: CommentType;
 }
 
 export const WRITE_REPLY = gql`
   mutation (
-    $_id: Int!
-    $commentIndex: Int!
+    $pid: Int!
+    $commentId: String!
     $username: String
     $password: String
     $comment: String!
@@ -141,25 +160,34 @@ export const WRITE_REPLY = gql`
     $isAdmin: Boolean!
   ) {
     writeReply(
-      _id: $_id
-      commentIndex: $commentIndex
+      pid: $pid
+      commentId: $commentId
       username: $username
       password: $password
       comment: $comment
       createdAt: $createdAt
       isAdmin: $isAdmin
     ) {
+      _id
+      username
       createdAt
       comment
       isAdmin
+      replies {
+        _id
+        username
+        comment
+        createdAt
+        isAdmin
+      }
     }
   }
 `;
 
 export interface DeleteReplyVars {
-  _id: number;
-  commentIndex: number;
-  replyIndex: number;
+  pid: number;
+  commentId: string;
+  replyId: string;
   password?: string;
 }
 
@@ -168,8 +196,8 @@ export interface DeleteReplyQueryType {
 }
 
 export const DELETE_REPLY = gql`
-  mutation ($_id: Int!, $commentIndex: Int!, $replyIndex: Int!, $password: String) {
-    deleteReply(_id: $_id, commentIndex: $commentIndex, replyIndex: $replyIndex, password: $password) {
+  mutation ($pid: Int!, $commentId: String!, $replyId: String!, $password: String) {
+    deleteReply(pid: $pid, commentId: $commentId, replyId: $replyId, password: $password) {
       isSuccess
     }
   }
@@ -184,8 +212,8 @@ export interface EditReplyQueryType {
 }
 
 export const EDIT_REPLY = gql`
-  mutation ($_id: Int!, $commentIndex: Int!, $replyIndex: Int!, $newReply: String!, $password: String) {
-    editReply(_id: $_id, commentIndex: $commentIndex, replyIndex: $replyIndex, newReply: $newReply, password: $password) {
+  mutation ($pid: Int!, $commentId: String!, $replyId: String!, $newReply: String!, $password: String) {
+    editReply(pid: $pid, commentId: $commentId, replyId: $replyId, newReply: $newReply, password: $password) {
       isSuccess
     }
   }

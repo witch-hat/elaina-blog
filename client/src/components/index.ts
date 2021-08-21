@@ -15,6 +15,7 @@ export { DropDownMenu } from './common/box/DropDownMenu';
 export { HorizontalScrollWrapper } from './common/wrapper/HorizontalScrollWrapper';
 export { FocusWrapper } from './common/wrapper/FocusWrapper';
 export { ModalWrapper } from './common/wrapper/ModalWrapper';
+export { CircleRippleWrapper } from './common/wrapper/CircleRippleWrapper';
 
 // Images
 export { RoundImage } from './common/image/RoundImage';

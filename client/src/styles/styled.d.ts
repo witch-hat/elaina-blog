@@ -28,10 +28,11 @@ declare module 'styled-components' {
     articleBackground: string;
     secondaryContentBackground: string;
     editorBackground: string;
-    adminCommentColor: string;
+    adminCommentSignColor: string;
     adminReplyColor: string;
     loadingBackground: string;
     selectedButton: string;
+    replyBackground: string;
     // Text Color
     blogName: string;
     mainText: string;
@@ -39,6 +40,9 @@ declare module 'styled-components' {
     hoverText: string;
     placeholderText: string;
     inputText: string;
+    adminCommentTextColor: string;
+    // Text Weight
+    adminCommentTextWeight: number;
     // Border
     borderColor: string;
     inputBorder: string;

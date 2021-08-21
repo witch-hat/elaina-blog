@@ -1,11 +1,11 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 export enum CommentEvent {
   newComment,
   newReply
 }
 
-export interface CommentLog extends Document {
+export interface CommentLog {
   _id: number;
   time: Date;
   commentEvent: CommentEvent;
