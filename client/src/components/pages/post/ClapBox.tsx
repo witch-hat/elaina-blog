@@ -59,7 +59,7 @@ interface Props {
   id: number;
 }
 
-export function ClapBox(props: Props) {
+export function ClapBox({ id, ...props }: Props) {
   const likeIds = useSelector<RootState, number[]>((state) => state.post.likedIds);
 
   const [like, setLike] = useState(false);
@@ -69,7 +69,7 @@ export function ClapBox(props: Props) {
   const [decreaseLikeCount] = useMutation<DecreaseLikeCountQueryType, DecreaseLikeCountVars>(DECREASE_LIKE_COUNT);
 
   useEffect(() => {
-    if (likeIds.find((id) => id === props.id)) {
+    if (likeIds.find((targetId) => targetId === id)) {
       setNextLike(true);
       setLike(true);
     } else {
@@ -81,11 +81,11 @@ export function ClapBox(props: Props) {
   useEffect(() => {
     async function changeNextLike() {
       if (nextLike) {
-        postDispatch.addLikedId(props.id);
-        await increaseLikeCount({ variables: { id: props.id } });
+        postDispatch.addLikedId(id);
+        await increaseLikeCount({ variables: { id } });
       } else {
-        postDispatch.deleteLikedId(props.id);
-        await decreaseLikeCount({ variables: { id: props.id } });
+        postDispatch.deleteLikedId(id);
+        await decreaseLikeCount({ variables: { id } });
       }
     }
     if (nextLike !== like) {
