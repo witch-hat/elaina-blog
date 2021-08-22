@@ -63,53 +63,54 @@ export function ClapBox({ id, ...props }: Props) {
   const likeById = useSelector<RootState, { [id: number]: boolean }>((state) => state.post.likedById);
 
   const [like, setLike] = useState(false);
+  const [nextLike, setNextLike] = useState(false);
   const [likeCount, setLikeCount] = useState(props.initLikeCount);
   const [increaseLikeCount] = useMutation<IncreaseLikeCountQueryType, IncreaseLikeCountVars>(INCREASE_LIKE_COUNT);
   const [decreaseLikeCount] = useMutation<DecreaseLikeCountQueryType, DecreaseLikeCountVars>(DECREASE_LIKE_COUNT);
 
-  let isRunning = false;
-
   useEffect(() => {
     if (likeById && likeById.hasOwnProperty(id) && likeById[id]) {
+      setNextLike(true);
       setLike(true);
     } else {
+      setNextLike(false);
       setLike(false);
     }
   }, []);
 
-  async function onClick() {
-    const nextLike = !like;
-    const countAddition = nextLike ? 1 : -1;
-
-    if (nextLike) {
-      await increaseLikeCount({ variables: { id } });
-    } else {
-      await decreaseLikeCount({ variables: { id } });
+  useEffect(() => {
+    async function changeNextLike() {
+      if (nextLike) {
+        await increaseLikeCount({ variables: { id } });
+      } else {
+        await decreaseLikeCount({ variables: { id } });
+      }
     }
+    if (nextLike !== like) {
+      postDispatch.setLikedId(id, nextLike);
+      changeNextLike();
+      setTimeout(() => {
+        setLike(nextLike);
+      }, 1000);
+    }
+  }, [nextLike]);
 
-    setLikeCount((prev) => prev + countAddition);
-    setLike(nextLike);
-
-    postDispatch.setLikedId(id, nextLike);
+  function onClick() {
+    if (like === nextLike) {
+      setNextLike(!nextLike);
+      const addCount = !nextLike ? 1 : -1;
+      setLikeCount((prev) => prev + addCount);
+    } else {
+      return;
+    }
   }
 
   return (
     <Container>
       <Box>
         <FlexWrapper>
-          <Icon
-            onClick={() => {
-              setTimeout(async () => {
-                if (isRunning) return;
-                console.log('start');
-                isRunning = true;
-                await onClick();
-                isRunning = false;
-                console.log('end');
-              }, 500);
-            }}
-          >
-            <FontAwesomeIcon icon={like ? solidHeart : regularHeart} style={{ fontSize: '3rem' }} />
+          <Icon onClick={onClick}>
+            <FontAwesomeIcon icon={nextLike ? solidHeart : regularHeart} style={{ fontSize: '3rem' }} />
             <Number>{likeCount}</Number>
           </Icon>
         </FlexWrapper>
