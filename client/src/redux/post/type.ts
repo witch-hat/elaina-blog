@@ -1,15 +1,20 @@
 export enum ActionTypes {
-  SetLikedId = 'SetLikedId'
+  AddLikedId = 'AddLikedId',
+  DeleteLikedId = 'DeleteLikedId'
 }
 
 export interface PostState {
-  likedById: { [id: number]: boolean };
+  likedIds: number[];
 }
 
-interface SetLikedId {
-  type: ActionTypes.SetLikedId;
-  id: number;
-  isLike: boolean;
+interface AddLikedId {
+  type: ActionTypes.AddLikedId;
+  payload: number;
 }
 
-export type PostAction = SetLikedId;
+interface DeleteLikedId {
+  type: ActionTypes.DeleteLikedId;
+  payload: number;
+}
+
+export type PostAction = AddLikedId | DeleteLikedId;

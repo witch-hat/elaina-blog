@@ -1,18 +1,20 @@
 import { ActionTypes, PostAction, PostState } from './type';
 
 export const initialPostState: PostState = {
-  likedById: {} as { [id: number]: boolean }
+  likedIds: [] as number[]
 };
 
 export function postReducer(state = initialPostState, action: PostAction): PostState {
   switch (action.type) {
-    case ActionTypes.SetLikedId:
+    case ActionTypes.AddLikedId:
       return {
         ...state,
-        likedById: {
-          ...state.likedById,
-          [action.id]: action.isLike
-        }
+        likedIds: [...state.likedIds, action.payload]
+      };
+    case ActionTypes.DeleteLikedId:
+      return {
+        ...state,
+        likedIds: state.likedIds.filter((payload) => payload !== action.payload)
       };
     default:
       return state;

@@ -1,9 +1,14 @@
 import { ActionTypes } from './type';
 
-export function setLikedId(id: number, isLike: boolean) {
+export function addLikedId(payload: number) {
   return {
-    type: ActionTypes.SetLikedId,
-    id,
-    isLike
+    type: ActionTypes.AddLikedId,
+    payload
+  };
+}
+export function deleteLikedId(payload: number) {
+  return {
+    type: ActionTypes.DeleteLikedId,
+    payload
   };
 }
