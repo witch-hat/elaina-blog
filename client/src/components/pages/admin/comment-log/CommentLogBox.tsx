@@ -6,13 +6,12 @@ import { FormatUnifier } from 'src/utils';
 const Context = styled.div({
   display: 'flex',
   float: 'left',
-  width: '700px',
-  height: '7rem',
+  width: '100%',
+  height: '5rem',
   padding: '.8rem',
   marginTop: '5px',
   marginBottom: '20px',
-  border: '1px solid ',
-  borderColor: '#dfe0e2',
+  border: '1px solid #dfe0e2',
   borderRadius: '.4rem',
   justifyContent: 'left',
   flexDirection: 'column',
@@ -50,7 +49,6 @@ const EventAndDate = styled.p({
 
 interface Props {
   time: number;
-  categoryTitle: string;
   postId: number;
   postTitle: string;
   isEvent: number | null;
@@ -59,13 +57,11 @@ interface Props {
 export function CommentLogBox(props: Props) {
   const dateDifferent = FormatUnifier.calculateDate(new Date(props.time));
   const event = props.isEvent === null ? `User upload new comment ${dateDifferent}` : `User upload new reply ${dateDifferent}`;
-  console.log(props.postId);
   return (
     <div>
       {/* <UserImage src='/public/images/FakeProfile.png'></UserImage> */}
       <Link href={`/post/${props.postId}`}>
         <Context>
-          <CategoryTitle>{props.categoryTitle}</CategoryTitle>
           <PostTitle>{props.postTitle}</PostTitle>
           <EventAndDate>{event}</EventAndDate>
         </Context>
