@@ -49,12 +49,12 @@ export const categoryResolver = {
         const createdMap: Map<number, Date | null> = new Map<number, Date | null>();
 
         // initialize countMap, createdMap
-        categories.map((category: Category) => {
+        for (const category of categories) {
           countMap.set(category._id, 0);
           createdMap.set(category._id, null);
-        });
+        }
 
-        posts.map((post: Post) => {
+        for (const post of posts) {
           if (countMap.has(post.categoryId)) {
             // @ts-ignore
             countMap.set(post.categoryId, countMap.get(post.categoryId) + 1);
@@ -62,7 +62,7 @@ export const categoryResolver = {
           if (createdMap.has(post.categoryId)) {
             createdMap.set(post.categoryId, post.createdAt);
           }
-        });
+        }
 
         const result = categories.map((category: Category) => {
           const postCount = countMap.get(category._id);
