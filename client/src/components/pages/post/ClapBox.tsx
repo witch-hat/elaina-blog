@@ -63,24 +63,24 @@ export function ClapBox({ id, ...props }: Props) {
   const likeIds = useSelector<RootState, number[]>((state) => state.post.likedIds);
 
   const [like, setLike] = useState(false);
-  const [nextLike, setNextLike] = useState(false);
+  const [running, setRunning] = useState(false);
   const [likeCount, setLikeCount] = useState(props.initLikeCount);
   const [increaseLikeCount] = useMutation<IncreaseLikeCountQueryType, IncreaseLikeCountVars>(INCREASE_LIKE_COUNT);
   const [decreaseLikeCount] = useMutation<DecreaseLikeCountQueryType, DecreaseLikeCountVars>(DECREASE_LIKE_COUNT);
 
   useEffect(() => {
     if (likeIds.find((targetId) => targetId === id)) {
-      setNextLike(true);
       setLike(true);
     } else {
-      setNextLike(false);
       setLike(false);
     }
   }, []);
 
   useEffect(() => {
+    //useEffect문 안쪽에서 running이 false이면 걸러 버리고 promise문 실행한다.
+    if (!running) return;
     async function changeNextLike() {
-      if (nextLike) {
+      if (like) {
         postDispatch.addLikedId(id);
         await increaseLikeCount({ variables: { id } });
       } else {
@@ -88,21 +88,20 @@ export function ClapBox({ id, ...props }: Props) {
         await decreaseLikeCount({ variables: { id } });
       }
     }
-    if (nextLike !== like) {
-      changeNextLike();
-      setTimeout(() => {
-        setLike(nextLike);
-      }, 1000);
-    }
-  }, [nextLike]);
+    changeNextLike();
+    //원하는 지연시간 만큼 setTimeout한 뒤 그 안에 setRunning(false)만 집어 넣는다.
+    setTimeout(() => {
+      setRunning(false);
+    }, 1000);
+  }, [running]); //의존 변수로는 running만 넣으면 된다. (따라서 running의 초깃값은 false이다.)
 
   function onClick() {
-    if (like === nextLike) {
-      setNextLike(!nextLike);
-      const addCount = !nextLike ? 1 : -1;
+    if (!running) {
+      //Promise 없는 코드를 setRunning(true)와 함께 if(!running)문 안쪽으로 집어넣는다.
+      setRunning(true);
+      setLike(!like);
+      const addCount = !like ? 1 : -1;
       setLikeCount((prev) => prev + addCount);
-    } else {
-      return;
     }
   }
 
@@ -111,7 +110,7 @@ export function ClapBox({ id, ...props }: Props) {
       <Box>
         <FlexWrapper>
           <Icon onClick={onClick}>
-            <FontAwesomeIcon icon={nextLike ? solidHeart : regularHeart} style={{ fontSize: '3rem' }} />
+            <FontAwesomeIcon icon={like ? solidHeart : regularHeart} style={{ fontSize: '3rem' }} />
             <Number>{likeCount}</Number>
           </Icon>
         </FlexWrapper>
