@@ -8,8 +8,6 @@ import { Lang, trans } from 'src/resources/languages';
 import { NavigationButton } from './NavigationButton';
 
 const Container = styled.nav((props) => ({
-  position: 'sticky',
-  top: '4rem',
   display: 'flex',
   width: '100%',
   backgroundColor: props.theme.mainBackground,

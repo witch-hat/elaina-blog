@@ -49,7 +49,6 @@ const StyledHr = styled.hr((props) => ({
 }));
 
 const PostWrapper = styled.div<{ isEmpty: boolean }>((props) => ({
-  display: 'flex',
   width: '100%',
   padding: '0 1rem',
   flex: props.isEmpty ? 1 : 'none'
@@ -58,10 +57,9 @@ const PostWrapper = styled.div<{ isEmpty: boolean }>((props) => ({
 const NoPosts = styled.div({
   display: 'flex',
   width: '100%',
-  flex: 1,
+  height: '100%',
   alignItems: 'center',
-  justifyContent: 'center',
-  alignSelf: 'stretch'
+  justifyContent: 'center'
 });
 
 interface ServerSideProps {

@@ -7,6 +7,7 @@ import { Profile } from './profile/Profile';
 const Container = styled.div({
   display: 'flex',
   width: '1200px',
+  minHeight: '100vh',
   margin: '0 auto',
   justifyContent: 'center',
   alignItems: 'flex-start',
