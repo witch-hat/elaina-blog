@@ -28,11 +28,14 @@ const CategoryTitle = styled.p({
 });
 
 const PostTitle = styled.p({
-  fontSize: '18px'
+  fontSize: '18px',
+  fontWeight: 'bold',
+  marginBottom: '0.5rem'
 });
 
 const EventAndDate = styled.p({
-  opacity: '0.5'
+  opacity: '0.5',
+  fontSize: '0.7rem'
 });
 
 // const UserImage = styled.img({
