@@ -100,7 +100,7 @@
 .markdown-body code,
 .markdown-body kbd,
 .markdown-body pre {
-  font-family: monospace, monospace;
+  font-family: monospace;
   font-size: 1em;
 }
 
@@ -259,8 +259,8 @@
 
 .markdown-body code,
 .markdown-body pre {
-  font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
-  font-size: 12px;
+  font-family: monospace;
+  font-size: 1em;
 }
 
 .markdown-body pre {
@@ -795,8 +795,7 @@
   word-break: normal;
 }
 
-.markdown-body .highlight pre,
-.markdown-body pre {
+.markdown-body .highlight pre {
   padding: 16px;
   overflow: auto;
   font-size: 85%;
