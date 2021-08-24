@@ -22,7 +22,8 @@ export const aboutResolver = {
   Query: {
     async about() {
       try {
-        const about = await AboutModel.findById(1);
+        const about: About | null = await AboutModel.findById(1);
+
         return about;
       } catch (err) {
         throw err;
@@ -33,7 +34,7 @@ export const aboutResolver = {
   Mutation: {
     async updateAbout(_: any, args: { article: string }) {
       try {
-        const about: About | null = await AboutModel.findById(1);
+        const about = await AboutModel.findById(1);
 
         if (!about) {
           const newAbout = await AboutModel.create({ _id: 1, article: args.article, updatedAt: new Date() });

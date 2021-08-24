@@ -24,6 +24,7 @@ const MenuList = styled.div((props) => ({
 }));
 
 const MainButton = styled.div<{ visible: boolean }>((props) => ({
+  width: '100%',
   padding: '.5rem .8rem',
   borderRadius: '.5rem',
   backgroundColor: props.visible ? props.theme.selectedButton : 'inherit',

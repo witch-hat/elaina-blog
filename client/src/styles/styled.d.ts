@@ -1,7 +1,7 @@
 import 'styled-components';
 
 declare module 'styled-components' {
-  export interface NavList {
+  interface NavList {
     selectedColor: string;
     selectedBorderLeft: string;
     hoverColor: string;
@@ -14,9 +14,9 @@ declare module 'styled-components' {
     textColor: string;
   }
 
-  export interface SubmitButton extends Button {}
+  interface SubmitButton extends Button {}
 
-  export interface DangerButton extends Button {}
+  interface DangerButton extends Button {}
 
   export interface DefaultTheme {
     themeColor: string;
@@ -28,10 +28,11 @@ declare module 'styled-components' {
     articleBackground: string;
     secondaryContentBackground: string;
     editorBackground: string;
-    adminCommentColor: string;
+    adminCommentSignColor: string;
     adminReplyColor: string;
     loadingBackground: string;
     selectedButton: string;
+    replyBackground: string;
     // Text Color
     blogName: string;
     mainText: string;
@@ -39,6 +40,9 @@ declare module 'styled-components' {
     hoverText: string;
     placeholderText: string;
     inputText: string;
+    adminCommentTextColor: string;
+    // Text Weight
+    adminCommentTextWeight: number;
     // Border
     borderColor: string;
     inputBorder: string;

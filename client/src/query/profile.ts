@@ -1,5 +1,20 @@
 import { gql } from '@apollo/client';
 
+export interface ProfileDataType {
+  _id: string;
+  image: string;
+  name: string;
+  introduce: string;
+  link?: string;
+  company?: string;
+  location?: string;
+  email?: string;
+}
+
+export interface GetProfileQueryType {
+  profile: ProfileDataType;
+}
+
 export const GET_PROFILE = gql`
   query profile {
     profile {
@@ -15,9 +30,20 @@ export const GET_PROFILE = gql`
   }
 `;
 
+export interface UpdateProfileVars extends ProfileDataType {
+  link: string;
+  company: string;
+  location: string;
+  email: string;
+}
+
+export interface UpdateProfileQueryType {
+  updateProfile: ProfileDataType;
+}
+
 export const UPDATE_PROFILE = gql`
   mutation UpdateProfile(
-    $id: String
+    $_id: String
     $image: String
     $name: String
     $introduce: String
@@ -27,7 +53,7 @@ export const UPDATE_PROFILE = gql`
     $email: String
   ) {
     updateProfile(
-      id: $id
+      _id: $_id
       image: $image
       name: $name
       introduce: $introduce
@@ -47,14 +73,3 @@ export const UPDATE_PROFILE = gql`
     }
   }
 `;
-
-export interface ProfileType {
-  _id: string;
-  image: string;
-  name: string;
-  introduce: string;
-  link?: string;
-  company?: string;
-  location?: string;
-  email?: string;
-}

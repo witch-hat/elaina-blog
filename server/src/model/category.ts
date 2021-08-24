@@ -1,6 +1,6 @@
-import { Schema, model, Document, SchemaType } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
-export interface Category extends Document {
+export interface Category {
   _id: number;
   title: string;
   order: number;
@@ -17,8 +17,7 @@ export const categorySchema = new Schema<Category>(
       required: true
     },
     order: {
-      type: Number,
-      required: true
+      type: Number
     }
   },
   {

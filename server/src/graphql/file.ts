@@ -21,7 +21,7 @@ export const fileTypeDef = gql`
 
 export const fileResolver = {
   Mutation: {
-    async uploadFile(_: any, args: any, context: ContextType) {
+    async uploadFile(_: any, args: any) {
       // user verify
       // if (!context.user.login) {
       //   throw new Error(context.user.err);
@@ -43,7 +43,7 @@ export const fileResolver = {
           path: `http://localhost:3000/images/${fileName}`
         };
 
-        FileModel.create(result);
+        await FileModel.create(result);
 
         return result;
       } catch (err) {

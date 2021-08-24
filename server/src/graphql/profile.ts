@@ -21,7 +21,7 @@ export const profileTypeDef = gql`
 
   extend type Mutation {
     updateProfile(
-      id: String
+      _id: String
       image: String
       name: String
       introduce: String
@@ -37,7 +37,7 @@ export const profileResolver = {
   Query: {
     async profile() {
       try {
-        const profile: Profile | null = await ProfileModel.findOne();
+        const profile = await ProfileModel.findOne();
         return profile;
       } catch (err) {
         throw new ApolloError('Server Error: Cannot find profile');
@@ -45,12 +45,18 @@ export const profileResolver = {
     }
   },
   Mutation: {
-    async updateProfile(_: any, args: any, context: ContextType) {
+    async updateProfile(_: any, args: Profile, context: ContextType) {
       try {
-        const updatedProfile: Profile = await ProfileModel.findByIdAndUpdate(
-          args.id,
+        const updatedProfile = await ProfileModel.findByIdAndUpdate(
+          args._id,
           {
-            ...args
+            image: args.image,
+            name: args.name,
+            introduce: args.introduce,
+            link: args.link,
+            company: args.company,
+            location: args.location,
+            email: args.email
           },
           { new: true, upsert: true }
         );

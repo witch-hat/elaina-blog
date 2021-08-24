@@ -1,6 +1,6 @@
 export enum LangCode {
-  en = 'en',
-  ko = 'ko'
+  EN = 'EN',
+  KO = 'KO'
 }
 
 export enum Lang {
@@ -8,9 +8,10 @@ export enum Lang {
   Save = 'Save',
   Cancel = 'Cancel',
   Board = 'Board',
+  Category = 'Category',
   Edit = 'Edit',
   Delete = 'Delete',
-  TimeLine = 'TimeLine',
+  LatestPost = 'LatestPost',
   About = 'About',
   Search = 'Search',
   Menu = 'Menu',

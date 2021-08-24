@@ -1,11 +1,13 @@
-import { Schema, model, Document, SchemaType } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
-export interface Post extends Document {
+export interface Post {
   _id: number;
   title: string;
   createdAt: Date;
   article: string;
   categoryId: number;
+  likeCount: number;
+  commentCount: number;
 }
 
 export const postSchema = new Schema<Post>(
@@ -28,7 +30,18 @@ export const postSchema = new Schema<Post>(
     },
     categoryId: {
       type: Number,
-      required: true
+      required: true,
+      default: 0
+    },
+    likeCount: {
+      type: Number,
+      required: true,
+      default: 0
+    },
+    commentCount: {
+      type: Number,
+      required: true,
+      default: 0
     }
   },
   {

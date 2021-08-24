@@ -2,6 +2,7 @@ import { gql } from 'apollo-server';
 import { Date } from 'mongoose';
 
 import { CommentEvent, CommentLog, CommentLogModel } from '../model/comment-log';
+import { PostModel } from '../model/post';
 import { ContextType } from '../types/context';
 
 export const commentLogTypeDef = gql`
@@ -13,10 +14,11 @@ export const commentLogTypeDef = gql`
     postId: Int
     commentIndex: Int
     replyIndex: Int
+    postTitle: String
   }
 
   extend type Query {
-    commentLogs: [CommentLog]
+    commentLogs(page: Int!): [CommentLog]
   }
 
   extend type Mutation {
@@ -28,10 +30,23 @@ export const commentLogTypeDef = gql`
 
 export const commentLogResolver = {
   Query: {
-    async commentLogs() {
+    async commentLogs(_: any, args: { page: number }) {
       try {
-        const logList: CommentLog[] = await CommentLogModel.find();
-        return logList;
+        const commentLogs = await CommentLogModel.find({}, {}, { sort: { _id: -1 }, skip: (args.page - 1) * 10, limit: 10 });
+        const logPostTitles = await Promise.all(commentLogs.map((log) => PostModel.findById(log.postId)));
+
+        const logs: CommentLog[] = commentLogs.map((log, index) => ({
+          _id: log._id,
+          time: log.time,
+          commentEvent: log.commentEvent,
+          categoryId: log.categoryId,
+          postId: log.postId,
+          commentIndex: log.commentIndex,
+          replyIndex: log.replyIndex,
+          postTitle: logPostTitles[index]?.title
+        }));
+
+        return logs;
       } catch (err) {
         throw err;
       }
@@ -52,7 +67,7 @@ export const commentLogResolver = {
       context: ContextType
     ) {
       try {
-        const lastLog: CommentLog | null = await CommentLogModel.findOne({}, {}, { sort: { _id: -1 } });
+        const lastLog = await CommentLogModel.findOne({}, {}, { sort: { _id: -1 } });
 
         await CommentLogModel.create({
           _id: lastLog ? lastLog._id + 1 : 1,
@@ -76,7 +91,7 @@ export const commentLogResolver = {
       context: ContextType
     ) {
       try {
-        const foundLog: CommentLog | null = await CommentLogModel.findOne({
+        const foundLog = await CommentLogModel.findOne({
           postId: args.postId,
           commentIndex: args.commentIndex,
           replyIndex: args.replyIndex ? args.replyIndex : null

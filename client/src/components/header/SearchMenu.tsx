@@ -1,17 +1,13 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
-// import { theme } from 'src/styles';
 import { NoRefInputBox } from 'src/components';
-import { RootState } from 'src/redux/rootReducer';
-import { ThemeMode } from 'src/redux/common/type';
 import { trans, Lang } from 'src/resources/languages';
 
-const SearchButton = styled.button((props) => ({
+const Button = styled.button((props) => ({
   display: 'flex',
   width: '45px',
   height: '45px',
@@ -43,13 +39,21 @@ const SearchForm = styled.form({
   justifyContent: 'center'
 });
 
-interface Props {}
+const MemoizedSearchButton = React.memo(function SearchButton() {
+  return (
+    <Button type='submit'>
+      <FontAwesomeIcon icon={faSearch} />
+    </Button>
+  );
+});
 
-export function SearchMenu(props: Props) {
-  // const themeMode: ThemeMode = useSelector<RootState, any>((state) => state.common.theme);
-
+export function SearchMenu() {
   const router = useRouter();
   const [searchKeyword, setSearchKeyWord] = useState('');
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setSearchKeyWord(e.target.value);
+  }
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -63,7 +67,7 @@ export function SearchMenu(props: Props) {
   }
 
   return (
-    <SearchForm onSubmit={(e: React.FormEvent<HTMLFormElement>) => handleSubmit(e)}>
+    <SearchForm onSubmit={handleSubmit}>
       <NoRefInputBox
         type='text'
         placeholder={trans(Lang.Search)}
@@ -72,11 +76,9 @@ export function SearchMenu(props: Props) {
         maxLength={10}
         value={searchKeyword}
         styles={{ width: '180px', small: { width: '120px', height: '32px' } }}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchKeyWord(e.currentTarget.value)}
+        onChange={handleChange}
       />
-      <SearchButton type='submit'>
-        <FontAwesomeIcon icon={faSearch} />
-      </SearchButton>
+      <MemoizedSearchButton />
     </SearchForm>
   );
 }

@@ -1,6 +1,13 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
-export const fileSchema = new Schema(
+export interface File {
+  filename: string;
+  mimetype: string;
+  encoding: string;
+  path: string;
+}
+
+export const fileSchema = new Schema<File>(
   {
     filename: {
       type: String,
@@ -24,12 +31,5 @@ export const fileSchema = new Schema(
     versionKey: false
   }
 );
-
-interface File extends Document {
-  filename: string;
-  mimetype: string;
-  encoding: string;
-  path: string;
-}
 
 export const FileModel = model<File>('File', fileSchema);

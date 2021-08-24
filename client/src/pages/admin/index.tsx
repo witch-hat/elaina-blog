@@ -2,22 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 import { GetServerSideProps } from 'next';
 
-import { initApolloClient } from 'src/apollo/withApollo';
-import { CommentEvent, CommentLog, GET_COMMENT_LOGS } from 'src/query/comment-log';
-import CommnetLogBox from 'src/pages/admin/component/CommentLogItem/CommentLogBox';
-import { GET_CATEGORIES_WITH_DETAILS, CategoryDetails } from 'src/query/category';
-import { BorderBox } from 'src/components/common/box/BorderBox';
-import { Post, GET_POSTS } from 'src/query/post';
 import { trans, Lang } from 'src/resources/languages';
-
-import { AdminPageLayout } from './component/AdminPageLayout';
-import { PageTitle } from './component/PageTitle';
-import { AppCommonProps, appCommponProps } from '../_app';
+import { initializeApollo } from 'src/lib/apollo';
+import { AppCommonProps, appCommponProps } from 'src/pages/_app';
+import { AdminPageLayout, PageTitle, CommentLogBox } from 'src/components/pages/admin';
+import { CommentLogDataType, GET_COMMENT_LOGS, CommentLogQueryType, CommentLogVars } from 'src/query/comment-log';
 
 interface ServerSideProps {
-  logs: CommentLog[];
-  categoriesDetail: CategoryDetails[];
-  posts: Post[];
+  logs: CommentLogDataType[];
 }
 
 interface Props extends AppCommonProps, ServerSideProps {}
@@ -33,16 +25,16 @@ export default function Admin(props: Props) {
         <PageTitle title={trans(Lang.Activities)} />
         {props.logs.map((log) => {
           /*category title 찾아주기*/
-          const findCategoryTitle = props.categoriesDetail.find((category) => category._id === log.categoryId)?.title!;
-          const findPostTitle = props.posts.find((post) => post._id === log._id)?.title!;
+          // const findCategoryTitle = props.categoriesDetail.find((category) => category._id === log.categoryId)?.title!;
+          // const findPostTitle = props.posts.find((post) => post._id === log._id)?.title!;
           return (
-            <CommnetLogBox
+            <CommentLogBox
               key={log._id}
               isEvent={log.replyIndex}
               time={log.time}
               postId={log.postId}
-              categoryTitle={findCategoryTitle}
-              postTitle={findPostTitle}
+              categoryTitle={'카테고리 제목은 없어도 될듯'}
+              postTitle={log.postTitle}
             />
           );
         })}
@@ -61,18 +53,19 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
     };
   }
 
-  const client = initApolloClient({}, context);
-  const { data: CommentData } = await client.query({ query: GET_COMMENT_LOGS });
-  const { data: CategoryData } = await client.query({ query: GET_CATEGORIES_WITH_DETAILS });
-  const { data: PostTitle } = await client.query({ query: GET_POSTS });
-  const logs: CommentLog[] = CommentData.commentLogs;
-  const categoriesDetail = CategoryData.categoriesWithDetails;
-  const posts = PostTitle.posts;
+  context.res.setHeader('Cache-Control', 'max-age=0, public, must-revalidate');
+
+  const client = initializeApollo({}, context);
+  const { data: CommentData } = await client.query<CommentLogQueryType, CommentLogVars>({
+    query: GET_COMMENT_LOGS,
+    variables: { page: 1 }
+  });
+
+  const logs = CommentData.commentLogs;
+
   return {
     props: {
-      logs,
-      categoriesDetail,
-      posts
+      logs
     }
   };
 };

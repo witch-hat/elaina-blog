@@ -11,10 +11,11 @@ export const theme: { light: DefaultTheme; dark: DefaultTheme } = {
     articleBackground: '#fff',
     secondaryContentBackground: '#eee',
     editorBackground: '#fff',
-    adminCommentColor: 'rgba(145, 255, 0, 0.05)',
+    adminCommentSignColor: '#333',
     adminReplyColor: 'rgba(145, 255, 0, 0.15)',
     loadingBackground: 'rgba(255, 255, 255, .8)',
     selectedButton: 'rgba(200, 200, 200, .8)',
+    replyBackground: '#fafafa',
     // Text Color
     blogName: '#121314',
     mainText: '#121314',
@@ -22,6 +23,9 @@ export const theme: { light: DefaultTheme; dark: DefaultTheme } = {
     hoverText: '',
     placeholderText: '#888',
     inputText: '#121314',
+    adminCommentTextColor: '#fff',
+    // Text Weight
+    adminCommentTextWeight: 300,
     // Border
     borderColor: '#ddd',
     inputBorder: '#ccc',
@@ -33,7 +37,6 @@ export const theme: { light: DefaultTheme; dark: DefaultTheme } = {
     navHoverUnderBar: '#888',
     shadowColor: 'rgba(38, 38, 38, 0.4)',
     inputOutline: 'rgba(134, 125, 255, .7)',
-
     // submit
     submitButton: {
       buttonColor: '#2a9df4',
@@ -65,10 +68,11 @@ export const theme: { light: DefaultTheme; dark: DefaultTheme } = {
     articleBackground: '#252525',
     secondaryContentBackground: '#313131',
     editorBackground: '#313131',
-    adminCommentColor: 'rgba(77, 77, 77, 0.5)',
+    adminCommentSignColor: '#fff',
     adminReplyColor: 'rgba(77, 77, 77, 0.7)',
     loadingBackground: 'rgba(0, 0, 0, .7)',
     selectedButton: 'rgba(60, 60, 60, .8)',
+    replyBackground: '#333',
     // Text Color
     blogName: '#f1f2f3',
     mainText: '#f1f2f3',
@@ -76,6 +80,9 @@ export const theme: { light: DefaultTheme; dark: DefaultTheme } = {
     hoverText: '',
     placeholderText: '#f1f2f3',
     inputText: '#f1f2f3',
+    adminCommentTextColor: '#333',
+    // Text Weight
+    adminCommentTextWeight: 700,
     // Border
     borderColor: '#aaa',
     inputBorder: '#111',
@@ -83,9 +90,9 @@ export const theme: { light: DefaultTheme; dark: DefaultTheme } = {
     hoverBorderColor: '#f1f2f3',
     invalidBorder: '#ff3d41',
     // Others
-    navUnderBar: '#888',
-    navHoverUnderBar: '#ddd',
-    shadowColor: 'rgba(0, 0, 0, 0.9)',
+    navUnderBar: '#ddd',
+    navHoverUnderBar: '#888',
+    shadowColor: 'rgba(200, 200, 200, 0.9)',
     inputOutline: 'rgba(134, 125, 255, .7)',
 
     // submit
