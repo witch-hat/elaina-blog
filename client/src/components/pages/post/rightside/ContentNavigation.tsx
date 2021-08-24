@@ -76,19 +76,6 @@ export function ContentNavigation() {
     const articleContainer = document.getElementById('styled-article');
     applyHeadings(articleContainer?.firstElementChild!);
     scrollToHeadingElement(location.hash);
-
-    const observer = new MutationObserver((mutations) => {
-      for (const mutation of mutations) {
-        if (mutation.type === 'childList') {
-          applyHeadings(articleContainer?.firstElementChild!);
-          scrollToHeadingElement(location.hash);
-          observer.disconnect();
-          return;
-        }
-      }
-    });
-    const config: MutationObserverInit = { attributes: true, childList: true, characterData: true };
-    observer.observe(articleContainer!, config);
   }, []);
 
   return (
