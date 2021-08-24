@@ -1,5 +1,8 @@
 import React from 'react';
+import { useState } from 'react';
+import { useEffect } from 'react';
 import styled from 'styled-components';
+import { ContentNavigationButton } from './NavigationButton';
 
 const Container = styled.div({
   width: '100%',
@@ -19,21 +22,81 @@ const NavigationContainer = styled.div({
   color: '#777'
 });
 
+export interface Heading {
+  tag: string;
+  text: string;
+}
+
+function isHeadingTag(tag: string): boolean {
+  if (tag.length !== 2) {
+    return false;
+  }
+
+  if (!tag.startsWith('H')) {
+    return false;
+  }
+
+  if (Number(tag.charAt(1)) === NaN) {
+    return false;
+  }
+
+  return true;
+}
+
 export function ContentNavigation() {
+  const [headings, setHeadings] = useState<Heading[]>([]);
+
+  function applyHeadings(article: Element) {
+    if (article) {
+      const tempHeadings: Heading[] = [];
+      for (const articleChild of article.children) {
+        if (isHeadingTag(articleChild.tagName)) {
+          const heading: Heading = {
+            tag: articleChild.tagName,
+            text: articleChild.textContent!
+          };
+          tempHeadings.push(heading);
+        }
+      }
+      setHeadings(tempHeadings);
+    }
+  }
+
+  function scrollToHeadingElement(hash: string) {
+    const id = hash.slice(1);
+    if (id !== '') {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView();
+      }
+    }
+  }
+
+  useEffect(() => {
+    const articleContainer = document.getElementById('styled-article');
+    applyHeadings(articleContainer?.firstElementChild!);
+    scrollToHeadingElement(location.hash);
+
+    const observer = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        if (mutation.type === 'childList') {
+          applyHeadings(articleContainer?.firstElementChild!);
+          scrollToHeadingElement(location.hash);
+          observer.disconnect();
+          return;
+        }
+      }
+    });
+    const config: MutationObserverInit = { attributes: true, childList: true, characterData: true };
+    observer.observe(articleContainer!, config);
+  }, []);
+
   return (
     <Container>
       <NavigationContainer>
-        H1(#)
-        <br />
-        &nbsp;&nbsp;H2(##)
-        <br />
-        &nbsp;&nbsp;&nbsp;&nbsp;H3(###)
-        <br />
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;H4(####)
-        <br />
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;H5(#####)
-        <br />
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;H6(######)
+        {headings.map((heading) => {
+          return <ContentNavigationButton key={heading.text} heading={heading} />;
+        })}
       </NavigationContainer>
     </Container>
   );

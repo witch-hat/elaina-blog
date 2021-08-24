@@ -23,7 +23,7 @@ interface Props {
 
 function Article(props: Props) {
   return (
-    <StyledArticle>
+    <StyledArticle id={'styled-article'}>
       <Viewer content={props.article} />
     </StyledArticle>
   );
