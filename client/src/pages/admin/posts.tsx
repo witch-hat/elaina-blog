@@ -77,9 +77,47 @@ const PreviewContent = styled.span({
   overflow: 'hidden'
 });
 
+const BoardTD = styled.td({
+  border: '1px solid #ddd',
+  padding: '12px'
+});
+
+const BoardTH = styled.th({
+  border: '1px solid #ddd',
+  padding: '10px',
+  textAlign: 'center',
+  backgroundColor: '#80a8b3',
+  color: 'white'
+});
+
+const BoardTR = styled.tr({
+  '&:hover': {
+    backgroundColor: '#7fd4d865'
+  }
+});
+
+const DeleteButton = styled.button({
+  outline: 'none',
+  fontSize: '11px',
+  color: '#e9493d',
+  padding: '3px 10px',
+  borderRadius: '8px',
+  cursor: 'pointer',
+  border: '1px solid #e9493d',
+  backgroundColor: 'transparent',
+  '&:active': {
+    border: '1px solid blue'
+  }
+});
+
 interface ServerSideProps {
   posts: PostDetailDataType[];
 }
+
+const deletePost = (post_id: any) => {
+  // return <div>delete this post._id: {post_id}</div>;
+  return alert(post_id);
+};
 
 interface Props extends AppCommonProps, ServerSideProps {}
 
@@ -90,35 +128,63 @@ export default function PostProps(props: Props) {
     <AdminPageLayout>
       <Container>
         <PageTitle title={trans(Lang.BoardManage)} />
-        {props.posts.map((post) => {
-          return (
-            <Link key={post.title + post._id} href={`/post/${post._id}`} passHref>
-              <PostContainer>
-                <BorderBox isHoverEffect={true} styles={{ width: '100%', margin: '.8rem 0' }}>
-                  <Wrapper>
-                    <DeleteButtonWrapper>
-                      <CircleRippleWrapper
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          // setDeletedPost({ isModalOpen: true, index });
-                          alert('준비중');
-                        }}
-                      >
-                        <FontAwesomeIcon icon={faTrash} style={{ fontSize: '1.25rem' }} />
-                      </CircleRippleWrapper>
-                    </DeleteButtonWrapper>
-                    <Content>
-                      <PreviewTextWrapper>
-                        <PreviewTitle>{post.title}</PreviewTitle>
-                        <PreviewContent>{post.article}</PreviewContent>
-                      </PreviewTextWrapper>
-                    </Content>
-                  </Wrapper>
-                </BorderBox>
-              </PostContainer>
-            </Link>
-          );
-        })}
+
+        <>
+          <table>
+            <thead>
+              <BoardTR>
+                <BoardTH>선택</BoardTH>
+                <BoardTH>post_id</BoardTH>
+                <BoardTH>카테고리</BoardTH>
+                <BoardTH>글 제목</BoardTH>
+                <BoardTH>등록일</BoardTH>
+                <BoardTH>삭제</BoardTH>
+              </BoardTR>
+            </thead>
+            <tbody>
+              {props.posts.map((post) => {
+                return (
+                  // <Link key={post.title + post._id} href={`/post/${post._id}`} passHref>
+                  //   <PostContainer>
+                  //     <BorderBox isHoverEffect={true} styles={{ width: '100%', margin: '.8rem 0' }}>
+                  //       <Wrapper>
+                  //         <DeleteButtonWrapper>
+                  //           <CircleRippleWrapper
+                  //             onClick={(event) => {
+                  //               event.stopPropagation();
+                  //               // setDeletedPost({ isModalOpen: true, index });
+                  //               alert('준비중');
+                  //             }}
+                  //           >
+                  //             <FontAwesomeIcon icon={faTrash} style={{ fontSize: '1.25rem' }} />
+                  //           </CircleRippleWrapper>
+                  //         </DeleteButtonWrapper>
+                  //         <Content>
+                  //           <PreviewTextWrapper>
+                  //             <PreviewTitle>{post.title}</PreviewTitle>
+                  //             <PreviewContent>{post.article}</PreviewContent>
+                  //           </PreviewTextWrapper>
+                  //         </Content>
+                  //       </Wrapper>
+                  //     </BorderBox>
+                  //   </PostContainer>
+                  // </Link>
+
+                  <BoardTR key={post.title + post._id}>
+                    <BoardTD></BoardTD>
+                    <BoardTD>{post._id}</BoardTD>
+                    <BoardTD>{post.categoryId}</BoardTD>
+                    <BoardTD>{post.title}</BoardTD>
+                    <BoardTD>{post.createdAt}</BoardTD>
+                    <BoardTD>
+                      <DeleteButton onClick={() => deletePost(post._id)}>Delete</DeleteButton>
+                    </BoardTD>
+                  </BoardTR>
+                );
+              })}
+            </tbody>
+          </table>
+        </>
       </Container>
     </AdminPageLayout>
   );
