@@ -1,10 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStickyNote, faBook, faUser, faEdit, faFeatherAlt } from '@fortawesome/free-solid-svg-icons';
+import { faStickyNote, faBook, faUser, faEdit, faPencilAlt, faPenNib } from '@fortawesome/free-solid-svg-icons';
 
 import { Lang, trans } from 'src/resources/languages';
-import { CircleRippleButton } from 'src/components/common/button/CircleRippleButton';
 
 import { NavigationButton } from './NavigationButton';
 import { CircleRippleA } from 'src/components/common/button/CircleRippleA';
@@ -49,11 +48,15 @@ export function Navigation(props: Props) {
           </CircleRippleA>
         );
       case 'about':
-        return null;
+        return (
+          <CircleRippleA href={''}>
+            <FontAwesomeIcon icon={faPenNib} />
+          </CircleRippleA>
+        );
       default:
         return (
           <CircleRippleA href={'/admin/writer'}>
-            <FontAwesomeIcon icon={faFeatherAlt} />
+            <FontAwesomeIcon icon={faPencilAlt} />
           </CircleRippleA>
         );
     }
