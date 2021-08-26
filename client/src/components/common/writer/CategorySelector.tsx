@@ -11,11 +11,6 @@ const Container = styled.div({
   alignItems: 'center'
 });
 
-const Desc = styled.p({
-  marginRight: '.5rem',
-  fontWeight: 'bold'
-});
-
 const CategoryDropDown = styled.div({
   width: '16rem'
 });
@@ -53,7 +48,6 @@ interface Props {
 export function CategorySelector(props: Props) {
   return (
     <Container>
-      <Desc>Category:</Desc>
       <CategoryDropDown>
         <DropDownMenu
           mainButton={
