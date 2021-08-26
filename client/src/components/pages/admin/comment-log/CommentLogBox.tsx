@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Link from 'next/link';
 import { FormatUnifier } from 'src/utils';
 
-const Context = styled.div({
+const Context = styled.div((props) => ({
   display: 'flex',
   float: 'left',
   width: '100%',
@@ -11,15 +11,15 @@ const Context = styled.div({
   padding: '.8rem',
   marginTop: '5px',
   marginBottom: '20px',
-  border: '1px solid #dfe0e2',
+  border: `1px solid ${props.theme.borderColor}`,
   borderRadius: '.4rem',
   justifyContent: 'left',
   flexDirection: 'column',
-  '&:hover > p': {
-    color: '#50a3f1',
+  '&:hover > p: first-child': {
+    color: props.theme.navList.selectedColor,
     cursor: 'pointer'
   }
-});
+}));
 
 const CategoryTitle = styled.p({
   paddingBottom: '0.5rem',
