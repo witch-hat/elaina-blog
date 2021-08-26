@@ -3,22 +3,23 @@ import styled from 'styled-components';
 import Link from 'next/link';
 import { FormatUnifier } from 'src/utils';
 
-const Context = styled.div({
+const Context = styled.div((props) => ({
   display: 'flex',
   float: 'left',
-  width: '700px',
-  height: '7rem',
+  width: '100%',
+  height: '5rem',
   padding: '.8rem',
   marginTop: '5px',
   marginBottom: '20px',
-  border: '1px solid',
+  border: `1px solid ${props.theme.borderColor}`,
   borderRadius: '.4rem',
   justifyContent: 'left',
   flexDirection: 'column',
-  '&:hover > p': {
-    color: '#50a3f1'
+  '&:hover > p: first-child': {
+    color: props.theme.navList.selectedColor,
+    cursor: 'pointer'
   }
-});
+}));
 
 const CategoryTitle = styled.p({
   paddingBottom: '0.5rem',
@@ -27,11 +28,14 @@ const CategoryTitle = styled.p({
 });
 
 const PostTitle = styled.p({
-  fontSize: '18px'
+  fontSize: '18px',
+  fontWeight: 'bold',
+  marginBottom: '0.5rem'
 });
 
 const EventAndDate = styled.p({
-  opacity: '0.5'
+  opacity: '0.5',
+  fontSize: '0.7rem'
 });
 
 // const UserImage = styled.img({
@@ -48,7 +52,6 @@ const EventAndDate = styled.p({
 
 interface Props {
   time: number;
-  categoryTitle: string;
   postId: number;
   postTitle: string;
   isEvent: number | null;
@@ -57,13 +60,11 @@ interface Props {
 export function CommentLogBox(props: Props) {
   const dateDifferent = FormatUnifier.calculateDate(new Date(props.time));
   const event = props.isEvent === null ? `User upload new comment ${dateDifferent}` : `User upload new reply ${dateDifferent}`;
-  console.log(props.postId);
   return (
     <div>
       {/* <UserImage src='/public/images/FakeProfile.png'></UserImage> */}
       <Link href={`/post/${props.postId}`}>
         <Context>
-          <CategoryTitle>{props.categoryTitle}</CategoryTitle>
           <PostTitle>{props.postTitle}</PostTitle>
           <EventAndDate>{event}</EventAndDate>
         </Context>
