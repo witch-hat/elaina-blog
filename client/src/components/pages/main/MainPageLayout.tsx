@@ -38,6 +38,7 @@ const Wrapper = styled.div({
 
 interface Props {
   children: JSX.Element;
+  tab: string;
   profile: any;
   isLogin: boolean;
 }
@@ -47,7 +48,7 @@ export function MainPageLayout(props: Props) {
     <Container>
       <Profile profile={props.profile} isLogin={props.isLogin} />
       <Wrapper>
-        <Navigation />
+        <Navigation tab={props.tab} isLogin={props.isLogin} />
         {props.children}
       </Wrapper>
     </Container>

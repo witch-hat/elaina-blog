@@ -22,9 +22,10 @@ interface Props extends AppCommonProps, ServerSideProps {}
 
 export default function Index(props: Props) {
   const router = useRouter();
+  const tab: string = router.query.tab as string;
 
   function MainPageLayoutContent(): JSX.Element {
-    switch (router.query.tab) {
+    switch (tab) {
       case 'about':
         return <AboutPage name={props.profile.name} about={props.about} isLogin={props.app.isLogin} />;
       case 'category':
@@ -35,7 +36,7 @@ export default function Index(props: Props) {
   }
 
   return (
-    <MainPageLayout profile={props.profile} isLogin={props.app.isLogin}>
+    <MainPageLayout tab={tab} profile={props.profile} isLogin={props.app.isLogin}>
       <MainPageLayoutContent />
     </MainPageLayout>
   );
