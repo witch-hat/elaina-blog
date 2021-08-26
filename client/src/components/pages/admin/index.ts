@@ -1,5 +1,5 @@
 export { AdminPageLayout } from './AdminPageLayout';
-export { PageTitle } from './PageTitle';
+export { PageHeader as PageTitle } from './PageHeader';
 
 // admin
 export { CommentLogBox } from './comment-log/CommentLogBox';

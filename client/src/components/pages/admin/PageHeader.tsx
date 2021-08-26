@@ -18,7 +18,7 @@ interface Props {
   title: string;
 }
 
-export function PageTitle(props: Props) {
+export function PageHeader(props: Props) {
   return (
     <>
       <Title>{props.title}</Title>
