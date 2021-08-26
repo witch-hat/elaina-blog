@@ -1,8 +1,8 @@
 import { Schema, model } from 'mongoose';
 
 export enum CommentEvent {
-  newComment,
-  newReply
+  NewComment,
+  NewReply
 }
 
 export interface CommentLog {
