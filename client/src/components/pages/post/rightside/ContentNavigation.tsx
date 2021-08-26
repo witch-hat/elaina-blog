@@ -78,13 +78,17 @@ export function ContentNavigation() {
     scrollToHeadingElement(location.hash);
   }, []);
 
-  return (
-    <Container>
-      <NavigationContainer>
-        {headings.map((heading) => {
-          return <ContentNavigationButton key={heading.text} heading={heading} />;
-        })}
-      </NavigationContainer>
-    </Container>
-  );
+  if (headings.length === 0) {
+    return null;
+  } else {
+    return (
+      <Container>
+        <NavigationContainer>
+          {headings.map((heading) => {
+            return <ContentNavigationButton key={heading.text} heading={heading} />;
+          })}
+        </NavigationContainer>
+      </Container>
+    );
+  }
 }
