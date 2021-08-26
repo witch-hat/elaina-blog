@@ -16,19 +16,19 @@ export namespace FormatUnifier {
     const date = new Date().getTime() - new Date(dateTime).getTime();
     let dateDiff = ``;
     if (date >= 60000) {
-      dateDiff = `${Math.floor(date / 60000)} Minutes Ago`;
+      dateDiff = `${Math.floor(date / 60000)} minutes ago`;
     }
     if (date >= 3600000) {
-      dateDiff = `${Math.floor(date / 3600000)} Hours Ago`;
+      dateDiff = `${Math.floor(date / 3600000)} hours ago`;
     }
     if (date >= 86400000) {
-      dateDiff = `${Math.floor(date / 86400000)} Days Ago`;
+      dateDiff = `${Math.floor(date / 86400000)} days ago`;
     }
     if (date >= 2592000000) {
-      dateDiff = `${Math.floor(date / 2592000000)} Months Ago`;
+      dateDiff = `${Math.floor(date / 2592000000)} months ago`;
     }
     if (date >= 31536000000) {
-      dateDiff = `${Math.floor(date / 31536000000)} Years Ago`;
+      dateDiff = `${Math.floor(date / 31536000000)} years ago`;
     }
     return dateDiff;
   }
