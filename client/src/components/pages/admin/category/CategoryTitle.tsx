@@ -23,7 +23,7 @@ const PreviewTitle = styled.p({
   marginRight: '.5rem',
   fontSize: '1.2rem',
   fontWeight: 'bold',
-  textAlign: 'left',
+  lineHeight: '2rem',
   wordBreak: 'break-all',
   overflow: 'hidden',
   WebkitLineClamp: 1,
