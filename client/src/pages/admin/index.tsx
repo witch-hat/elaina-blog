@@ -27,16 +27,7 @@ export default function Admin(props: Props) {
           /*category title 찾아주기*/
           // const findCategoryTitle = props.categoriesDetail.find((category) => category._id === log.categoryId)?.title!;
           // const findPostTitle = props.posts.find((post) => post._id === log._id)?.title!;
-          return (
-            <CommentLogBox
-              key={log._id}
-              isEvent={log.replyIndex}
-              time={log.time}
-              postId={log.postId}
-              categoryTitle={'카테고리 제목은 없어도 될듯'}
-              postTitle={log.postTitle}
-            />
-          );
+          return <CommentLogBox key={log._id} isEvent={log.replyIndex} time={log.time} postId={log.postId} postTitle={log.postTitle} />;
         })}
       </Container>
     </AdminPageLayout>
