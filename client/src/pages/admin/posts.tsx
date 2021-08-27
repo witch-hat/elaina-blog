@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
 import { useMutation, useApolloClient } from '@apollo/client';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -135,6 +136,8 @@ const DynamicDeleteModal = dynamic<ModalProps>(() =>
 interface Props extends AppCommonProps, ServerSideProps {}
 
 export default function PostProps(props: Props) {
+  const router = useRouter();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [deletePostID, setDeletePostID] = useState(0);
 
@@ -178,6 +181,8 @@ export default function PostProps(props: Props) {
           alert('Can not delete post');
           return;
         }
+
+        router.push('/admin/posts'); // 더 좋은 방법이 없을까..?
       } catch (err) {
         alert(err.message);
       }
