@@ -11,6 +11,7 @@ import { initializeApollo } from 'src/lib/apollo';
 import { BorderBox, CircleRippleWrapper } from 'src/components';
 import { appCommponProps, AppCommonProps } from 'src/pages/_app';
 import { AdminPageLayout, PageTitle } from 'src/components/pages/admin';
+import { FormatUnifier } from 'src/utils';
 
 const Container = styled.div({
   width: '100%'
@@ -175,7 +176,7 @@ export default function PostProps(props: Props) {
                     <BoardTD>{post._id}</BoardTD>
                     <BoardTD>{post.categoryId}</BoardTD>
                     <BoardTD>{post.title}</BoardTD>
-                    <BoardTD>{post.createdAt}</BoardTD>
+                    <BoardTD>{FormatUnifier.getFullFormatDate(new Date(post.createdAt))}</BoardTD>
                     <BoardTD>
                       <DeleteButton onClick={() => deletePost(post._id)}>Delete</DeleteButton>
                     </BoardTD>
