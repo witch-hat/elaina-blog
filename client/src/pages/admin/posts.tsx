@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
+import { useMutation, useApolloClient } from '@apollo/client';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
@@ -12,6 +15,10 @@ import { BorderBox, CircleRippleWrapper } from 'src/components';
 import { appCommponProps, AppCommonProps } from 'src/pages/_app';
 import { AdminPageLayout, PageTitle } from 'src/components/pages/admin';
 import { FormatUnifier } from 'src/utils';
+
+import { DeletePostQueryType, DeletePostVars, DELETE_POST } from 'src/query/post';
+import { IsAuthQueryType, IS_AUTH } from 'src/query/user';
+import { DeletePostAllCommentLogQueryType, DeletePostAllCommentLogVars, DELETE_POST_ALL_COMMENT_LOG } from 'src/query/comment-log';
 
 const Container = styled.div({
   width: '100%'
@@ -115,15 +122,75 @@ interface ServerSideProps {
   posts: PostDetailDataType[];
 }
 
-const deletePost = (post_id: any) => {
-  // return <div>delete this post._id: {post_id}</div>;
-  return alert(post_id);
-};
+interface ModalProps {
+  visible: boolean;
+  onDelete: () => void;
+  onCancel: () => void;
+}
+
+const DynamicDeleteModal = dynamic<ModalProps>(() =>
+  import('src/components/pages/post/article/DeleteModal').then((mod) => mod.DeleteModal)
+);
 
 interface Props extends AppCommonProps, ServerSideProps {}
 
 export default function PostProps(props: Props) {
-  // const [posts, setPosts] = useState<PostType[]>(props.posts);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [deletePostID, setDeletePostID] = useState(0);
+
+  async function deleteButtonClick(deletePostId: React.SetStateAction<number>) {
+    setIsModalOpen(true);
+    setDeletePostID(deletePostId);
+  }
+
+  const client = useApolloClient();
+  const [deletePost] = useMutation<DeletePostQueryType, DeletePostVars>(DELETE_POST);
+  const [deletePostAllCommentLog] = useMutation<DeletePostAllCommentLogQueryType, DeletePostAllCommentLogVars>(DELETE_POST_ALL_COMMENT_LOG);
+
+  const id = deletePostID;
+
+  async function handleDeleteButtonClick() {
+    const authResponse = await client.query<IsAuthQueryType>({ query: IS_AUTH });
+
+    const isAdmin = authResponse.data.isAuth.isSuccess;
+
+    if (isAdmin) {
+      try {
+        const [deleteResponse] = await Promise.all([
+          deletePost({
+            variables: {
+              id: +id
+            }
+          }),
+          deletePostAllCommentLog({
+            variables: {
+              postId: +id
+            }
+          })
+        ]);
+
+        if (!deleteResponse.data) {
+          alert('Can not delete post');
+          return;
+        }
+
+        if (!deleteResponse.data.deletePost.isSuccess) {
+          alert('Can not delete post');
+          return;
+        }
+      } catch (err) {
+        alert(err.message);
+      }
+    } else {
+      return alert('Invalid User');
+    }
+
+    setIsModalOpen(false);
+  }
+
+  function handleCancelButtonClick() {
+    setIsModalOpen(false);
+  }
 
   return (
     <AdminPageLayout>
@@ -134,7 +201,6 @@ export default function PostProps(props: Props) {
           <table>
             <thead>
               <BoardTR>
-                <BoardTH>선택</BoardTH>
                 <BoardTH>post_id</BoardTH>
                 <BoardTH>카테고리</BoardTH>
                 <BoardTH>글 제목</BoardTH>
@@ -172,13 +238,14 @@ export default function PostProps(props: Props) {
                   // </Link>
 
                   <BoardTR key={post.title + post._id}>
-                    <BoardTD></BoardTD>
+                    <DynamicDeleteModal visible={isModalOpen} onDelete={handleDeleteButtonClick} onCancel={handleCancelButtonClick} />
+
                     <BoardTD>{post._id}</BoardTD>
                     <BoardTD>{post.categoryId}</BoardTD>
                     <BoardTD>{post.title}</BoardTD>
                     <BoardTD>{FormatUnifier.getFullFormatDate(new Date(post.createdAt))}</BoardTD>
                     <BoardTD>
-                      <DeleteButton onClick={() => deletePost(post._id)}>Delete</DeleteButton>
+                      <DeleteButton onClick={() => deleteButtonClick(post._id)}>Delete</DeleteButton>
                     </BoardTD>
                   </BoardTR>
                 );
