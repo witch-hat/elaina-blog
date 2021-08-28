@@ -5,13 +5,20 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useMutation, useApolloClient } from '@apollo/client';
 
-import { GET_LATEST_POSTS, GetLastestPostsQueryType, GetLatestPostsVars, PostDetailDataType } from 'src/query/post';
+import {
+  GET_LATEST_POSTS,
+  GetLastestPostsQueryType,
+  GetLatestPostsVars,
+  PostDetailDataType,
+  DeletePostQueryType,
+  DeletePostVars,
+  DELETE_POST
+} from 'src/query/post';
 import { trans, Lang } from 'src/resources/languages';
 import { initializeApollo } from 'src/lib/apollo';
 import { appCommponProps, AppCommonProps } from 'src/pages/_app';
 import { AdminPageLayout, PageTitle } from 'src/components/pages/admin';
 import { FormatUnifier } from 'src/utils';
-import { DeletePostQueryType, DeletePostVars, DELETE_POST } from 'src/query/post';
 import { IsAuthQueryType, IS_AUTH } from 'src/query/user';
 import { DeletePostAllCommentLogQueryType, DeletePostAllCommentLogVars, DELETE_POST_ALL_COMMENT_LOG } from 'src/query/comment-log';
 
@@ -153,7 +160,7 @@ export default function PostProps(props: Props) {
           <BoardTable>
             <thead>
               <BoardTR>
-                <BoardTH>post_id</BoardTH>
+                <BoardTH>id</BoardTH>
                 <BoardTH>카테고리</BoardTH>
                 <BoardTH>글 제목</BoardTH>
                 <BoardTH>등록일</BoardTH>
