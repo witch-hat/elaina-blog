@@ -5,14 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons';
 import { useMutation } from '@apollo/client';
-import {
-  DecreaseLikeCountQueryType,
-  DecreaseLikeCountVars,
-  DECREASE_LIKE_COUNT,
-  IncreaseLikeCountQueryType,
-  IncreaseLikeCountVars,
-  INCREASE_LIKE_COUNT
-} from 'src/query/post';
+import { DECREASE_LIKE_COUNT, INCREASE_LIKE_COUNT, LikeCountQueryType, LikeCountVars } from 'src/query/post';
 import { RootState } from 'src/redux/rootReducer';
 import { postDispatch } from 'src/redux/post/dispatch';
 
@@ -67,24 +60,26 @@ export function ClapBox({ id, ...props }: Props) {
   });
 
   const [likeCount, setLikeCount] = useState(props.initLikeCount);
-  const [increaseLikeCount] = useMutation<IncreaseLikeCountQueryType, IncreaseLikeCountVars>(INCREASE_LIKE_COUNT);
-  const [decreaseLikeCount] = useMutation<DecreaseLikeCountQueryType, DecreaseLikeCountVars>(DECREASE_LIKE_COUNT);
+  const [increaseLikeCount, { data: increaseData }] = useMutation<LikeCountQueryType, LikeCountVars>(INCREASE_LIKE_COUNT);
+  const [decreaseLikeCount, { data: decreaseData }] = useMutation<LikeCountQueryType, LikeCountVars>(DECREASE_LIKE_COUNT);
 
   const running = useRef(false);
 
   useEffect(() => {
     if (!running.current) return;
-    async function query() {
+    async function doMutation() {
       if (like) {
         postDispatch.addLikedId(id);
         await increaseLikeCount({ variables: { id } });
+        if (increaseData) setLikeCount(increaseData.likeCount);
       } else {
         postDispatch.deleteLikedId(id);
         await decreaseLikeCount({ variables: { id } });
+        if (decreaseData) setLikeCount(decreaseData.likeCount);
       }
       running.current = false;
     }
-    query();
+    doMutation();
   }, [like]);
 
   function onClick() {

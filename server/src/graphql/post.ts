@@ -264,7 +264,7 @@ export const postResolver = {
 
     async increaseLikeCount(_: any, args: { id: number }) {
       try {
-        const [editPost] = await Promise.all([PostModel.findById(args.id)]);
+        const editPost = await PostModel.findById(args.id);
         if (editPost) {
           editPost.likeCount += 1;
           await editPost.save();
