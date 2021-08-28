@@ -5,6 +5,11 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useMutation, useApolloClient } from '@apollo/client';
 
+import { trans, Lang } from 'src/resources/languages';
+import { initializeApollo } from 'src/lib/apollo';
+import { appCommponProps, AppCommonProps } from 'src/pages/_app';
+import { AdminPageLayout, PageTitle } from 'src/components/pages/admin';
+import { FormatUnifier } from 'src/utils';
 import {
   GET_LATEST_POSTS,
   GetLastestPostsQueryType,
@@ -14,11 +19,6 @@ import {
   DeletePostVars,
   DELETE_POST
 } from 'src/query/post';
-import { trans, Lang } from 'src/resources/languages';
-import { initializeApollo } from 'src/lib/apollo';
-import { appCommponProps, AppCommonProps } from 'src/pages/_app';
-import { AdminPageLayout, PageTitle } from 'src/components/pages/admin';
-import { FormatUnifier } from 'src/utils';
 import { IsAuthQueryType, IS_AUTH } from 'src/query/user';
 import { DeletePostAllCommentLogQueryType, DeletePostAllCommentLogVars, DELETE_POST_ALL_COMMENT_LOG } from 'src/query/comment-log';
 
@@ -106,21 +106,20 @@ const DynamicDeleteModal = dynamic<ModalProps>(() =>
 interface Props extends AppCommonProps, ServerSideProps {}
 
 export default function PostProps(props: Props) {
-  const router = useRouter();
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [deletePostID, setDeletePostID] = useState(0);
+
+  const [deletePost] = useMutation<DeletePostQueryType, DeletePostVars>(DELETE_POST);
+  const [deletePostAllCommentLog] = useMutation<DeletePostAllCommentLogQueryType, DeletePostAllCommentLogVars>(DELETE_POST_ALL_COMMENT_LOG);
+
+  const router = useRouter();
+  const client = useApolloClient();
+  const id = deletePostID;
 
   async function deleteButtonClick(deletePostId: React.SetStateAction<number>) {
     setIsModalOpen(true);
     setDeletePostID(deletePostId);
   }
-
-  const client = useApolloClient();
-  const [deletePost] = useMutation<DeletePostQueryType, DeletePostVars>(DELETE_POST);
-  const [deletePostAllCommentLog] = useMutation<DeletePostAllCommentLogQueryType, DeletePostAllCommentLogVars>(DELETE_POST_ALL_COMMENT_LOG);
-
-  const id = deletePostID;
 
   async function handleDeleteButtonClick() {
     const { data } = await client.query<IsAuthQueryType>({ query: IS_AUTH });
