@@ -72,6 +72,23 @@ const DeleteButton = styled.button({
   }
 });
 
+const PagenationNext = styled.button({
+  float: 'right',
+  outline: 'none',
+  fontSize: '11px',
+  padding: '3px 10px',
+  borderRadius: '8px',
+  cursor: 'pointer',
+  border: '1px solid #4276a1',
+  backgroundColor: '#867dff',
+  color: 'white',
+
+  '&:hover': {
+    backgroundColor: '#d1cffaa7',
+    color: 'black'
+  }
+});
+
 interface ServerSideProps {
   posts: PostDetailDataType[];
 }
@@ -184,6 +201,7 @@ export default function PostProps(props: Props) {
             </tbody>
           </BoardTable>
         </>
+        <PagenationNext>Next</PagenationNext>
       </Container>
     </AdminPageLayout>
   );
