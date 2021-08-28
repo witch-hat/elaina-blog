@@ -1,7 +1,7 @@
 import { ActionTypes, PostAction, PostState } from './type';
 
 export const initialPostState: PostState = {
-  likedIds: [] as number[]
+  likedIds: []
 };
 
 export function postReducer(state = initialPostState, action: PostAction): PostState {

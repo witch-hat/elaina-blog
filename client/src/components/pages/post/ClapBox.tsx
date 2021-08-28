@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -62,24 +62,19 @@ interface Props {
 export function ClapBox({ id, ...props }: Props) {
   const likeIds = useSelector<RootState, number[]>((state) => state.post.likedIds);
 
-  const [like, setLike] = useState(false);
-  const [running, setRunning] = useState(false);
+  const [like, setLike] = useState(() => {
+    return likeIds.find((targetId) => targetId === id) ? true : false;
+  });
+
   const [likeCount, setLikeCount] = useState(props.initLikeCount);
   const [increaseLikeCount] = useMutation<IncreaseLikeCountQueryType, IncreaseLikeCountVars>(INCREASE_LIKE_COUNT);
   const [decreaseLikeCount] = useMutation<DecreaseLikeCountQueryType, DecreaseLikeCountVars>(DECREASE_LIKE_COUNT);
 
-  useEffect(() => {
-    if (likeIds.find((targetId) => targetId === id)) {
-      setLike(true);
-    } else {
-      setLike(false);
-    }
-  }, []);
+  const running = useRef(false);
 
   useEffect(() => {
-    //useEffect문 안쪽에서 running이 false이면 걸러 버리고 promise문 실행한다.
-    if (!running) return;
-    async function changeNextLike() {
+    if (!running.current) return;
+    async function query() {
       if (like) {
         postDispatch.addLikedId(id);
         await increaseLikeCount({ variables: { id } });
@@ -87,18 +82,14 @@ export function ClapBox({ id, ...props }: Props) {
         postDispatch.deleteLikedId(id);
         await decreaseLikeCount({ variables: { id } });
       }
+      running.current = false;
     }
-    changeNextLike();
-    //원하는 지연시간 만큼 setTimeout한 뒤 그 안에 setRunning(false)만 집어 넣는다.
-    setTimeout(() => {
-      setRunning(false);
-    }, 1000);
-  }, [running]); //의존 변수로는 running만 넣으면 된다. (따라서 running의 초깃값은 false이다.)
+    query();
+  }, [like]);
 
   function onClick() {
-    if (!running) {
-      //Promise 없는 코드를 setRunning(true)와 함께 if(!running)문 안쪽으로 집어넣는다.
-      setRunning(true);
+    if (!running.current) {
+      running.current = true;
       setLike(!like);
       const addCount = !like ? 1 : -1;
       setLikeCount((prev) => prev + addCount);
