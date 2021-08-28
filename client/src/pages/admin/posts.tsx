@@ -28,13 +28,13 @@ const BoardTH = styled.th({
   border: '1px solid #ddd',
   padding: '10px',
   textAlign: 'center',
-  backgroundColor: '#80a8b3',
+  backgroundColor: '#867dff',
   color: 'white'
 });
 
 const BoardTR = styled.tr({
   '&:hover': {
-    backgroundColor: '#7fd4d865'
+    backgroundColor: '#d1cffaa7'
   }
 });
 
@@ -134,6 +134,7 @@ export default function PostProps(props: Props) {
     <AdminPageLayout>
       <Container>
         <PageTitle title={trans(Lang.BoardManage)} />
+        <DynamicDeleteModal visible={isModalOpen} onDelete={handleDeleteButtonClick} onCancel={handleCancelButtonClick} />
 
         <>
           <table>
@@ -150,8 +151,6 @@ export default function PostProps(props: Props) {
               {props.posts.map((post) => {
                 return (
                   <BoardTR key={post.title + post._id}>
-                    <DynamicDeleteModal visible={isModalOpen} onDelete={handleDeleteButtonClick} onCancel={handleCancelButtonClick} />
-
                     <BoardTD>{post._id}</BoardTD>
                     <BoardTD>{post.categoryId}</BoardTD>
                     <BoardTD>{post.title}</BoardTD>
