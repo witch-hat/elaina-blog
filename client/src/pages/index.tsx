@@ -22,26 +22,22 @@ interface Props extends AppCommonProps, ServerSideProps {}
 
 export default function Index(props: Props) {
   const router = useRouter();
+  const tab: string = router.query.tab as string;
 
-  if (router.query.tab === 'about') {
-    return (
-      <MainPageLayout profile={props.profile} isLogin={props.app.isLogin}>
-        <AboutPage name={props.profile.name} about={props.about} isLogin={props.app.isLogin} />
-      </MainPageLayout>
-    );
-  }
-
-  if (router.query.tab === 'category') {
-    return (
-      <MainPageLayout profile={props.profile} isLogin={props.app.isLogin}>
-        <MemoizedContentCategory categories={props.categories} isLogin={props.app.isLogin} />
-      </MainPageLayout>
-    );
+  function MainPageLayoutContent(): JSX.Element {
+    switch (tab) {
+      case 'about':
+        return <AboutPage name={props.profile.name} about={props.about} isLogin={props.app.isLogin} />;
+      case 'category':
+        return <MemoizedContentCategory categories={props.categories} isLogin={props.app.isLogin} />;
+      default:
+        return <MemoizedPostContainer posts={props.latestPosts} />;
+    }
   }
 
   return (
-    <MainPageLayout profile={props.profile} isLogin={props.app.isLogin}>
-      <MemoizedPostContainer posts={props.latestPosts} />
+    <MainPageLayout tab={tab} profile={props.profile} isLogin={props.app.isLogin}>
+      <MainPageLayoutContent />
     </MainPageLayout>
   );
 }

@@ -23,11 +23,6 @@ const Title = styled.div({
   alignItems: 'center'
 });
 
-const Desc = styled.p({
-  marginRight: '.5rem',
-  fontWeight: 'bold'
-});
-
 const MenuContainer = styled.div({
   display: 'flex',
   flexDirection: 'column'
@@ -106,7 +101,6 @@ export function WriterLayout(props: Props) {
           changeCategory={changeCategory}
         />
         <Title>
-          <Desc>Title:</Desc>
           <NoRefInputBox
             id='post-title'
             type='text'

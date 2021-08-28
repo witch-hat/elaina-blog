@@ -77,7 +77,7 @@ export function CommentWriter(props: Props) {
           pushCommentLog({
             variables: {
               time: new Date(createdAt),
-              event: CommentEvent.newComment,
+              event: CommentEvent.NewComment,
               categoryId: props.categoryId,
               postId: props.postId,
               commentIndex: props.commentIndex

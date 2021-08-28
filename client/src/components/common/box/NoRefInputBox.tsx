@@ -21,6 +21,7 @@ const Input = styled.input<InputProps>((props) => {
   return {
     width: props.styles?.width || '100px',
     height: props.styles?.height || '40px',
+    padding: '.5rem .8rem',
     margin: props.styles?.margin,
     border: `1px solid ${props.theme.inputBorder}`,
     borderRadius: '.5rem',
@@ -28,7 +29,7 @@ const Input = styled.input<InputProps>((props) => {
     fontSize: props.styles?.fontSize || '1rem',
     color: props.theme.inputText,
     '&:focus': {
-      padding: '1px',
+      padding: '.5rem .8rem',
       borderWidth: '2px',
       borderColor: props.isValid ? props.theme.inputOutline : props.theme.invalidBorder,
       outline: 'none'
@@ -38,7 +39,8 @@ const Input = styled.input<InputProps>((props) => {
     },
     '@media screen and (max-width: 767px)': {
       width: props.styles?.small?.width || '100px',
-      height: props.styles?.small?.height || '40px'
+      height: props.styles?.small?.height || '40px',
+      padding: '.5rem'
     }
   };
 });

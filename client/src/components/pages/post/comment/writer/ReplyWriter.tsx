@@ -82,7 +82,7 @@ export function ReplyWriter(props: Props) {
           pushCommentLog({
             variables: {
               time: new Date(createdAt),
-              event: CommentEvent.newReply,
+              event: CommentEvent.NewReply,
               categoryId: props.categoryId,
               postId: props.postId,
               commentIndex: props.commentIndex + 1,

@@ -25,7 +25,7 @@ const NavButtons = styled.a<ButtonProps>((props) => {
 interface Props {
   href?: string;
   query?: string;
-  children: JSX.Element;
+  children: JSX.Element | JSX.Element[];
 }
 
 export function NavigationButton(props: Props) {

@@ -3,8 +3,8 @@ import { gql } from '@apollo/client';
 import { MutationCommonResponse } from '.';
 
 export enum CommentEvent {
-  newComment,
-  newReply
+  NewComment,
+  NewReply
 }
 
 export interface CommentLogDataType {
