@@ -19,9 +19,9 @@ const Container = styled.div({
   width: '100%'
 });
 
-const BoardTD = styled.td({
-  border: '1px solid #ddd',
-  padding: '12px'
+const BoardTable = styled.table({
+  width: '100%',
+  height: '100%'
 });
 
 const BoardTH = styled.th({
@@ -30,6 +30,19 @@ const BoardTH = styled.th({
   textAlign: 'center',
   backgroundColor: '#867dff',
   color: 'white'
+});
+
+const BoardTD = styled.td({
+  border: '1px solid #ddd',
+  padding: '12px'
+});
+
+const BoardTdTitle = styled(BoardTD)({
+  width: '400px'
+});
+
+const BoardTdCenter = styled(BoardTD)({
+  textAlign: 'center'
 });
 
 const BoardTR = styled.tr({
@@ -137,7 +150,7 @@ export default function PostProps(props: Props) {
         <DynamicDeleteModal visible={isModalOpen} onDelete={handleDeleteButtonClick} onCancel={handleCancelButtonClick} />
 
         <>
-          <table>
+          <BoardTable>
             <thead>
               <BoardTR>
                 <BoardTH>post_id</BoardTH>
@@ -151,18 +164,18 @@ export default function PostProps(props: Props) {
               {props.posts.map((post) => {
                 return (
                   <BoardTR key={post.title + post._id}>
-                    <BoardTD>{post._id}</BoardTD>
+                    <BoardTdCenter>{post._id}</BoardTdCenter>
                     <BoardTD>{post.categoryId}</BoardTD>
-                    <BoardTD>{post.title}</BoardTD>
-                    <BoardTD>{FormatUnifier.getFullFormatDate(new Date(post.createdAt))}</BoardTD>
-                    <BoardTD>
+                    <BoardTdTitle>{post.title}</BoardTdTitle>
+                    <BoardTdCenter>{FormatUnifier.getFullFormatDate(new Date(post.createdAt))}</BoardTdCenter>
+                    <BoardTdCenter>
                       <DeleteButton onClick={() => deleteButtonClick(post._id)}>Delete</DeleteButton>
-                    </BoardTD>
+                    </BoardTdCenter>
                   </BoardTR>
                 );
               })}
             </tbody>
-          </table>
+          </BoardTable>
         </>
       </Container>
     </AdminPageLayout>
