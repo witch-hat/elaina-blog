@@ -123,9 +123,8 @@ export default function PostProps(props: Props) {
   const id = deletePostID;
 
   async function handleDeleteButtonClick() {
-    const authResponse = await client.query<IsAuthQueryType>({ query: IS_AUTH });
-
-    const isAdmin = authResponse.data.isAuth.isSuccess;
+    const { data } = await client.query<IsAuthQueryType>({ query: IS_AUTH });
+    const isAdmin = data.isAuth.isSuccess;
 
     if (isAdmin) {
       try {
@@ -180,7 +179,7 @@ export default function PostProps(props: Props) {
                 <BoardTH>id</BoardTH>
                 <BoardTH>카테고리</BoardTH>
                 <BoardTH>글 제목</BoardTH>
-                <BoardTH>등록일</BoardTH>
+                <BoardTH>작성일</BoardTH>
                 <BoardTH>삭제</BoardTH>
               </BoardTR>
             </thead>
