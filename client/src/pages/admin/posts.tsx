@@ -114,7 +114,6 @@ export default function PostProps(props: Props) {
 
   const router = useRouter();
   const client = useApolloClient();
-  const id = deletePostID;
 
   async function deleteButtonClick(deletePostId: React.SetStateAction<number>) {
     setIsModalOpen(true);
@@ -130,12 +129,12 @@ export default function PostProps(props: Props) {
         const [deleteResponse] = await Promise.all([
           deletePost({
             variables: {
-              id: +id
+              id: +deletePostID
             }
           }),
           deletePostAllCommentLog({
             variables: {
-              postId: +id
+              postId: +deletePostID
             }
           })
         ]);
