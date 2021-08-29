@@ -1,9 +1,9 @@
-import remarkGfm from "remark-gfm";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import ReactMarkdown from "react-markdown";
-import { materialDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import remarkGfm from 'remark-gfm';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import ReactMarkdown from 'react-markdown';
+import { materialDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 
-import styles from "src/styles/markdown-styles.module.css";
+import styles from 'src/styles/markdown-styles.module.css';
 
 interface Props {
   content: string;
@@ -39,19 +39,19 @@ export function MDViewer(props: Props) {
           return <h6 id={text}>{text}</h6>;
         },
         img({ src }) {
-          return <img src={src} style={{ width: "100%" }} />;
+          return typeof src === 'string' ? <img src={src} style={{ width: '100%' }} /> : <div> 이미지 출력 오류입니다. </div>;
         },
         code({ className, children }) {
           // Removing "language-" because React-Markdown already added "language-"
-          const language = className?.replace("language-", "");
+          const language = className?.replace('language-', '');
           return (
             <SyntaxHighlighter style={materialDark} language={language}>
               {children[0]}
             </SyntaxHighlighter>
           );
-        },
+        }
       }}
-      className={styles["markdown-body"]}
+      className={styles['markdown-body']}
     >
       {props.content}
     </ReactMarkdown>
