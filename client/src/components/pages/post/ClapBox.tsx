@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,6 +8,7 @@ import { useMutation } from '@apollo/client';
 import { DECREASE_LIKE_COUNT, INCREASE_LIKE_COUNT, LikeCountQueryType, LikeCountVars } from 'src/query/post';
 import { RootState } from 'src/redux/rootReducer';
 import { postDispatch } from 'src/redux/post/dispatch';
+import { SubmitButton } from 'src/components/common/button/SubmitButton';
 
 const Container = styled.div({
   width: '100%',
@@ -23,6 +24,7 @@ const Box = styled.div({
 const FlexWrapper = styled.div({
   display: 'flex',
   width: '100%',
+  margin: '2rem 0',
   alignItems: 'center',
   justifyContent: 'center'
 });
@@ -30,7 +32,6 @@ const FlexWrapper = styled.div({
 const Icon = styled.span((props) => ({
   display: 'inline-flex',
   padding: '.5rem',
-  margin: '2rem 0',
   border: `.15rem solid ${props.theme.likeColor}`,
   borderRadius: '.5rem',
   color: props.theme.likeColor,
@@ -63,31 +64,21 @@ export function ClapBox({ id, ...props }: Props) {
   const [increaseLikeCount, { data: increaseData }] = useMutation<LikeCountQueryType, LikeCountVars>(INCREASE_LIKE_COUNT);
   const [decreaseLikeCount, { data: decreaseData }] = useMutation<LikeCountQueryType, LikeCountVars>(DECREASE_LIKE_COUNT);
 
-  const running = useRef(false);
+  function changeStates() {
+    setLike(!like);
+    const addCount = !like ? 1 : -1;
+    setLikeCount((prev) => prev + addCount);
+  }
 
-  useEffect(() => {
-    if (!running.current) return;
-    async function doMutation() {
-      if (like) {
-        postDispatch.addLikedId(id);
-        await increaseLikeCount({ variables: { id } });
-        if (increaseData) setLikeCount(increaseData.likeCount);
-      } else {
-        postDispatch.deleteLikedId(id);
-        await decreaseLikeCount({ variables: { id } });
-        if (decreaseData) setLikeCount(decreaseData.likeCount);
-      }
-      running.current = false;
-    }
-    doMutation();
-  }, [like]);
-
-  function onClick() {
-    if (!running.current) {
-      running.current = true;
-      setLike(!like);
-      const addCount = !like ? 1 : -1;
-      setLikeCount((prev) => prev + addCount);
+  async function doMutation() {
+    if (like) {
+      postDispatch.addLikedId(id);
+      await increaseLikeCount({ variables: { id } });
+      if (increaseData) setLikeCount(increaseData.likeCount);
+    } else {
+      postDispatch.deleteLikedId(id);
+      await decreaseLikeCount({ variables: { id } });
+      if (decreaseData) setLikeCount(decreaseData.likeCount);
     }
   }
 
@@ -95,10 +86,12 @@ export function ClapBox({ id, ...props }: Props) {
     <Container>
       <Box>
         <FlexWrapper>
-          <Icon onClick={onClick}>
-            <FontAwesomeIcon icon={like ? solidHeart : regularHeart} style={{ fontSize: '3rem' }} />
-            <Number>{likeCount}</Number>
-          </Icon>
+          <SubmitButton prevFunction={changeStates} nextFunction={doMutation}>
+            <Icon>
+              <FontAwesomeIcon icon={like ? solidHeart : regularHeart} style={{ fontSize: '3rem' }} />
+              <Number>{likeCount}</Number>
+            </Icon>
+          </SubmitButton>
         </FlexWrapper>
       </Box>
     </Container>
