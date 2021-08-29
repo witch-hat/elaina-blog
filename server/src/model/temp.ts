@@ -3,6 +3,7 @@ import { Schema, model } from 'mongoose';
 export interface Temp {
   _id: number;
   categoryId: number;
+  category: string;
   title: string;
   article: string;
   savedAt: Date;
@@ -16,6 +17,10 @@ export const tempSchema = new Schema<Temp>(
     },
     categoryId: {
       type: Number,
+      required: true
+    },
+    category: {
+      type: String,
       required: true
     },
     title: {

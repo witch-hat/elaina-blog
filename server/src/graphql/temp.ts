@@ -6,7 +6,9 @@ import { TempModel, Temp } from '../model/temp';
 
 export const tempTypeDef = gql`
   type TempPost {
+    _id: Int!
     categoryId: Int!
+    category: String!
     title: String!
     article: String!
     savedAt: DateTime!
@@ -17,7 +19,7 @@ export const tempTypeDef = gql`
   }
 
   extend type Mutation {
-    saveTempPost(id: Int!, category: String!, title: String!, article: String): MutationResponse
+    saveTempPost(id: Int!, category: String!, title: String!, article: String!): MutationResponse
     deleteTempPost(id: Int!): MutationResponse
   }
 `;
@@ -42,6 +44,7 @@ export const tempResolver = {
 
         if (post) {
           post.categoryId = category._id;
+          post.category = args.category;
           post.title = args.title;
           post.article = args.article;
           post.savedAt = new Date();
