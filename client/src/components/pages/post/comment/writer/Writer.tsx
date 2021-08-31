@@ -130,7 +130,7 @@ export function Writer(props: WriterProps) {
         }}
       />
       <ButtonContainer>
-        <SubmitButton nextFunction={onSubmit} waitTime={1000}>
+        <SubmitButton nextFunction={onSubmit} waitTime={5000}>
           <ButtonDesign>{trans(Lang.Save)}</ButtonDesign>
         </SubmitButton>
       </ButtonContainer>

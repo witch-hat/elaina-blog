@@ -37,6 +37,8 @@ export const postTypeDef = gql`
 
   extend type Query {
     getLatestPosts(page: Int!): [Post]
+    getPrevPost(hereId: Int!): Post
+    getNextPost(hereId: Int!): Post
     findPostById(id: String!): Post
     findSameCategoryPosts(categoryId: Int!): PostCategory
     search(keyword: String!): SearchResponse
@@ -70,6 +72,46 @@ export const postResolver = {
         });
 
         return previewPosts;
+      } catch (err) {
+        throw err;
+      }
+    },
+
+    async getPrevPost(_: any, args: { hereId: number }) {
+      try {
+        const herePost = await PostModel.findOne({ _id: args.hereId });
+        const posts = await PostModel.find({ _id: { $lt: args.hereId }, categoryId: herePost?.categoryId }, {}, { sort: { _id: -1 } });
+        return posts[0]
+          ? {
+              _id: posts[0]._id,
+              title: posts[0].title,
+              createdAt: posts[0].createdAt,
+              article: removeMd(posts[0].article),
+              categoryId: posts[0].categoryId,
+              likeCount: posts[0].likeCount,
+              commentCount: posts[0].commentCount
+            }
+          : null;
+      } catch (err) {
+        throw err;
+      }
+    },
+
+    async getNextPost(_: any, args: { hereId: number }) {
+      try {
+        const herePost = await PostModel.findOne({ _id: args.hereId });
+        const posts = await PostModel.find({ _id: { $gt: args.hereId }, categoryId: herePost?.categoryId }, {}, { sort: { _id: 1 } });
+        return posts[0]
+          ? {
+              _id: posts[0]._id,
+              title: posts[0].title,
+              createdAt: posts[0].createdAt,
+              article: removeMd(posts[0].article),
+              categoryId: posts[0].categoryId,
+              likeCount: posts[0].likeCount,
+              commentCount: posts[0].commentCount
+            }
+          : null;
       } catch (err) {
         throw err;
       }

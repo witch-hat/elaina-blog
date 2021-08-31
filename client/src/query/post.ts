@@ -34,6 +34,46 @@ export const GET_LATEST_POSTS = gql`
   }
 `;
 
+export interface GetNearPostVars {
+  hereId: number;
+}
+
+export interface GetNextPostQueryType {
+  getNextPost: PostDetailDataType;
+}
+
+export interface GetPrevPostQueryType {
+  getPrevPost: PostDetailDataType;
+}
+
+export const GET_PREV_POST = gql`
+  query ($hereId: Int!) {
+    getPrevPost(hereId: $hereId) {
+      _id
+      title
+      createdAt
+      article
+      categoryId
+      likeCount
+      commentCount
+    }
+  }
+`;
+
+export const GET_NEXT_POST = gql`
+  query ($hereId: Int!) {
+    getNextPost(hereId: $hereId) {
+      _id
+      title
+      createdAt
+      article
+      categoryId
+      likeCount
+      commentCount
+    }
+  }
+`;
+
 export interface FindPostByIdVars {
   id: string;
 }
