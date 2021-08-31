@@ -30,5 +30,6 @@
   "ConfirmPassword": "새 비밀번호 확인",
   "ForgotPassword": "비밀번호 찾기",
   "DeviceManage": "로그인 기기 관리",
-  "Activities": "최근 활동"
+  "Activities": "최근 활동",
+  "TempPosts": "임시 저장글"
 }

@@ -19,6 +19,7 @@ export function ContentMenuContainer() {
       <SideMenuItem menu={trans(Lang.AdminHome)} href='/admin' />
       <SideMenuItem menu={trans(Lang.CategoryManage)} href='/admin/category' />
       <SideMenuItem menu={trans(Lang.BoardManage)} href='/admin/posts' />
+      <SideMenuItem menu={trans(Lang.TempPosts)} href='/admin/temp' />
     </Container>
   );
 }

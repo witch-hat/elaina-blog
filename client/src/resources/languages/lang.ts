@@ -35,5 +35,6 @@ export enum Lang {
   ConfirmPassword = 'ConfirmPassword',
   ForgotPassword = 'ForgotPassword',
   DeviceManage = 'DeviceManage',
-  Activities = 'Activities'
+  Activities = 'Activities',
+  TempPosts = 'TempPosts'
 }

@@ -16,7 +16,9 @@ const Context = styled.div((props) => ({
   justifyContent: 'left',
   flexDirection: 'column',
   '&:hover > p: first-child': {
-    color: props.theme.navList.selectedColor,
+    color: props.theme.navList.selectedColor
+  },
+  '&:hover': {
     cursor: 'pointer'
   }
 }));
