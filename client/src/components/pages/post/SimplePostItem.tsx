@@ -1,8 +1,10 @@
-import Link from 'next/link';
 import styled from 'styled-components';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronLeft as prevArrow, faChevronRight as nextArrow } from '@fortawesome/free-solid-svg-icons';
+import Link from 'next/link';
 import { BorderBox } from 'src/components';
 import { PostDetailDataType } from 'src/query/post';
+import { FlexDirection, TextAlign } from './BoxDesigns';
 
 const StyledA = styled.a({
   display: 'block',
@@ -12,7 +14,15 @@ const StyledA = styled.a({
 
 const Container = styled.div({
   width: '100%',
-  padding: '.8rem'
+  padding: '.8rem',
+  margin: '0 .5rem'
+});
+
+const FlexWrapper = styled.div({
+  display: 'flex',
+  width: '100%',
+  padding: '0 1rem',
+  alignItems: 'center'
 });
 
 const Title = styled.p({
@@ -35,19 +45,47 @@ const PreviewArticle = styled.p({
   WebkitBoxOrient: 'vertical'
 });
 
-interface Props {
-  post: PostDetailDataType;
+interface Styles {
+  textAlign: TextAlign;
+  flexDirection: FlexDirection;
 }
 
-export function SimplePostItem(props: Props) {
+interface Direction {
+  isPrev: boolean;
+  styles: Styles;
+}
+
+interface Props {
+  post: PostDetailDataType;
+  direction: Direction;
+}
+
+export const Direction: { prev: Direction; next: Direction } = {
+  prev: {
+    isPrev: true,
+    styles: { textAlign: TextAlign.start, flexDirection: FlexDirection.row }
+  },
+  next: {
+    isPrev: false,
+    styles: {
+      textAlign: TextAlign.end,
+      flexDirection: FlexDirection.rowReverse
+    }
+  }
+};
+
+export function SimplePostItem({ direction, ...props }: Props) {
   return (
     <Link href={`/post/${props.post._id}`}>
       <StyledA>
         <BorderBox isHoverEffect={true} styles={{ width: '100%', margin: '0' }}>
-          <Container>
-            <Title>{props.post.title}</Title>
-            <PreviewArticle>{props.post.article}</PreviewArticle>
-          </Container>
+          <FlexWrapper style={{ flexDirection: direction.styles.flexDirection }}>
+            <FontAwesomeIcon icon={direction.isPrev ? prevArrow : nextArrow} style={{ fontSize: '3rem' }} />
+            <Container>
+              <Title style={{ textAlign: direction.styles.textAlign }}>{props.post.title}</Title>
+              <PreviewArticle style={{ textAlign: direction.styles.textAlign }}>{props.post.article}</PreviewArticle>
+            </Container>
+          </FlexWrapper>
         </BorderBox>
       </StyledA>
     </Link>

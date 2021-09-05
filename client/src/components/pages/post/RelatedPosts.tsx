@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { PostDetailDataType } from 'src/query/post';
-import { SimplePostItem } from './SimplePostItem';
+import { Direction, SimplePostItem } from './SimplePostItem';
 
 const Container = styled.section({
   display: 'flex',
@@ -46,8 +46,12 @@ export function RelatedPostsContainer({ prevPost, nextPost }: Prop) {
     <Container>
       <StyleHr />
       <NearPosts>
-        <PrevPost>{prevPost && <SimplePostItem key={prevPost.article + prevPost._id} post={prevPost} />}</PrevPost>
-        <NextPost>{nextPost && <SimplePostItem key={nextPost.article + nextPost._id} post={nextPost} />}</NextPost>
+        <PrevPost>
+          {prevPost && <SimplePostItem key={prevPost.article + prevPost._id} post={prevPost} direction={Direction.prev} />}
+        </PrevPost>
+        <NextPost>
+          {nextPost && <SimplePostItem key={nextPost.article + nextPost._id} post={nextPost} direction={Direction.next} />}
+        </NextPost>
       </NearPosts>
     </Container>
   );
