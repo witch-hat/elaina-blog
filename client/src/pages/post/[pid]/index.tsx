@@ -96,6 +96,7 @@ export default function PostId(props: Props) {
           isLogin={props.app.isLogin}
         />
         <ClapBox id={parseInt(_id)} initLikeCount={props.post.likeCount} commentsCount={data.comments.count} />
+        <RelatedPostsContainer prevPost={props.prevPost} nextPost={props.nextPost} />
         <CommentContainer
           comments={data.comments}
           isLogin={props.app.isLogin}
@@ -103,7 +104,6 @@ export default function PostId(props: Props) {
           categoryId={props.categoryId}
           postId={props.post._id}
         />
-        <RelatedPostsContainer prevPost={props.prevPost} nextPost={props.nextPost} />
       </ContentContainer>
       <RightSideContainer />
     </Container>
@@ -139,17 +139,19 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
       };
     }
 
-    const profileQueryResult = await client.query<GetProfileQueryType>({ query: GET_PROFILE });
+    const [profileQueryResult, prevPostQueryResult, nextPostQueryResult] = await Promise.all([
+      client.query<GetProfileQueryType>({ query: GET_PROFILE }),
+      client.query<GetPrevPostQueryType, GetNearPostVars>({
+        query: GET_PREV_POST,
+        variables: { hereId: parseInt(`${id}`) }
+      }),
+      client.query<GetNextPostQueryType, GetNearPostVars>({
+        query: GET_NEXT_POST,
+        variables: { hereId: parseInt(`${id}`) }
+      })
+    ]);
     const profile = profileQueryResult.data.profile;
-    const prevPostQueryResult = await client.query<GetPrevPostQueryType, GetNearPostVars>({
-      query: GET_PREV_POST,
-      variables: { hereId: parseInt(`${id}`) }
-    });
     const prevPost = prevPostQueryResult.data.getPrevPost;
-    const nextPostQueryResult = await client.query<GetNextPostQueryType, GetNearPostVars>({
-      query: GET_NEXT_POST,
-      variables: { hereId: parseInt(`${id}`) }
-    });
     const nextPost = nextPostQueryResult.data.getNextPost;
 
     return {

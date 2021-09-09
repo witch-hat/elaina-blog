@@ -80,16 +80,20 @@ export const postResolver = {
     async getPrevPost(_: any, args: { hereId: number }) {
       try {
         const herePost = await PostModel.findOne({ _id: args.hereId });
-        const posts = await PostModel.find({ _id: { $lt: args.hereId }, categoryId: herePost?.categoryId }, {}, { sort: { _id: -1 } });
-        return posts[0]
+        const [post] = await PostModel.find(
+          { _id: { $lt: args.hereId }, categoryId: herePost?.categoryId },
+          {},
+          { sort: { _id: -1 } }
+        ).limit(1);
+        return post
           ? {
-              _id: posts[0]._id,
-              title: posts[0].title,
-              createdAt: posts[0].createdAt,
-              article: removeMd(posts[0].article),
-              categoryId: posts[0].categoryId,
-              likeCount: posts[0].likeCount,
-              commentCount: posts[0].commentCount
+              _id: post._id,
+              title: post.title,
+              createdAt: post.createdAt,
+              article: removeMd(post.article),
+              categoryId: post.categoryId,
+              likeCount: post.likeCount,
+              commentCount: post.commentCount
             }
           : null;
       } catch (err) {
@@ -100,16 +104,20 @@ export const postResolver = {
     async getNextPost(_: any, args: { hereId: number }) {
       try {
         const herePost = await PostModel.findOne({ _id: args.hereId });
-        const posts = await PostModel.find({ _id: { $gt: args.hereId }, categoryId: herePost?.categoryId }, {}, { sort: { _id: 1 } });
-        return posts[0]
+        const [post] = await PostModel.find(
+          { _id: { $gt: args.hereId }, categoryId: herePost?.categoryId },
+          {},
+          { sort: { _id: 1 } }
+        ).limit(1);
+        return post
           ? {
-              _id: posts[0]._id,
-              title: posts[0].title,
-              createdAt: posts[0].createdAt,
-              article: removeMd(posts[0].article),
-              categoryId: posts[0].categoryId,
-              likeCount: posts[0].likeCount,
-              commentCount: posts[0].commentCount
+              _id: post._id,
+              title: post.title,
+              createdAt: post.createdAt,
+              article: removeMd(post.article),
+              categoryId: post.categoryId,
+              likeCount: post.likeCount,
+              commentCount: post.commentCount
             }
           : null;
       } catch (err) {

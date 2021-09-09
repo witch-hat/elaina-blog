@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { ReactElement } from 'react-markdown';
 import styled from 'styled-components';
 
 const Button = styled.span({
@@ -11,7 +10,7 @@ interface SubmitButtonProps {
   prevFunction?: () => any;
   nextFunction: () => Promise<any>;
   waitTime?: number;
-  children?: ReactElement;
+  children?: JSX.Element;
 }
 
 export function SubmitButton(props: SubmitButtonProps) {
