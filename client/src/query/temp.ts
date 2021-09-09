@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-import { MutationCommonResponse } from ".";
+import { MutationCommonResponse, QueryPaginationVars } from ".";
 
 export interface TempPostType {
   _id: number;
@@ -11,9 +11,7 @@ export interface TempPostType {
   savedAt: number;
 }
 
-export interface GetTempPostVars {
-  page: number;
-}
+export interface GetTempPostVars extends QueryPaginationVars {}
 
 export interface GetTempPostQueryType {
   tempPosts: TempPostType[];

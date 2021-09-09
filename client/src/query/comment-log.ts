@@ -1,10 +1,10 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
-import { MutationCommonResponse } from '.';
+import { MutationCommonResponse, QueryPaginationVars } from ".";
 
 export enum CommentEvent {
   NewComment,
-  NewReply
+  NewReply,
 }
 
 export interface CommentLogDataType {
@@ -18,9 +18,7 @@ export interface CommentLogDataType {
   postTitle: string;
 }
 
-export interface CommentLogVars {
-  page: number;
-}
+export interface CommentLogVars extends QueryPaginationVars {}
 
 export interface CommentLogQueryType {
   commentLogs: CommentLogDataType[];
@@ -55,7 +53,14 @@ export interface PushCommentLogQueryType {
 }
 
 export const PUSH_COMMENT_LOG = gql`
-  mutation ($time: DateTime!, $event: Int!, $categoryId: Int!, $postId: Int!, $commentIndex: Int!, $replyIndex: Int) {
+  mutation (
+    $time: DateTime!
+    $event: Int!
+    $categoryId: Int!
+    $postId: Int!
+    $commentIndex: Int!
+    $replyIndex: Int
+  ) {
     pushCommentLog(
       time: $time
       event: $event
@@ -79,7 +84,11 @@ export interface DeleteCommentLogQueryType {
 
 export const DELETE_COMMENT_LOG = gql`
   mutation ($postId: Int!, $commentIndex: Int!, $replyIndex: Int) {
-    deleteCommentLog(postId: $postId, commentIndex: $commentIndex, replyIndex: $replyIndex) {
+    deleteCommentLog(
+      postId: $postId
+      commentIndex: $commentIndex
+      replyIndex: $replyIndex
+    ) {
       isSuccess
     }
   }

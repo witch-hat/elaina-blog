@@ -1,4 +1,5 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
+import { QueryPaginationVars } from ".";
 
 export interface PostDataType {
   _id: number;
@@ -13,9 +14,7 @@ export interface PostDetailDataType extends PostDataType {
   commentCount: number;
 }
 
-export interface GetLatestPostsVars {
-  page: number;
-}
+export interface GetLatestPostsVars extends QueryPaginationVars {}
 
 export interface GetLastestPostsQueryType {
   getLatestPosts: PostDetailDataType[];
@@ -121,8 +120,18 @@ export interface WritePostQueryType {
 }
 
 export const WRITE_POST = gql`
-  mutation ($title: String!, $createdAt: DateTime, $article: String!, $category: String!) {
-    writePost(title: $title, createdAt: $createdAt, article: $article, category: $category) {
+  mutation (
+    $title: String!
+    $createdAt: DateTime
+    $article: String!
+    $category: String!
+  ) {
+    writePost(
+      title: $title
+      createdAt: $createdAt
+      article: $article
+      category: $category
+    ) {
       _id
     }
   }
