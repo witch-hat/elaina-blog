@@ -1,4 +1,5 @@
 import { gql } from '@apollo/client';
+import { QueryPaginationVars } from '.';
 
 export interface PostDataType {
   _id: number;
@@ -6,6 +7,7 @@ export interface PostDataType {
   createdAt: number;
   article: string;
   categoryId: number;
+  category: string | null;
 }
 
 export interface PostDetailDataType extends PostDataType {
@@ -13,9 +15,7 @@ export interface PostDetailDataType extends PostDataType {
   commentCount: number;
 }
 
-export interface GetLatestPostsVars {
-  page: number;
-}
+export interface GetLatestPostsVars extends QueryPaginationVars {}
 
 export interface GetLastestPostsQueryType {
   getLatestPosts: PostDetailDataType[];
@@ -28,6 +28,8 @@ export const GET_LATEST_POSTS = gql`
       title
       createdAt
       article
+      categoryId
+      category
       likeCount
       commentCount
     }

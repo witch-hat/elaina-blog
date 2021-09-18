@@ -12,6 +12,7 @@ export const postTypeDef = gql`
     createdAt: DateTime!
     article: String!
     categoryId: Int!
+    category: String
     likeCount: Int!
     commentCount: Int!
   }
@@ -57,15 +58,19 @@ export const postResolver = {
   Query: {
     async getLatestPosts(_: any, args: { page: number }) {
       try {
-        const posts = await PostModel.find({}, {}, { sort: { _id: -1 }, skip: (args.page - 1) * 10, limit: 10 });
+        const [posts, categories] = await Promise.all([
+          PostModel.find({}, {}, { sort: { _id: -1 }, skip: (args.page - 1) * 10, limit: 10 }),
+          CategoryModel.find()
+        ]);
 
-        const previewPosts: Post[] = posts.map((post) => {
+        const previewPosts = posts.map((post) => {
           return {
             _id: post._id,
             title: post.title,
             createdAt: post.createdAt,
             article: removeMd(post.article),
             categoryId: post.categoryId,
+            category: categories.find((category) => category._id === post.categoryId)?.title || null,
             likeCount: post.likeCount,
             commentCount: post.commentCount
           };
@@ -202,7 +207,15 @@ export const postResolver = {
   },
 
   Mutation: {
-    async writePost(_: any, args: { title: string; createdAt: Date; article: string; category: string }) {
+    async writePost(
+      _: any,
+      args: {
+        title: string;
+        createdAt: Date;
+        article: string;
+        category: string;
+      }
+    ) {
       try {
         if (!args.title) {
           throw new UserInputError('글의 제목을 1자 이상 써주세요.');
@@ -228,11 +241,19 @@ export const postResolver = {
             return result;
           }
 
-          const category = await CategoryModel.findOne({ title: args.category });
+          const category = await CategoryModel.findOne({
+            title: args.category
+          });
           if (category) {
             const categoryId = category._id;
 
-            const result = await PostModel.create({ _id, title: args.title, createdAt: args.createdAt, categoryId, article: args.article });
+            const result = await PostModel.create({
+              _id,
+              title: args.title,
+              createdAt: args.createdAt,
+              categoryId,
+              article: args.article
+            });
 
             return result;
           } else {
@@ -253,7 +274,9 @@ export const postResolver = {
             return result;
           }
 
-          const category = await CategoryModel.findOne({ title: args.category });
+          const category = await CategoryModel.findOne({
+            title: args.category
+          });
           if (category) {
             const categoryId = category._id;
 
