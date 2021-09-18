@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useRef } from 'react';
 import styled from 'styled-components';
 
 const Button = styled.span({
@@ -7,37 +7,29 @@ const Button = styled.span({
 });
 
 interface SubmitButtonProps {
-  prevFunction?: () => any;
-  nextFunction: () => Promise<any>;
+  blockedFunction: () => any;
   waitTime?: number;
   children?: JSX.Element;
 }
 
 export function SubmitButton(props: SubmitButtonProps) {
-  const [running, setRunning] = useState(false);
+  const running = useRef(false);
 
-  useEffect(() => {
-    if (!running) return;
-    async function doMutation() {
-      await props.nextFunction();
-      if (!props.waitTime) setRunning(false);
-    }
-    doMutation();
-    if (props.waitTime) {
-      setTimeout(() => {
-        setRunning(false);
-      }, props.waitTime);
-    }
-  }, [running]);
-
-  function onClick() {
-    if (!running) {
-      setRunning(true);
-      if (props.prevFunction) props.prevFunction();
-    }
+  async function onClick() {
+    running.current = true;
+    await props.blockedFunction();
+    running.current = false;
   }
 
-  return <Button onClick={onClick}>{props.children}</Button>;
+  return (
+    <Button
+      onClick={() => {
+        if (!running.current) onClick();
+      }}
+    >
+      {props.children}
+    </Button>
+  );
 }
 
 /* 사용에 대한 설명

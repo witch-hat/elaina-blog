@@ -43,7 +43,7 @@ const PreviewArticle = styled.p<{ isPrev: boolean }>((props) => ({
   wordBreak: 'break-all',
   overflow: 'hidden',
   textAlign: `${props.isPrev ? 'start' : 'end'}`,
-  WebkitLineClamp: 3,
+  WebkitLineClamp: 1,
   WebkitBoxOrient: 'vertical'
 }));
 

@@ -64,14 +64,11 @@ export function ClapBox({ id, ...props }: Props) {
   const [increaseLikeCount, { data: increaseData }] = useMutation<LikeCountQueryType, LikeCountVars>(INCREASE_LIKE_COUNT);
   const [decreaseLikeCount, { data: decreaseData }] = useMutation<LikeCountQueryType, LikeCountVars>(DECREASE_LIKE_COUNT);
 
-  function changeStates() {
+  async function onClick() {
     setLike(!like);
     const addCount = !like ? 1 : -1;
     setLikeCount((prev) => prev + addCount);
-  }
-
-  async function doMutation() {
-    if (like) {
+    if (!like) {
       postDispatch.addLikedId(id);
       await increaseLikeCount({ variables: { id } });
       if (increaseData) setLikeCount(increaseData.likeCount);
@@ -86,7 +83,7 @@ export function ClapBox({ id, ...props }: Props) {
     <Container>
       <Box>
         <FlexWrapper>
-          <SubmitButton prevFunction={changeStates} nextFunction={doMutation}>
+          <SubmitButton blockedFunction={onClick}>
             <Icon>
               <FontAwesomeIcon icon={like ? solidHeart : regularHeart} style={{ fontSize: '3rem' }} />
               <Number>{likeCount}</Number>

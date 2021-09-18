@@ -53,7 +53,7 @@ export function CommentWriter(props: Props) {
         }
 
         props.onAddComment(data.writeComment);
-      } catch (err) {
+      } catch (err: any) {
         alert(err.msg);
       }
     } else {
@@ -91,7 +91,7 @@ export function CommentWriter(props: Props) {
         }
 
         props.onAddComment(data.writeComment);
-      } catch (err) {
+      } catch (err: any) {
         alert(err.message);
       }
     }

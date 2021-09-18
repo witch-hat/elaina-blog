@@ -89,7 +89,7 @@ export function ReplyBox(props: Props) {
             replyId: props.reply._id
           }
         });
-      } catch (err) {
+      } catch (err: any) {
         alert(err.message);
         return;
       }
@@ -105,7 +105,7 @@ export function ReplyBox(props: Props) {
             password
           }
         });
-      } catch (err) {
+      } catch (err: any) {
         alert(err.message);
         return;
       }
@@ -119,7 +119,7 @@ export function ReplyBox(props: Props) {
           replyIndex: props?.replyIndex! + 1
         }
       });
-    } catch (err) {
+    } catch (err: any) {
       alert(err.message);
     }
 

@@ -43,7 +43,7 @@ export function CommentEditor(props: Props) {
 
     try {
       await props.onEdit(editingCommentContent, password);
-    } catch (err) {
+    } catch (err: any) {
       setEditingCommentContent(props.commentContent);
       alert(err.message);
     }
