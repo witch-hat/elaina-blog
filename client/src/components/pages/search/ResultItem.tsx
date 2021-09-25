@@ -53,7 +53,7 @@ interface Props {
 
 export function ResultItem(props: Props) {
   return (
-    <Link href={`/post/${props.id}`} passHref>
+    <Link href={`/post/${props.id}`} passHref={true}>
       <a style={{ width: '100%' }}>
         <BorderBox isHoverEffect={true} styles={{ width: '100%', margin: '.8rem 0' }}>
           <Content>

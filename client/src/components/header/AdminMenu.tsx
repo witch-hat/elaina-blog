@@ -74,13 +74,13 @@ export function AdminMenu(props: Props) {
         }
         dropMenu={
           <>
-            <Link href='/admin'>
+            <Link href='/admin' passHref={true}>
               <MenuItem>{trans(Lang.Admin)}</MenuItem>
             </Link>
             {props.isLogin ? (
               <MenuItem onClick={handleLogout}>{trans(Lang.Logout)}</MenuItem>
             ) : (
-              <Link href={{ pathname: '/admin/login', query: { url: router.asPath } }}>
+              <Link href={{ pathname: '/admin/login', query: { url: router.asPath } }} passHref={true}>
                 <MenuItem>{trans(Lang.Login)}</MenuItem>
               </Link>
             )}
