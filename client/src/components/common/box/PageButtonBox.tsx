@@ -31,38 +31,41 @@ const Wrapper = styled.div({
 interface Props {
   elementsInPage: number;
   currPage: number;
-  elementCount: number;
+  elementsTotalCount: number;
 }
 
 function PageButtonBox(props: Props) {
   const router = useRouter();
   const pages = useMemo<number[]>(() => {
-    if (props.elementCount === 0) {
+    if (props.elementsTotalCount === 0) {
       return [1];
     }
 
-    if (props.elementCount <= 50) {
-      if (props.elementCount % props.elementsInPage === 0) {
-        return [...Array(props.elementCount / props.elementsInPage).keys()].map((i) => i + 1);
+    const isTotalDividePage = props.elementsTotalCount % props.elementsInPage === 0;
+    const rawPage = props.elementsTotalCount / props.elementsInPage;
+
+    if (props.elementsTotalCount <= 50) {
+      if (isTotalDividePage) {
+        return [...Array(rawPage).keys()].map((i) => i + 1);
       }
 
-      return [...Array(Math.floor(props.elementCount / props.elementsInPage) + 1).keys()].map((i) => i + 1);
+      return [...Array(Math.floor(rawPage) + 1).keys()].map((i) => i + 1);
     }
 
     if (props.currPage <= 3) {
       return [1, 2, 3, 4, 5];
     }
 
-    if (props.elementCount % props.elementsInPage === 0 && props.currPage >= Math.floor(props.elementCount / props.elementsInPage) - 2) {
-      return [...Array(5).keys()].map((i) => i + Math.floor(props.elementCount / props.elementsInPage) - 4);
+    if (isTotalDividePage && props.currPage >= Math.floor(rawPage) - 2) {
+      return [...Array(5).keys()].map((i) => i + Math.floor(rawPage) - 4);
     }
 
-    if (props.currPage >= Math.floor(props.elementCount / props.elementsInPage) - 1) {
-      return [...Array(5).keys()].map((i) => i + Math.floor(props.elementCount / props.elementsInPage) - 3);
+    if (props.currPage >= Math.floor(rawPage) - 1) {
+      return [...Array(5).keys()].map((i) => i + Math.floor(rawPage) - 3);
     }
 
     return [...Array(5).keys()].map((i) => i + props.currPage - 2);
-  }, [props.currPage, props.elementCount, props.elementsInPage]);
+  }, [props.currPage, props.elementsTotalCount, props.elementsInPage]);
 
   return (
     <Container>
@@ -94,9 +97,12 @@ function PageButtonBox(props: Props) {
       </Wrapper>
       <Button
         onClick={() => {
-          if (props.elementCount % props.elementsInPage === 0 && props.currPage === Math.floor(props.elementCount / props.elementsInPage)) {
+          if (
+            props.elementsTotalCount % props.elementsInPage === 0 &&
+            props.currPage === Math.floor(props.elementsTotalCount / props.elementsInPage)
+          ) {
             return;
-          } else if (props.currPage === Math.floor(props.elementCount / props.elementsInPage) + 1) {
+          } else if (props.currPage === Math.floor(props.elementsTotalCount / props.elementsInPage) + 1) {
             return;
           }
 

@@ -49,7 +49,7 @@ export function Navigation(props: Props) {
         );
       case 'about':
         return (
-          <CircleRippleA href={''}>
+          <CircleRippleA href={'/?tab=about&edit=true'} shallow={true}>
             <FontAwesomeIcon icon={faPenNib} />
           </CircleRippleA>
         );

@@ -13,6 +13,7 @@ import { MainPageLayout, MemoizedContentCategory, MemoizedPostContainer, AboutPa
 
 interface ServerSideProps {
   latestPosts: PostDetailDataType[];
+  totalPosts: number;
   profile: ProfileDataType;
   categories: CategoryDetailType[];
   about: AboutDataType;
@@ -31,7 +32,7 @@ export default function Index(props: Props) {
       case 'category':
         return <MemoizedContentCategory categories={props.categories} isLogin={props.app.isLogin} />;
       default:
-        return <MemoizedPostContainer posts={props.latestPosts} />;
+        return <MemoizedPostContainer posts={props.latestPosts} totalPosts={props.totalPosts} />;
     }
   }
 
@@ -81,11 +82,13 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
   const about = aboutQueryResult.data.about;
   const profile = profileQueryResult.data.profile;
   const categories = categoryQueryResult.data.categoriesWithDetails;
-  const latestPosts = latestPostsQueryResult.data.getLatestPosts;
+  const latestPosts = latestPostsQueryResult.data.getLatestPosts.posts;
+  const totalPosts = latestPostsQueryResult.data.getLatestPosts.total;
 
   return {
     props: {
       latestPosts,
+      totalPosts,
       profile,
       categories,
       about

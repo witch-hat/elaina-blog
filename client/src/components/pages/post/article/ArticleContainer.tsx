@@ -4,14 +4,7 @@ import { useMutation, useApolloClient } from '@apollo/client';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 
-import {
-  DeletePostQueryType,
-  DeletePostVars,
-  DELETE_POST,
-  FindSameCategoryPostsQueryType,
-  FindSameCategoryPostsVars,
-  FIND_SAME_CATEGORY_POSTS
-} from 'src/query/post';
+import { DeletePostQueryType, DeletePostVars, DELETE_POST } from 'src/query/post';
 import { IsAuthQueryType, IS_AUTH } from 'src/query/user';
 import { ProfileDataType } from 'src/query/profile';
 
@@ -101,17 +94,7 @@ export function ArticleContainer(props: Props) {
         }
 
         const categoryId = deleteResponse.data.deletePost.categoryId!;
-        const { data } = await client.query<FindSameCategoryPostsQueryType, FindSameCategoryPostsVars>({
-          query: FIND_SAME_CATEGORY_POSTS,
-          variables: { categoryId }
-        });
-
-        if (data.findSameCategoryPosts.post.length === 0) {
-          router.push('/');
-        } else {
-          const lastPostId = data.findSameCategoryPosts.post[0]._id;
-          router.push(`/post/${lastPostId}`);
-        }
+        router.push({ pathname: `/category/${categoryId}`, query: { page: '1' } });
       } catch (err) {
         alert(err.message);
       }
