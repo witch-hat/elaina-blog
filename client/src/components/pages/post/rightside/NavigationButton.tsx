@@ -10,7 +10,8 @@ const Container = styled.div({
 });
 
 const NavButton = styled.a({
-  fontSize: '14px'
+  fontSize: '14px',
+  marginTop: '8px'
 });
 
 export function ContentNavigationButton(props: Props) {
