@@ -63,13 +63,11 @@ export function CommentLogBox(props: Props) {
   return (
     <div>
       {/* <UserImage src='/public/images/FakeProfile.png'></UserImage> */}
-      <Link href={`/post/${props.postId}`}>
-        <a>
-          <Context>
-            <PostTitle>{props.postTitle}</PostTitle>
-            <EventAndDate>{event}</EventAndDate>
-          </Context>
-        </a>
+      <Link href={`/post/${props.postId}`} passHref={true}>
+        <Context>
+          <PostTitle>{props.postTitle}</PostTitle>
+          <EventAndDate>{event}</EventAndDate>
+        </Context>
       </Link>
     </div>
   );

@@ -150,7 +150,7 @@ export function PostCategory(props: Props) {
         {props.titles.map(({ title, _id }) => {
           return (
             <TitleList key={`${title}${_id}`} currentNav={props.currentPostId === _id}>
-              <Link href={`/post/${_id}`} passHref>
+              <Link href={`/post/${_id}`} passHref={true}>
                 <Title>{title}</Title>
               </Link>
             </TitleList>

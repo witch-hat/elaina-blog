@@ -96,7 +96,7 @@ interface Props {
 
 export function ContentCategoryItem(props: Props) {
   return (
-    <Link href={`/category/${props.category._id}`}>
+    <Link href={`/category/${props.category._id}`} passHref={true}>
       <Container>
         <BorderBox isHoverEffect={true} styles={{ width: '100%', margin: '4% 0' }}>
           <Content>
