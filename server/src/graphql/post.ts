@@ -37,7 +37,7 @@ export const postTypeDef = gql`
   }
 
   extend type Query {
-    getLatestPosts(page: Int!): [Post]
+    getLatestPosts(page: Int!): LatestPosts
     getPrevPost(hereId: Int!): Post
     getNextPost(hereId: Int!): Post
     findPostById(id: String!): Post
