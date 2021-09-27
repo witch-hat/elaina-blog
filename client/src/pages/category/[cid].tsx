@@ -7,7 +7,16 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { AppCommonProps } from 'src/pages/_app';
 import { initializeApollo } from 'src/lib/apollo';
 import { PostItem } from 'src/components/pages/main/post/PostItem';
-import { FindSameCategoryPostsQueryType, FindSameCategoryPostsVars, FIND_SAME_CATEGORY_POSTS, PostDetailDataType } from 'src/query/post';
+import {
+  FindSameCategoryPostsQueryType,
+  FindSameCategoryPostsVars,
+  FIND_SAME_CATEGORY_POSTS,
+  GetLastestPostsQueryType,
+  GetLatestPostsVars,
+  GET_LATEST_POSTS,
+  PostDetailDataType
+} from 'src/query/post';
+import { MemoizedPageButtonBox } from 'src/components/common/box/PageButtonBox';
 
 const Container = styled.div({
   display: 'flex',
@@ -62,15 +71,24 @@ const NoPosts = styled.div({
   justifyContent: 'center'
 });
 
+const FlexWrapper = styled.div({
+  display: 'flex',
+  width: '100%',
+  justifyContent: 'center'
+});
+
 interface ServerSideProps {
   categoryTitle: string;
   posts: PostDetailDataType[];
+  totalPosts: number;
 }
 
 interface Props extends ServerSideProps, AppCommonProps {}
 
 export default function CategoryPage(props: Props) {
   const router = useRouter();
+
+  const currPage = router.query.page as string;
 
   function handleWriteButtonClick() {
     router.push({ pathname: '/admin/writer', query: { category: props.categoryTitle } });
@@ -96,6 +114,9 @@ export default function CategoryPage(props: Props) {
           <NoPosts>No Posts....</NoPosts>
         )}
       </PostWrapper>
+      <FlexWrapper>
+        <MemoizedPageButtonBox elementsTotalCount={props.totalPosts} elementsInPage={10} currPage={Number.parseInt(currPage)} />
+      </FlexWrapper>
     </Container>
   );
 }
@@ -103,21 +124,41 @@ export default function CategoryPage(props: Props) {
 export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (context) => {
   context.res.setHeader('Cache-Control', 'max-age=0, public, must-revalidate');
 
-  const categoryId = context.resolvedUrl.split('/')[2];
+  const categoryId = (context.query.cid as string) || '0';
+  const page = (context.query.page as string) || '0';
   const apolloClient = initializeApollo({}, context);
+
+  if (categoryId === '0') {
+    const { data } = await apolloClient.query<GetLastestPostsQueryType, GetLatestPostsVars>({
+      query: GET_LATEST_POSTS,
+      variables: {
+        page: Number.parseInt(page)
+      }
+    });
+
+    return {
+      props: {
+        categoryTitle: 'Latest',
+        posts: data.getLatestPosts.posts,
+        totalPosts: data.getLatestPosts.total
+      }
+    };
+  }
 
   const sameCategoryPostsQueryResult = await apolloClient.query<FindSameCategoryPostsQueryType, FindSameCategoryPostsVars>({
     query: FIND_SAME_CATEGORY_POSTS,
-    variables: { categoryId: Number.parseInt(categoryId) }
+    variables: { categoryId: Number.parseInt(categoryId), page: Number.parseInt(page) }
   });
 
   const categoryTitle = sameCategoryPostsQueryResult.data.findSameCategoryPosts.category.title;
-  const posts = sameCategoryPostsQueryResult.data.findSameCategoryPosts.post;
+  const posts = sameCategoryPostsQueryResult.data.findSameCategoryPosts.posts;
+  const totalPosts = sameCategoryPostsQueryResult.data.findSameCategoryPosts.total;
 
   return {
     props: {
       categoryTitle,
-      posts
+      posts,
+      totalPosts
     }
   };
 };

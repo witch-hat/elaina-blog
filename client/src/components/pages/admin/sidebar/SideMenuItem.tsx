@@ -42,10 +42,8 @@ export function SideMenuItem(props: Props) {
   if (props.href) {
     return (
       <MenuContainer currentNav={router.pathname === props.href}>
-        <Link href={props.href}>
-          <a>
-            <Menu>{props.menu}</Menu>
-          </a>
+        <Link href={props.href} passHref={true}>
+          <Menu>{props.menu}</Menu>
         </Link>
       </MenuContainer>
     );

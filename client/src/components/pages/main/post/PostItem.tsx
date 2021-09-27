@@ -55,7 +55,7 @@ interface Props {
 
 export function PostItem(props: Props) {
   return (
-    <Link href={`/post/${props.post._id}`}>
+    <Link href={`/post/${props.post._id}`} passHref={true}>
       <StyledA>
         <BorderBox isHoverEffect={true} styles={{ width: '100%', margin: '0' }}>
           <Container>

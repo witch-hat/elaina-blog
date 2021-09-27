@@ -5,6 +5,7 @@ import { CategoryDetailType } from 'src/query/category';
 
 import { ContentCategoryItem } from './ContentCategoryItem';
 import { NoCategory } from './NoCategory';
+import { MemoizedPageButtonBox } from 'src/components/common/box/PageButtonBox';
 
 const Container = styled.section({
   display: 'flex',
@@ -15,6 +16,12 @@ const Container = styled.section({
   flexFlow: 'row wrap'
 });
 
+const FlexWrapper = styled.div({
+  display: 'flex',
+  width: '100%',
+  justifyContent: 'center'
+});
+
 interface Props {
   categories: CategoryDetailType[];
   isLogin: boolean;
@@ -22,15 +29,20 @@ interface Props {
 
 export function ContentCategory(props: Props) {
   return (
-    <Container>
-      {props.categories.length ? (
-        props.categories.map((category) => {
-          return <ContentCategoryItem key={category.title} category={category} />;
-        })
-      ) : (
-        <NoCategory />
-      )}
-    </Container>
+    <>
+      <Container>
+        {props.categories.length ? (
+          props.categories.map((category) => {
+            return <ContentCategoryItem key={category.title} category={category} />;
+          })
+        ) : (
+          <NoCategory />
+        )}
+      </Container>
+      <FlexWrapper>
+        <MemoizedPageButtonBox currPage={1} elementsTotalCount={4} elementsInPage={12} />
+      </FlexWrapper>
+    </>
   );
 }
 

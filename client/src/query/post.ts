@@ -18,20 +18,26 @@ export interface PostDetailDataType extends PostDataType {
 export interface GetLatestPostsVars extends QueryPaginationVars {}
 
 export interface GetLastestPostsQueryType {
-  getLatestPosts: PostDetailDataType[];
+  getLatestPosts: {
+    posts: PostDetailDataType[];
+    total: number;
+  };
 }
 
 export const GET_LATEST_POSTS = gql`
   query ($page: Int!) {
     getLatestPosts(page: $page) {
-      _id
-      title
-      createdAt
-      article
-      categoryId
-      category
-      likeCount
-      commentCount
+      posts {
+        _id
+        title
+        createdAt
+        article
+        categoryId
+        category
+        likeCount
+        commentCount
+      }
+      total
     }
   }
 `;
@@ -100,19 +106,21 @@ export const FIND_POST_BY_ID = gql`
 
 export interface FindSameCategoryPostsVars {
   categoryId: number;
+  page: number;
 }
 
 export interface FindSameCategoryPostsQueryType {
   findSameCategoryPosts: {
-    post: PostDetailDataType[];
+    posts: PostDetailDataType[];
     category: { title: string };
+    total: number;
   };
 }
 
 export const FIND_SAME_CATEGORY_POSTS = gql`
-  query ($categoryId: Int!) {
-    findSameCategoryPosts(categoryId: $categoryId) {
-      post {
+  query ($categoryId: Int!, $page: Int!) {
+    findSameCategoryPosts(categoryId: $categoryId, page: $page) {
+      posts {
         _id
         title
         article
@@ -123,6 +131,7 @@ export const FIND_SAME_CATEGORY_POSTS = gql`
       category {
         title
       }
+      total
     }
   }
 `;

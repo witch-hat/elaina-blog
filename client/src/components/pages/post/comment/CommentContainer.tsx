@@ -81,13 +81,6 @@ export function CommentContainer(props: Props) {
     <Container>
       <Title>{trans(Lang.Comments)}</Title>
       <StyleHr />
-      <CommentWriter
-        isLogin={props.isLogin}
-        onAddComment={addNewComment}
-        categoryId={props.categoryId}
-        postId={props.postId}
-        commentIndex={commentContainer.comments.length + 1}
-      />
       <Comments>
         {commentContainer.comments.length ? (
           commentContainer.comments.map((comment: CommentType, index: number) => {
@@ -113,6 +106,13 @@ export function CommentContainer(props: Props) {
           <div>No Comments...</div>
         )}
       </Comments>
+      <CommentWriter
+        isLogin={props.isLogin}
+        onAddComment={addNewComment}
+        categoryId={props.categoryId}
+        postId={props.postId}
+        commentIndex={commentContainer.comments.length + 1}
+      />
     </Container>
   );
 }

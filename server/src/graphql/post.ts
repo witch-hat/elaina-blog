@@ -18,8 +18,9 @@ export const postTypeDef = gql`
   }
 
   type PostCategory {
-    post: [Post]
+    posts: [Post]
     category: Category
+    total: Int!
   }
 
   type DeleteResponse {
@@ -36,12 +37,17 @@ export const postTypeDef = gql`
     result: [SearchResult]
   }
 
+  type LatestPosts {
+    posts: [Post]
+    total: Int!
+  }
+
   extend type Query {
     getLatestPosts(page: Int!): LatestPosts
     getPrevPost(hereId: Int!): Post
     getNextPost(hereId: Int!): Post
     findPostById(id: String!): Post
-    findSameCategoryPosts(categoryId: Int!): PostCategory
+    findSameCategoryPosts(categoryId: Int!, page: Int!): PostCategory
     search(keyword: String!): SearchResponse
   }
 
@@ -58,8 +64,9 @@ export const postResolver = {
   Query: {
     async getLatestPosts(_: any, args: { page: number }) {
       try {
-        const [posts, categories] = await Promise.all([
+        const [posts, postsCount, categories] = await Promise.all([
           PostModel.find({}, {}, { sort: { _id: -1 }, skip: (args.page - 1) * 10, limit: 10 }),
+          PostModel.countDocuments(),
           CategoryModel.find()
         ]);
 
@@ -76,7 +83,7 @@ export const postResolver = {
           };
         });
 
-        return previewPosts;
+        return { posts: previewPosts, total: postsCount };
       } catch (err) {
         throw err;
       }
@@ -141,10 +148,11 @@ export const postResolver = {
       }
     },
 
-    async findSameCategoryPosts(_: any, args: { categoryId: number }) {
+    async findSameCategoryPosts(_: any, args: { categoryId: number; page: number }) {
       try {
-        const [sameCategoryPosts, categoryFindResult] = await Promise.all([
-          PostModel.find({ categoryId: args.categoryId }),
+        const [sameCategoryPosts, sameCategoryPostsCount, categoryFindResult] = await Promise.all([
+          PostModel.find({ categoryId: args.categoryId }, {}, { sort: { _id: -1 }, skip: (args.page - 1) * 10, limit: 10 }),
+          PostModel.countDocuments({ categoryId: args.categoryId }),
           CategoryModel.findById(args.categoryId)
         ]);
 
@@ -154,8 +162,9 @@ export const postResolver = {
         }
 
         return {
-          post: sameCategoryPosts.reverse(),
-          category: categoryFindResult
+          posts: sameCategoryPosts,
+          category: categoryFindResult,
+          total: sameCategoryPostsCount
         };
       } catch (err) {
         throw err;

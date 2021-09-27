@@ -9,10 +9,9 @@ import { CommentBox } from './box/CommentBox';
 import { ReplyWriter } from './writer/ReplyWriter';
 import { ReplyElement } from './ReplyElement';
 
-const Container = styled.div((props) => ({
+const Container = styled.div(() => ({
   display: 'flex',
   width: '100%',
-  borderTop: `2px solid ${props.theme.borderColor}`,
   transition: '.2s all',
   justifyContent: 'center',
   alignItems: 'center'
@@ -105,17 +104,6 @@ export function CommentElement(props: Props) {
             } Reply `}</ReplyButton>
             <ReplyButton onClick={() => setIsAddReply(!isAddReply)}>{isAddReply ? trans(Lang.Cancel) : trans(Lang.WriteReply)}</ReplyButton>
           </ReplyButtonContainer>
-          {isAddReply && (
-            <ReplyWriter
-              isLogin={props.isLogin}
-              onAddReply={onAddReply}
-              categoryId={props.categoryId}
-              postId={props.postId}
-              commentIndex={props.commentIndex}
-              commentId={props.comment._id}
-              replyIndex={props.comment.replies.length + 1}
-            />
-          )}
           <ReplyContainer>
             {isShowingReply
               ? props.comment.replies.map((reply: ReplyType, index: number) => {
@@ -137,6 +125,17 @@ export function CommentElement(props: Props) {
                 })
               : null}
           </ReplyContainer>
+          {isAddReply && (
+            <ReplyWriter
+              isLogin={props.isLogin}
+              onAddReply={onAddReply}
+              categoryId={props.categoryId}
+              postId={props.postId}
+              commentIndex={props.commentIndex}
+              commentId={props.comment._id}
+              replyIndex={props.comment.replies.length + 1}
+            />
+          )}
         </>
       </CommentBox>
     </Container>
