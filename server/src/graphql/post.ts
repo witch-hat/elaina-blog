@@ -85,6 +85,7 @@ export const postResolver = {
     async getPrevPost(_: any, args: { hereId: number }) {
       try {
         const herePost = await PostModel.findOne({ _id: args.hereId });
+        if (herePost === null) throw new ApolloError("Error: post not found")
         const [post] = await PostModel.find(
           { _id: { $lt: args.hereId }, categoryId: herePost?.categoryId },
           {},
