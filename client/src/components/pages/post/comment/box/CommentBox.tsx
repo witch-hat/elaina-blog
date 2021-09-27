@@ -86,7 +86,7 @@ export function CommentBox(props: Props) {
         if (data?.deleteComment.isSuccess) {
           props.deleteComment(props.commentIndex);
         }
-      } catch (err: any) {
+      } catch (err) {
         alert(err.message);
         return;
       }
@@ -106,7 +106,7 @@ export function CommentBox(props: Props) {
         if (data?.deleteComment.isSuccess) {
           props.deleteComment(props.commentIndex);
         }
-      } catch (err: any) {
+      } catch (err) {
         alert(err.message);
         return;
       }
@@ -119,7 +119,7 @@ export function CommentBox(props: Props) {
           commentIndex: props.commentIndex + 1
         }
       });
-    } catch (err: any) {
+    } catch (err) {
       alert(err.message);
     }
   }

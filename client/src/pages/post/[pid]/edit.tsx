@@ -62,7 +62,7 @@ export default function PostEdit(props: Props) {
       });
 
       router.push(`/post/${id}`);
-    } catch (err: any) {
+    } catch (err) {
       alert(err.message);
       return;
     }
