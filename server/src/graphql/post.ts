@@ -44,6 +44,8 @@ export const postTypeDef = gql`
 
   extend type Query {
     getLatestPosts(page: Int!): LatestPosts
+    getPrevPost(hereId: Int!): Post
+    getNextPost(hereId: Int!): Post
     findPostById(id: String!): Post
     findSameCategoryPosts(categoryId: Int!, page: Int!): PostCategory
     search(keyword: String!): SearchResponse
@@ -82,6 +84,55 @@ export const postResolver = {
         });
 
         return { posts: previewPosts, total: postsCount };
+      } catch (err) {
+        throw err;
+      }
+    },
+
+    async getPrevPost(_: any, args: { hereId: number }) {
+      try {
+        const herePost = await PostModel.findOne({ _id: args.hereId });
+        if (herePost === null) throw new ApolloError("Error: post not found")
+        const [post] = await PostModel.find(
+          { _id: { $lt: args.hereId }, categoryId: herePost?.categoryId },
+          {},
+          { sort: { _id: -1 } }
+        ).limit(1);
+        return post
+          ? {
+              _id: post._id,
+              title: post.title,
+              createdAt: post.createdAt,
+              article: removeMd(post.article),
+              categoryId: post.categoryId,
+              likeCount: post.likeCount,
+              commentCount: post.commentCount
+            }
+          : null;
+      } catch (err) {
+        throw err;
+      }
+    },
+
+    async getNextPost(_: any, args: { hereId: number }) {
+      try {
+        const herePost = await PostModel.findOne({ _id: args.hereId });
+        const [post] = await PostModel.find(
+          { _id: { $gt: args.hereId }, categoryId: herePost?.categoryId },
+          {},
+          { sort: { _id: 1 } }
+        ).limit(1);
+        return post
+          ? {
+              _id: post._id,
+              title: post.title,
+              createdAt: post.createdAt,
+              article: removeMd(post.article),
+              categoryId: post.categoryId,
+              likeCount: post.likeCount,
+              commentCount: post.commentCount
+            }
+          : null;
       } catch (err) {
         throw err;
       }

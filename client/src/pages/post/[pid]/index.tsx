@@ -6,11 +6,22 @@ import { useQuery } from '@apollo/client';
 
 import { AppCommonProps } from 'src/pages/_app';
 import { initializeApollo } from 'src/lib/apollo';
-import { FindPostByIdQueryType, FindPostByIdVars, FIND_POST_BY_ID, PostDetailDataType } from 'src/query/post';
+import {
+  FindPostByIdQueryType,
+  FindPostByIdVars,
+  FIND_POST_BY_ID,
+  GetNearPostVars,
+  GetNextPostQueryType,
+  GetPrevPostQueryType,
+  GET_NEXT_POST,
+  GET_PREV_POST,
+  PostDetailDataType
+} from 'src/query/post';
 import { GET_PROFILE, ProfileDataType, GetProfileQueryType } from 'src/query/profile';
 import { GET_COMMENTS, GetCommentsQueryType, GetCommentVars } from 'src/query/comment';
 import { ArticleContainer, CommentContainer, RightSideContainer } from 'src/components/pages/post';
 import { ClapBox } from 'src/components/pages/post/ClapBox';
+import { RelatedPostsContainer } from 'src/components/pages/post/RelatedPosts';
 
 const Container = styled.div({
   display: 'flex',
@@ -49,6 +60,8 @@ interface ServerSideProps {
   categoryId: number;
   post: PostDetailDataType;
   profile: ProfileDataType;
+  prevPost: PostDetailDataType | null;
+  nextPost: PostDetailDataType | null;
 }
 
 interface Props extends AppCommonProps, ServerSideProps {}
@@ -83,6 +96,7 @@ export default function PostId(props: Props) {
           isLogin={props.app.isLogin}
         />
         <ClapBox id={parseInt(_id)} initLikeCount={props.post.likeCount} commentsCount={data.comments.count} />
+        <RelatedPostsContainer prevPost={props.prevPost} nextPost={props.nextPost} />
         <CommentContainer
           comments={data.comments}
           isLogin={props.app.isLogin}
@@ -125,14 +139,28 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
       };
     }
 
-    const profileQueryResult = await client.query<GetProfileQueryType>({ query: GET_PROFILE });
+    const [profileQueryResult, prevPostQueryResult, nextPostQueryResult] = await Promise.all([
+      client.query<GetProfileQueryType>({ query: GET_PROFILE }),
+      client.query<GetPrevPostQueryType, GetNearPostVars>({
+        query: GET_PREV_POST,
+        variables: { hereId: parseInt(`${id}`) }
+      }),
+      client.query<GetNextPostQueryType, GetNearPostVars>({
+        query: GET_NEXT_POST,
+        variables: { hereId: parseInt(`${id}`) }
+      })
+    ]);
     const profile = profileQueryResult.data.profile;
+    const prevPost = prevPostQueryResult.data.getPrevPost;
+    const nextPost = nextPostQueryResult.data.getNextPost;
 
     return {
       props: {
         categoryId: findedPost.categoryId,
         post: findedPost,
-        profile
+        profile,
+        prevPost,
+        nextPost
       }
     };
   } catch (err) {
