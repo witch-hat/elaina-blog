@@ -13,7 +13,10 @@ const Container = styled.section({
   padding: '.9rem 1rem',
   justifyContent: 'space-between',
   alignItems: 'flex-start',
-  flexFlow: 'row wrap'
+  flexFlow: 'row wrap',
+  '@media screen and (max-width: 767px)': {
+    justifyContent: 'center'
+  }
 });
 
 const FlexWrapper = styled.div({
