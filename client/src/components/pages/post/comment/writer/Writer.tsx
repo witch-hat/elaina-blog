@@ -131,7 +131,7 @@ export function Writer(props: WriterProps) {
       />
       <ButtonContainer>
         <SubmitButton blockedFunction={onSubmit}>
-          <ButtonDesign>{trans(Lang.Save)}</ButtonDesign>
+          <ButtonDesign>{trans(Lang.WriteComments)}</ButtonDesign>
         </SubmitButton>
       </ButtonContainer>
     </EditorContainer>

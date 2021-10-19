@@ -22,7 +22,7 @@ export function AdminSideBar() {
 
   return (
     <Container>
-      <Button onClick={() => router.push('/admin/writer')}>{trans(Lang.Write)}</Button>
+      <Button onClick={() => router.push('/admin/writer')}>{trans(Lang.Writing)}</Button>
       <ContentMenuContainer />
       <SettingMenuContainer />
     </Container>

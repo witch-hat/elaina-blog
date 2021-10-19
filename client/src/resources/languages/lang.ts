@@ -35,6 +35,7 @@ export enum Lang {
   Search = 'Search',
   Setting = 'Setting',
   Write = 'Write',
+  Writing = 'Writing',
   WriteComments = 'WriteComments',
   WriteReply = 'WriteReply'
 }
