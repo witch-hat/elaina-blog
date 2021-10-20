@@ -89,10 +89,6 @@ const PagenationNext = styled.button({
   }
 });
 
-interface ServerSideProps {
-  posts: PostDetailDataType[];
-}
-
 interface ModalProps {
   visible: boolean;
   onDelete: () => void;
@@ -204,6 +200,10 @@ export default function PostProps(props: Props) {
   );
 }
 
+interface ServerSideProps {
+  posts: PostDetailDataType[];
+}
+
 export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (context) => {
   if (!appCommponProps.app.isLogin) {
     return {
@@ -221,8 +221,8 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
       page: 1
     }
   });
-  const posts = data.getLatestPosts;
 
+  const posts = data.getLatestPosts.posts;
   return {
     props: {
       posts
