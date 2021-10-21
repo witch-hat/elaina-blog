@@ -12,13 +12,17 @@ const Container = styled.div({
   marginTop: '1rem'
 });
 
-export function ContentMenuContainer() {
+interface Props {
+  onClickMenuItem: () => void;
+}
+
+export function ContentMenuContainer(props: Props) {
   return (
     <Container>
       <SideMenuTitle icon={faBookmark} title={trans(Lang.Content)} />
-      <SideMenuItem menu={trans(Lang.AdminHome)} href='/admin' />
-      <SideMenuItem menu={trans(Lang.CategoryManage)} href='/admin/category' />
-      <SideMenuItem menu={trans(Lang.BoardManage)} href='/admin/posts' />
+      <SideMenuItem menu={trans(Lang.AdminHome)} href='/admin' onClick={props.onClickMenuItem} />
+      <SideMenuItem menu={trans(Lang.CategoryManage)} href='/admin/category' onClick={props.onClickMenuItem} />
+      <SideMenuItem menu={trans(Lang.BoardManage)} href='/admin/posts' onClick={props.onClickMenuItem} />
     </Container>
   );
 }
