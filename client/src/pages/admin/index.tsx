@@ -5,7 +5,7 @@ import { GetServerSideProps } from 'next';
 import { trans, Lang } from 'src/resources/languages';
 import { initializeApollo } from 'src/lib/apollo';
 import { AppCommonProps, appCommponProps } from 'src/pages/_app';
-import { AdminPageLayout, PageTitle, CommentLogBox } from 'src/components/pages/admin';
+import { AdminPageLayout, CommentLogBox } from 'src/components/pages/admin';
 import { CommentLogDataType, GET_COMMENT_LOGS, CommentLogQueryType, CommentLogVars } from 'src/query/comment-log';
 
 interface ServerSideProps {
@@ -20,9 +20,8 @@ const Container = styled.div({
 
 export default function Admin(props: Props) {
   return (
-    <AdminPageLayout>
+    <AdminPageLayout title={trans(Lang.Activities)}>
       <Container>
-        <PageTitle title={trans(Lang.Activities)} />
         {props.logs.map((log) => {
           /*category title 찾아주기*/
           // const findCategoryTitle = props.categoriesDetail.find((category) => category._id === log.categoryId)?.title!;

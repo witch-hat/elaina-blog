@@ -8,7 +8,7 @@ import { useMutation, useApolloClient } from '@apollo/client';
 import { trans, Lang } from 'src/resources/languages';
 import { initializeApollo } from 'src/lib/apollo';
 import { appCommponProps, AppCommonProps } from 'src/pages/_app';
-import { AdminPageLayout, PageTitle } from 'src/components/pages/admin';
+import { AdminPageLayout } from 'src/components/pages/admin';
 import { FormatUnifier } from 'src/utils';
 import {
   GET_LATEST_POSTS,
@@ -161,9 +161,8 @@ export default function PostProps(props: Props) {
   }
 
   return (
-    <AdminPageLayout>
+    <AdminPageLayout title={trans(Lang.BoardManage)}>
       <Container>
-        <PageTitle title={trans(Lang.BoardManage)} />
         <DynamicDeleteModal visible={isModalOpen} onDelete={handleDeleteButtonClick} onCancel={handleCancelButtonClick} />
 
         <>

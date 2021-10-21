@@ -5,7 +5,7 @@ import { GetServerSideProps } from 'next';
 import { appCommponProps } from 'src/pages/_app';
 import { trans, Lang } from 'src/resources/languages';
 import { AlertStateType, initAlert, AlertBox } from 'src/components';
-import { PageTitle, AdminPageLayout, PassowordInputContainer } from 'src/components/pages/admin';
+import { AdminPageLayout, PassowordInputContainer } from 'src/components/pages/admin';
 
 const Container = styled.div({
   width: '100%'
@@ -41,9 +41,8 @@ export default function ChangePassword() {
   }
 
   return (
-    <AdminPageLayout>
+    <AdminPageLayout title={trans(Lang.ChangePassword)}>
       <Container>
-        <PageTitle title={trans(Lang.ChangePassword)} />
         <PassowordInputContainer resetAlert={resetAlert} setSuccessAlert={setSuccessAlert} setErrorAlert={setErrorAlert} />
         {alertState.isPop && (
           <AlertBox msg={alertState.msg} isError={alertState.isError} onCloseButtonClick={() => resetAlert()}></AlertBox>
