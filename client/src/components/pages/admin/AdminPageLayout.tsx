@@ -15,6 +15,9 @@ const Section = styled.section({
   width: '850px',
   marginLeft: '50px',
   '@media screen and (max-width: 1380px)': {
+    width: '700px'
+  },
+  '@media screen and (max-width: 767px)': {
     width: '100%',
     padding: '.5rem',
     marginLeft: '0'
