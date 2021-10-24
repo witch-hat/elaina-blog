@@ -21,10 +21,14 @@ jobs:
         with:
           node-version: '14.x'
 
+      - name: Install Yarn
+        working-directory: client
+        run: npm install -g yarn
+
       - name: Install Client Dependencies
         working-directory: client
-        run: npm install
+        run: yarn install
 
       - name: Build Client
         working-directory: client
-        run: npm run build
+        run: yarn run build
