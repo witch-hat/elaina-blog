@@ -7,8 +7,8 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "@fortawesome/react-fontawesome": "^0.1.14",
-    "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^12.0.0",
+    "@testing-library/jest-dom": "^5.15.0",
+    "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.2.0",
     "@typescript-eslint/eslint-plugin": "^4.28.4",
     "apollo-link-error": "^1.1.13",
@@ -48,11 +48,12 @@
     "typescript": "4.3.5"
   },
   "devDependencies": {
+    "@babel/preset-typescript": "^7.16.0",
     "@fortawesome/free-regular-svg-icons": "^5.15.3",
     "@types/apollo-upload-client": "^14.1.0",
     "@types/bcryptjs": "^2.4.2",
     "@types/cookie": "^0.4.1",
-    "@types/jest": "^26.0.24",
+    "@types/jest": "^27.0.2",
     "@types/jsonwebtoken": "^8.5.4",
     "@types/lodash": "^4.14.171",
     "@types/node": "^16.3.3",
@@ -66,14 +67,15 @@
     "@types/set-cookie-parser": "^2.4.1",
     "@types/styled-components": "^5.1.11",
     "eslint-config-next": "^11.0.1",
-    "eslint-plugin-react": "^7.24.0"
+    "eslint-plugin-react": "^7.24.0",
+    "jest": "^27.3.1"
   },
   "scripts": {
     "dev": "next",
     "start": "next start",
     "build": "next build",
     "eject": "react-scripts eject",
-    "test": "echo \"client\""
+    "test": "jest --watch"
   },
   "eslintConfig": {
     "extends": "react-app"
