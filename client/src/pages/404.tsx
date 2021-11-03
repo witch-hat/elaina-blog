@@ -8,7 +8,7 @@ const Container = styled.div({
   alignItems: 'center'
 });
 
-const ErrorMessege = styled.p({
+const ErrorMessege = styled.h2({
   fontSize: '1.25rem',
   fontWeight: 'bold'
 });
