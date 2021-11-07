@@ -9,10 +9,17 @@ import { trans, Lang } from 'src/resources/languages';
 import { initializeApollo } from 'src/lib/apollo';
 import { appCommponProps, AppCommonProps } from 'src/pages/_app';
 import { AdminPageLayout, PageTitle } from 'src/components/pages/admin';
-import { GetLatestPostsVars, DeletePostQueryType, DeletePostVars, DELETE_POST } from 'src/query/post';
 import { IsAuthQueryType, IS_AUTH } from 'src/query/user';
 import { DeletePostAllCommentLogQueryType, DeletePostAllCommentLogVars, DELETE_POST_ALL_COMMENT_LOG } from 'src/query/comment-log';
-import { GetTempPostQueryType, GET_TEMP_POSTS, TempPostType } from 'src/query/temp';
+import {
+  GetTempPostQueryType,
+  GET_TEMP_POSTS,
+  TempPostType,
+  GetTempPostVars,
+  DELETE_TEMP_POST,
+  DeleteTempPostQueryType,
+  DeleteTempPostVars
+} from 'src/query/temp';
 import { PostsBox } from 'src/components/pages/admin/post/PostsBox';
 
 const Container = styled.div({
@@ -25,11 +32,11 @@ const BoardTable = styled.table({
 });
 
 const BoardTH = styled.th({
-  border: '1px solid #ddd',
   padding: '10px',
-  textAlign: 'center',
+  color: 'white',
+  border: '1px solid #ddd',
   backgroundColor: '#867dff',
-  color: 'white'
+  textAlign: 'center'
 });
 
 const BoardTR = styled.tr({
@@ -38,22 +45,22 @@ const BoardTR = styled.tr({
   }
 });
 
-const PagenationNext = styled.button({
+const PagenationNext = styled.button((props) => ({
   float: 'right',
-  outline: 'none',
-  fontSize: '11px',
   padding: '3px 10px',
-  borderRadius: '8px',
-  cursor: 'pointer',
-  border: '1px solid #4276a1',
-  backgroundColor: '#867dff',
+  outline: 'none',
   color: 'white',
+  backgroundColor: '#867dff',
+  border: `1px solid ${props.theme.borderColor}`,
+  borderRadius: '8px',
+  fontSize: '11px',
 
+  cursor: 'pointer',
   '&:hover': {
     backgroundColor: '#d1cffaa7',
     color: 'black'
   }
-});
+}));
 
 interface ServerSideProps {
   posts: TempPostType[];
@@ -75,13 +82,13 @@ export default function PostProps(props: Props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [deletePostID, setDeletePostID] = useState(0);
 
-  const [deletePost] = useMutation<DeletePostQueryType, DeletePostVars>(DELETE_POST);
+  const [deletePost] = useMutation<DeleteTempPostQueryType, DeleteTempPostVars>(DELETE_TEMP_POST);
   const [deletePostAllCommentLog] = useMutation<DeletePostAllCommentLogQueryType, DeletePostAllCommentLogVars>(DELETE_POST_ALL_COMMENT_LOG);
 
   const router = useRouter();
   const client = useApolloClient();
 
-  async function deleteButtonClick(deletePostId: React.SetStateAction<number>) {
+  async function deleteButtonClick(deletePostId: number) {
     setIsModalOpen(true);
     setDeletePostID(deletePostId);
   }
@@ -110,12 +117,12 @@ export default function PostProps(props: Props) {
           return;
         }
 
-        if (!deleteResponse.data.deletePost.isSuccess) {
+        if (!deleteResponse.data.deleteTempPost.isSuccess) {
           alert('Can not delete post');
           return;
         }
 
-        router.push('/admin/posts'); // 더 좋은 방법이 없을까..?
+        //router.push('/admin/posts'); // 더 좋은 방법이 없을까..?
       } catch (err) {
         alert(err.message);
       }
@@ -181,7 +188,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
   }
 
   const client = initializeApollo({}, context);
-  const { data } = await client.query<GetTempPostQueryType, GetLatestPostsVars>({
+  const { data } = await client.query<GetTempPostQueryType, GetTempPostVars>({
     query: GET_TEMP_POSTS,
     variables: {
       page: 1

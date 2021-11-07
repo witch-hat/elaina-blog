@@ -1,11 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
+
 import { FormatUnifier } from 'src/utils';
 
-const BoardTD = styled.td({
-  border: '1px solid #ddd',
-  padding: '12px'
-});
+const BoardTD = styled.td((props) => ({
+  padding: '12px',
+  border: `1px solid ${props.theme.borderColor}`
+}));
 
 const BoardTdTitle = styled(BoardTD)({
   width: '400px'
@@ -21,24 +22,24 @@ const BoardTR = styled.tr({
   }
 });
 
-const DeleteButton = styled.button({
-  outline: 'none',
-  fontSize: '11px',
-  color: '#e9493d',
+const DeleteButton = styled.button((props) => ({
   padding: '3px 10px',
+  outline: 'none',
+  color: '#e9493d',
+  border: `1px solid ${props.theme.borderColor}`,
   borderRadius: '8px',
-  cursor: 'pointer',
-  border: '1px solid #e9493d',
   backgroundColor: 'transparent',
   '&:active': {
     border: '1px solid blue'
-  }
-});
+  },
+  fontSize: '11px',
+  cursor: 'pointer'
+}));
 
 interface PostData {
   _id: number;
   title: string;
-  savedAt: Date;
+  savedAt: number;
   article: string;
   category: string;
   onDeleteClick: (id: number) => void;
