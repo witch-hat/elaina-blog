@@ -6,7 +6,7 @@ import { appCommponProps } from 'src/pages/_app';
 import { trans, Lang } from 'src/resources/languages';
 import { initializeApollo } from 'src/lib/apollo';
 import { GetDeviceQueryType, GET_DEVICES, LoginDeviceType } from 'src/query/user';
-import { PageTitle, AdminPageLayout, DeviceItem } from 'src/components/pages/admin';
+import { AdminPageLayout, DeviceItem } from 'src/components/pages/admin';
 
 const Container = styled.div({
   width: '100%'
@@ -28,9 +28,8 @@ interface Props extends ServerSideProps {}
 
 export default function DevicePage(props: Props) {
   return (
-    <AdminPageLayout>
+    <AdminPageLayout title={trans(Lang.DeviceManage)}>
       <Container>
-        <PageTitle title={trans(Lang.DeviceManage)} />
         <DeviceContainer>
           {props.loginDevices.map((device) => {
             return <DeviceItem key={device.userUniqueId} device={device} />;

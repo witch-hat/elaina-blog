@@ -12,13 +12,15 @@ export const postTypeDef = gql`
     createdAt: DateTime!
     article: String!
     categoryId: Int!
+    category: String
     likeCount: Int!
     commentCount: Int!
   }
 
   type PostCategory {
-    post: [Post]
+    posts: [Post]
     category: Category
+    total: Int!
   }
 
   type DeleteResponse {
@@ -35,10 +37,17 @@ export const postTypeDef = gql`
     result: [SearchResult]
   }
 
+  type LatestPosts {
+    posts: [Post]
+    total: Int!
+  }
+
   extend type Query {
-    getLatestPosts(page: Int!): [Post]
+    getLatestPosts(page: Int!): LatestPosts
+    getPrevPost(hereId: Int!): Post
+    getNextPost(hereId: Int!): Post
     findPostById(id: String!): Post
-    findSameCategoryPosts(categoryId: Int!): PostCategory
+    findSameCategoryPosts(categoryId: Int!, page: Int!): PostCategory
     search(keyword: String!): SearchResponse
   }
 
@@ -55,21 +64,75 @@ export const postResolver = {
   Query: {
     async getLatestPosts(_: any, args: { page: number }) {
       try {
-        const posts = await PostModel.find({}, {}, { sort: { _id: -1 }, skip: (args.page - 1) * 10, limit: 10 });
+        const [posts, postsCount, categories] = await Promise.all([
+          PostModel.find({}, {}, { sort: { _id: -1 }, skip: (args.page - 1) * 10, limit: 10 }),
+          PostModel.countDocuments(),
+          CategoryModel.find()
+        ]);
 
-        const previewPosts: Post[] = posts.map((post) => {
+        const previewPosts = posts.map((post) => {
           return {
             _id: post._id,
             title: post.title,
             createdAt: post.createdAt,
             article: removeMd(post.article),
             categoryId: post.categoryId,
+            category: categories.find((category) => category._id === post.categoryId)?.title || null,
             likeCount: post.likeCount,
             commentCount: post.commentCount
           };
         });
 
-        return previewPosts;
+        return { posts: previewPosts, total: postsCount };
+      } catch (err) {
+        throw err;
+      }
+    },
+
+    async getPrevPost(_: any, args: { hereId: number }) {
+      try {
+        const herePost = await PostModel.findOne({ _id: args.hereId });
+        if (herePost === null) throw new ApolloError("Error: post not found")
+        const [post] = await PostModel.find(
+          { _id: { $lt: args.hereId }, categoryId: herePost?.categoryId },
+          {},
+          { sort: { _id: -1 } }
+        ).limit(1);
+        return post
+          ? {
+              _id: post._id,
+              title: post.title,
+              createdAt: post.createdAt,
+              article: removeMd(post.article),
+              categoryId: post.categoryId,
+              likeCount: post.likeCount,
+              commentCount: post.commentCount
+            }
+          : null;
+      } catch (err) {
+        throw err;
+      }
+    },
+
+    async getNextPost(_: any, args: { hereId: number }) {
+      try {
+        const herePost = await PostModel.findOne({ _id: args.hereId });
+        const [post] = await PostModel.find(
+          { _id: { $gt: args.hereId }, categoryId: herePost?.categoryId },
+          {},
+          { sort: { _id: 1 } }
+        ).limit(1);
+        return post
+          ? {
+              _id: post._id,
+              title: post.title,
+              createdAt: post.createdAt,
+              article: removeMd(post.article),
+              categoryId: post.categoryId,
+              likeCount: post.likeCount,
+              commentCount: post.commentCount
+            }
+          : null;
       } catch (err) {
         throw err;
       }
@@ -85,10 +148,11 @@ export const postResolver = {
       }
     },
 
-    async findSameCategoryPosts(_: any, args: { categoryId: number }) {
+    async findSameCategoryPosts(_: any, args: { categoryId: number; page: number }) {
       try {
-        const [sameCategoryPosts, categoryFindResult] = await Promise.all([
-          PostModel.find({ categoryId: args.categoryId }),
+        const [sameCategoryPosts, sameCategoryPostsCount, categoryFindResult] = await Promise.all([
+          PostModel.find({ categoryId: args.categoryId }, {}, { sort: { _id: -1 }, skip: (args.page - 1) * 10, limit: 10 }),
+          PostModel.countDocuments({ categoryId: args.categoryId }),
           CategoryModel.findById(args.categoryId)
         ]);
 
@@ -98,8 +162,9 @@ export const postResolver = {
         }
 
         return {
-          post: sameCategoryPosts.reverse(),
-          category: categoryFindResult
+          posts: sameCategoryPosts,
+          category: categoryFindResult,
+          total: sameCategoryPostsCount
         };
       } catch (err) {
         throw err;
@@ -152,7 +217,15 @@ export const postResolver = {
   },
 
   Mutation: {
-    async writePost(_: any, args: { title: string; createdAt: Date; article: string; category: string }) {
+    async writePost(
+      _: any,
+      args: {
+        title: string;
+        createdAt: Date;
+        article: string;
+        category: string;
+      }
+    ) {
       try {
         if (!args.title) {
           throw new UserInputError('글의 제목을 1자 이상 써주세요.');
@@ -178,11 +251,19 @@ export const postResolver = {
             return result;
           }
 
-          const category = await CategoryModel.findOne({ title: args.category });
+          const category = await CategoryModel.findOne({
+            title: args.category
+          });
           if (category) {
             const categoryId = category._id;
 
-            const result = await PostModel.create({ _id, title: args.title, createdAt: args.createdAt, categoryId, article: args.article });
+            const result = await PostModel.create({
+              _id,
+              title: args.title,
+              createdAt: args.createdAt,
+              categoryId,
+              article: args.article
+            });
 
             return result;
           } else {
@@ -203,7 +284,9 @@ export const postResolver = {
             return result;
           }
 
-          const category = await CategoryModel.findOne({ title: args.category });
+          const category = await CategoryModel.findOne({
+            title: args.category
+          });
           if (category) {
             const categoryId = category._id;
 

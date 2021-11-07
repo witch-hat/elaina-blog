@@ -13,5 +13,8 @@ module.exports = {
     '@typescript-eslint/no-non-null-asserted-optional-chain': 'off',
     '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/no-namespace': 'off'
+  },
+  env: {
+    jest: true
   }
 };

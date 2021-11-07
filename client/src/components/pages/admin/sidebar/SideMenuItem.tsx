@@ -12,7 +12,6 @@ const MenuContainer = styled.nav<{ currentNav: boolean }>((props) => ({
   cursor: 'pointer',
   fontWeight: props.currentNav ? 'bold' : 'normal',
   color: props.currentNav ? props.theme.navList.selectedColor : 'inherit',
-  textDecoration: props.currentNav ? 'underline' : 'none',
   transition: '.2s all',
   userSelect: 'none',
   '&:hover': {
@@ -26,10 +25,7 @@ const MenuContainer = styled.nav<{ currentNav: boolean }>((props) => ({
 const Menu = styled.p({
   listStyle: 'none',
   width: '100%',
-  cursor: 'pointer',
-  '&:hover': {
-    textDecoration: 'underline'
-  }
+  cursor: 'pointer'
 });
 
 interface Props {
@@ -46,10 +42,8 @@ export function SideMenuItem(props: Props) {
   if (props.href) {
     return (
       <MenuContainer currentNav={router.pathname === props.href}>
-        <Link href={props.href}>
-          <a>
-            <Menu>{props.menu}</Menu>
-          </a>
+        <Link href={props.href} passHref={true}>
+          <Menu>{props.menu}</Menu>
         </Link>
       </MenuContainer>
     );

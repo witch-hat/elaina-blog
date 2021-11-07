@@ -1,12 +1,11 @@
-import React, { useState, ChangeEvent, useRef } from 'react';
+import React, { useState, ChangeEvent } from 'react';
 import styled from 'styled-components';
-import { Editor as EditorType } from '@toast-ui/react-editor';
 
 import { NoRefInputBox } from 'src/components';
 import { CategoryDetailType } from 'src/query/category';
 
 import { CategorySelector } from './CategorySelector';
-import { ForwardedToastEditor as Editor } from './ToastEditorWrapper';
+import { Editor } from './Editor';
 
 const Container = styled.div({
   display: 'flex',
@@ -65,7 +64,6 @@ interface Props {
 }
 
 export function WriterLayout(props: Props) {
-  const editorRef = useRef<EditorType>(null);
   const [title, setTitle] = useState(props.title || '');
   const [article, setArticle] = useState<string>(props.article || '');
   const [selectedCategory, setSelectedCategory] = useState(props.category || DEFAULT_CATEGORY);
@@ -74,12 +72,8 @@ export function WriterLayout(props: Props) {
     setSelectedCategory(newCategory);
   }
 
-  function handleChange() {
-    if (!editorRef.current) {
-      return;
-    }
-    const instance = editorRef.current.getInstance();
-    setArticle(instance.getMarkdown());
+  function handleChange(text: string) {
+    setArticle(text);
   }
 
   async function handleSubmit() {
@@ -116,14 +110,7 @@ export function WriterLayout(props: Props) {
         </Title>
       </MenuContainer>
       <div style={{ flex: 1, backgroundColor: '#fff' }}>
-        <Editor
-          ref={editorRef}
-          initialValue={article || ''}
-          placeholder='Write your story...'
-          hideModeSwitch={true}
-          onChange={handleChange}
-          height={'100%'}
-        />
+        <Editor value={article} handleChange={handleChange} />
       </div>
       <ButtonContainer>
         <WriteButton onClick={handleSubmit}>{props.submitText}</WriteButton>

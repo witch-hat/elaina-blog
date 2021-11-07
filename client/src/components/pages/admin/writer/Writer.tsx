@@ -61,6 +61,6 @@ export function Writer(props: Props) {
   }
 
   return (
-    <WriterLayout author={props.author} categories={props.categories} submitText={trans(Lang.Write)} handleSubmit={handleCreatePost} />
+    <WriterLayout author={props.author} categories={props.categories} submitText={trans(Lang.Writing)} handleSubmit={handleCreatePost} />
   );
 }

@@ -8,7 +8,7 @@ import { useMutation, useApolloClient } from '@apollo/client';
 import { trans, Lang } from 'src/resources/languages';
 import { initializeApollo } from 'src/lib/apollo';
 import { appCommponProps, AppCommonProps } from 'src/pages/_app';
-import { AdminPageLayout, PageTitle } from 'src/components/pages/admin';
+import { AdminPageLayout } from 'src/components/pages/admin';
 import { FormatUnifier } from 'src/utils';
 import {
   GET_LATEST_POSTS,
@@ -89,10 +89,6 @@ const PagenationNext = styled.button({
   }
 });
 
-interface ServerSideProps {
-  posts: PostDetailDataType[];
-}
-
 interface ModalProps {
   visible: boolean;
   onDelete: () => void;
@@ -165,9 +161,8 @@ export default function PostProps(props: Props) {
   }
 
   return (
-    <AdminPageLayout>
+    <AdminPageLayout title={trans(Lang.BoardManage)}>
       <Container>
-        <PageTitle title={trans(Lang.BoardManage)} />
         <DynamicDeleteModal visible={isModalOpen} onDelete={handleDeleteButtonClick} onCancel={handleCancelButtonClick} />
 
         <>
@@ -204,6 +199,10 @@ export default function PostProps(props: Props) {
   );
 }
 
+interface ServerSideProps {
+  posts: PostDetailDataType[];
+}
+
 export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (context) => {
   if (!appCommponProps.app.isLogin) {
     return {
@@ -221,8 +220,8 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async (co
       page: 1
     }
   });
-  const posts = data.getLatestPosts;
 
+  const posts = data.getLatestPosts.posts;
   return {
     props: {
       posts

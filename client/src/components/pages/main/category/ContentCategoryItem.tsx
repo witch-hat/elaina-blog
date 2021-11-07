@@ -10,7 +10,14 @@ import { ContentCategoryDetails } from './ContentCategoryDetails';
 const Container = styled.a({
   display: 'block',
   width: '32%',
-  height: 'max-content'
+  height: 'max-content',
+  '@media screen and (max-width: 1380px)': {
+    width: '47%'
+  },
+  '@media screen and (max-width: 767px)': {
+    width: '100%',
+    maxWidth: '400px'
+  }
 });
 
 const Content = styled.div({
@@ -96,7 +103,13 @@ interface Props {
 
 export function ContentCategoryItem(props: Props) {
   return (
-    <Link href={`/category/${props.category._id}`}>
+    <Link
+      href={{
+        pathname: `/category/${props.category._id}`,
+        query: { page: '1' }
+      }}
+      passHref={true}
+    >
       <Container>
         <BorderBox isHoverEffect={true} styles={{ width: '100%', margin: '4% 0' }}>
           <Content>

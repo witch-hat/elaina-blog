@@ -5,7 +5,7 @@ import { GetServerSideProps } from 'next';
 import { trans, Lang } from 'src/resources/languages';
 import { initializeApollo } from 'src/lib/apollo';
 import { appCommponProps, AppCommonProps } from 'src/pages/_app';
-import { AdminPageLayout, PageTitle, CategoryContainer } from 'src/components/pages/admin';
+import { AdminPageLayout, CategoryContainer } from 'src/components/pages/admin';
 import { CategoryDetailsQueryType, CategoryDetailType, GET_CATEGORIES_WITH_DETAILS } from 'src/query/category';
 
 const Container = styled.div({
@@ -22,9 +22,8 @@ export default function Category(props: Props) {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   return (
-    <AdminPageLayout>
+    <AdminPageLayout title={trans(Lang.CategoryManage)}>
       <Container>
-        <PageTitle title={trans(Lang.CategoryManage)} />
         <CategoryContainer categories={props.categories} isAddModalOpen={isAddModalOpen} setIsAddModalOpen={setIsAddModalOpen} />
       </Container>
     </AdminPageLayout>

@@ -12,12 +12,16 @@ const Container = styled.div({
   marginTop: '1rem'
 });
 
-export function SettingMenuContainer() {
+interface Props {
+  onClickMenuItem: () => void;
+}
+
+export function SettingMenuContainer(props: Props) {
   return (
     <Container>
       <SideMenuTitle icon={faUsersCog} title={trans(Lang.Setting)} />
-      <SideMenuItem menu={trans(Lang.ChangePassword)} href='/admin/password' />
-      <SideMenuItem menu={trans(Lang.DeviceManage)} href='/admin/device' />
+      <SideMenuItem menu={trans(Lang.ChangePassword)} href='/admin/password' onClick={props.onClickMenuItem} />
+      <SideMenuItem menu={trans(Lang.DeviceManage)} href='/admin/device' onClick={props.onClickMenuItem} />
     </Container>
   );
 }

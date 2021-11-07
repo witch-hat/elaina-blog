@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
-import { MutationCommonResponse } from '.';
+import { MutationCommonResponse, QueryPaginationVars } from ".";
 
 export interface TempPostType {
   _id: number;
@@ -8,12 +8,10 @@ export interface TempPostType {
   cateogry: string;
   title: string;
   article: string;
-  savedAt: Date;
+  savedAt: number;
 }
 
-export interface GetTempPostVars {
-  page: number;
-}
+export interface GetTempPostVars extends QueryPaginationVars {}
 
 export interface GetTempPostQueryType {
   tempPosts: TempPostType[];
@@ -45,7 +43,12 @@ export interface SaveTempPostQueryType {
 
 export const SAVE_TEMP_POST = gql`
   mutation ($id: Int!, $category: String!, $title: String!, $article: String!) {
-    saveTempPost(id: $id, category: $category, title: $title, article: $article) {
+    saveTempPost(
+      id: $id
+      category: $category
+      title: $title
+      article: $article
+    ) {
       isSuccess
     }
   }

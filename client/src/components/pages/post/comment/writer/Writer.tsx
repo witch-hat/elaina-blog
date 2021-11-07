@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import { Lang, trans } from 'src/resources/languages';
 import { MemoizedInputContainer } from './InputContainer';
+import { SubmitButton } from 'src/components/common/button/SubmitButton';
 
 const EditorContainer = styled.form({
   width: '100%',
@@ -43,7 +44,7 @@ const ButtonContainer = styled.div({
   justifyContent: 'flex-end'
 });
 
-const SubmitButton = styled.button((props) => ({
+const ButtonDesign = styled.div((props) => ({
   display: 'flex',
   width: '6rem',
   height: '100%',
@@ -85,10 +86,8 @@ export function Writer(props: WriterProps) {
     textRef.current.style.height = `${textRef.current.scrollHeight}px`;
   };
 
-  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  async function onSubmit() {
     await props.addComment(username, password, comment);
-
     props.isComment && reset();
   }
 
@@ -97,7 +96,7 @@ export function Writer(props: WriterProps) {
   const onPWChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value), []);
 
   return (
-    <EditorContainer onSubmit={onSubmit}>
+    <EditorContainer>
       {props.isLogin || (
         <InputWrapper>
           <MemoizedInputContainer
@@ -131,7 +130,9 @@ export function Writer(props: WriterProps) {
         }}
       />
       <ButtonContainer>
-        <SubmitButton type='submit'>{trans(Lang.Save)}</SubmitButton>
+        <SubmitButton blockedFunction={onSubmit}>
+          <ButtonDesign>{trans(Lang.WriteComments)}</ButtonDesign>
+        </SubmitButton>
       </ButtonContainer>
     </EditorContainer>
   );

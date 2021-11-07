@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Link from 'next/link';
 
 const Button = styled.a((props) => ({
   display: 'flex',
@@ -30,8 +31,13 @@ interface Props {
   href: string;
   width?: string;
   height?: string;
+  shallow?: boolean;
 }
 
 export function CircleRippleA(props: Props) {
-  return <Button href={props.href}>{props.children}</Button>;
+  return (
+    <Link href={props.href} passHref shallow={props.shallow}>
+      <Button>{props.children}</Button>
+    </Link>
+  );
 }
