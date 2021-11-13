@@ -1,4 +1,4 @@
-import { applyMiddleware, createStore, Store } from 'redux';
+import { applyMiddleware, createStore, Store } from '@reduxjs/toolkit';
 import { PersistConfig, persistReducer, persistStore } from 'redux-persist';
 import logger from 'redux-logger';
 import storage from 'redux-persist/lib/storage';
