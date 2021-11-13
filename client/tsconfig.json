@@ -18,6 +18,6 @@
     "baseUrl": ".",
     "rootDir": "."
   },
-  "include": ["src"],
+  "include": ["src", "__mock__", "__test__"],
   "exclude": ["node_modules"]
 }
