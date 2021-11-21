@@ -36,8 +36,8 @@
     "uuid": "^8.3.2"
   },
   "scripts": {
-    "prestart": "tsc",
-    "dev": "nodemon --exec ts-node src/index.ts"
+    "dev": "nodemon --exec ts-node src/index.ts",
+    "start": "ts-node src/index.ts"
   },
   "author": {
     "name": "elaina-blog",
