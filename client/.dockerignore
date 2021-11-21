@@ -1,0 +1,7 @@
+node_modules
+__mock__
+__test__
+.next
+jest.config.js
+
+README.md
