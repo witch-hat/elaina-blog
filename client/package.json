@@ -8,9 +8,6 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "@fortawesome/react-fontawesome": "^0.1.14",
     "@reduxjs/toolkit": "^1.6.2",
-    "@testing-library/jest-dom": "^5.15.0",
-    "@testing-library/react": "^12.1.2",
-    "@testing-library/user-event": "^13.2.0",
     "@typescript-eslint/eslint-plugin": "^4.28.4",
     "apollo-link-error": "^1.1.13",
     "apollo-link-token-refresh": "^0.3.2",
@@ -54,7 +51,6 @@
     "@types/apollo-upload-client": "^14.1.0",
     "@types/bcryptjs": "^2.4.2",
     "@types/cookie": "^0.4.1",
-    "@types/jest": "^27.0.2",
     "@types/jsonwebtoken": "^8.5.4",
     "@types/lodash": "^4.14.171",
     "@types/node": "^16.3.3",
@@ -67,16 +63,16 @@
     "@types/redux-logger": "^3.0.9",
     "@types/set-cookie-parser": "^2.4.1",
     "@types/styled-components": "^5.1.11",
+    "cypress": "^9.0.0",
     "eslint-config-next": "^11.0.1",
-    "eslint-plugin-react": "^7.24.0",
-    "jest": "^27.3.1"
+    "eslint-plugin-react": "^7.24.0"
   },
   "scripts": {
     "dev": "next",
     "start": "next start",
     "build": "next build",
     "eject": "react-scripts eject",
-    "test": "jest --watch"
+    "cypress": "cypress open"
   },
   "eslintConfig": {
     "extends": "react-app"
