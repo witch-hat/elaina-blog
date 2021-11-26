@@ -17,6 +17,10 @@
   "EditProfile": "Edit Profile",
   "Delete": "Delete",
   "DeviceManage": "Device Manage",
+<<<<<<< HEAD
+  "Activities": "Activities",
+  "TempPosts": "Temporary Posts"
+=======
   "Edit": "Edit",
   "ForgotPassword": "Forgot Password?",
   "LatestPost": "Latest",
@@ -33,4 +37,5 @@
   "Writing": "Writing",
   "WriteComments": "Write Comments",
   "WriteReply": "Write Reply"
+>>>>>>> b7a8cb41a163a51d3a51f040568552c00b36c9cb
 }

@@ -16,6 +16,10 @@
   "CurrentPassword": "현재 비밀번호",
   "Delete": "삭제",
   "DeviceManage": "로그인 기기 관리",
+<<<<<<< HEAD
+  "Activities": "최근 활동",
+  "TempPosts": "임시 저장글"
+=======
   "Edit": "수정",
   "EditProfile": "프로필 수정",
   "ForgotPassword": "비밀번호 찾기",
@@ -33,4 +37,5 @@
   "Writing": "글쓰기",
   "WriteComments": "댓글 쓰기",
   "WriteReply": "대댓글 쓰기"
+>>>>>>> b7a8cb41a163a51d3a51f040568552c00b36c9cb
 }

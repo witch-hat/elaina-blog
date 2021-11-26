@@ -37,5 +37,19 @@ export enum Lang {
   Write = 'Write',
   Writing = 'Writing',
   WriteComments = 'WriteComments',
+<<<<<<< HEAD
+  Reply = 'Reply',
+  WriteReply = 'WriteReply',
+  AdminHome = 'AdminHome',
+  ChangePassword = 'ChangePassword',
+  CurrentPassword = 'CurrentPassword',
+  NewPassword = 'NewPassword',
+  ConfirmPassword = 'ConfirmPassword',
+  ForgotPassword = 'ForgotPassword',
+  DeviceManage = 'DeviceManage',
+  Activities = 'Activities',
+  TempPosts = 'TempPosts'
+=======
   WriteReply = 'WriteReply'
+>>>>>>> b7a8cb41a163a51d3a51f040568552c00b36c9cb
 }
