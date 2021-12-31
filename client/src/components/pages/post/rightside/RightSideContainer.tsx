@@ -25,21 +25,10 @@ const Container = styled.aside((props) => ({
   }
 }));
 
-const StyledHr = styled.hr({
-  display: 'block',
-  width: '100%',
-  marginLeft: '.5rem',
-  border: 'none',
-  borderTop: '1px solid #ddd',
-  borderRadius: '.5rem',
-  boxSizing: 'border-box'
-});
-
 export function RightSideContainer() {
   return (
     <Container>
       <ContentNavigation />
-      <StyledHr />
     </Container>
   );
 }

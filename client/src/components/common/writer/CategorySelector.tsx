@@ -11,9 +11,11 @@ const Container = styled.div({
   alignItems: 'center'
 });
 
-const CategoryDropDown = styled.div({
-  width: '16rem'
-});
+const CategoryDropDown = styled.div((props) => ({
+  width: '16rem',
+  borderRadius: '.5rem',
+  backgroundColor: props.theme.dropDownBackground
+}));
 
 const MainButton = styled.div({
   display: 'flex',

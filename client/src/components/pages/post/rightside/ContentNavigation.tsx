@@ -22,6 +22,16 @@ const NavigationContainer = styled.div({
   color: '#777'
 });
 
+const StyledHr = styled.hr({
+  display: 'block',
+  width: '100%',
+  marginLeft: '.5rem',
+  border: 'none',
+  borderTop: '1px solid #ddd',
+  borderRadius: '.5rem',
+  boxSizing: 'border-box'
+});
+
 export interface Heading {
   tag: string;
   text: string;
@@ -88,6 +98,7 @@ export function ContentNavigation() {
             return <ContentNavigationButton key={heading.text} heading={heading} />;
           })}
         </NavigationContainer>
+        <StyledHr />
       </Container>
     );
   }

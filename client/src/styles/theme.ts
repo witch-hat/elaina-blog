@@ -16,6 +16,7 @@ export const theme: { light: DefaultTheme; dark: DefaultTheme } = {
     loadingBackground: 'rgba(255, 255, 255, .8)',
     selectedButton: 'rgba(200, 200, 200, .8)',
     replyBackground: '#fafafa',
+    dropDownBackground: 'rgba(0, 0, 0, 0.05)',
     // Text Color
     blogName: '#121314',
     mainText: '#121314',
@@ -74,6 +75,7 @@ export const theme: { light: DefaultTheme; dark: DefaultTheme } = {
     loadingBackground: 'rgba(0, 0, 0, .7)',
     selectedButton: 'rgba(60, 60, 60, .8)',
     replyBackground: '#333',
+    dropDownBackground: 'rgba(0, 0, 0, 0.25)',
     // Text Color
     blogName: '#f1f2f3',
     mainText: '#f1f2f3',

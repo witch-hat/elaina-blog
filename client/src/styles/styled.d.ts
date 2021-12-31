@@ -33,6 +33,7 @@ declare module 'styled-components' {
     loadingBackground: string;
     selectedButton: string;
     replyBackground: string;
+    dropDownBackground: string;
     // Text Color
     blogName: string;
     mainText: string;

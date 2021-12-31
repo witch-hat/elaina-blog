@@ -9,7 +9,7 @@ import { Editor } from './Editor';
 
 const Container = styled.div({
   display: 'flex',
-  width: '900px',
+  width: '1200px',
   margin: '0 auto',
   alignSelf: 'stretch',
   flexDirection: 'column'
@@ -88,19 +88,14 @@ export function WriterLayout(props: Props) {
   return (
     <Container>
       <MenuContainer>
-        <CategorySelector
-          categories={props.categories}
-          default={DEFAULT_CATEGORY}
-          selectedCategory={selectedCategory}
-          changeCategory={changeCategory}
-        />
+        <CategorySelector categories={props.categories} default={DEFAULT_CATEGORY} selectedCategory={selectedCategory} changeCategory={changeCategory} />
         <Title>
           <NoRefInputBox
-            id='post-title'
-            type='text'
+            id="post-title"
+            type="text"
             minLength={2}
             maxLength={999}
-            placeholder='제목'
+            placeholder="제목"
             styles={{ width: '100%' }}
             value={title}
             onChange={(e: ChangeEvent<HTMLInputElement>) => {

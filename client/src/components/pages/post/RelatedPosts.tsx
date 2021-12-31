@@ -5,7 +5,7 @@ import { SimplePostItem } from './SimplePostItem';
 const Container = styled.section({
   display: 'flex',
   width: '100%',
-  minHeight: '20rem',
+  maxHeight: '20rem',
   padding: '.5rem 2rem',
   flexDirection: 'column',
   justifyContent: 'center',
